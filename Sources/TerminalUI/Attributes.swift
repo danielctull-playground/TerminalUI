@@ -1,42 +1,42 @@
 
 struct Bold: Equatable {
-  let control: ControlSequence
-  static let on = Bold(control: "1m")
-  static let off = Bold(control: "22m")
+  let sgr: SelectGraphicRendition
+  static let on = Bold(sgr: 1)
+  static let off = Bold(sgr: 22)
 }
 
 struct Italic: Equatable {
-  let control: ControlSequence
-  static let on = Italic(control: "3m")
-  static let off = Italic(control: "23m")
+  let sgr: SelectGraphicRendition
+  static let on = Italic(sgr: 3)
+  static let off = Italic(sgr: 23)
 }
 
 struct Underline: Equatable {
-  let control: ControlSequence
-  static let on = Underline(control: "4m")
-  static let off = Underline(control: "24m")
+  let sgr: SelectGraphicRendition
+  static let on = Underline(sgr: 4)
+  static let off = Underline(sgr: 24)
 }
 
 struct Blinking: Equatable {
-  let control: ControlSequence
-  static let on = Blinking(control: "5m")
-  static let off = Blinking(control: "25m")
+  let sgr: SelectGraphicRendition
+  static let on = Blinking(sgr: 5)
+  static let off = Blinking(sgr: 25)
 }
 
 struct Inverse: Equatable {
-  let control: ControlSequence
-  static let on = Inverse(control: "7m")
-  static let off = Inverse(control: "27m")
+  let sgr: SelectGraphicRendition
+  static let on = Inverse(sgr: 7)
+  static let off = Inverse(sgr: 27)
 }
 
 struct Hidden: Equatable {
-  let control: ControlSequence
-  static let on = Hidden(control: "8m")
-  static let off = Hidden(control: "28m")
+  let sgr: SelectGraphicRendition
+  static let on = Hidden(sgr: 8)
+  static let off = Hidden(sgr: 28)
 }
 
 struct Strikethrough: Equatable {
-  let control: ControlSequence
-  static let on = Strikethrough(control: "9m")
-  static let off = Strikethrough(control: "29m")
+  let sgr: SelectGraphicRendition
+  static let on = Strikethrough(sgr: 9)
+  static let off = Strikethrough(sgr: 29)
 }

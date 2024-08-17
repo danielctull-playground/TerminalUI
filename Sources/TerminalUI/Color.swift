@@ -19,6 +19,12 @@ extension Color {
 }
 
 extension Color {
-  private static func ansi(foreground: Int, background: Int) -> Color {
-    Color(foreground: "\(foreground)m", background: "\(background)m") }
+  private static func ansi(
+    foreground: SelectGraphicRendition,
+    background: SelectGraphicRendition
+  ) -> Color {
+    Color(
+      foreground: ControlSequence(foreground),
+      background: ControlSequence(background))
+  }
 }

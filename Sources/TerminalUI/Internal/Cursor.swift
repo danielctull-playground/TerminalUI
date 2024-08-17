@@ -16,31 +16,31 @@ struct Cursor {
   }
 
   mutating func setBold(_ bold: Bold) {
-    output.write(bold.control)
+    output.write(ControlSequence(bold.sgr))
   }
 
   mutating func setItalic(_ italic: Italic) {
-    output.write(italic.control)
+    output.write(ControlSequence(italic.sgr))
   }
 
   mutating func setUnderline(_ underline: Underline) {
-    output.write(underline.control)
+    output.write(ControlSequence(underline.sgr))
   }
 
   mutating func setBlinking(_ blinking: Blinking) {
-    output.write(blinking.control)
+    output.write(ControlSequence(blinking.sgr))
   }
 
   mutating func setInverse(_ inverse: Inverse) {
-    output.write(inverse.control)
+    output.write(ControlSequence(inverse.sgr))
   }
 
   mutating func setHidden(_ hidden: Hidden) {
-    output.write(hidden.control)
+    output.write(ControlSequence(hidden.sgr))
   }
 
   mutating func setStrikethrough(_ strikethrough: Strikethrough) {
-    output.write(strikethrough.control)
+    output.write(ControlSequence(strikethrough.sgr))
   }
 
   mutating func write(_ character: Character) {
