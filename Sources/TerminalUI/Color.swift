@@ -1,7 +1,7 @@
 
 public struct Color: Equatable {
-  let foreground: String
-  let background: String
+  let foreground: ControlSequence
+  let background: ControlSequence
 }
 
 // MARK: - ANSI colors
@@ -20,8 +20,5 @@ extension Color {
 
 extension Color {
   private static func ansi(foreground: Int, background: Int) -> Color {
-    Color(
-      foreground: "\u{1b}[\(foreground)m",
-      background: "\u{1b}[\(background)m")
-  }
+    Color(foreground: "\(foreground)m", background: "\(background)m") }
 }
