@@ -2,12 +2,12 @@
 var canvas = Canvas(cursor: Cursor())
 
 
-let d = Pixel(content: "d", foreground: .red, background: .yellow)
-let a = Pixel(content: "a", foreground: .white, background: .magenta)
-let n = Pixel(content: "n", foreground: .green, background: .yellow)
-let i = Pixel(content: "i", foreground: .default, background: .default)
-let e = Pixel(content: "e", foreground: .red, background: .yellow)
-let l = Pixel(content: "l", foreground: .red, background: .yellow)
+let d = Pixel("d", bold: .on)
+let a = Pixel("a", italic: .on)
+let n = Pixel("n", underline: .on)
+let i = Pixel("i", blinking: .on)
+let e = Pixel("e", inverse: .on)
+let l = Pixel("l", strikethrough: .on)
 
 canvas.draw(d, at: Position(x: 1, y: 1))
 canvas.draw(a, at: Position(x: 2, y: 1))
