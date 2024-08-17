@@ -13,10 +13,3 @@ struct Output: TextOutputStream {
 extension Output {
   static let standard = Output(handle: .standardOutput)
 }
-
-extension TextOutputStream {
-
-  mutating func write(_ control: ControlSequence) {
-    print(control.value, to: &self)
-  }
-}
