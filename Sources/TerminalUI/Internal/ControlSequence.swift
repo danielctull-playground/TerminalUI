@@ -18,6 +18,22 @@ extension ControlSequence: ExpressibleByStringLiteral {
 
 extension ControlSequence: ExpressibleByStringInterpolation {}
 
+extension ControlSequence {
+  static let clearScreen: ControlSequence = "2J"
+}
+
+struct AlternativeBuffer {
+  let control: ControlSequence
+  static let on = AlternativeBuffer(control: "?1049h")
+  static let off = AlternativeBuffer(control: "?1049l")
+}
+
+struct CursorVisibility {
+  let control: ControlSequence
+  static let on = CursorVisibility(control: "?25h")
+  static let off = CursorVisibility(control: "?25l")
+}
+
 // MARK: - Select Graphic Rendition
 
 struct SelectGraphicRendition: Equatable {

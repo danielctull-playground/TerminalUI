@@ -1,6 +1,12 @@
+import Foundation
+
+var stdout = Output.standard
+
+stdout.write(ControlSequence.clearScreen)
+stdout.write(AlternativeBuffer.on.control)
+stdout.write(CursorVisibility.off.control)
 
 var canvas = Canvas(cursor: Cursor())
-
 
 let d = Pixel("d", bold: .on)
 let a = Pixel("a", italic: .on)
