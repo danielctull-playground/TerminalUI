@@ -6,7 +6,7 @@ stdout.write(ControlSequence.clearScreen)
 stdout.write(AlternativeBuffer.on.control)
 stdout.write(CursorVisibility.off.control)
 
-var canvas = Canvas(size: .window, cursor: Cursor())
+var canvas = Canvas(size: .window)
 
 let d = Pixel("d", bold: .on)
 let a = Pixel("a", italic: .on)

@@ -1,8 +1,13 @@
 
 struct Canvas {
 
-  var size: Size
-  var cursor: Cursor
+  private var size: Size
+  private var cursor: Cursor
+
+  init(size: Size) {
+    self.size = size
+    self.cursor = Cursor()
+  }
 
   mutating func clear() {
     for x in 1..<size.width {
