@@ -1,10 +1,4 @@
 
-struct Hidden: Equatable {
-  let sgr: SelectGraphicRendition
-  static let on = Hidden(sgr: 8)
-  static let off = Hidden(sgr: 28)
-}
-
 struct Strikethrough: Equatable {
   let sgr: SelectGraphicRendition
   static let on = Strikethrough(sgr: 9)

@@ -3,6 +3,7 @@ public struct Text {
 
   @Environment(\.blinking) private var blinking
   @Environment(\.bold) private var bold
+  @Environment(\.hidden) private var hidden
   @Environment(\.inverse) private var inverse
   @Environment(\.italic) private var italic
   @Environment(\.underline) private var underline
@@ -25,7 +26,8 @@ extension Text: View {
           italic: italic,
           underline: underline,
           blinking: blinking,
-          inverse: inverse
+          inverse: inverse,
+          hidden: hidden
         )
         canvas.draw(pixel, at: Position(x: index, y: 0))
       }
