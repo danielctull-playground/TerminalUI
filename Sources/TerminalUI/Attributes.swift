@@ -1,10 +1,4 @@
 
-struct Underline: Equatable {
-  let sgr: SelectGraphicRendition
-  static let on = Underline(sgr: 4)
-  static let off = Underline(sgr: 24)
-}
-
 struct Blinking: Equatable {
   let sgr: SelectGraphicRendition
   static let on = Blinking(sgr: 5)

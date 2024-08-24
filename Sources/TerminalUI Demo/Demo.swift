@@ -7,6 +7,7 @@ struct Demo: App {
     Text("daniel")
       .bold()
       .italic()
+      .underline()
   }
 
 //  func draw(in canvas: inout Canvas) {
