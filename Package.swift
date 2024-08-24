@@ -13,6 +13,11 @@ let package = Package(
       name: "TerminalUI"
     ),
 
+    .testTarget(
+      name: "TerminalUITests",
+      dependencies: ["TerminalUI"]
+    ),
+
     .executableTarget(
       name: "TerminalUI Demo",
       dependencies: ["TerminalUI"]
