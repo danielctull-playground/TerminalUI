@@ -34,6 +34,6 @@ extension App {
 
     let canvas = Canvas(size: .window)
     canvas.clear()
-    body.update(canvas: canvas)
+    body.update(canvas: canvas, environment: EnvironmentValues())
   }
 }
