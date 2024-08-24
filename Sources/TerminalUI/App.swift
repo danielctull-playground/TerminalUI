@@ -1,8 +1,12 @@
 import Foundation
 
-protocol App {
+public protocol App {
 
-  func draw(in canvas: inout Canvas)
+  /// The type of view representing the body of the app.
+  associatedtype Body: View
+
+  /// The content and behavior of the app.
+  var body: Body { get }
 
   /// Creates an instance of the app using the body that you define for its
   /// content.
@@ -15,7 +19,7 @@ protocol App {
 
 extension App {
 
-  static func main() {
+  public static func main() {
     let app = Self()
     app.run()
     dispatchMain()
@@ -28,8 +32,8 @@ extension App {
     stdout.write(AlternativeBuffer.on.control)
     stdout.write(CursorVisibility.off.control)
 
-    var canvas = Canvas(size: .window)
+    let canvas = Canvas(size: .window)
     canvas.clear()
-    draw(in: &canvas)
+    body.update(canvas: canvas)
   }
 }

@@ -1,5 +1,5 @@
 
-struct Canvas {
+class Canvas {
 
   private var size: Size
   private var cursor: Cursor
@@ -9,7 +9,7 @@ struct Canvas {
     self.cursor = Cursor()
   }
 
-  mutating func clear() {
+  func clear() {
     for x in 1..<size.width {
       for y in 1..<size.height {
         let position = Position(x: x, y: y)
@@ -18,7 +18,7 @@ struct Canvas {
     }
   }
 
-  mutating func draw(_ pixel: Pixel, at position: Position) {
+  func draw(_ pixel: Pixel, at position: Position) {
     cursor.move(to: position)
     cursor.setForegroundColor(pixel.foreground)
     cursor.setBackgroundColor(pixel.background)
