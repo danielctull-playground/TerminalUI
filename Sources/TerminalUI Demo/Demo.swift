@@ -9,6 +9,7 @@ struct Demo: App {
       .italic()
       .underline()
       .blinking()
+      .inverse()
   }
 
 //  func draw(in canvas: inout Canvas) {

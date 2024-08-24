@@ -1,11 +1,4 @@
 
-
-struct Inverse: Equatable {
-  let sgr: SelectGraphicRendition
-  static let on = Inverse(sgr: 7)
-  static let off = Inverse(sgr: 27)
-}
-
 struct Hidden: Equatable {
   let sgr: SelectGraphicRendition
   static let on = Hidden(sgr: 8)
