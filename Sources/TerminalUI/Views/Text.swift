@@ -6,6 +6,7 @@ public struct Text {
   @Environment(\.hidden) private var hidden
   @Environment(\.inverse) private var inverse
   @Environment(\.italic) private var italic
+  @Environment(\.strikethrough) private var strikethrough
   @Environment(\.underline) private var underline
 
   private let string: String
@@ -27,7 +28,8 @@ extension Text: View {
           underline: underline,
           blinking: blinking,
           inverse: inverse,
-          hidden: hidden
+          hidden: hidden,
+          strikethrough: strikethrough
         )
         canvas.draw(pixel, at: Position(x: index, y: 0))
       }
