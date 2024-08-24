@@ -14,7 +14,7 @@ struct BuiltinView {
 
 extension BuiltinView: View {
 
-  var body: some View {
+  var body: Never {
     fatalError("BuiltinView body should never be called.")
   }
 }
