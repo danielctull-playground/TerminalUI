@@ -4,12 +4,18 @@ import PackageDescription
 
 let package = Package(
   name: "TerminalUI",
-//  products: [
-//    .library(name: "TerminalUI", targets: ["TerminalUI"]),
-//  ],
+  products: [
+    .library(name: "TerminalUI", targets: ["TerminalUI"]),
+  ],
   targets: [
-    .executableTarget(
-      name: "TerminalUI"),
 
+    .target(
+      name: "TerminalUI"
+    ),
+
+    .executableTarget(
+      name: "TerminalUI Demo",
+      dependencies: ["TerminalUI"]
+    ),
   ]
 )

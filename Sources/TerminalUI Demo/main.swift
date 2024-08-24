@@ -1,4 +1,5 @@
 import Foundation
+@testable import TerminalUI
 
 var stdout = Output.standard
 
