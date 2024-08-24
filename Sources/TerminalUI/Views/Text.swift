@@ -1,6 +1,7 @@
 
 public struct Text {
 
+  @Environment(\.blinking) private var blinking
   @Environment(\.bold) private var bold
   @Environment(\.italic) private var italic
   @Environment(\.underline) private var underline
@@ -21,7 +22,8 @@ extension Text: View {
           character,
           bold: bold,
           italic: italic,
-          underline: underline
+          underline: underline,
+          blinking: blinking
         )
         canvas.draw(pixel, at: Position(x: index, y: 0))
       }

@@ -1,9 +1,4 @@
 
-struct Blinking: Equatable {
-  let sgr: SelectGraphicRendition
-  static let on = Blinking(sgr: 5)
-  static let off = Blinking(sgr: 25)
-}
 
 struct Inverse: Equatable {
   let sgr: SelectGraphicRendition

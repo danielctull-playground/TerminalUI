@@ -8,6 +8,7 @@ struct Demo: App {
       .bold()
       .italic()
       .underline()
+      .blinking()
   }
 
 //  func draw(in canvas: inout Canvas) {
