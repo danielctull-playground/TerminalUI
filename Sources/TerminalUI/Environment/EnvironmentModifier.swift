@@ -5,16 +5,15 @@ extension View {
     _ keyPath: WritableKeyPath<EnvironmentValues, Value>,
     _ value: Value
   ) -> some View {
-    EnvironmentModifier(content: self) { $0[keyPath: keyPath] = value }
+    modifier(EnvironmentModifier { $0[keyPath: keyPath] = value })
   }
 }
 
-private struct EnvironmentModifier<Content: View>: View {
+private struct EnvironmentModifier<Content: View>: ViewModifier {
 
-  let content: Content
   let modify: (inout EnvironmentValues) -> Void
 
-  var body: some View {
+  func body(content: Content) -> some View {
     BuiltinView { canvas, environment in
       var environment = environment
       modify(&environment)
