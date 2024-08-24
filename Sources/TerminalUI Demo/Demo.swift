@@ -6,6 +6,7 @@ struct Demo: App {
   var body: some View {
     Text("daniel")
       .bold()
+      .italic()
   }
 
 //  func draw(in canvas: inout Canvas) {

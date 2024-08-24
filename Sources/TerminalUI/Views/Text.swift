@@ -2,6 +2,8 @@
 public struct Text {
 
   @Environment(\.bold) private var bold
+  @Environment(\.italic) private var italic
+
   private let string: String
 
   public init(_ string: String) {
@@ -14,7 +16,12 @@ extension Text: View {
   public var body: some View {
     BuiltinView { canvas in
       for (character, index) in zip(string, 1...) {
-        canvas.draw(Pixel(character, bold: bold), at: Position(x: index, y: 0))
+        let pixel = Pixel(
+          character,
+          bold: bold,
+          italic: italic
+        )
+        canvas.draw(pixel, at: Position(x: index, y: 0))
       }
     }
   }
