@@ -1,14 +1,18 @@
 
 struct BuiltinView {
 
-  private let update: (Canvas) -> Void
+  private let update: (Canvas, EnvironmentValues) -> Void
 
-  init(update: @escaping (Canvas) -> Void) {
+  init(update: @escaping (Canvas, EnvironmentValues) -> Void) {
     self.update = update
   }
 
-  func update(canvas: Canvas) {
-    update(canvas)
+  init(update: @escaping (Canvas) -> Void) {
+    self.update = { canvas, _ in update(canvas) }
+  }
+
+  func update(canvas: Canvas, environment: EnvironmentValues) {
+    update(canvas, environment)
   }
 }
 

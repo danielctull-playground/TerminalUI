@@ -11,11 +11,15 @@ public protocol View {
 extension View {
 
   func update(canvas: Canvas) {
+    update(canvas: canvas, environment: EnvironmentValues())
+  }
+
+  func update(canvas: Canvas, environment: EnvironmentValues) {
 
     if let builtin = self as? BuiltinView {
       builtin.update(canvas: canvas)
     } else {
-      body.update(canvas: canvas)
+      body.update(canvas: canvas, environment: environment)
     }
   }
 }
