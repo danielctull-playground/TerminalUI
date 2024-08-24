@@ -1,10 +1,4 @@
 
-struct Bold: Equatable {
-  let sgr: SelectGraphicRendition
-  static let on = Bold(sgr: 1)
-  static let off = Bold(sgr: 22)
-}
-
 struct Italic: Equatable {
   let sgr: SelectGraphicRendition
   static let on = Italic(sgr: 3)

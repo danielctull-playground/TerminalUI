@@ -5,6 +5,7 @@ struct Demo: App {
 
   var body: some View {
     Text("daniel")
+      .bold()
   }
 
 //  func draw(in canvas: inout Canvas) {
