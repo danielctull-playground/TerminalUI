@@ -12,6 +12,8 @@ extension View {
 
   func update(canvas: Canvas, environment: EnvironmentValues) {
 
+    environment.install(on: self)
+
     if let builtin = self as? BuiltinView {
       builtin.update(canvas: canvas, environment: environment)
     } else {
