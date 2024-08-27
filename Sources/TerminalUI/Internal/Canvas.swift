@@ -9,15 +9,6 @@ class Canvas {
     self.cursor = Cursor()
   }
 
-  func clear() {
-    for x in 1..<size.width {
-      for y in 1..<size.height {
-        let position = Position(x: x, y: y)
-        draw(Pixel(" "), at: position)
-      }
-    }
-  }
-
   func draw(_ pixel: Pixel, at position: Position) {
     cursor.move(to: position)
     cursor.setForegroundColor(pixel.foreground)
