@@ -33,6 +33,6 @@ extension App {
     stdout.write(CursorVisibility.off.control)
 
     let canvas = Canvas()
-    body.update(canvas: canvas, environment: EnvironmentValues())
+    body.update(canvas: canvas)
   }
 }

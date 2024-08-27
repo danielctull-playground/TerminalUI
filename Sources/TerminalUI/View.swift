@@ -10,6 +10,10 @@ public protocol View {
 
 extension View {
 
+  func update(canvas: Canvas) {
+    update(canvas: canvas, environment: EnvironmentValues())
+  }
+
   func update(canvas: Canvas, environment: EnvironmentValues) {
 
     environment.install(on: self)
