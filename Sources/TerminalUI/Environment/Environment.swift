@@ -3,7 +3,7 @@
 public struct Environment<Value> {
 
   private let keyPath: KeyPath<EnvironmentValues, Value>
-  @Box private var values: EnvironmentValues?
+  @Mutable private var values: EnvironmentValues?
 
   public init(_ keyPath: KeyPath<EnvironmentValues, Value>) {
     self.keyPath = keyPath
@@ -12,14 +12,6 @@ public struct Environment<Value> {
   public var wrappedValue: Value {
     guard let values else { fatalError("Environment values not set.") }
     return values[keyPath: keyPath]
-  }
-}
-
-@propertyWrapper
-private final class Box<Value> {
-  var wrappedValue: Value
-  init(wrappedValue: Value) {
-    self.wrappedValue = wrappedValue
   }
 }
 
