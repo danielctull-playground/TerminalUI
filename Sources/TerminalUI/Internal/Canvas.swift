@@ -1,11 +1,9 @@
 
 class Canvas {
 
-  private var size: Size
   private var cursor: Cursor
 
-  init(size: Size) {
-    self.size = size
+  init() {
     self.cursor = Cursor()
   }
 

@@ -32,7 +32,7 @@ extension App {
     stdout.write(AlternativeBuffer.on.control)
     stdout.write(CursorVisibility.off.control)
 
-    let canvas = Canvas(size: .window)
+    let canvas = Canvas()
     body.update(canvas: canvas, environment: EnvironmentValues())
   }
 }
