@@ -1,6 +1,7 @@
 
 public struct Text {
 
+  @Environment(\.backgroundColor) private var backgroundColor
   @Environment(\.blinking) private var blinking
   @Environment(\.bold) private var bold
   @Environment(\.foregroundColor) private var foregroundColor
@@ -25,6 +26,7 @@ extension Text: View {
         let pixel = Pixel(
           character,
           foreground: foregroundColor,
+          background: backgroundColor,
           bold: bold,
           italic: italic,
           underline: underline,

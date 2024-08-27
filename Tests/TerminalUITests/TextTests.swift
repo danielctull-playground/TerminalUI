@@ -35,4 +35,19 @@ struct TextTests {
       Position(x: 1, y: 0): Pixel("x", foreground: .blue),
     ])
   }
+
+  @Test("backgroundColor")
+  func backgroundColor() {
+
+    var pixels: [Position: Pixel] = [:]
+    let canvas = Canvas { pixels[$1] = $0 }
+
+    Text("x")
+      .backgroundColor(.blue)
+      .update(canvas: canvas)
+
+    #expect(pixels == [
+      Position(x: 1, y: 0): Pixel("x", background: .blue),
+    ])
+  }
 }
