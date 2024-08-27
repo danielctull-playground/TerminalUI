@@ -3,6 +3,7 @@ public struct Text {
 
   @Environment(\.blinking) private var blinking
   @Environment(\.bold) private var bold
+  @Environment(\.foregroundColor) private var foregroundColor
   @Environment(\.hidden) private var hidden
   @Environment(\.inverse) private var inverse
   @Environment(\.italic) private var italic
@@ -23,6 +24,7 @@ extension Text: View {
       for (character, index) in zip(string, 1...) {
         let pixel = Pixel(
           character,
+          foreground: foregroundColor,
           bold: bold,
           italic: italic,
           underline: underline,
