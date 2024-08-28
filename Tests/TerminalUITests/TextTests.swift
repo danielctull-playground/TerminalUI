@@ -1,7 +1,8 @@
 @testable import TerminalUI
+import TerminalUITesting
 import Testing
 
-@Suite
+@Suite("Text Tests")
 struct TextTests {
 
   @Test("Text displays correctly")
@@ -24,14 +25,10 @@ struct TextTests {
   @Test("foregroundColor")
   func foregroundColor() {
 
-    var pixels: [Position: Pixel] = [:]
-    let canvas = Canvas { pixels[$1] = $0 }
-
-    Text("x")
+    let text = Text("x")
       .foregroundColor(.blue)
-      .update(canvas: canvas)
 
-    #expect(pixels == [
+    text.expect([
       Position(x: 1, y: 0): Pixel("x", foreground: .blue),
     ])
   }
@@ -39,14 +36,10 @@ struct TextTests {
   @Test("backgroundColor")
   func backgroundColor() {
 
-    var pixels: [Position: Pixel] = [:]
-    let canvas = Canvas { pixels[$1] = $0 }
-
-    Text("x")
+    let text = Text("x")
       .backgroundColor(.blue)
-      .update(canvas: canvas)
 
-    #expect(pixels == [
+    text.expect([
       Position(x: 1, y: 0): Pixel("x", background: .blue),
     ])
   }
