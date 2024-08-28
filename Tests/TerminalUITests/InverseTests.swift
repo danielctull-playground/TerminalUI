@@ -2,7 +2,7 @@
 import TerminalUITesting
 import Testing
 
-@Suite("Inverse Tests")
+@Suite("Inverse Tests", .tags(.viewModifier))
 struct InverseTests {
 
   @Test("inverse = on")

@@ -2,7 +2,7 @@
 import TerminalUITesting
 import Testing
 
-@Suite("Underline Tests")
+@Suite("Underline Tests", .tags(.viewModifier))
 struct UnderlineTests {
 
   @Test("underline = on")

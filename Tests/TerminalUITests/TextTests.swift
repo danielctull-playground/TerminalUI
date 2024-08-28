@@ -2,7 +2,7 @@
 import TerminalUITesting
 import Testing
 
-@Suite("Text Tests")
+@Suite("Text Tests", .tags(.view))
 struct TextTests {
 
   @Test("Text displays correctly")

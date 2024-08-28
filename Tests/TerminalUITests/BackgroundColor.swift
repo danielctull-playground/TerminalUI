@@ -2,7 +2,7 @@
 import TerminalUITesting
 import Testing
 
-@Suite("BackgroundColor Tests")
+@Suite("BackgroundColor Tests", .tags(.viewModifier))
 struct BackgroundColorTests {
 
   @Test("backgroundColor")

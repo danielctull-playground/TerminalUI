@@ -2,7 +2,7 @@
 import TerminalUITesting
 import Testing
 
-@Suite("Strikethrough Tests")
+@Suite("Strikethrough Tests", .tags(.viewModifier))
 struct StrikethroughTests {
 
   @Test("strikethrough = on")
