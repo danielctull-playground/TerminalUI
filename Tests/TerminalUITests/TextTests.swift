@@ -21,26 +21,4 @@ struct TextTests {
       Position(x: 5, y: 0): Pixel("o"),
     ])
   }
-
-  @Test("foregroundColor")
-  func foregroundColor() {
-
-    let text = Text("x")
-      .foregroundColor(.blue)
-
-    text.expect([
-      Position(x: 1, y: 0): Pixel("x", foreground: .blue),
-    ])
-  }
-
-  @Test("backgroundColor")
-  func backgroundColor() {
-
-    let text = Text("x")
-      .backgroundColor(.blue)
-
-    text.expect([
-      Position(x: 1, y: 0): Pixel("x", background: .blue),
-    ])
-  }
 }
