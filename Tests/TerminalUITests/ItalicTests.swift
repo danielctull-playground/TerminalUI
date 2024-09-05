@@ -2,10 +2,10 @@
 import TerminalUITesting
 import Testing
 
-@Suite("Italic Tests", .tags(.viewModifier))
+@Suite("Italic", .tags(.viewModifier))
 struct ItalicTests {
 
-  @Test("italic = on")
+  @Test("on")
   func on() {
 
     let text = Text("x")
@@ -16,7 +16,7 @@ struct ItalicTests {
     ])
   }
 
-  @Test("italic = off")
+  @Test("off")
   func off() {
 
     let text = Text("x")

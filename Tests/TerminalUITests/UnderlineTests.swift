@@ -2,10 +2,10 @@
 import TerminalUITesting
 import Testing
 
-@Suite("Underline Tests", .tags(.viewModifier))
+@Suite("Underline", .tags(.viewModifier))
 struct UnderlineTests {
 
-  @Test("underline = on")
+  @Test("on")
   func on() {
 
     let text = Text("x")
@@ -16,7 +16,7 @@ struct UnderlineTests {
     ])
   }
 
-  @Test("underline = off")
+  @Test("off")
   func off() {
 
     let text = Text("x")

@@ -2,10 +2,10 @@
 import TerminalUITesting
 import Testing
 
-@Suite("Strikethrough Tests", .tags(.viewModifier))
+@Suite("Strikethrough", .tags(.viewModifier))
 struct StrikethroughTests {
 
-  @Test("strikethrough = on")
+  @Test("on")
   func on() {
 
     let text = Text("x")
@@ -16,7 +16,7 @@ struct StrikethroughTests {
     ])
   }
 
-  @Test("strikethrough = off")
+  @Test("off")
   func off() {
 
     let text = Text("x")

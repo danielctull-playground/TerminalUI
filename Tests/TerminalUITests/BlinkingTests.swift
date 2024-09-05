@@ -2,10 +2,10 @@
 import TerminalUITesting
 import Testing
 
-@Suite("Blinking Tests", .tags(.viewModifier))
+@Suite("Blinking", .tags(.viewModifier))
 struct BlinkingTests {
 
-  @Test("blinking = on")
+  @Test("on")
   func on() {
 
     let text = Text("x")
@@ -16,7 +16,7 @@ struct BlinkingTests {
     ])
   }
 
-  @Test("blinking = off")
+  @Test("off")
   func off() {
 
     let text = Text("x")

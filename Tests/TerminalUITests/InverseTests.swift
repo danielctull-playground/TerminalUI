@@ -2,10 +2,10 @@
 import TerminalUITesting
 import Testing
 
-@Suite("Inverse Tests", .tags(.viewModifier))
+@Suite("Inverse", .tags(.viewModifier))
 struct InverseTests {
 
-  @Test("inverse = on")
+  @Test("on")
   func on() {
 
     let text = Text("x")
@@ -16,7 +16,7 @@ struct InverseTests {
     ])
   }
 
-  @Test("inverse = off")
+  @Test("off")
   func off() {
 
     let text = Text("x")

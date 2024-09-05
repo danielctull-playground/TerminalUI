@@ -2,10 +2,10 @@
 import TerminalUITesting
 import Testing
 
-@Suite("Bold Tests", .tags(.viewModifier))
+@Suite("Bold", .tags(.viewModifier))
 struct BoldTests {
 
-  @Test("bold = on")
+  @Test("on")
   func on() {
 
     let text = Text("x")
@@ -16,7 +16,7 @@ struct BoldTests {
     ])
   }
 
-  @Test("bold = off")
+  @Test("off")
   func off() {
 
     let text = Text("x")

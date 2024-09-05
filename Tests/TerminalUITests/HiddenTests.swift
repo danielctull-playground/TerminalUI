@@ -2,10 +2,10 @@
 import TerminalUITesting
 import Testing
 
-@Suite("Hidden Tests", .tags(.viewModifier))
+@Suite("Hidden", .tags(.viewModifier))
 struct HiddenTests {
 
-  @Test("hidden = on")
+  @Test("on")
   func on() {
 
     let text = Text("x")
@@ -16,7 +16,7 @@ struct HiddenTests {
     ])
   }
 
-  @Test("hidden = off")
+  @Test("off")
   func off() {
 
     let text = Text("x")
