@@ -1,13 +1,9 @@
 
 struct ControlSequence: Equatable {
-  private let raw: String
+  fileprivate let raw: String
   fileprivate init(_ raw: String) {
     self.raw = raw
   }
-}
-
-extension ControlSequence {
-  fileprivate var value: String { "\u{1b}[\(raw)" }
 }
 
 extension ControlSequence: ExpressibleByStringLiteral {
@@ -58,7 +54,7 @@ extension ControlSequence {
 
 extension TextOutputStream {
 
-  mutating func write(_ control: ControlSequence) {
-    write(control.value)
+  mutating func write(_ controlSequence: ControlSequence) {
+    write("\u{1b}[\(controlSequence.raw)")
   }
 }
