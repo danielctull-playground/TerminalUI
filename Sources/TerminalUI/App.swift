@@ -25,7 +25,7 @@ extension App {
     dispatchMain()
   }
 
-  func run(stream: some TextOutputStream) {
+  public func run(stream: some TextOutputStream) {
     var output = stream
 
     output.write(ControlSequence.clearScreen)
