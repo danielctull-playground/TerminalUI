@@ -16,7 +16,6 @@ extension Canvas {
   init(_ output: some TextOutputStream) {
     var output = output
     self.init { pixel, position in
-      output.write(.position(position))
       output.write(pixel.foreground.foreground)
       output.write(pixel.background.background)
       output.write(pixel.bold.controlSequence)
@@ -26,6 +25,7 @@ extension Canvas {
       output.write(pixel.inverse.controlSequence)
       output.write(pixel.hidden.controlSequence)
       output.write(pixel.strikethrough.controlSequence)
+      output.write(.position(position))
       output.write(pixel.content)
     }
   }

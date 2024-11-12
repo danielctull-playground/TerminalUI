@@ -12,16 +12,16 @@ struct CanvasTests {
     canvas.draw(Pixel("a"), at: Position(x: 2, y: 1))
     let controls = stream.output.split(separator: "\u{1b}")
     #expect(controls == [
-      "[1;2H", // Position
-      "[39m",  // ForegroundColor
-      "[49m",  // BackgroundColor
-      "[22m",  // Bold
-      "[23m",  // Italic
-      "[24m",  // Underline
-      "[25m",  // Blinking
-      "[27m",  // Inverse
-      "[28m",  // Hidden
-      "[29ma", // Strikethrough & content
+      "[39m",  // ForegroundColor default
+      "[49m",  // BackgroundColor default
+      "[22m",  // Bold off
+      "[23m",  // Italic off
+      "[24m",  // Underline off
+      "[25m",  // Blinking off
+      "[27m",  // Inverse off
+      "[28m",  // Hidden off
+      "[29m", // Strikethrough off
+      "[1;2Ha", // Position + content
     ])
   }
 }
