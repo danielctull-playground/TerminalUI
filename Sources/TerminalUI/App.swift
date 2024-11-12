@@ -21,18 +21,18 @@ extension App {
 
   public static func main() {
     let app = Self()
-    app.run()
+    app.run(stream: .fileHandle(.standardOutput))
     dispatchMain()
   }
 
-  private func run() {
-    var stdout = Output.standard
+  func run(stream: some TextOutputStream) {
+    var output = stream
 
-    stdout.write(ControlSequence.clearScreen)
-    stdout.write(AlternativeBuffer.on.control)
-    stdout.write(CursorVisibility.off.control)
+    output.write(ControlSequence.clearScreen)
+    output.write(AlternativeBuffer.on.control)
+    output.write(CursorVisibility.off.control)
 
-    let canvas = Canvas(stdout)
+    let canvas = Canvas(output)
     body.update(canvas: canvas)
   }
 }
