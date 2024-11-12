@@ -13,20 +13,20 @@ struct Canvas {
 
 extension Canvas {
 
-  init() {
-    var cursor = Cursor()
+  init(_ output: some TextOutputStream) {
+    var output = output
     self.init { pixel, position in
-      cursor.move(to: position)
-      cursor.setForegroundColor(pixel.foreground)
-      cursor.setBackgroundColor(pixel.background)
-      cursor.setBold(pixel.bold)
-      cursor.setItalic(pixel.italic)
-      cursor.setUnderline(pixel.underline)
-      cursor.setBlinking(pixel.blinking)
-      cursor.setInverse(pixel.inverse)
-      cursor.setHidden(pixel.hidden)
-      cursor.setStrikethrough(pixel.strikethrough)
-      cursor.write(pixel.content)
+      output.move(to: position)
+      output.setForegroundColor(pixel.foreground)
+      output.setBackgroundColor(pixel.background)
+      output.setBold(pixel.bold)
+      output.setItalic(pixel.italic)
+      output.setUnderline(pixel.underline)
+      output.setBlinking(pixel.blinking)
+      output.setInverse(pixel.inverse)
+      output.setHidden(pixel.hidden)
+      output.setStrikethrough(pixel.strikethrough)
+      output.write(pixel.content)
     }
   }
 }
