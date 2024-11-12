@@ -1,29 +1,37 @@
-@testable import TerminalUI
+import TerminalUI
 import TerminalUITesting
 import Testing
 
 @Suite("Underline", .tags(.viewModifier))
 struct UnderlineTests {
 
-  @Test("on")
-  func on() {
+  @Test("Text Output", arguments: [
+    (true,  "[4m" ),
+    (false, "[24m"),
+  ])
+  func textOutput(underline: Bool, expected: String) {
 
-    let text = Text("x")
-      .underline(true)
+    let app = TestApp {
+      Text("a").underline(underline)
+    }
 
-    text.expect([
-      Position(x: 1, y: 0): Pixel("x", underline: .on),
-    ])
-  }
+    let stream = TestStream()
+    app.run(stream: stream)
 
-  @Test("off")
-  func off() {
-
-    let text = Text("x")
-      .underline(false)
-
-    text.expect([
-      Position(x: 1, y: 0): Pixel("x", underline: .off),
+    #expect(stream.controlSequences == [
+      "[2J",     // Clear screen
+      "[?1049h", // Alternative buffer on
+      "[?25l",   // Cursor visibility off
+      "[39m",    // ForegroundColor default
+      "[49m",    // BackgroundColor default
+      "[22m",    // Bold off
+      "[23m",    // Italic off
+      expected,  // Underline
+      "[25m",    // Blinking off
+      "[27m",    // Inverse off
+      "[28m",    // Hidden off
+      "[29m",    // Strikethrough off
+      "[0;1Ha",  // Position + content
     ])
   }
 }

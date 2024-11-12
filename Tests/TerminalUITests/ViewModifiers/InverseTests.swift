@@ -1,29 +1,37 @@
-@testable import TerminalUI
+import TerminalUI
 import TerminalUITesting
 import Testing
 
 @Suite("Inverse", .tags(.viewModifier))
 struct InverseTests {
 
-  @Test("on")
-  func on() {
+  @Test("Text Output", arguments: [
+    (true,  "[7m" ),
+    (false, "[27m"),
+  ])
+  func textOutput(inverse: Bool, expected: String) {
 
-    let text = Text("x")
-      .inverse(true)
+    let app = TestApp {
+      Text("a").inverse(inverse)
+    }
 
-    text.expect([
-      Position(x: 1, y: 0): Pixel("x", inverse: .on),
-    ])
-  }
+    let stream = TestStream()
+    app.run(stream: stream)
 
-  @Test("off")
-  func off() {
-
-    let text = Text("x")
-      .inverse(false)
-
-    text.expect([
-      Position(x: 1, y: 0): Pixel("x", inverse: .off),
+    #expect(stream.controlSequences == [
+      "[2J",     // Clear screen
+      "[?1049h", // Alternative buffer on
+      "[?25l",   // Cursor visibility off
+      "[39m",    // ForegroundColor default
+      "[49m",    // BackgroundColor default
+      "[22m",    // Bold off
+      "[23m",    // Italic off
+      "[24m",    // Underline off
+      "[25m",    // Blinking off
+      expected,  // Inverse
+      "[28m",    // Hidden off
+      "[29m",    // Strikethrough off
+      "[0;1Ha",  // Position + content
     ])
   }
 }
