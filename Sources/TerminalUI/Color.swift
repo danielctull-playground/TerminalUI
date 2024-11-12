@@ -1,5 +1,5 @@
 
-public struct Color: Equatable {
+public struct Color: Equatable, Sendable {
   let foreground: ControlSequence
   let background: ControlSequence
 }

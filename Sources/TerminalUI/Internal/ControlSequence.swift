@@ -1,5 +1,5 @@
 
-struct ControlSequence: Equatable {
+struct ControlSequence: Equatable, Sendable {
   fileprivate let raw: String
   fileprivate init(_ raw: String) {
     self.raw = raw
