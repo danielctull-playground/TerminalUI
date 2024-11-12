@@ -18,7 +18,7 @@ extension EnvironmentValues {
 }
 
 struct Italic: Equatable {
-  let sgr: SelectGraphicRendition
-  static let on = Italic(sgr: 3)
-  static let off = Italic(sgr: 23)
+  let controlSequence: ControlSequence
+  static let on = Italic(controlSequence: .selectGraphicRendition(3))
+  static let off = Italic(controlSequence: .selectGraphicRendition(23))
 }

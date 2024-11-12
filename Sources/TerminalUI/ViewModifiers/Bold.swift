@@ -18,7 +18,7 @@ extension EnvironmentValues {
 }
 
 struct Bold: Equatable {
-  let sgr: SelectGraphicRendition
-  static let on = Bold(sgr: 1)
-  static let off = Bold(sgr: 22)
+  let controlSequence: ControlSequence
+  static let on = Bold(controlSequence: .selectGraphicRendition(1))
+  static let off = Bold(controlSequence: .selectGraphicRendition(22))
 }

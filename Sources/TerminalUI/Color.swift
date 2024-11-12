@@ -20,11 +20,11 @@ extension Color {
 
 extension Color {
   private static func ansi(
-    foreground: SelectGraphicRendition,
-    background: SelectGraphicRendition
+    foreground: GraphicRendition,
+    background: GraphicRendition
   ) -> Color {
     Color(
-      foreground: ControlSequence(foreground),
-      background: ControlSequence(background))
+      foreground: .selectGraphicRendition(foreground),
+      background: .selectGraphicRendition(background))
   }
 }

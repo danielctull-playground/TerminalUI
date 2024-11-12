@@ -18,7 +18,7 @@ extension EnvironmentValues {
 }
 
 struct Strikethrough: Equatable {
-  let sgr: SelectGraphicRendition
-  static let on = Strikethrough(sgr: 9)
-  static let off = Strikethrough(sgr: 29)
+  let controlSequence: ControlSequence
+  static let on = Strikethrough(controlSequence: .selectGraphicRendition(9))
+  static let off = Strikethrough(controlSequence: .selectGraphicRendition(29))
 }

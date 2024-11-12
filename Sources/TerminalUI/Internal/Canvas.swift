@@ -16,17 +16,23 @@ extension Canvas {
   init(_ output: some TextOutputStream) {
     var output = output
     self.init { pixel, position in
-      output.move(to: position)
-      output.setForegroundColor(pixel.foreground)
-      output.setBackgroundColor(pixel.background)
-      output.setBold(pixel.bold)
-      output.setItalic(pixel.italic)
-      output.setUnderline(pixel.underline)
-      output.setBlinking(pixel.blinking)
-      output.setInverse(pixel.inverse)
-      output.setHidden(pixel.hidden)
-      output.setStrikethrough(pixel.strikethrough)
+      output.write(.position(position))
+      output.write(pixel.foreground.foreground)
+      output.write(pixel.background.background)
+      output.write(pixel.bold.controlSequence)
+      output.write(pixel.italic.controlSequence)
+      output.write(pixel.underline.controlSequence)
+      output.write(pixel.blinking.controlSequence)
+      output.write(pixel.inverse.controlSequence)
+      output.write(pixel.hidden.controlSequence)
+      output.write(pixel.strikethrough.controlSequence)
       output.write(pixel.content)
     }
+  }
+}
+
+extension TextOutputStream {
+  fileprivate mutating func write(_ character: Character) {
+    write(String(character))
   }
 }

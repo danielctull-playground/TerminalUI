@@ -34,22 +34,23 @@ struct CursorVisibility {
   static let off = CursorVisibility(control: "?25l")
 }
 
-// MARK: - Select Graphic Rendition
+// MARK: - GraphicRendition
 
-struct SelectGraphicRendition: Equatable {
+struct GraphicRendition: Equatable {
   fileprivate let value: Int
 }
 
-extension SelectGraphicRendition: ExpressibleByIntegerLiteral {
+extension GraphicRendition: ExpressibleByIntegerLiteral {
   init(integerLiteral value: Int) {
     self.init(value: value)
   }
 }
 
 extension ControlSequence {
-
-  init(_ sgr: SelectGraphicRendition) {
-    self.init("\(sgr.value)m")
+  static func selectGraphicRendition(
+    _ rendition: GraphicRendition
+  ) -> ControlSequence {
+    ControlSequence("\(rendition.value)m")
   }
 }
 

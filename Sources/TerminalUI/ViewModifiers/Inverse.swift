@@ -18,7 +18,7 @@ extension EnvironmentValues {
 }
 
 struct Inverse: Equatable {
-  let sgr: SelectGraphicRendition
-  static let on = Inverse(sgr: 7)
-  static let off = Inverse(sgr: 27)
+  let controlSequence: ControlSequence
+  static let on = Inverse(controlSequence: .selectGraphicRendition(7))
+  static let off = Inverse(controlSequence: .selectGraphicRendition(27))
 }
