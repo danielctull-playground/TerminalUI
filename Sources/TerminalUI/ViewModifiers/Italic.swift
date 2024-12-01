@@ -11,7 +11,7 @@ private struct ItalicEnvironmentKey: EnvironmentKey {
 }
 
 extension EnvironmentValues {
-  var italic: Italic {
+  fileprivate(set) var italic: Italic {
     get { self[ItalicEnvironmentKey.self] }
     set { self[ItalicEnvironmentKey.self] = newValue }
   }

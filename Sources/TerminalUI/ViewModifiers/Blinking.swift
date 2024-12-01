@@ -11,7 +11,7 @@ private struct BlinkingEnvironmentKey: EnvironmentKey {
 }
 
 extension EnvironmentValues {
-  var blinking: Blinking {
+  fileprivate(set) var blinking: Blinking {
     get { self[BlinkingEnvironmentKey.self] }
     set { self[BlinkingEnvironmentKey.self] = newValue }
   }

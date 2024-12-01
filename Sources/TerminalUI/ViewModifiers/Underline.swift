@@ -11,7 +11,7 @@ private struct UnderlineEnvironmentKey: EnvironmentKey {
 }
 
 extension EnvironmentValues {
-  var underline: Underline {
+  fileprivate(set) var underline: Underline {
     get { self[UnderlineEnvironmentKey.self] }
     set { self[UnderlineEnvironmentKey.self] = newValue }
   }

@@ -11,7 +11,7 @@ private struct StrikethroughEnvironmentKey: EnvironmentKey {
 }
 
 extension EnvironmentValues {
-  var strikethrough: Strikethrough {
+  fileprivate(set) var strikethrough: Strikethrough {
     get { self[StrikethroughEnvironmentKey.self] }
     set { self[StrikethroughEnvironmentKey.self] = newValue }
   }

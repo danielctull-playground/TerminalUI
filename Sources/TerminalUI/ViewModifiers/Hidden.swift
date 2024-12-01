@@ -11,7 +11,7 @@ private struct HiddenEnvironmentKey: EnvironmentKey {
 }
 
 extension EnvironmentValues {
-  var hidden: Hidden {
+  fileprivate(set) var hidden: Hidden {
     get { self[HiddenEnvironmentKey.self] }
     set { self[HiddenEnvironmentKey.self] = newValue }
   }

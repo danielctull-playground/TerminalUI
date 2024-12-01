@@ -11,7 +11,7 @@ private struct BoldEnvironmentKey: EnvironmentKey {
 }
 
 extension EnvironmentValues {
-  var bold: Bold {
+  fileprivate(set) var bold: Bold {
     get { self[BoldEnvironmentKey.self] }
     set { self[BoldEnvironmentKey.self] = newValue }
   }

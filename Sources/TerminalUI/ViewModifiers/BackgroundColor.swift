@@ -11,7 +11,7 @@ private struct BackgroundColorEnvironmentKey: EnvironmentKey {
 }
 
 extension EnvironmentValues {
-  var backgroundColor: Color {
+  fileprivate(set) var backgroundColor: Color {
     get { self[BackgroundColorEnvironmentKey.self] }
     set { self[BackgroundColorEnvironmentKey.self] = newValue }
   }

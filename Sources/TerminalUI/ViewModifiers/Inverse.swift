@@ -11,7 +11,7 @@ private struct InverseEnvironmentKey: EnvironmentKey {
 }
 
 extension EnvironmentValues {
-  var inverse: Inverse {
+  fileprivate(set) var inverse: Inverse {
     get { self[InverseEnvironmentKey.self] }
     set { self[InverseEnvironmentKey.self] = newValue }
   }
