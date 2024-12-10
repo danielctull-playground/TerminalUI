@@ -22,17 +22,15 @@ public protocol ViewModifier {
   func body(content: Content) -> Body
 }
 
-private struct ModifiedView<Modifier: ViewModifier>: View {
+private struct ModifiedView<Modifier: ViewModifier>: Builtin, View {
 
   let content: Modifier.Content
   let modifier: Modifier
 
-  var body: some View {
-    BuiltinView { canvas, environment in
-      environment.install(on: modifier)
-      modifier
-        .body(content: content)
-        .render(in: canvas, environment: environment)
-    }
+  func render(in canvas: Canvas, environment: EnvironmentValues) {
+    environment.install(on: modifier)
+    modifier
+      .body(content: content)
+      .render(in: canvas, environment: environment)
   }
 }
