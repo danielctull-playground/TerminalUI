@@ -7,10 +7,6 @@ struct BuiltinView {
     self.render = render
   }
 
-  init(render: @escaping (Canvas) -> Void) {
-    self.render = { canvas, _ in render(canvas) }
-  }
-
   func render(in canvas: Canvas, environment: EnvironmentValues) {
     render(canvas, environment)
   }
