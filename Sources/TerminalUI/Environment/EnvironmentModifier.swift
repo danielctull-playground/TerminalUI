@@ -17,7 +17,7 @@ private struct EnvironmentModifier<Content: View>: ViewModifier {
     BuiltinView { canvas, environment in
       var environment = environment
       modify(&environment)
-      content.update(canvas: canvas, environment: environment)
+      content.render(in: canvas, environment: environment)
     }
   }
 }

@@ -10,18 +10,18 @@ public protocol View {
 
 extension View {
 
-  func update(canvas: Canvas) {
-    update(canvas: canvas, environment: EnvironmentValues())
+  func render(in canvas: Canvas) {
+    render(in: canvas, environment: EnvironmentValues())
   }
 
-  func update(canvas: Canvas, environment: EnvironmentValues) {
+  func render(in canvas: Canvas, environment: EnvironmentValues) {
 
     environment.install(on: self)
 
     if let builtin = self as? BuiltinView {
-      builtin.update(canvas: canvas, environment: environment)
+      builtin.render(in: canvas, environment: environment)
     } else {
-      body.update(canvas: canvas, environment: environment)
+      body.render(in: canvas, environment: environment)
     }
   }
 }

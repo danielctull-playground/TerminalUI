@@ -32,7 +32,7 @@ private struct ModifiedView<Modifier: ViewModifier>: View {
       environment.install(on: modifier)
       modifier
         .body(content: content)
-        .update(canvas: canvas, environment: environment)
+        .render(in: canvas, environment: environment)
     }
   }
 }
