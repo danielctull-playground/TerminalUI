@@ -18,7 +18,7 @@ extension View {
 
     environment.install(on: self)
 
-    if let builtin = self as? BuiltinView {
+    if let builtin = self as? any Builtin {
       builtin.render(in: canvas, environment: environment)
     } else {
       body.render(in: canvas, environment: environment)
