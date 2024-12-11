@@ -27,7 +27,7 @@ private struct ModifiedView<Modifier: ViewModifier>: Builtin, View {
   let content: Modifier.Content
   let modifier: Modifier
 
-  func render(in canvas: Canvas, environment: EnvironmentValues) {
+  func render(in canvas: any Canvas, environment: EnvironmentValues) {
     environment.install(on: modifier)
     modifier
       .body(content: content)

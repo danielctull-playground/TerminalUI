@@ -7,7 +7,7 @@ public struct Text: Builtin, View {
     self.string = string
   }
 
-  func render(in canvas: Canvas, environment: EnvironmentValues) {
+  func render(in canvas: any Canvas, environment: EnvironmentValues) {
     for (character, index) in zip(string, 1...) {
       let pixel = Pixel(
         character,

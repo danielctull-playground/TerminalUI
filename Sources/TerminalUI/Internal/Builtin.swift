@@ -1,6 +1,6 @@
 
 protocol Builtin {
-  func render(in canvas: Canvas, environment: EnvironmentValues)
+  func render(in canvas: any Canvas, environment: EnvironmentValues)
 }
 
 extension Builtin {
