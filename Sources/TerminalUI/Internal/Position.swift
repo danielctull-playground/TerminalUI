@@ -4,8 +4,8 @@ struct Position: Equatable, Hashable {
   let y: Int
 }
 
-extension ControlSequence {
-  static func position(_ position: Position) -> ControlSequence {
-    "\(position.y);\(position.x)H"
+extension Position {
+  var controlSequence: ControlSequence {
+    "\(y);\(x)H"
   }
 }
