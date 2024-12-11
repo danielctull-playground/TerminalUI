@@ -25,7 +25,7 @@ extension Canvas {
       output.write(pixel.inverse.controlSequence)
       output.write(pixel.hidden.controlSequence)
       output.write(pixel.strikethrough.controlSequence)
-      output.write(.position(position))
+      output.write(position.controlSequence)
       output.write(pixel.content)
     }
   }
