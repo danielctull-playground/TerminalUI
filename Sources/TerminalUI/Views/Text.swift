@@ -21,7 +21,7 @@ public struct Text: Builtin, View {
         hidden: environment.hidden,
         strikethrough: environment.strikethrough
       )
-      canvas.draw(pixel, at: Position(x: index, y: 0))
+      canvas.draw(pixel, at: Position(x: Horizontal(index), y: 0))
     }
   }
 }

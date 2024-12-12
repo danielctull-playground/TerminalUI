@@ -1,7 +1,7 @@
 
 struct Position: Equatable, Hashable {
-  let x: Int
-  let y: Int
+  let x: Horizontal
+  let y: Vertical
 }
 
 extension Position {
