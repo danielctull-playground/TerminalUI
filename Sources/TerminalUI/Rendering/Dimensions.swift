@@ -6,6 +6,12 @@ struct Horizontal: Equatable, Hashable {
   fileprivate let value: Int
 }
 
+extension Horizontal: Comparable {
+  static func < (lhs: Horizontal, rhs: Horizontal) -> Bool {
+    lhs.value < rhs.value
+  }
+}
+
 extension Horizontal: CustomStringConvertible {
   var description: String {
     value.description
@@ -15,6 +21,16 @@ extension Horizontal: CustomStringConvertible {
 extension Horizontal: ExpressibleByIntegerLiteral {
   init(integerLiteral value: Int) {
     self.init(value: value)
+  }
+}
+
+extension Horizontal: Strideable {
+  func advanced(by n: Int) -> Horizontal {
+    Horizontal(value: value + n)
+  }
+
+  func distance(to other: Horizontal) -> Int {
+    value - other.value
   }
 }
 
@@ -31,6 +47,12 @@ struct Vertical: Equatable, Hashable {
   fileprivate let value: Int
 }
 
+extension Vertical: Comparable {
+  static func < (lhs: Vertical, rhs: Vertical) -> Bool {
+    lhs.value < rhs.value
+  }
+}
+
 extension Vertical: CustomStringConvertible {
   var description: String {
     value.description
@@ -40,6 +62,16 @@ extension Vertical: CustomStringConvertible {
 extension Vertical: ExpressibleByIntegerLiteral {
   init(integerLiteral value: Int) {
     self.init(value: value)
+  }
+}
+
+extension Vertical: Strideable {
+  func advanced(by n: Int) -> Vertical {
+    Vertical(value: value + n)
+  }
+
+  func distance(to other: Vertical) -> Int {
+    value - other.value
   }
 }
 

@@ -12,6 +12,15 @@ import Testing
       #expect(horizontal.description == "3")
     }
 
+    @Test("Strideable")
+    func strideable() {
+      var horizontals = (Horizontal(1)...Horizontal(3)).makeIterator()
+      #expect(horizontals.next() == 1)
+      #expect(horizontals.next() == 2)
+      #expect(horizontals.next() == 3)
+      #expect(horizontals.next() == nil)
+    }
+
     @Test("init(some BinaryInteger)")
     func initBinaryInteger() {
       let value: Int = Int.random(in: 0..<10000)
@@ -25,6 +34,15 @@ import Testing
     func expressibleByIntegerLiteral() {
       let vertical: Vertical = 3
       #expect(vertical.description == "3")
+    }
+
+    @Test("Strideable")
+    func strideable() {
+      var verticals = (Vertical(1)...Vertical(3)).makeIterator()
+      #expect(verticals.next() == 1)
+      #expect(verticals.next() == 2)
+      #expect(verticals.next() == 3)
+      #expect(verticals.next() == nil)
     }
 
     @Test("init(some BinaryInteger)")
