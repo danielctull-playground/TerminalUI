@@ -1,8 +1,17 @@
 
-public struct Color: CustomStringConvertible, Equatable, Sendable {
+public struct Color: Builtin, CustomStringConvertible, Equatable, Sendable, View {
   public let description: String
   let foreground: ControlSequence
   let background: ControlSequence
+
+  func render(in canvas: any Canvas, size: Size, environment: EnvironmentValues) {
+    let pixel = Pixel(" ", background: self)
+    for x in 1...size.width {
+      for y in 1...size.height {
+        canvas.draw(pixel, at: Position(x: x, y: y))
+      }
+    }
+  }
 }
 
 // MARK: - ANSI colors
