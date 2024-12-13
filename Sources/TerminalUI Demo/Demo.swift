@@ -4,11 +4,6 @@ import TerminalUI
 struct Demo: App {
 
   var body: some View {
-    Text("daniel")
-      .bold()
-      .italic()
-      .underline()
-      .blinking()
-      .inverse()
+    Color.red.padding(top: 5, leading: 2, bottom: 10, trailing: 8)
   }
 }

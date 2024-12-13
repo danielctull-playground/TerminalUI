@@ -2,34 +2,44 @@
 // MARK: Horizontal
 
 /// A measurement of the horizontal dimension.
-struct Horizontal: Equatable, Hashable {
+public struct Horizontal: Equatable, Hashable {
   fileprivate let value: Int
 }
 
+extension Horizontal: AdditiveArithmetic {
+  public static func + (lhs: Horizontal, rhs: Horizontal) -> Horizontal {
+    Horizontal(value: lhs.value + rhs.value)
+  }
+
+  public static func - (lhs: Horizontal, rhs: Horizontal) -> Horizontal {
+    Horizontal(value: lhs.value - rhs.value)
+  }
+}
+
 extension Horizontal: Comparable {
-  static func < (lhs: Horizontal, rhs: Horizontal) -> Bool {
+  public static func < (lhs: Horizontal, rhs: Horizontal) -> Bool {
     lhs.value < rhs.value
   }
 }
 
 extension Horizontal: CustomStringConvertible {
-  var description: String {
+  public var description: String {
     value.description
   }
 }
 
 extension Horizontal: ExpressibleByIntegerLiteral {
-  init(integerLiteral value: Int) {
+  public init(integerLiteral value: Int) {
     self.init(value: value)
   }
 }
 
 extension Horizontal: Strideable {
-  func advanced(by n: Int) -> Horizontal {
+  public func advanced(by n: Int) -> Horizontal {
     Horizontal(value: value + n)
   }
 
-  func distance(to other: Horizontal) -> Int {
+  public func distance(to other: Horizontal) -> Int {
     value - other.value
   }
 }
@@ -43,34 +53,44 @@ extension Horizontal {
 // MARK: - Vertical
 
 /// A measurement of the vertical dimension.
-struct Vertical: Equatable, Hashable {
+public struct Vertical: Equatable, Hashable {
   fileprivate let value: Int
 }
 
+extension Vertical: AdditiveArithmetic {
+  public static func + (lhs: Vertical, rhs: Vertical) -> Vertical {
+    Vertical(value: lhs.value + rhs.value)
+  }
+
+  public static func - (lhs: Vertical, rhs: Vertical) -> Vertical {
+    Vertical(value: lhs.value - rhs.value)
+  }
+}
+
 extension Vertical: Comparable {
-  static func < (lhs: Vertical, rhs: Vertical) -> Bool {
+  public static func < (lhs: Vertical, rhs: Vertical) -> Bool {
     lhs.value < rhs.value
   }
 }
 
 extension Vertical: CustomStringConvertible {
-  var description: String {
+  public var description: String {
     value.description
   }
 }
 
 extension Vertical: ExpressibleByIntegerLiteral {
-  init(integerLiteral value: Int) {
+  public init(integerLiteral value: Int) {
     self.init(value: value)
   }
 }
 
 extension Vertical: Strideable {
-  func advanced(by n: Int) -> Vertical {
+  public func advanced(by n: Int) -> Vertical {
     Vertical(value: value + n)
   }
 
-  func distance(to other: Vertical) -> Int {
+  public func distance(to other: Vertical) -> Int {
     value - other.value
   }
 }
