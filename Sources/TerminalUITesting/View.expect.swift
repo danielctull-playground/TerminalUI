@@ -13,7 +13,7 @@ extension View {
 
   package func expect(_ expected: [Position: Pixel]) {
     let canvas = TestCanvas()
-    _render(in: canvas)
+    _render(in: canvas, size: Size(width: 10, height: 10))
     #expect(canvas.pixels == expected)
   }
 }
