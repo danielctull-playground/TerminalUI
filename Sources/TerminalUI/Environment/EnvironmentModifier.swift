@@ -18,6 +18,6 @@ private struct EnvironmentView<Content: View, Value>: Builtin, View {
   func render(in canvas: Canvas, environment: EnvironmentValues) {
     var environment = environment
     environment[keyPath: keyPath] = value
-    content.render(in: canvas, environment: environment)
+    content._render(in: canvas, environment: environment)
   }
 }

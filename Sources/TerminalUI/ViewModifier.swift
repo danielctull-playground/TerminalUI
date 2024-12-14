@@ -31,6 +31,6 @@ private struct ModifiedView<Modifier: ViewModifier>: Builtin, View {
     environment.install(on: modifier)
     modifier
       .body(content: content)
-      .render(in: canvas, environment: environment)
+      ._render(in: canvas, environment: environment)
   }
 }

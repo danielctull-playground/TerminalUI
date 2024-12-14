@@ -11,7 +11,7 @@ struct TextTests {
     var pixels: [Position: Pixel] = [:]
     let canvas = Canvas { pixels[$1] = $0 }
 
-    Text("Hello").render(in: canvas)
+    Text("Hello")._render(in: canvas)
 
     #expect(pixels == [
       Position(x: 1, y: 0): Pixel("H"),

@@ -33,6 +33,6 @@ extension App {
     output.write(CursorVisibility.off.control)
 
     let canvas = Canvas(output)
-    body.render(in: canvas)
+    body._render(in: canvas)
   }
 }
