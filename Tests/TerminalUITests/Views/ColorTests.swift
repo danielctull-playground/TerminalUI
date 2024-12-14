@@ -10,7 +10,9 @@ struct ColorTests {
 
     let canvas = TestCanvas()
 
-    Color.red._render(in: canvas, size: Size(width: 3, height: 3))
+    canvas.render(size: Size(width: 3, height: 3)) {
+      Color.red
+    }
 
     #expect(canvas.pixels == [
       Position(x: 1, y: 1): Pixel(" ", background: .red),
