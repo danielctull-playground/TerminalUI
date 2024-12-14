@@ -32,7 +32,7 @@ extension App {
     output.write(AlternativeBuffer.on.control)
     output.write(CursorVisibility.off.control)
 
-    let canvas = Canvas(output)
-    body.render(in: canvas)
+    let canvas = AppCanvas(output: output)
+    body._render(in: canvas)
   }
 }
