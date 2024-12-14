@@ -10,18 +10,18 @@ public protocol View {
 
 extension View {
 
-  func _render(in canvas: any Canvas) {
-    _render(in: canvas, environment: EnvironmentValues())
+  func _render(in canvas: any Canvas, size: Size) {
+    _render(in: canvas, size: size, environment: EnvironmentValues())
   }
 
-  func _render(in canvas: any Canvas, environment: EnvironmentValues) {
+  func _render(in canvas: any Canvas, size: Size, environment: EnvironmentValues) {
 
     environment.install(on: self)
 
     if let builtin = self as? any Builtin {
-      builtin.render(in: canvas, environment: environment)
+      builtin.render(in: canvas, size: size, environment: environment)
     } else {
-      body._render(in: canvas, environment: environment)
+      body._render(in: canvas, size: size, environment: environment)
     }
   }
 }

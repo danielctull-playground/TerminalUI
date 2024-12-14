@@ -10,7 +10,7 @@ struct TextTests {
 
     let canvas = TestCanvas()
 
-    Text("Hello")._render(in: canvas)
+    Text("Hello")._render(in: canvas, size: Size(width: 5, height: 1))
 
     #expect(canvas.pixels == [
       Position(x: 1, y: 0): Pixel("H"),

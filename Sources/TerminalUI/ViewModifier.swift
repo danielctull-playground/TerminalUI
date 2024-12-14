@@ -27,10 +27,10 @@ private struct ModifiedView<Modifier: ViewModifier>: Builtin, View {
   let content: Modifier.Content
   let modifier: Modifier
 
-  func render(in canvas: any Canvas, environment: EnvironmentValues) {
+  func render(in canvas: any Canvas, size: Size, environment: EnvironmentValues) {
     environment.install(on: modifier)
     modifier
       .body(content: content)
-      ._render(in: canvas, environment: environment)
+      ._render(in: canvas, size: size, environment: environment)
   }
 }

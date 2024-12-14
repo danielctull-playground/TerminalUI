@@ -15,9 +15,9 @@ private struct EnvironmentView<Content: View, Value>: Builtin, View {
   let keyPath: WritableKeyPath<EnvironmentValues, Value>
   let value: Value
 
-  func render(in canvas: any Canvas, environment: EnvironmentValues) {
+  func render(in canvas: any Canvas, size: Size, environment: EnvironmentValues) {
     var environment = environment
     environment[keyPath: keyPath] = value
-    content._render(in: canvas, environment: environment)
+    content._render(in: canvas, size: size, environment: environment)
   }
 }
