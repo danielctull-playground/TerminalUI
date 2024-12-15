@@ -6,6 +6,16 @@ public struct Horizontal: Equatable, Hashable {
   fileprivate let value: Int
 }
 
+extension Horizontal: AdditiveArithmetic {
+  public static func + (lhs: Horizontal, rhs: Horizontal) -> Horizontal {
+    Horizontal(value: lhs.value + rhs.value)
+  }
+
+  public static func - (lhs: Horizontal, rhs: Horizontal) -> Horizontal {
+    Horizontal(value: lhs.value - rhs.value)
+  }
+}
+
 extension Horizontal: Comparable {
   public static func < (lhs: Horizontal, rhs: Horizontal) -> Bool {
     lhs.value < rhs.value
@@ -45,6 +55,16 @@ extension Horizontal {
 /// A measurement of the vertical dimension.
 public struct Vertical: Equatable, Hashable {
   fileprivate let value: Int
+}
+
+extension Vertical: AdditiveArithmetic {
+  public static func + (lhs: Vertical, rhs: Vertical) -> Vertical {
+    Vertical(value: lhs.value + rhs.value)
+  }
+
+  public static func - (lhs: Vertical, rhs: Vertical) -> Vertical {
+    Vertical(value: lhs.value - rhs.value)
+  }
 }
 
 extension Vertical: Comparable {

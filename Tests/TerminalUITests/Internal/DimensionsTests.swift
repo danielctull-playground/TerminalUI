@@ -12,6 +12,12 @@ import Testing
       #expect(horizontal.description == "3")
     }
 
+    @Test("AdditiveArithmetic")
+    func additiveArithmetic() {
+      #expect(Horizontal(4) + Horizontal(2) == Horizontal(6))
+      #expect(Horizontal(4) - Horizontal(2) == Horizontal(2))
+    }
+
     @Test("Comparable")
     func comparable() {
       #expect(Horizontal(1) < Horizontal(2))
@@ -43,6 +49,12 @@ import Testing
   }
 
   @Suite("Vertical") struct VerticalTests {
+
+    @Test("AdditiveArithmetic")
+    func additiveArithmetic() {
+      #expect(Vertical(4) + Vertical(2) == Vertical(6))
+      #expect(Vertical(4) - Vertical(2) == Vertical(2))
+    }
 
     @Test("Comparable")
     func comparable() {
