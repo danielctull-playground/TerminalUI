@@ -131,4 +131,19 @@ struct PaddingTests {
       Position(x: 3, y: 2): pixel,
     ])
   }
+
+  @Test("length")
+  func length() async throws {
+
+    canvas.render(size: Size(width: 4, height: 4)) {
+      view.padding(1)
+    }
+
+    #expect(canvas.pixels == [
+      Position(x: 2, y: 2): pixel,
+      Position(x: 3, y: 2): pixel,
+      Position(x: 2, y: 3): pixel,
+      Position(x: 3, y: 3): pixel,
+    ])
+  }
 }

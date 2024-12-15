@@ -11,6 +11,10 @@ extension View {
   ) -> some View {
     padding(set.insets(value))
   }
+
+  public func padding(_ length: Int) -> some View {
+    padding(.all, length)
+  }
 }
 
 private struct Padding<Content: View>: Builtin, View {
