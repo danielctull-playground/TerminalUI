@@ -4,6 +4,13 @@ extension View {
   public func padding(_ insets: EdgeInsets) -> some View {
     Padding(content: self, insets: insets)
   }
+
+  public func padding<Value>(
+    _ set: Edge.Set<Value>,
+    _ value: Value
+  ) -> some View {
+    padding(set.insets(value))
+  }
 }
 
 private struct Padding<Content: View>: Builtin, View {
