@@ -1,8 +1,8 @@
 import Foundation
 
 struct Size {
-  let width: Int
-  let height: Int
+  let width: Horizontal
+  let height: Vertical
 }
 
 extension Size {
@@ -10,6 +10,6 @@ extension Size {
   static var window: Size {
     var size = winsize()
     _ = ioctl(STDOUT_FILENO, UInt(TIOCGWINSZ), &size)
-    return Size(width: Int(size.ws_col), height: Int(size.ws_row))
+    return Size(width: Horizontal(size.ws_col), height: Vertical(size.ws_row))
   }
 }
