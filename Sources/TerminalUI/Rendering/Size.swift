@@ -1,8 +1,13 @@
 import Foundation
 
-struct Size {
+public struct Size {
   let width: Horizontal
   let height: Vertical
+
+  public init(width: Horizontal, height: Vertical) {
+    self.width = width
+    self.height = height
+  }
 }
 
 extension Size {
