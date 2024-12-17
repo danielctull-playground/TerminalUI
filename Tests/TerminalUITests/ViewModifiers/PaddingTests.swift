@@ -1,13 +1,13 @@
-@testable import TerminalUI
+import TerminalUI
 import TerminalUITesting
 import Testing
 
 @Suite("Padding", .tags(.viewModifier))
 struct PaddingTests {
 
-  let canvas = TestCanvas()
-  let view = Color.blue
-  let pixel = Pixel(" ", background: .blue)
+  private let canvas = TestCanvas()
+  private let view = Color.blue
+  private let pixel = Pixel(" ", background: .blue)
 
   @Test("edge insets")
   func edgeInsets() {

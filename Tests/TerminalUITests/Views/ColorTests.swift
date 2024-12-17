@@ -1,14 +1,14 @@
-@testable import TerminalUI
+import TerminalUI
 import TerminalUITesting
 import Testing
 
 @Suite("Color", .tags(.view))
 struct ColorTests {
 
+  private let canvas = TestCanvas()
+
   @Test("Color displays correctly")
   func display() {
-
-    let canvas = TestCanvas()
 
     canvas.render(size: Size(width: 3, height: 3)) {
       Color.red

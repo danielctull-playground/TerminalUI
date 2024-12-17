@@ -1,16 +1,18 @@
-@testable import TerminalUI
+import TerminalUI
 import TerminalUITesting
 import Testing
 
 @Suite("Text", .tags(.view))
 struct TextTests {
 
+  private let canvas = TestCanvas()
+
   @Test("Text displays correctly")
   func displays() {
 
-    let canvas = TestCanvas()
-
-    Text("Hello")._render(in: canvas, size: Size(width: 5, height: 1))
+    canvas.render(size: Size(width: 5, height: 1)) {
+      Text("Hello")
+    }
 
     #expect(canvas.pixels == [
       Position(x: 1, y: 0): Pixel("H"),
