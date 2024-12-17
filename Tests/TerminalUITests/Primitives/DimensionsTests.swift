@@ -40,6 +40,16 @@ import Testing
       #expect(horizontals.next() == 3)
       #expect(horizontals.next() == nil)
     }
+    
+    @Test("Strideable: advanced(by:)", arguments: [-1, 0, 1], [-1, 0, 1])
+    func strideable_advancedBy(start: Int, n: Int) {
+      #expect(Horizontal(start).advanced(by: n) == Horizontal(start.advanced(by: n)))
+    }
+
+    @Test("Strideable: distance(to:)", arguments: [-1, 0, 1], [-1, 0, 1])
+    func strideable_distanceTo(x: Int, y: Int) {
+      #expect(Horizontal(x).distance(to: Horizontal(y)) == x.distance(to: y))
+    }
 
     @Test("init(some BinaryInteger)")
     func initBinaryInteger() {
@@ -83,6 +93,16 @@ import Testing
       #expect(verticals.next() == 2)
       #expect(verticals.next() == 3)
       #expect(verticals.next() == nil)
+    }
+
+    @Test("Strideable: advanced(by:)", arguments: [-1, 0, 1], [-1, 0, 1])
+    func strideable_advancedBy(start: Int, n: Int) {
+      #expect(Vertical(start).advanced(by: n) == Vertical(start.advanced(by: n)))
+    }
+
+    @Test("Strideable: distance(to:)", arguments: [-1, 0, 1], [-1, 0, 1])
+    func strideable_distanceTo(x: Int, y: Int) {
+      #expect(Vertical(x).distance(to: Vertical(y)) == x.distance(to: y))
     }
 
     @Test("init(some BinaryInteger)")

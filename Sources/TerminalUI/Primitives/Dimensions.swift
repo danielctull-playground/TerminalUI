@@ -36,11 +36,11 @@ extension Horizontal: ExpressibleByIntegerLiteral {
 
 extension Horizontal: Strideable {
   public func advanced(by n: Int) -> Horizontal {
-    Horizontal(value: value + n)
+    Horizontal(value: value.advanced(by: n))
   }
 
   public func distance(to other: Horizontal) -> Int {
-    value - other.value
+    value.distance(to: other.value)
   }
 }
 
@@ -87,11 +87,11 @@ extension Vertical: ExpressibleByIntegerLiteral {
 
 extension Vertical: Strideable {
   public func advanced(by n: Int) -> Vertical {
-    Vertical(value: value + n)
+    Vertical(value: value.advanced(by: n))
   }
 
   public func distance(to other: Vertical) -> Int {
-    value - other.value
+    value.distance(to: other.value)
   }
 }
 
