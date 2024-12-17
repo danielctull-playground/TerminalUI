@@ -2,17 +2,23 @@ import TerminalUI
 import Testing
 
 public struct TestCanvas: Canvas {
-  @Mutable package var pixels: [Position: Pixel] = [:]
+
+  @Mutable private var _pixels: [Position: Pixel] = [:]
   private let size: Size
+
   public init(width: Horizontal, height: Vertical) {
     size = Size(width: width, height: height)
   }
+
   public func draw(_ pixel: Pixel, at position: Position) {
-    pixels[position] = pixel
+    _pixels[position] = pixel
   }
 }
 
 extension TestCanvas {
+
+  public var pixels: [Position: Pixel] { _pixels }
+
   public func render(content: () -> some View) {
     render(size: size, content: content)
   }
