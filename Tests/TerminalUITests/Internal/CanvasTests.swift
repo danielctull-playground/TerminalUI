@@ -8,7 +8,7 @@ struct CanvasTests {
   @Test("Drawing with default values")
   func defaultValues() {
     let stream = TestStream()
-    let canvas = AppCanvas(output: stream)
+    let canvas = TextStreamCanvas(output: stream)
     canvas.draw(Pixel("a"), at: Position(x: 2, y: 1))
     let controls = stream.output.split(separator: "\u{1b}")
     #expect(controls == [

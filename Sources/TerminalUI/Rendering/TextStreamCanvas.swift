@@ -1,5 +1,5 @@
 
-struct AppCanvas<Output: TextOutputStream>: Canvas {
+struct TextStreamCanvas<Output: TextOutputStream>: Canvas {
   @Mutable var output: Output
 
   func draw(_ pixel: Pixel, at position: Position) {

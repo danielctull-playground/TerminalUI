@@ -32,7 +32,7 @@ extension App {
     output.write(AlternativeBuffer.on.control)
     output.write(CursorVisibility.off.control)
 
-    let canvas = AppCanvas(output: output)
+    let canvas = TextStreamCanvas(output: output)
     body._render(in: canvas, size: .window)
   }
 }
