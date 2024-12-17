@@ -15,18 +15,7 @@ public struct Text: Builtin, View {
 
     for (line, y) in zip(lines, origin.y...) {
       for (character, x) in zip(line, origin.x...) {
-        let pixel = Pixel(
-          character,
-          foreground: environment.foregroundColor,
-          background: environment.backgroundColor,
-          bold: environment.bold,
-          italic: environment.italic,
-          underline: environment.underline,
-          blinking: environment.blinking,
-          inverse: environment.inverse,
-          hidden: environment.hidden,
-          strikethrough: environment.strikethrough
-        )
+        let pixel = Pixel(character: character, environment: environment)
         canvas.draw(pixel, at: Position(x: x, y: y))
       }
     }
@@ -57,5 +46,22 @@ extension StringProtocol {
     }
 
     return [head] + tail.lines(ofLength: lineLength)
+  }
+}
+
+extension Pixel {
+  fileprivate init(character: Character, environment: EnvironmentValues) {
+    self.init(
+      character,
+      foreground: environment.foregroundColor,
+      background: environment.backgroundColor,
+      bold: environment.bold,
+      italic: environment.italic,
+      underline: environment.underline,
+      blinking: environment.blinking,
+      inverse: environment.inverse,
+      hidden: environment.hidden,
+      strikethrough: environment.strikethrough
+    )
   }
 }
