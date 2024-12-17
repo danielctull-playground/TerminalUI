@@ -43,7 +43,11 @@ extension StringProtocol {
 
     let head: SubSequence
     let tail: SubSequence
-    if let space = dropLast(count - lineLength).lastIndex(of: " ") {
+    if dropFirst(lineLength).first == " " {
+      let space = index(startIndex, offsetBy: lineLength)
+      head = self[..<space]
+      tail = self[index(after: space)...]
+    } else if let space = dropLast(count - lineLength).lastIndex(of: " ") {
       head = self[..<space]
       tail = self[index(after: space)...]
     } else {
