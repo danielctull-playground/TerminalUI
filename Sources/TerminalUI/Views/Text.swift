@@ -8,7 +8,8 @@ public struct Text: Builtin, View {
   }
 
   func render(in canvas: any Canvas, size: Size, environment: EnvironmentValues) {
-    for (character, index) in zip(string, 1...) {
+    let origin = Position.origin
+    for (character, index) in zip(string, origin.x...) {
       let pixel = Pixel(
         character,
         foreground: environment.foregroundColor,
@@ -21,7 +22,7 @@ public struct Text: Builtin, View {
         hidden: environment.hidden,
         strikethrough: environment.strikethrough
       )
-      canvas.draw(pixel, at: Position(x: Horizontal(index), y: 1))
+      canvas.draw(pixel, at: Position(x: index, y: origin.y))
     }
   }
 }
