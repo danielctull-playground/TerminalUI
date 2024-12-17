@@ -31,7 +31,7 @@ struct StrikethroughTests {
       "[27m",    // Inverse off
       "[28m",    // Hidden off
       expected,  // Strikethrough
-      "[0;1Ha",  // Position + content
+      "[1;1Ha",  // Position + content
     ])
   }
 }

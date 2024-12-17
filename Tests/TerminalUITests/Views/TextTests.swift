@@ -15,11 +15,11 @@ struct TextTests {
     }
 
     #expect(canvas.pixels == [
-      Position(x: 1, y: 0): Pixel("H"),
-      Position(x: 2, y: 0): Pixel("e"),
-      Position(x: 3, y: 0): Pixel("l"),
-      Position(x: 4, y: 0): Pixel("l"),
-      Position(x: 5, y: 0): Pixel("o"),
+      Position(x: 1, y: 1): Pixel("H"),
+      Position(x: 2, y: 1): Pixel("e"),
+      Position(x: 3, y: 1): Pixel("l"),
+      Position(x: 4, y: 1): Pixel("l"),
+      Position(x: 5, y: 1): Pixel("o"),
     ])
   }
 }

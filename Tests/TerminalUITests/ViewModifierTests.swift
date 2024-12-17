@@ -33,7 +33,7 @@ struct ViewModifierTests {
       "[27m",    // Inverse off
       "[28m",    // Hidden off
       "[29m",    // Strikethrough off
-      "[0;1HA",  // Position + content
+      "[1;1HA",  // Position + content
     ])
   }
 }
