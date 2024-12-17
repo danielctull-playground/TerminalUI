@@ -8,10 +8,13 @@ struct CanvasTests {
   @Test("Drawing with default values")
   func defaultValues() {
     let stream = TestStream()
-    let canvas = AppCanvas(output: stream)
+    let canvas = TextStreamCanvas(output: stream)
     canvas.draw(Pixel("a"), at: Position(x: 2, y: 1))
     let controls = stream.output.split(separator: "\u{1b}")
     #expect(controls == [
+      "[2J",     // Clear screen
+      "[?1049h", // Alternative buffer on
+      "[?25l",   // Cursor visibility off
       "[39m",  // ForegroundColor default
       "[49m",  // BackgroundColor default
       "[22m",  // Bold off

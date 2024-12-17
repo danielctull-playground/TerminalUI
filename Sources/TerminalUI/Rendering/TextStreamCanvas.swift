@@ -1,6 +1,13 @@
 
-struct AppCanvas<Output: TextOutputStream>: Canvas {
+struct TextStreamCanvas<Output: TextOutputStream>: Canvas {
   @Mutable var output: Output
+
+  init(output: Output) {
+    self.output = output
+    self.output.write(ControlSequence.clearScreen)
+    self.output.write(AlternativeBuffer.on.control)
+    self.output.write(CursorVisibility.off.control)
+  }
 
   func draw(_ pixel: Pixel, at position: Position) {
     output.write(pixel.foreground.foreground)

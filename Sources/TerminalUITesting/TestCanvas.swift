@@ -14,7 +14,7 @@ public struct TestCanvas: Canvas {
 
 extension TestCanvas {
   public func render(content: () -> some View) {
-    content()._render(in: self, size: size)
+    render(size: size, content: content)
   }
 }
 
