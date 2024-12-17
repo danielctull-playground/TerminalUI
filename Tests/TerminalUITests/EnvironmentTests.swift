@@ -5,12 +5,12 @@ import Testing
 @Suite("Environment Tests")
 struct EnvironmentTests {
 
-  private let canvas = TestCanvas()
+  private let canvas = TestCanvas(width: 7, height: 1)
 
   @Test("default")
   func defaultValue() {
 
-    canvas.render(size: Size(width: 7, height: 1)) {
+    canvas.render {
       TestView()
     }
 
@@ -28,7 +28,7 @@ struct EnvironmentTests {
   @Test("modifier")
   func modifier() {
 
-    canvas.render(size: Size(width: 7, height: 1)) {
+    canvas.render {
       TestView().environment(\.value, "b")
     }
 

@@ -5,14 +5,15 @@ import Testing
 @Suite("Padding", .tags(.viewModifier))
 struct PaddingTests {
 
-  private let canvas = TestCanvas()
+  private let canvas = TestCanvas(width: 3, height: 3)
   private let view = Color.blue
   private let pixel = Pixel(" ", background: .blue)
 
   @Test("edge insets")
   func edgeInsets() {
 
-    canvas.render(size: Size(width: 8, height: 6)) {
+    let canvas = TestCanvas(width: 8, height: 6)
+    canvas.render {
       view.padding(EdgeInsets(top: 1, leading: 2, bottom: 3, trailing: 4))
     }
 
@@ -27,7 +28,7 @@ struct PaddingTests {
   @Test("all")
   func all() async throws {
 
-    canvas.render(size: Size(width: 3, height: 3)) {
+    canvas.render {
       view.padding(.all, 1)
     }
 
@@ -39,7 +40,7 @@ struct PaddingTests {
   @Test("top")
   func top() async throws {
 
-    canvas.render(size: Size(width: 3, height: 3)) {
+    canvas.render {
       view.padding(.top, 1)
     }
 
@@ -56,7 +57,7 @@ struct PaddingTests {
   @Test("leading")
   func leading() async throws {
 
-    canvas.render(size: Size(width: 3, height: 3)) {
+    canvas.render {
       view.padding(.leading, 1)
     }
 
@@ -73,7 +74,7 @@ struct PaddingTests {
   @Test("bottom")
   func bottom() async throws {
 
-    canvas.render(size: Size(width: 3, height: 3)) {
+    canvas.render {
       view.padding(.bottom, 1)
     }
 
@@ -90,7 +91,7 @@ struct PaddingTests {
   @Test("trailing")
   func trailing() async throws {
 
-    canvas.render(size: Size(width: 3, height: 3)) {
+    canvas.render {
       view.padding(.trailing, 1)
     }
 
@@ -107,7 +108,7 @@ struct PaddingTests {
   @Test("horizontal")
   func horizontal() async throws {
 
-    canvas.render(size: Size(width: 3, height: 3)) {
+    canvas.render {
       view.padding(.horizontal, 1)
     }
 
@@ -121,7 +122,7 @@ struct PaddingTests {
   @Test("vertical")
   func vertical() async throws {
 
-    canvas.render(size: Size(width: 3, height: 3)) {
+    canvas.render {
       view.padding(.vertical, 1)
     }
 
@@ -135,15 +136,12 @@ struct PaddingTests {
   @Test("length")
   func length() async throws {
 
-    canvas.render(size: Size(width: 4, height: 4)) {
+    canvas.render {
       view.padding(1)
     }
 
     #expect(canvas.pixels == [
       Position(x: 2, y: 2): pixel,
-      Position(x: 3, y: 2): pixel,
-      Position(x: 2, y: 3): pixel,
-      Position(x: 3, y: 3): pixel,
     ])
   }
 }

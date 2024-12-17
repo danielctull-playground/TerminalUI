@@ -5,12 +5,12 @@ import Testing
 @Suite("Color", .tags(.view))
 struct ColorTests {
 
-  private let canvas = TestCanvas()
+  private let canvas = TestCanvas(width: 3, height: 3)
 
   @Test("Color displays correctly")
   func display() {
 
-    canvas.render(size: Size(width: 3, height: 3)) {
+    canvas.render {
       Color.red
     }
 

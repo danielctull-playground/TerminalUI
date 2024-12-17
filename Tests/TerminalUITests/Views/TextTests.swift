@@ -5,12 +5,12 @@ import Testing
 @Suite("Text", .tags(.view))
 struct TextTests {
 
-  private let canvas = TestCanvas()
+  private let canvas = TestCanvas(width: 5, height: 1)
 
   @Test("Text displays correctly")
   func displays() {
 
-    canvas.render(size: Size(width: 5, height: 1)) {
+    canvas.render {
       Text("Hello")
     }
 
