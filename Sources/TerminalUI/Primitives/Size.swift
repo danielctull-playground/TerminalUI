@@ -1,6 +1,6 @@
 import Foundation
 
-package struct Size {
+package struct Size: Equatable {
 
   package let width: Horizontal
   package let height: Vertical
