@@ -1,5 +1,5 @@
 import Foundation
-@testable import TerminalUI
+import TerminalUI
 import TerminalUITesting
 import Testing
 

@@ -1,14 +1,20 @@
-@testable import TerminalUI
+import TerminalUI
 import TerminalUITesting
 import Testing
 
 @Suite("Environment Tests")
 struct EnvironmentTests {
 
+  private let canvas = TestCanvas(width: 7, height: 1)
+
   @Test("default")
   func defaultValue() {
-    let view = TestView()
-    view.expect([
+
+    canvas.render {
+      TestView()
+    }
+
+    #expect(canvas.pixels == [
       Position(x: 1, y: 0): Pixel("d"),
       Position(x: 2, y: 0): Pixel("e"),
       Position(x: 3, y: 0): Pixel("f"),
@@ -22,10 +28,11 @@ struct EnvironmentTests {
   @Test("modifier")
   func modifier() {
 
-    let view = TestView()
-      .environment(\.value, "b")
+    canvas.render {
+      TestView().environment(\.value, "b")
+    }
 
-    view.expect([
+    #expect(canvas.pixels == [
       Position(x: 1, y: 0): Pixel("b"),
     ])
   }

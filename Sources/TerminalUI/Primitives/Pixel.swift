@@ -1,5 +1,6 @@
 
-struct Pixel: Equatable {
+public struct Pixel: Equatable {
+
   let content: Character
   let foreground: Color
   let background: Color
@@ -10,6 +11,23 @@ struct Pixel: Equatable {
   let inverse: Inverse
   let hidden: Hidden
   let strikethrough: Strikethrough
+
+  public init(
+    _ content: Character,
+    foreground: Color = .default,
+    background: Color = .default
+  ) {
+    self.content = content
+    self.foreground = foreground
+    self.background = background
+    self.bold = .off
+    self.italic = .off
+    self.underline = .off
+    self.blinking = .off
+    self.inverse = .off
+    self.hidden = .off
+    self.strikethrough = .off
+  }
 
   init(
     _ content: Character,
