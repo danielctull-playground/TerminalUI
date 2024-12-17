@@ -10,11 +10,11 @@ public protocol View {
 
 extension View {
 
-  func _render(in canvas: any Canvas, size: Size) {
+  package func _render(in canvas: any Canvas, size: Size) {
     _render(in: canvas, size: size, environment: EnvironmentValues())
   }
 
-  func _render(in canvas: any Canvas, size: Size, environment: EnvironmentValues) {
+  package func _render(in canvas: any Canvas, size: Size, environment: EnvironmentValues) {
 
     environment.install(on: self)
 
