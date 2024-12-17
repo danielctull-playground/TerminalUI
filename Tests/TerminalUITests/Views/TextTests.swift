@@ -5,10 +5,10 @@ import Testing
 @Suite("Text", .tags(.view))
 struct TextTests {
 
-  private let canvas = TestCanvas(width: 5, height: 1)
+  private let canvas = TestCanvas(width: 5, height: 3)
 
-  @Test("Text displays correctly")
-  func displays() {
+  @Test("single line")
+  func singleLine() {
 
     canvas.render {
       Text("Hello")
@@ -20,6 +20,24 @@ struct TextTests {
       Position(x: 3, y: 1): Pixel("l"),
       Position(x: 4, y: 1): Pixel("l"),
       Position(x: 5, y: 1): Pixel("o"),
+    ])
+  }
+
+  @Test("two lines")
+  func twoLines() {
+
+    canvas.render {
+      Text("Hi there")
+    }
+
+    #expect(canvas.pixels == [
+      Position(x: 1, y: 1): Pixel("H"),
+      Position(x: 2, y: 1): Pixel("i"),
+      Position(x: 1, y: 2): Pixel("t"),
+      Position(x: 2, y: 2): Pixel("h"),
+      Position(x: 3, y: 2): Pixel("e"),
+      Position(x: 4, y: 2): Pixel("r"),
+      Position(x: 5, y: 2): Pixel("e"),
     ])
   }
 }
