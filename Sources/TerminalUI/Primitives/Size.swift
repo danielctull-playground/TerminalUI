@@ -1,10 +1,11 @@
 import Foundation
 
-public struct Size {
+package struct Size {
+
   let width: Horizontal
   let height: Vertical
 
-  public init(width: Horizontal, height: Vertical) {
+  package init(width: Horizontal, height: Vertical) {
     self.width = width
     self.height = height
   }
