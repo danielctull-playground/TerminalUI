@@ -6,6 +6,7 @@ let package = Package(
   name: "TerminalUI",
   products: [
     .library(name: "TerminalUI", targets: ["TerminalUI"]),
+    .library(name: "TerminalUITesting", targets: ["TerminalUITesting"]),
   ],
   targets: [
 
