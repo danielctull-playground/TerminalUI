@@ -1,9 +1,9 @@
 
 /// Acts as a mutable box for values in a struct.
 @propertyWrapper
-final class Mutable<Value> {
-  var wrappedValue: Value
-  init(wrappedValue: Value) {
+package final class Mutable<Value> {
+  package var wrappedValue: Value
+  package init(wrappedValue: Value) {
     self.wrappedValue = wrappedValue
   }
 }
