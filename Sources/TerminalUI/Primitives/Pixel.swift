@@ -1,7 +1,7 @@
 
 public struct Pixel: Equatable {
 
-  let content: Character
+  package let content: Character
   let foreground: Color
   let background: Color
   let bold: Bold

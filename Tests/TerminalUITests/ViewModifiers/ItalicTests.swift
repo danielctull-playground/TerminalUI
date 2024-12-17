@@ -31,7 +31,7 @@ struct ItalicTests {
       "[27m",    // Inverse off
       "[28m",    // Hidden off
       "[29m",    // Strikethrough off
-      "[0;1Ha",  // Position + content
+      "[1;1Ha",  // Position + content
     ])
   }
 }

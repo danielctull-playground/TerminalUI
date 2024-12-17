@@ -2,8 +2,8 @@ import Foundation
 
 package struct Size {
 
-  let width: Horizontal
-  let height: Vertical
+  package let width: Horizontal
+  package let height: Vertical
 
   package init(width: Horizontal, height: Vertical) {
     self.width = width

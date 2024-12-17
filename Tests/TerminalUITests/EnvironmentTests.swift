@@ -15,13 +15,13 @@ struct EnvironmentTests {
     }
 
     #expect(canvas.pixels == [
-      Position(x: 1, y: 0): Pixel("d"),
-      Position(x: 2, y: 0): Pixel("e"),
-      Position(x: 3, y: 0): Pixel("f"),
-      Position(x: 4, y: 0): Pixel("a"),
-      Position(x: 5, y: 0): Pixel("u"),
-      Position(x: 6, y: 0): Pixel("l"),
-      Position(x: 7, y: 0): Pixel("t"),
+      Position(x: 1, y: 1): Pixel("d"),
+      Position(x: 2, y: 1): Pixel("e"),
+      Position(x: 3, y: 1): Pixel("f"),
+      Position(x: 4, y: 1): Pixel("a"),
+      Position(x: 5, y: 1): Pixel("u"),
+      Position(x: 6, y: 1): Pixel("l"),
+      Position(x: 7, y: 1): Pixel("t"),
     ])
   }
 
@@ -33,7 +33,7 @@ struct EnvironmentTests {
     }
 
     #expect(canvas.pixels == [
-      Position(x: 1, y: 0): Pixel("b"),
+      Position(x: 1, y: 1): Pixel("b"),
     ])
   }
 }

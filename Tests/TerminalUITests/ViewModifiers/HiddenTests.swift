@@ -31,7 +31,7 @@ struct HiddenTests {
       "[27m",    // Inverse off
       expected,  // Hidden
       "[29m",    // Strikethrough off
-      "[0;1Ha",  // Position + content
+      "[1;1Ha",  // Position + content
     ])
   }
 }
