@@ -21,18 +21,12 @@ extension App {
 
   public static func main() {
     let app = Self()
-    app.run(stream: .fileHandle(.standardOutput))
+
+    let canvas = TextStreamCanvas(output: .fileHandle(.standardOutput))
+    canvas.render(size: .window) {
+      app.body
+    }
+
     dispatchMain()
-  }
-
-  public func run(stream: some TextOutputStream) {
-    var output = stream
-
-    output.write(ControlSequence.clearScreen)
-    output.write(AlternativeBuffer.on.control)
-    output.write(CursorVisibility.off.control)
-
-    let canvas = TextStreamCanvas(output: output)
-    body._render(in: canvas, size: .window)
   }
 }

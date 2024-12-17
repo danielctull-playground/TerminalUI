@@ -1,4 +1,3 @@
-
 @testable import TerminalUI
 import TerminalUITesting
 import Testing
@@ -17,7 +16,10 @@ struct AppTests {
 
     let app = TestApp()
     let stream = TestStream()
-    app.run(stream: stream)
+    let canvas = TextStreamCanvas(output: stream)
+    canvas.render(size: Size(width: 1, height: 1)) {
+      app.body
+    }
     let controls = stream.output.split(separator: "\u{1b}")
     #expect(controls == [
       "[2J",     // Clear screen
@@ -48,7 +50,10 @@ struct AppTests {
 
     let app = TestApp()
     let stream = TestStream()
-    app.run(stream: stream)
+    let canvas = TextStreamCanvas(output: stream)
+    canvas.render(size: Size(width: 1, height: 1)) {
+      app.body
+    }
     let controls = stream.output.split(separator: "\u{1b}")
     #expect(controls == [
       "[2J",     // Clear screen

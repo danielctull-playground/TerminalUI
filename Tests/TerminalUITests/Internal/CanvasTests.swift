@@ -12,6 +12,9 @@ struct CanvasTests {
     canvas.draw(Pixel("a"), at: Position(x: 2, y: 1))
     let controls = stream.output.split(separator: "\u{1b}")
     #expect(controls == [
+      "[2J",     // Clear screen
+      "[?1049h", // Alternative buffer on
+      "[?25l",   // Cursor visibility off
       "[39m",  // ForegroundColor default
       "[49m",  // BackgroundColor default
       "[22m",  // Bold off

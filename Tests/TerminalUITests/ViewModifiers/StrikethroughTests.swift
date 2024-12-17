@@ -1,4 +1,4 @@
-import TerminalUI
+@testable import TerminalUI
 import TerminalUITesting
 import Testing
 
@@ -11,14 +11,13 @@ struct StrikethroughTests {
   ])
   func textOutput(strikethrough: Bool, expected: String) {
 
-    let app = TestApp {
+    let canvas = TextStreamCanvas(output: TestStream())
+
+    canvas.render(size: Size(width: 1, height: 1)) {
       Text("a").strikethrough(strikethrough)
     }
 
-    let stream = TestStream()
-    app.run(stream: stream)
-
-    #expect(stream.controlSequences == [
+    #expect(canvas.output.controlSequences == [
       "[2J",     // Clear screen
       "[?1049h", // Alternative buffer on
       "[?25l",   // Cursor visibility off

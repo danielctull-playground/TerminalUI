@@ -1,4 +1,4 @@
-import TerminalUI
+@testable import TerminalUI
 import Testing
 
 @Suite("ViewModifier", .tags(.viewModifier))
@@ -13,14 +13,13 @@ struct ViewModifierTests {
       }
     }
 
-    let app = TestApp {
+    let canvas = TextStreamCanvas(output: TestStream())
+
+    canvas.render(size: Size(width: 1, height: 1)) {
       Text("A").modifier(VM())
     }
 
-    let stream = TestStream()
-    app.run(stream: stream)
-
-    #expect(stream.controlSequences == [
+    #expect(canvas.output.controlSequences == [
       "[2J",     // Clear screen
       "[?1049h", // Alternative buffer on
       "[?25l",   // Cursor visibility off

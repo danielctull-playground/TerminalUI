@@ -1,4 +1,4 @@
-import TerminalUI
+@testable import TerminalUI
 import TerminalUITesting
 import Testing
 
@@ -18,14 +18,13 @@ struct ForegroundColorTests {
   ])
   func textOutput(foregroundColor: Color, expected: String) {
 
-    let app = TestApp {
+    let canvas = TextStreamCanvas(output: TestStream())
+
+    canvas.render(size: Size(width: 1, height: 1)) {
       Text("a").foregroundColor(foregroundColor)
     }
 
-    let stream = TestStream()
-    app.run(stream: stream)
-
-    #expect(stream.controlSequences == [
+    #expect(canvas.output.controlSequences == [
       "[2J",     // Clear screen
       "[?1049h", // Alternative buffer on
       "[?25l",   // Cursor visibility off
