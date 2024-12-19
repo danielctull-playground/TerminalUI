@@ -15,7 +15,7 @@ struct ViewModifierTests {
 
     let canvas = TextStreamCanvas(output: .memory)
 
-    canvas.render(size: Size(width: 1, height: 1)) {
+    canvas.render(size: ProposedSize(width: 1, height: 1)) {
       Text("A").modifier(VM())
     }
 
