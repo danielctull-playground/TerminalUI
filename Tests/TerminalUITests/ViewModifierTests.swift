@@ -4,14 +4,14 @@ import Testing
 @Suite("ViewModifier", .tags(.viewModifier))
 struct ViewModifierTests {
 
+  private struct VM<Content: View>: ViewModifier {
+    func body(content: Content) -> some View {
+      content
+    }
+  }
+
   @Test("Empty view modifier displays original contents")
   func empty() {
-
-    struct VM<Content: View>: ViewModifier {
-      func body(content: Content) -> some View {
-        content
-      }
-    }
 
     let canvas = TextStreamCanvas(output: .memory)
 
@@ -34,5 +34,26 @@ struct ViewModifierTests {
       "[29m",    // Strikethrough off
       "[1;1HA",  // Position + content
     ])
+  }
+
+  @Test(arguments: Array<(String, Horizontal, Vertical, Horizontal, Vertical)>([
+    ("12345", 5, 1, 5, 1),
+    ("12345", 3, 2, 3, 2),
+    ("123 456 789", 5, 4, 3, 3),
+    ("123456789", 5, 5, 5, 2),
+    ("123456", 5, 5, 5, 2),
+  ]))
+  func size(
+    input: String,
+    proposedWidth: Horizontal,
+    proposedHeight: Vertical,
+    expectedWidth: Horizontal,
+    expectedHeight: Vertical
+  ) {
+    let proposed = ProposedSize(width: proposedWidth, height: proposedHeight)
+    let view = Text(input).modifier(VM())
+    let size = view._size(for: proposed)
+    #expect(size.width == expectedWidth)
+    #expect(size.height == expectedHeight)
   }
 }

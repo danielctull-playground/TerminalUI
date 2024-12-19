@@ -4,6 +4,13 @@ public struct Color: Builtin, CustomStringConvertible, Equatable, Sendable, View
   let foreground: ControlSequence
   let background: ControlSequence
 
+  func size(
+    for proposedSize: ProposedSize,
+    environment: EnvironmentValues
+  ) -> Size {
+    Size(width: proposedSize.width, height: proposedSize.height)
+  }
+
   func render(in canvas: any Canvas, size: Size, environment: EnvironmentValues) {
     let pixel = Pixel(" ", background: self)
     for x in 1...size.width {

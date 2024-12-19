@@ -26,4 +26,30 @@ struct ColorTests {
       Position(x: 3, y: 3): Pixel(" ", background: .red),
     ])
   }
+
+  @Test("size", arguments: Color.testCases)
+  func size(color: Color) {
+    let width = Horizontal(Int.random(in: 0...1_000_000_000))
+    let height = Vertical(Int.random(in: 0...1_000_000_000))
+    let proposed = ProposedSize(width: width, height: height)
+    let size = color._size(for: proposed)
+    #expect(size.width == width)
+    #expect(size.height == height)
+  }
+}
+
+extension Color {
+  fileprivate static var testCases: [Color] {
+    [
+      .black,
+      .red,
+      .green,
+      .yellow,
+      .blue,
+      .magenta,
+      .cyan,
+      .white,
+      .default,
+    ]
+  }
 }

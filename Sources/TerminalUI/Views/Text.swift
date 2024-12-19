@@ -7,11 +7,20 @@ public struct Text: Builtin, View {
     self.string = string
   }
 
+  func size(
+    for proposedSize: ProposedSize,
+    environment: EnvironmentValues
+  ) -> Size {
+    let lines = string.lines(ofLength: proposedSize.width.lineLength)
+    let height = Vertical(lines.count)
+    let width = Horizontal(lines.map(\.count).max() ?? 0)
+    return Size(width: width, height: height)
+  }
+
   func render(in canvas: any Canvas, size: Size, environment: EnvironmentValues) {
 
     let origin = Position.origin
-    let xs = origin.x...size.width
-    let lines = string.lines(ofLength: xs.count)
+    let lines = string.lines(ofLength: size.width.lineLength)
 
     for (line, y) in zip(lines, origin.y...) {
       for (character, x) in zip(line, origin.x...) {
@@ -30,6 +39,12 @@ public struct Text: Builtin, View {
         canvas.draw(pixel, at: Position(x: x, y: y))
       }
     }
+  }
+}
+
+extension Horizontal {
+  fileprivate var lineLength: Int {
+    (Position.origin.x...self).count
   }
 }
 

@@ -56,6 +56,12 @@ import Testing
       let value = Int.random(in: 0..<1_000_000)
       #expect(Horizontal(value).description == value.description)
     }
+
+    @Test("negate")
+    func negate() {
+      let value = Int.random(in: 0..<1_000_000)
+      #expect(-Horizontal(value) == Horizontal(-value))
+    }
   }
 
   @Suite("Vertical") struct VerticalTests {
@@ -109,6 +115,12 @@ import Testing
     func initBinaryInteger() {
       let value: Int = Int.random(in: 0..<1_000_000)
       #expect(Vertical(value).description == value.description)
+    }
+
+    @Test("negate")
+    func negate() {
+      let value = Int.random(in: 0..<1_000_000)
+      #expect(-Vertical(value) == Vertical(-value))
     }
   }
 }

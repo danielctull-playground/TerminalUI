@@ -2,7 +2,7 @@
 // MARK: Horizontal
 
 /// A measurement of the horizontal dimension.
-public struct Horizontal: Equatable, Hashable {
+public struct Horizontal: Equatable, Hashable, Sendable {
   fileprivate let value: Int
 }
 
@@ -50,10 +50,16 @@ extension Horizontal {
   }
 }
 
+extension Horizontal {
+  package static prefix func - (horizontal: Horizontal) -> Horizontal {
+    Horizontal(-horizontal.value)
+  }
+}
+
 // MARK: - Vertical
 
 /// A measurement of the vertical dimension.
-public struct Vertical: Equatable, Hashable {
+public struct Vertical: Equatable, Hashable, Sendable {
   fileprivate let value: Int
 }
 
@@ -98,5 +104,11 @@ extension Vertical: Strideable {
 extension Vertical {
   package init(_ value: some BinaryInteger) {
     self.init(value: Int(value))
+  }
+}
+
+extension Vertical {
+  package static prefix func - (vertical: Vertical) -> Vertical {
+    Vertical(-vertical.value)
   }
 }

@@ -27,6 +27,16 @@ private struct ModifiedView<Modifier: ViewModifier>: Builtin, View {
   let content: Modifier.Content
   let modifier: Modifier
 
+  func size(
+    for proposedSize: ProposedSize,
+    environment: EnvironmentValues
+  ) -> Size {
+    environment.install(on: modifier)
+    return modifier
+      .body(content: content)
+      ._size(for: proposedSize, environment: environment)
+  }
+
   func render(in canvas: any Canvas, size: Size, environment: EnvironmentValues) {
     environment.install(on: modifier)
     modifier

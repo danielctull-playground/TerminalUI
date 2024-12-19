@@ -36,6 +36,27 @@ struct EnvironmentTests {
       Position(x: 1, y: 1): Pixel("b"),
     ])
   }
+
+  @Test(arguments: Array<(String, Horizontal, Vertical, Horizontal, Vertical)>([
+    ("12345", 5, 1, 5, 1),
+    ("12345", 3, 2, 3, 2),
+    ("123 456 789", 5, 4, 3, 3),
+    ("123456789", 5, 5, 5, 2),
+    ("123456", 5, 5, 5, 2),
+  ]))
+  func size(
+    input: String,
+    proposedWidth: Horizontal,
+    proposedHeight: Vertical,
+    expectedWidth: Horizontal,
+    expectedHeight: Vertical
+  ) {
+    let proposed = ProposedSize(width: proposedWidth, height: proposedHeight)
+    let view = TestView().environment(\.value, input)
+    let size = view._size(for: proposed)
+    #expect(size.width == expectedWidth)
+    #expect(size.height == expectedHeight)
+  }
 }
 
 private struct TestView: View {
