@@ -15,8 +15,7 @@ struct AppTests {
     }
 
     let app = TestApp()
-    let stream = TestStream()
-    let canvas = TextStreamCanvas(output: stream)
+    let canvas = TextStreamCanvas(output: .memory)
     canvas.render(size: Size(width: 1, height: 1)) {
       app.body
     }
@@ -48,8 +47,7 @@ struct AppTests {
     }
 
     let app = TestApp()
-    let stream = TestStream()
-    let canvas = TextStreamCanvas(output: stream)
+    let canvas = TextStreamCanvas(output: .memory)
     canvas.render(size: Size(width: 1, height: 1)) {
       app.body
     }

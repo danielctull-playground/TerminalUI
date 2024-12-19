@@ -11,7 +11,7 @@ struct InverseTests {
   ])
   func textOutput(inverse: Bool, expected: String) {
 
-    let canvas = TextStreamCanvas(output: TestStream())
+    let canvas = TextStreamCanvas(output: .memory)
 
     canvas.render(size: Size(width: 1, height: 1)) {
       Text("a").inverse(inverse)

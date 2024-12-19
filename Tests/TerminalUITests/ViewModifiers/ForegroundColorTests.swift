@@ -18,7 +18,7 @@ struct ForegroundColorTests {
   ])
   func textOutput(foregroundColor: Color, expected: String) {
 
-    let canvas = TextStreamCanvas(output: TestStream())
+    let canvas = TextStreamCanvas(output: .memory)
 
     canvas.render(size: Size(width: 1, height: 1)) {
       Text("a").foregroundColor(foregroundColor)

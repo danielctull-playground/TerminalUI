@@ -7,8 +7,7 @@ struct CanvasTests {
 
   @Test("Drawing with default values")
   func defaultValues() {
-    let stream = TestStream()
-    let canvas = TextStreamCanvas(output: stream)
+    let canvas = TextStreamCanvas(output: .memory)
     canvas.draw(Pixel("a"), at: Position(x: 2, y: 1))
     #expect(canvas.output.controlSequences == [
       "[2J",     // Clear screen
