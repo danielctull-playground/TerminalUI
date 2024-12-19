@@ -8,7 +8,7 @@ public struct Color: Builtin, CustomStringConvertible, Equatable, Sendable, View
     for proposedSize: ProposedSize,
     environment: EnvironmentValues
   ) -> Size {
-    Size(proposedSize)
+    Size(width: proposedSize.width, height: proposedSize.height)
   }
 
   func render(in canvas: any Canvas, size: Size, environment: EnvironmentValues) {

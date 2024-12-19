@@ -9,12 +9,4 @@ import Testing
     #expect(size.width == 10)
     #expect(size.height == 8)
   }
-
-  @Test("init(proposedSize)")
-  func init_proposedSize() {
-    let proposed = ProposedSize(width: 11, height: 18)
-    let size = Size(proposed)
-    #expect(size.width == 11)
-    #expect(size.height == 18)
-  }
 }
