@@ -15,6 +15,13 @@ private struct EnvironmentView<Content: View, Value>: Builtin, View {
   let keyPath: WritableKeyPath<EnvironmentValues, Value>
   let value: Value
 
+  func size(
+    for proposedSize: ProposedSize,
+    environment: EnvironmentValues
+  ) -> Size {
+    Size(proposedSize)
+  }
+
   func render(in canvas: any Canvas, size: Size, environment: EnvironmentValues) {
     var environment = environment
     environment[keyPath: keyPath] = value

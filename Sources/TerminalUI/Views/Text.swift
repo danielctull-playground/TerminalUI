@@ -7,6 +7,13 @@ public struct Text: Builtin, View {
     self.string = string
   }
 
+  func size(
+    for proposedSize: ProposedSize,
+    environment: EnvironmentValues
+  ) -> Size {
+    Size(proposedSize)
+  }
+
   func render(in canvas: any Canvas, size: Size, environment: EnvironmentValues) {
 
     let origin = Position.origin

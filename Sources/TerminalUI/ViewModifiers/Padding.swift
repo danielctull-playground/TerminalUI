@@ -22,6 +22,13 @@ private struct Padding<Content: View>: Builtin, View {
   let content: Content
   let insets: EdgeInsets
 
+  func size(
+    for proposedSize: ProposedSize,
+    environment: EnvironmentValues
+  ) -> Size {
+    Size(proposedSize)
+  }
+
   func render(
     in canvas: any Canvas,
     size: Size,
