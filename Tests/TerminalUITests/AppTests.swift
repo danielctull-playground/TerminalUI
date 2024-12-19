@@ -20,8 +20,7 @@ struct AppTests {
     canvas.render(size: Size(width: 1, height: 1)) {
       app.body
     }
-    let controls = stream.output.split(separator: "\u{1b}")
-    #expect(controls == [
+    #expect(canvas.output.controlSequences == [
       "[2J",     // Clear screen
       "[?1049h", // Alternative buffer on
       "[?25l",   // Cursor visibility off
@@ -54,8 +53,7 @@ struct AppTests {
     canvas.render(size: Size(width: 1, height: 1)) {
       app.body
     }
-    let controls = stream.output.split(separator: "\u{1b}")
-    #expect(controls == [
+    #expect(canvas.output.controlSequences == [
       "[2J",     // Clear screen
       "[?1049h", // Alternative buffer on
       "[?25l",   // Cursor visibility off

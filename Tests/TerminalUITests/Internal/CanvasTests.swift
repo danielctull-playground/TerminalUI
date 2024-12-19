@@ -10,8 +10,7 @@ struct CanvasTests {
     let stream = TestStream()
     let canvas = TextStreamCanvas(output: stream)
     canvas.draw(Pixel("a"), at: Position(x: 2, y: 1))
-    let controls = stream.output.split(separator: "\u{1b}")
-    #expect(controls == [
+    #expect(canvas.output.controlSequences == [
       "[2J",     // Clear screen
       "[?1049h", // Alternative buffer on
       "[?25l",   // Cursor visibility off
