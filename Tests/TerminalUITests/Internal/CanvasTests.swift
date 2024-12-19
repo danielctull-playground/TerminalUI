@@ -26,6 +26,7 @@ struct CanvasTests {
     ])
   }
 
+  @Test("translateBy(x:y:)")
   func translateBy() {
     let canvas = TestCanvas(width: 10, height: 10)
     let modified = canvas.translateBy(x: -1, y: -1)
