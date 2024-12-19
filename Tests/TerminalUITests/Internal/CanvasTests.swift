@@ -25,4 +25,13 @@ struct CanvasTests {
       "[1;2Ha", // Position + content
     ])
   }
+
+  func translateBy() {
+    let canvas = TestCanvas(width: 10, height: 10)
+    let modified = canvas.translateBy(x: -1, y: -1)
+    modified.draw(Pixel("a"), at: Position(x: 2, y: 1))
+    #expect(canvas.pixels == [
+      Position(x: 1, y: 0): Pixel("a")
+    ])
+  }
 }
