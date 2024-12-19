@@ -16,12 +16,12 @@ private struct EnvironmentView<Content: View, Value>: Builtin, View {
   let value: Value
 
   func size(
-    for proposedSize: ProposedSize,
+    for proposal: ProposedSize,
     environment: EnvironmentValues
   ) -> Size {
     var environment = environment
     environment[keyPath: keyPath] = value
-    return content._size(for: proposedSize, environment: environment)
+    return content._size(for: proposal, environment: environment)
   }
 
   func render(in canvas: any Canvas, size: Size, environment: EnvironmentValues) {

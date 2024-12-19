@@ -16,12 +16,12 @@ private struct FixedFrame<Content: View>: Builtin, View {
   let height: Vertical?
 
   func size(
-    for proposedSize: ProposedSize,
+    for proposal: ProposedSize,
     environment: EnvironmentValues
   ) -> Size {
     let proposedSize = ProposedSize(
-      width: width ?? proposedSize.width,
-      height: height ?? proposedSize.height)
+      width: width ?? proposal.width,
+      height: height ?? proposal.height)
     let size = content._size(for: proposedSize, environment: environment)
     return Size(width: width ?? size.width, height: height ?? size.height)
   }

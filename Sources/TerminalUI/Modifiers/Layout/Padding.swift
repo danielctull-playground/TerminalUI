@@ -23,11 +23,11 @@ private struct Padding<Content: View>: Builtin, View {
   let insets: EdgeInsets
 
   func size(
-    for proposedSize: ProposedSize,
+    for proposal: ProposedSize,
     environment: EnvironmentValues
   ) -> Size {
     content
-      ._size(for: proposedSize.inset(insets), environment: environment)
+      ._size(for: proposal.inset(insets), environment: environment)
       .inset(-insets)
   }
 

@@ -10,21 +10,21 @@ public protocol View {
 
 extension View {
 
-  package func _size(for proposedSize: ProposedSize) -> Size {
-    _size(for: proposedSize, environment: EnvironmentValues())
+  package func _size(for proposal: ProposedSize) -> Size {
+    _size(for: proposal, environment: EnvironmentValues())
   }
 
   package func _size(
-    for proposedSize: ProposedSize,
+    for proposal: ProposedSize,
     environment: EnvironmentValues
   ) -> Size {
 
     environment.install(on: self)
 
     if let builtin = self as? any Builtin {
-      return builtin.size(for: proposedSize, environment: environment)
+      return builtin.size(for: proposal, environment: environment)
     } else {
-      return body._size(for: proposedSize, environment: environment)
+      return body._size(for: proposal, environment: environment)
     }
   }
 

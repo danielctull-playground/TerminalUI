@@ -5,10 +5,10 @@ public struct Color: Builtin, CustomStringConvertible, Equatable, Sendable, View
   let background: ControlSequence
 
   func size(
-    for proposedSize: ProposedSize,
+    for proposal: ProposedSize,
     environment: EnvironmentValues
   ) -> Size {
-    Size(width: proposedSize.width, height: proposedSize.height)
+    Size(width: proposal.width, height: proposal.height)
   }
 
   func render(in canvas: any Canvas, size: Size, environment: EnvironmentValues) {
