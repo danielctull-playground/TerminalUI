@@ -1,7 +1,7 @@
 
-final class TestStream: TextOutputStream {
+struct TestStream: TextOutputStream {
   var output: String = ""
-  func write(_ string: String) {
+  mutating func write(_ string: String) {
     output.append(string)
   }
 }
