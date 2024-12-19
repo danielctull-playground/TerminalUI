@@ -26,7 +26,9 @@ private struct Padding<Content: View>: Builtin, View {
     for proposedSize: ProposedSize,
     environment: EnvironmentValues
   ) -> Size {
-    Size(proposedSize)
+    content
+      ._size(for: proposedSize.inset(insets), environment: environment)
+      .inset(-insets)
   }
 
   func render(
@@ -63,11 +65,31 @@ extension Position {
   }
 }
 
+extension ProposedSize {
+  fileprivate func inset(_ insets: EdgeInsets) -> ProposedSize {
+    ProposedSize(
+      width: width - insets.leading - insets.trailing,
+      height: height - insets.top - insets.bottom
+    )
+  }
+}
+
 extension Size {
   fileprivate func inset(_ insets: EdgeInsets) -> Size {
     Size(
       width: width - insets.leading - insets.trailing,
       height: height - insets.top - insets.bottom
+    )
+  }
+}
+
+extension EdgeInsets {
+  fileprivate static prefix func - (insets: EdgeInsets) -> EdgeInsets {
+    EdgeInsets(
+      top: -insets.top,
+      leading: -insets.leading,
+      bottom: -insets.bottom,
+      trailing: -insets.trailing
     )
   }
 }
