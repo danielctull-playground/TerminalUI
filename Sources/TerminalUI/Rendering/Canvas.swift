@@ -32,3 +32,24 @@ private struct TranslatedCanvas<Base: Canvas>: Canvas {
     base.draw(pixel, at: position)
   }
 }
+
+// MARK: - Buffer
+
+extension Canvas {
+
+  func buffered() -> some Canvas {
+    BufferedCanvas(base: self)
+  }
+}
+
+private struct BufferedCanvas<Base: Canvas>: Canvas {
+
+  let base: Base
+  @Mutable private var pixels: [Position: Pixel] = [:]
+
+  func draw(_ pixel: Pixel, at position: Position) {
+    guard pixels[position] != pixel else { return }
+    pixels[position] = pixel
+    base.draw(pixel, at: position)
+  }
+}

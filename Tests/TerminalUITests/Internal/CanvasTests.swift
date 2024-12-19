@@ -35,4 +35,22 @@ struct CanvasTests {
       Position(x: 1, y: 0): Pixel("a")
     ])
   }
+
+  @Test("buffered()")
+  func buffered() {
+    let canvas = TestCanvas(width: 10, height: 10)
+    let changes = canvas.changes()
+    let buffered = changes.buffered()
+
+    let position = Position(x: 2, y: 1)
+    let pixel = Pixel("a")
+
+    buffered.draw(pixel, at: position)
+    #expect(canvas.pixels == [position: pixel])
+    #expect(changes.changes == [Change(position: position, pixel: pixel)])
+
+    buffered.draw(pixel, at: position)
+    #expect(canvas.pixels == [position: pixel])
+    #expect(changes.changes == [Change(position: position, pixel: pixel)])
+  }
 }

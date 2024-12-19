@@ -23,6 +23,8 @@ extension App {
     let app = Self()
 
     let canvas = TextStreamCanvas(output: .fileHandle(.standardOutput))
+      .buffered()
+
     canvas.render(size: .window) {
       app.body
     }
