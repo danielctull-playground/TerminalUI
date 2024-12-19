@@ -10,6 +10,24 @@ public protocol View {
 
 extension View {
 
+  package func _size(for proposedSize: ProposedSize) -> Size {
+    _size(for: proposedSize, environment: EnvironmentValues())
+  }
+
+  package func _size(
+    for proposedSize: ProposedSize,
+    environment: EnvironmentValues
+  ) -> Size {
+
+    environment.install(on: self)
+
+    if let builtin = self as? any Builtin {
+      return builtin.size(for: proposedSize, environment: environment)
+    } else {
+      return body._size(for: proposedSize, environment: environment)
+    }
+  }
+
   package func _render(in canvas: any Canvas, size: Size) {
     _render(in: canvas, size: size, environment: EnvironmentValues())
   }
