@@ -37,31 +37,10 @@ private struct Padding<Content: View>: Builtin, View {
     environment: EnvironmentValues
   ) {
     content._render(
-      in: canvas.inset(insets),
+      in: canvas.translateBy(x: insets.leading, y: insets.top),
       size: size.inset(insets),
       environment: environment
     )
-  }
-}
-
-extension Canvas {
-  fileprivate func inset(_ insets: EdgeInsets) -> Canvas {
-    InsetCanvas(base: self, insets: insets)
-  }
-}
-
-private struct InsetCanvas<Base: Canvas>: Canvas {
-  let base: Base
-  let insets: EdgeInsets
-
-  func draw(_ pixel: Pixel, at position: Position) {
-    base.draw(pixel, at: position.offset(by: insets))
-  }
-}
-
-extension Position {
-  fileprivate func offset(by insets: EdgeInsets) -> Position {
-    Position(x: x + insets.leading, y: y + insets.top)
   }
 }
 
