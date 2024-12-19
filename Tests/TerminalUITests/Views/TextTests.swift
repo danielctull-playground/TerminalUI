@@ -61,4 +61,24 @@ struct TextTests {
       Position(x: 5, y: 2): Pixel("e"),
     ])
   }
+
+  @Test(arguments: Array<(String, Horizontal, Vertical, Horizontal, Vertical)>([
+    ("12345", 5, 1, 5, 1),
+    ("12345", 3, 2, 3, 2),
+    ("123 456 789", 5, 4, 3, 3),
+    ("123456789", 5, 5, 5, 2),
+    ("123456", 5, 5, 5, 2),
+  ]))
+  func size(
+    input: String,
+    proposedWidth: Horizontal,
+    proposedHeight: Vertical,
+    expectedWidth: Horizontal,
+    expectedHeight: Vertical
+  ) {
+    let proposed = ProposedSize(width: proposedWidth, height: proposedHeight)
+    let size = Text(input)._size(for: proposed)
+    #expect(size.width == expectedWidth)
+    #expect(size.height == expectedHeight)
+  }
 }
