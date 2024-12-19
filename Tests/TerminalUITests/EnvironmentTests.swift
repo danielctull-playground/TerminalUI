@@ -33,7 +33,7 @@ struct EnvironmentTests {
     }
 
     #expect(canvas.pixels == [
-      Position(x: 1, y: 1): Pixel("b"),
+      Position(x: 4, y: 1): Pixel("b"),
     ])
   }
 
