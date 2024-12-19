@@ -19,3 +19,13 @@ extension Size {
     return Size(width: Horizontal(size.ws_col), height: Vertical(size.ws_row))
   }
 }
+
+extension Size {
+
+  /// Creates a size filling the entire proposed amount of space.
+  ///
+  /// - Parameter proposedSize: The proposed amount of space.
+  init(_ proposedSize: ProposedSize) {
+    self.init(width: proposedSize.width, height: proposedSize.height)
+  }
+}
