@@ -50,6 +50,12 @@ extension Horizontal {
   }
 }
 
+extension Horizontal {
+  package static prefix func - (horizontal: Horizontal) -> Horizontal {
+    Horizontal(-horizontal.value)
+  }
+}
+
 // MARK: - Vertical
 
 /// A measurement of the vertical dimension.
@@ -98,5 +104,11 @@ extension Vertical: Strideable {
 extension Vertical {
   package init(_ value: some BinaryInteger) {
     self.init(value: Int(value))
+  }
+}
+
+extension Vertical {
+  package static prefix func - (vertical: Vertical) -> Vertical {
+    Vertical(-vertical.value)
   }
 }
