@@ -56,6 +56,12 @@ extension Horizontal {
   }
 }
 
+extension Horizontal {
+  static func / (lhs: Horizontal, rhs: Int) -> Horizontal {
+    Horizontal(value: lhs.value / rhs)
+  }
+}
+
 extension Int {
   init(_ horizontal: Horizontal) {
     self = horizontal.value

@@ -46,6 +46,7 @@ extension StringProtocol {
 
   fileprivate func lines(ofLength lineLength: Int) -> [SubSequence] {
 
+    guard lineLength > 0 else { return [] }
     guard count > lineLength else {
       return [self[startIndex..<endIndex]]
     }
