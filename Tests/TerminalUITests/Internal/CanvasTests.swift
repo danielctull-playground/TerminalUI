@@ -30,9 +30,23 @@ struct CanvasTests {
   func translateBy() {
     let canvas = TestCanvas(width: 10, height: 10)
     let modified = canvas.translateBy(x: -1, y: -1)
-    modified.draw(Pixel("a"), at: Position(x: 2, y: 1))
+
+    modified.render(size: ProposedSize(width: 3, height: 3)) {
+      Color.blue
+    }
+
+    let pixel = Pixel(" ", background: .blue)
+
     #expect(canvas.pixels == [
-      Position(x: 1, y: 0): Pixel("a")
+      Position(x: 0, y: 0): pixel,
+      Position(x: 1, y: 0): pixel,
+      Position(x: 2, y: 0): pixel,
+      Position(x: 0, y: 1): pixel,
+      Position(x: 1, y: 1): pixel,
+      Position(x: 2, y: 1): pixel,
+      Position(x: 0, y: 2): pixel,
+      Position(x: 1, y: 2): pixel,
+      Position(x: 2, y: 2): pixel,
     ])
   }
 }
