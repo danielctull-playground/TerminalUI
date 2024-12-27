@@ -163,4 +163,26 @@ struct PaddingTests {
     #expect(size?.width == expectedWidth)
     #expect(size?.height == expectedHeight)
   }
+
+  @Suite("EmptyView.padding", .tags(.emptyView))
+  struct EmptyViewTests {
+
+    @Test("render")
+    func render() {
+      let canvas = TestCanvas(width: 3, height: 3)
+      EmptyView()
+        .padding(2)
+        ._render(in: canvas, size: Size(width: 3, height: 3))
+      #expect(canvas.pixels == [:])
+    }
+
+    @Test("size")
+    func size() {
+      let size = EmptyView()
+        .padding(2)
+        ._size(for: ProposedSize(width: 100, height: 100))
+      #expect(size == nil)
+    }
+  }
+
 }

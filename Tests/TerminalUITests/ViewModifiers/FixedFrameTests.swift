@@ -117,4 +117,25 @@ struct FixedFrameTests {
       Position(x: 2, y: 2): pixel,
     ])
   }
+
+  @Suite("EmptyView.fixedFrame", .tags(.emptyView))
+  struct EmptyViewTests {
+
+    @Test("render")
+    func render() {
+      let canvas = TestCanvas(width: 3, height: 3)
+      EmptyView()
+        .frame(width: 2, height: 2)
+        ._render(in: canvas, size: Size(width: 3, height: 3))
+      #expect(canvas.pixels == [:])
+    }
+
+    @Test("size")
+    func size() {
+      let size = EmptyView()
+        .frame(width: 2, height: 2)
+        ._size(for: ProposedSize(width: 100, height: 100))
+      #expect(size == nil)
+    }
+  }
 }
