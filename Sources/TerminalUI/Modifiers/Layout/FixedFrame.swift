@@ -18,11 +18,12 @@ private struct FixedFrame<Content: View>: Builtin, View {
   func size(
     for proposal: ProposedSize,
     environment: EnvironmentValues
-  ) -> Size {
+  ) -> Size? {
     let proposedSize = ProposedSize(
       width: width ?? proposal.width,
       height: height ?? proposal.height)
     let size = content._size(for: proposedSize, environment: environment)
+    guard let size else { return nil }
     return Size(width: width ?? size.width, height: height ?? size.height)
   }
 
@@ -33,6 +34,7 @@ private struct FixedFrame<Content: View>: Builtin, View {
   ) {
     let proposedSize = ProposedSize(width: size.width, height: size.height)
     let size = content._size(for: proposedSize, environment: environment)
+    guard let size else { return }
     let canvas = canvas.translateBy(
       x: Horizontal(proposedSize.width.distance(to: size.width) / 2),
       y: Vertical(proposedSize.height.distance(to: size.height) / 2))

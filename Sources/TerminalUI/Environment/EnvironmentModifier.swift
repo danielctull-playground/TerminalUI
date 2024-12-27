@@ -18,7 +18,7 @@ private struct EnvironmentView<Content: View, Value>: Builtin, View {
   func size(
     for proposal: ProposedSize,
     environment: EnvironmentValues
-  ) -> Size {
+  ) -> Size? {
     var environment = environment
     environment[keyPath: keyPath] = value
     return content._size(for: proposal, environment: environment)

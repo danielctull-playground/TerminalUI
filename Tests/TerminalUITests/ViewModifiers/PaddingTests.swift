@@ -160,7 +160,7 @@ struct PaddingTests {
     let proposed = ProposedSize(width: proposedWidth, height: proposedHeight)
     let view = Text(input).padding(1)
     let size = view._size(for: proposed)
-    #expect(size.width == expectedWidth)
-    #expect(size.height == expectedHeight)
+    #expect(size?.width == expectedWidth)
+    #expect(size?.height == expectedHeight)
   }
 }

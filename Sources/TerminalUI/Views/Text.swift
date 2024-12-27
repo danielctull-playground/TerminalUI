@@ -10,7 +10,7 @@ public struct Text: Builtin, View {
   func size(
     for proposal: ProposedSize,
     environment: EnvironmentValues
-  ) -> Size {
+  ) -> Size? {
     let lines = string.lines(ofLength: proposal.width.lineLength)
     let height = Vertical(lines.count)
     let width = Horizontal(lines.map(\.count).max() ?? 0)

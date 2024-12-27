@@ -7,7 +7,7 @@ public struct Color: Builtin, CustomStringConvertible, Equatable, Sendable, View
   func size(
     for proposal: ProposedSize,
     environment: EnvironmentValues
-  ) -> Size {
+  ) -> Size? {
     Size(width: proposal.width, height: proposal.height)
   }
 

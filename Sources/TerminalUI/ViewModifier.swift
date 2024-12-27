@@ -30,7 +30,7 @@ private struct ModifiedView<Modifier: ViewModifier>: Builtin, View {
   func size(
     for proposal: ProposedSize,
     environment: EnvironmentValues
-  ) -> Size {
+  ) -> Size? {
     environment.install(on: modifier)
     return modifier
       .body(content: content)

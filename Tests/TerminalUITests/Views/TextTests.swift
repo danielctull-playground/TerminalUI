@@ -78,7 +78,7 @@ struct TextTests {
   ) {
     let proposed = ProposedSize(width: proposedWidth, height: proposedHeight)
     let size = Text(input)._size(for: proposed)
-    #expect(size.width == expectedWidth)
-    #expect(size.height == expectedHeight)
+    #expect(size?.width == expectedWidth)
+    #expect(size?.height == expectedHeight)
   }
 }

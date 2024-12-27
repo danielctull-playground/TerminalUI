@@ -33,8 +33,8 @@ struct ColorTests {
     let height = Vertical(Int.random(in: 0...1_000_000_000))
     let proposed = ProposedSize(width: width, height: height)
     let size = color._size(for: proposed)
-    #expect(size.width == width)
-    #expect(size.height == height)
+    #expect(size?.width == width)
+    #expect(size?.height == height)
   }
 }
 

@@ -3,7 +3,7 @@ protocol Builtin {
   func size(
     for proposal: ProposedSize,
     environment: EnvironmentValues
-  ) -> Size
+  ) -> Size?
 
   func render(in canvas: any Canvas, size: Size, environment: EnvironmentValues)
 }

@@ -7,7 +7,7 @@ extension Canvas {
 
   package func render(size proposedSize: ProposedSize, content: () -> some View) {
     let content = content()
-    let size = content._size(for: proposedSize)
+    guard let size = content._size(for: proposedSize) else { return }
     let offsetX = Horizontal(size.width.distance(to: proposedSize.width) / 2)
     let offsetY = Vertical(size.height.distance(to: proposedSize.height) / 2)
     content._render(in: translateBy(x: offsetX, y: offsetY), size: size)

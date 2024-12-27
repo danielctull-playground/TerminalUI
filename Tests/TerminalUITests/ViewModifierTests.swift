@@ -53,7 +53,7 @@ struct ViewModifierTests {
     let proposed = ProposedSize(width: proposedWidth, height: proposedHeight)
     let view = Text(input).modifier(VM())
     let size = view._size(for: proposed)
-    #expect(size.width == expectedWidth)
-    #expect(size.height == expectedHeight)
+    #expect(size?.width == expectedWidth)
+    #expect(size?.height == expectedHeight)
   }
 }
