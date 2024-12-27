@@ -56,6 +56,12 @@ extension Horizontal {
   }
 }
 
+extension Int {
+  init(_ horizontal: Horizontal) {
+    self = horizontal.value
+  }
+}
+
 // MARK: - Vertical
 
 /// A measurement of the vertical dimension.
