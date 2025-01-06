@@ -1,5 +1,5 @@
 
-public struct Position: Equatable, Hashable {
+public struct Position: Equatable, Hashable, Sendable {
   package let x: Int
   package let y: Int
 

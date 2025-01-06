@@ -52,18 +52,97 @@ extension Alignment {
   }
 }
 
+extension Alignment {
+  func position(for size: Size) -> Position {
+    Position(
+      x: horizontal.value(in: size),
+      y: vertical.value(in: size))
+  }
+}
+
+// MARK: - AlignmentID
+
+public protocol AlignmentID: Equatable {
+  static func defaultValue(in size: Size) -> Int
+}
+
+// MARK: - AlignmentKey
+
+public struct AlignmentKey: Equatable, Hashable, Sendable {
+
+  fileprivate let id: any AlignmentID.Type
+
+  public static func == (lhs: AlignmentKey, rhs: AlignmentKey) -> Bool {
+    String(describing: lhs.id) == String(describing: rhs.id)
+  }
+
+  public func hash(into hasher: inout Hasher) {
+    hasher.combine(String(describing: id))
+  }
+}
+
 // MARK: - Horizontal Alignment
 
-public enum HorizontalAlignment: Equatable, Hashable, Sendable {
-  case leading
-  case center
-  case trailing
+public struct HorizontalAlignment: Equatable, Hashable, Sendable {
+  private let key: AlignmentKey
+  public init(_ id: any AlignmentID.Type) {
+    key = AlignmentKey(id: id)
+  }
+}
+
+extension HorizontalAlignment {
+  fileprivate func value(in size: Size) -> Int {
+    key.id.defaultValue(in: size)
+  }
+}
+
+extension HorizontalAlignment {
+  public static var leading: Self { Self(HorizontalLeading.self) }
+  public static var center: Self { Self(HorizontalCenter.self) }
+  public static var trailing: Self { Self(HorizontalTrailing.self) }
+}
+
+private enum HorizontalLeading: AlignmentID {
+  static func defaultValue(in size: Size) -> Int { 1 }
+}
+
+private enum HorizontalCenter: AlignmentID {
+  static func defaultValue(in size: Size) -> Int { Int(size.width) / 2 }
+}
+
+private enum HorizontalTrailing: AlignmentID {
+  static func defaultValue(in size: Size) -> Int { Int(size.width) }
 }
 
 // MARK: - Vertical Alignment
 
-public enum VerticalAlignment: Equatable, Hashable, Sendable {
-  case top
-  case center
-  case bottom
+public struct VerticalAlignment: Equatable, Hashable, Sendable {
+  private let key: AlignmentKey
+  public init(_ id: any AlignmentID.Type) {
+    key = AlignmentKey(id: id)
+  }
+}
+
+extension VerticalAlignment {
+  fileprivate func value(in size: Size) -> Int {
+    key.id.defaultValue(in: size)
+  }
+}
+
+extension VerticalAlignment {
+  public static var top: Self { Self(VerticalTop.self) }
+  public static var center: Self { Self(VerticalCenter.self) }
+  public static var bottom: Self { Self(VerticalBottom.self) }
+}
+
+private enum VerticalTop: AlignmentID {
+  static func defaultValue(in size: Size) -> Int { 1 }
+}
+
+private enum VerticalCenter: AlignmentID {
+  static func defaultValue(in size: Size) -> Int { Int(size.height) / 2 }
+}
+
+private enum VerticalBottom: AlignmentID {
+  static func defaultValue(in size: Size) -> Int { Int(size.height) }
 }
