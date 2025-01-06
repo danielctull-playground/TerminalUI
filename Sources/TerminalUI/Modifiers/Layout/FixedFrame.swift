@@ -33,9 +33,9 @@ private struct FixedFrame<Content: View>: Builtin, View {
   ) {
     let proposedSize = ProposedSize(width: size.width, height: size.height)
     let size = content._size(for: proposedSize, environment: environment)
-    let canvas = canvas.translateBy(
-      x: (size.width - proposedSize.width) / 2,
-      y: (size.height - proposedSize.height) / 2)
+    let x = (proposedSize.width - size.width) / 2
+    let y = (proposedSize.height - size.height) / 2
+    let canvas = canvas.translateBy(x: x, y: y)
     content._render(
       in: canvas,
       size: size,

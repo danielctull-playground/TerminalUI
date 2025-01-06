@@ -117,4 +117,18 @@ struct FixedFrameTests {
       Position(x: 2, y: 2): pixel,
     ])
   }
+
+  @Test("nested")
+  func nested() {
+
+    canvas.render {
+      view
+        .frame(width: 1, height: 1)
+        .frame(width: 3, height: 3)
+    }
+
+    #expect(canvas.pixels == [
+      Position(x: 2, y: 2): pixel,
+    ])
+  }
 }
