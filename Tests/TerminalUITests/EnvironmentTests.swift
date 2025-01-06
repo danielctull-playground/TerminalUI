@@ -37,7 +37,7 @@ struct EnvironmentTests {
     ])
   }
 
-  @Test(arguments: Array<(String, Horizontal, Vertical, Horizontal, Vertical)>([
+  @Test(arguments: Array<(String, Int, Int, Int, Int)>([
     ("12345", 5, 1, 5, 1),
     ("12345", 3, 2, 3, 2),
     ("123 456 789", 5, 4, 3, 3),
@@ -46,10 +46,10 @@ struct EnvironmentTests {
   ]))
   func size(
     input: String,
-    proposedWidth: Horizontal,
-    proposedHeight: Vertical,
-    expectedWidth: Horizontal,
-    expectedHeight: Vertical
+    proposedWidth: Int,
+    proposedHeight: Int,
+    expectedWidth: Int,
+    expectedHeight: Int
   ) {
     let proposed = ProposedSize(width: proposedWidth, height: proposedHeight)
     let view = TestView().environment(\.value, input)

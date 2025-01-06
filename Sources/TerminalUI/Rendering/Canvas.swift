@@ -8,8 +8,8 @@ extension Canvas {
   package func render(size proposedSize: ProposedSize, content: () -> some View) {
     let content = content()
     let size = content._size(for: proposedSize)
-    let offsetX = Horizontal(size.width.distance(to: proposedSize.width) / 2)
-    let offsetY = Vertical(size.height.distance(to: proposedSize.height) / 2)
+    let offsetX = (proposedSize.width - size.width) / 2
+    let offsetY = (proposedSize.height - size.height) / 2
     content._render(in: translateBy(x: offsetX, y: offsetY), size: size)
   }
 }
@@ -17,15 +17,15 @@ extension Canvas {
 // MARK: - Translation
 
 extension Canvas {
-  func translateBy(x: Horizontal, y: Vertical) -> some Canvas {
+  func translateBy(x: Int, y: Int) -> some Canvas {
     TranslatedCanvas(base: self, x: x, y: y)
   }
 }
 
 private struct TranslatedCanvas<Base: Canvas>: Canvas {
   let base: Base
-  let x: Horizontal
-  let y: Vertical
+  let x: Int
+  let y: Int
 
   func draw(_ pixel: Pixel, at position: Position) {
     let position = Position(x: x + position.x, y: y + position.y)

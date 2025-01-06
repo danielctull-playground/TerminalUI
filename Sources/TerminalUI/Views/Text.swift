@@ -12,8 +12,8 @@ public struct Text: Builtin, View {
     environment: EnvironmentValues
   ) -> Size {
     let lines = string.lines(ofLength: Int(proposal.width))
-    let height = Vertical(lines.count)
-    let width = Horizontal(lines.map(\.count).max() ?? 0)
+    let height = lines.count
+    let width = lines.map(\.count).max() ?? 0
     return Size(width: width, height: height)
   }
 

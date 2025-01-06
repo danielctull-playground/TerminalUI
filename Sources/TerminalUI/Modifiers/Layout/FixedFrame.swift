@@ -2,8 +2,8 @@
 extension View {
 
   public func frame(
-    width: Horizontal? = nil,
-    height: Vertical? = nil
+    width: Int? = nil,
+    height: Int? = nil
   ) -> some View {
     FixedFrame(content: self, width: width, height: height)
   }
@@ -12,8 +12,8 @@ extension View {
 private struct FixedFrame<Content: View>: Builtin, View {
 
   let content: Content
-  let width: Horizontal?
-  let height: Vertical?
+  let width: Int?
+  let height: Int?
 
   func size(
     for proposal: ProposedSize,
@@ -34,8 +34,8 @@ private struct FixedFrame<Content: View>: Builtin, View {
     let proposedSize = ProposedSize(width: size.width, height: size.height)
     let size = content._size(for: proposedSize, environment: environment)
     let canvas = canvas.translateBy(
-      x: Horizontal(proposedSize.width.distance(to: size.width) / 2),
-      y: Vertical(proposedSize.height.distance(to: size.height) / 2))
+      x: (size.width - proposedSize.width) / 2,
+      y: (size.height - proposedSize.height) / 2)
     content._render(
       in: canvas,
       size: size,

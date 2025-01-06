@@ -5,11 +5,8 @@ extension View {
     Padding(content: self, insets: insets)
   }
 
-  public func padding<Value>(
-    _ set: Edge.Set<Value>,
-    _ value: Value
-  ) -> some View {
-    padding(set.insets(value))
+  public func padding(_ set: Edge.Set, _ value: Int) -> some View {
+    padding(EdgeInsets(set: set, value: value))
   }
 
   public func padding(_ length: Int) -> some View {

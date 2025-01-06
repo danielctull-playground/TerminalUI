@@ -145,17 +145,17 @@ struct PaddingTests {
     ])
   }
 
-  @Test(arguments: Array<(String, Horizontal, Vertical, Horizontal, Vertical)>([
+  @Test(arguments: Array<(String, Int, Int, Int, Int)>([
     ("12",    4,  3, 4, 3),
     ("1234",  4,  4, 4, 4),
     ("1234", 10, 10, 6, 3),
   ]))
   func size(
     input: String,
-    proposedWidth: Horizontal,
-    proposedHeight: Vertical,
-    expectedWidth: Horizontal,
-    expectedHeight: Vertical
+    proposedWidth: Int,
+    proposedHeight: Int,
+    expectedWidth: Int,
+    expectedHeight: Int
   ) {
     let proposed = ProposedSize(width: proposedWidth, height: proposedHeight)
     let view = Text(input).padding(1)

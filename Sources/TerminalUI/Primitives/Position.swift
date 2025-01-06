@@ -1,9 +1,9 @@
 
 public struct Position: Equatable, Hashable {
-  package let x: Horizontal
-  package let y: Vertical
+  package let x: Int
+  package let y: Int
 
-  public init(x: Horizontal, y: Vertical) {
+  public init(x: Int, y: Int) {
     self.x = x
     self.y = y
   }

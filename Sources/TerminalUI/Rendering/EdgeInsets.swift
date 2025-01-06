@@ -1,15 +1,15 @@
 
 public struct EdgeInsets {
-  let top: Vertical
-  let leading: Horizontal
-  let bottom: Vertical
-  let trailing: Horizontal
+  let top: Int
+  let leading: Int
+  let bottom: Int
+  let trailing: Int
 
   public init(
-    top: Vertical,
-    leading: Horizontal,
-    bottom: Vertical,
-    trailing: Horizontal
+    top: Int,
+    leading: Int,
+    bottom: Int,
+    trailing: Int
   ) {
     self.top = top
     self.leading = leading

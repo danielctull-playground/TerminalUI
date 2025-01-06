@@ -6,7 +6,7 @@ public struct TestCanvas: Canvas {
   @Mutable private var _pixels: [Position: Pixel] = [:]
   private let size: ProposedSize
 
-  public init(width: Horizontal, height: Vertical) {
+  public init(width: Int, height: Int) {
     size = ProposedSize(width: width, height: height)
   }
 

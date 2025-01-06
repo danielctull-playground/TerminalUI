@@ -1,10 +1,10 @@
 
 /// Amount of space a view is offered.
 package struct ProposedSize {
-  package let width: Horizontal
-  package let height: Vertical
+  package let width: Int
+  package let height: Int
 
-  package init(width: Horizontal, height: Vertical) {
+  package init(width: Int, height: Int) {
     self.width = width
     self.height = height
   }
