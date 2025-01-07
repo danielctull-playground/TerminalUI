@@ -114,4 +114,29 @@ struct HStackTests {
       Position(x:  3, y: 3): Pixel(" ", background: .black),
     ])
   }
+
+  @Test("spacing", arguments: Array<(Int, Int, Int, Int)>([
+    (0, 4, 5, 6),
+    (1, 3, 5, 7),
+    (2, 2, 5, 8),
+    (3, 1, 5, 9),
+  ]))
+  func spacing(spacing: Int, a: Int, b: Int, c: Int) {
+
+    let canvas = TestCanvas(width: 9, height: 1)
+
+    canvas.render {
+      HStack(spacing: spacing, content: [
+        Text("A"),
+        Text("B"),
+        Text("C"),
+      ])
+    }
+
+    #expect(canvas.pixels == [
+      Position(x: a, y: 1): Pixel("A"),
+      Position(x: b, y: 1): Pixel("B"),
+      Position(x: c, y: 1): Pixel("C"),
+    ])
+  }
 }
