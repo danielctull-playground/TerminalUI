@@ -2,7 +2,7 @@ import TerminalUI
 import TerminalUITesting
 import Testing
 
-@Suite("Environment Tests")
+@Suite("Environment")
 struct EnvironmentTests {
 
   private let canvas = TestCanvas(width: 7, height: 1)

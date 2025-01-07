@@ -2,7 +2,7 @@
 import TerminalUITesting
 import Testing
 
-@Suite("Canvas Tests")
+@Suite("Canvas")
 struct CanvasTests {
 
   @Test("Drawing with default values")

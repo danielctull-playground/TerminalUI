@@ -2,7 +2,7 @@ import Foundation
 @testable import TerminalUI
 import Testing
 
-@Suite("FileHandleTextOutputStream Tests")
+@Suite("FileHandleTextOutputStream")
 struct FileHandleTextOutputStreamTests {
 
   @Test("Stream output is correct")
