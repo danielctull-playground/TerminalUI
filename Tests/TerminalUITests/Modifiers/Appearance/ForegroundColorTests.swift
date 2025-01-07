@@ -2,7 +2,7 @@
 import TerminalUITesting
 import Testing
 
-@Suite("ForegroundColor", .tags(.viewModifier))
+@Suite("ForegroundColor", .tags(.modifier))
 struct ForegroundColorTests {
 
   @Test("Text Output", arguments: [

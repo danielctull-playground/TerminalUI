@@ -2,7 +2,7 @@
 import TerminalUITesting
 import Testing
 
-@Suite("Hidden", .tags(.viewModifier))
+@Suite("Hidden", .tags(.modifier))
 struct HiddenTests {
 
   @Test("Text Output", arguments: [

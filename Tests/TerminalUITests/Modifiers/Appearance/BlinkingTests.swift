@@ -2,7 +2,7 @@
 import TerminalUITesting
 import Testing
 
-@Suite("Blinking", .tags(.viewModifier))
+@Suite("Blinking", .tags(.modifier))
 struct BlinkingTests {
 
   @Test("Text Output", arguments: [

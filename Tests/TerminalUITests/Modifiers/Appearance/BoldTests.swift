@@ -2,7 +2,7 @@
 import TerminalUITesting
 import Testing
 
-@Suite("Bold", .tags(.viewModifier))
+@Suite("Bold", .tags(.modifier))
 struct BoldTests {
 
   @Test("Text Output", arguments: [

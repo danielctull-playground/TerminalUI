@@ -2,7 +2,7 @@
 import TerminalUITesting
 import Testing
 
-@Suite("Italic", .tags(.viewModifier))
+@Suite("Italic", .tags(.modifier))
 struct ItalicTests {
 
   @Test("Text Output", arguments: [

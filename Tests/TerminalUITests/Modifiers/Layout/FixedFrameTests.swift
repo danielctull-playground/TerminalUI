@@ -2,7 +2,7 @@ import TerminalUI
 import TerminalUITesting
 import Testing
 
-@Suite("FixedFrame", .tags(.viewModifier))
+@Suite("FixedFrame", .tags(.modifier))
 struct FixedFrameTests {
 
   private let canvas = TestCanvas(width: 3, height: 3)

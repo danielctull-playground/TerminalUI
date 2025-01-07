@@ -2,7 +2,7 @@ import TerminalUI
 import TerminalUITesting
 import Testing
 
-@Suite("Padding", .tags(.viewModifier))
+@Suite("Padding", .tags(.modifier))
 struct PaddingTests {
 
   private let canvas = TestCanvas(width: 3, height: 3)

@@ -2,7 +2,7 @@
 import TerminalUITesting
 import Testing
 
-@Suite("Underline", .tags(.viewModifier))
+@Suite("Underline", .tags(.modifier))
 struct UnderlineTests {
 
   @Test("Text Output", arguments: [

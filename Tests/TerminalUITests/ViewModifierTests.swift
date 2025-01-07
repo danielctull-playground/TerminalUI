@@ -1,7 +1,7 @@
 @testable import TerminalUI
 import Testing
 
-@Suite("ViewModifier", .tags(.viewModifier))
+@Suite("ViewModifier", .tags(.modifier))
 struct ViewModifierTests {
 
   private struct VM<Content: View>: ViewModifier {

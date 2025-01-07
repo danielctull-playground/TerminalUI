@@ -2,7 +2,7 @@
 import TerminalUITesting
 import Testing
 
-@Suite("Strikethrough", .tags(.viewModifier))
+@Suite("Strikethrough", .tags(.modifier))
 struct StrikethroughTests {
 
   @Test("Text Output", arguments: [
