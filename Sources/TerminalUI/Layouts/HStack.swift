@@ -3,11 +3,14 @@ public struct HStack {
 
   @Mutable private var sizes: [Size] = []
 
+  private let alignment: VerticalAlignment
   private let content: [any View]
 
   public init(
+    alignment: VerticalAlignment = .center,
     content: [any View]
   ) {
+    self.alignment = alignment
     self.content = content
   }
 }
@@ -60,7 +63,8 @@ extension HStack: Builtin, View {
   ) {
     var offset = 0
     for (child, childSize) in zip(content, sizes) {
-      let canvas = canvas.translateBy(x: offset, y: 0)
+      let y = alignment.value(in: size) - alignment.value(in: childSize)
+      let canvas = canvas.translateBy(x: offset, y: y)
       child._render(in: canvas, size: childSize, environment: environment)
       offset += childSize.width
     }
