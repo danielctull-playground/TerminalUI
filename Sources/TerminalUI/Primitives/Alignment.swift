@@ -141,7 +141,7 @@ extension VerticalAlignment: CustomStringConvertible {
 }
 
 extension VerticalAlignment {
-  fileprivate func value(in size: Size) -> Int {
+  func value(in size: Size) -> Int {
     key.id.defaultValue(in: size)
   }
 }
