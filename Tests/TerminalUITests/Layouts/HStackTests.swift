@@ -88,4 +88,30 @@ struct HStackTests {
       Position(x: 11, y: 1): Pixel(" ", background: .red),
     ])
   }
+
+  @Test("alignment", arguments: Array<(VerticalAlignment, Int)>([
+    (.top,    1),
+    (.center, 2),
+    (.bottom, 3),
+  ]))
+  func alignment(alignment: VerticalAlignment, y: Int) {
+
+    let canvas = TestCanvas(width: 5, height: 3)
+
+    canvas.render {
+      HStack(alignment: alignment, content: [
+        Text("A"),
+        Color.black.frame(width: 1), // Ensures full height is used for HStack.
+        Text("B"),
+      ])
+    }
+
+    #expect(canvas.pixels == [
+      Position(x:  2, y: y): Pixel("A"),
+      Position(x:  4, y: y): Pixel("B"),
+      Position(x:  3, y: 1): Pixel(" ", background: .black),
+      Position(x:  3, y: 2): Pixel(" ", background: .black),
+      Position(x:  3, y: 3): Pixel(" ", background: .black),
+    ])
+  }
 }
