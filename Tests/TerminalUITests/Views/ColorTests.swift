@@ -29,8 +29,8 @@ struct ColorTests {
 
   @Test("size", arguments: Color.testCases)
   func size(color: Color) {
-    let width = Horizontal(Int.random(in: 0...1_000_000_000))
-    let height = Vertical(Int.random(in: 0...1_000_000_000))
+    let width = Int.random(in: 0...1_000_000_000)
+    let height = Int.random(in: 0...1_000_000_000)
     let proposed = ProposedSize(width: width, height: height)
     let size = color._size(for: proposed)
     #expect(size.width == width)

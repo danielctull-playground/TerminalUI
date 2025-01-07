@@ -117,4 +117,40 @@ struct FixedFrameTests {
       Position(x: 2, y: 2): pixel,
     ])
   }
+
+  @Test("nested")
+  func nested() {
+
+    canvas.render {
+      view
+        .frame(width: 1, height: 1)
+        .frame(width: 3, height: 3)
+    }
+
+    #expect(canvas.pixels == [
+      Position(x: 2, y: 2): pixel,
+    ])
+  }
+
+  @Test("alignment", arguments: Array<(Alignment, Position)>([
+    (.topLeading,     Position(x: 1, y: 1)),
+    (.top,            Position(x: 2, y: 1)),
+    (.topTrailing,    Position(x: 3, y: 1)),
+    (.leading,        Position(x: 1, y: 2)),
+    (.center,         Position(x: 2, y: 2)),
+    (.trailing,       Position(x: 3, y: 2)),
+    (.bottomLeading,  Position(x: 1, y: 3)),
+    (.bottom,         Position(x: 2, y: 3)),
+    (.bottomTrailing, Position(x: 3, y: 3)),
+  ]))
+  func alignment(alignment: Alignment, position: Position) {
+
+    canvas.render {
+      view
+        .frame(width: 1, height: 1)
+        .frame(width: 3, height: 3, alignment: alignment)
+    }
+
+    #expect(canvas.pixels == [position: pixel])
+  }
 }

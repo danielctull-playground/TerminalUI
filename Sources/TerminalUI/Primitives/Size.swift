@@ -1,10 +1,10 @@
 
-package struct Size {
+public struct Size {
 
-  package let width: Horizontal
-  package let height: Vertical
+  public let width: Int
+  public let height: Int
 
-  package init(width: Horizontal, height: Vertical) {
+  public init(width: Int, height: Int) {
     self.width = width
     self.height = height
   }
