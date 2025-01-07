@@ -1,5 +1,5 @@
 
-public struct Alignment: Equatable, Hashable, Sendable {
+public struct Alignment: Equatable, Sendable {
 
   public let horizontal: HorizontalAlignment
   public let vertical: VerticalAlignment
@@ -74,22 +74,18 @@ public protocol AlignmentID {
 
 // MARK: - AlignmentKey
 
-public struct AlignmentKey: Equatable, Hashable, Sendable {
+public struct AlignmentKey: Equatable, Sendable {
 
   fileprivate let id: any AlignmentID.Type
 
   public static func == (lhs: AlignmentKey, rhs: AlignmentKey) -> Bool {
     String(describing: lhs.id) == String(describing: rhs.id)
   }
-
-  public func hash(into hasher: inout Hasher) {
-    hasher.combine(String(describing: id))
-  }
 }
 
 // MARK: - Horizontal Alignment
 
-public struct HorizontalAlignment: Equatable, Hashable, Sendable {
+public struct HorizontalAlignment: Equatable, Sendable {
   private let key: AlignmentKey
   public init(_ id: any AlignmentID.Type) {
     key = AlignmentKey(id: id)
@@ -131,7 +127,7 @@ extension HorizontalAlignment {
 
 // MARK: - Vertical Alignment
 
-public struct VerticalAlignment: Equatable, Hashable, Sendable {
+public struct VerticalAlignment: Equatable, Sendable {
   private let key: AlignmentKey
   public init(_ id: any AlignmentID.Type) {
     key = AlignmentKey(id: id)
