@@ -86,7 +86,3 @@ extension Sequence {
     sorted { $0[keyPath: keyPath] < $1[keyPath: keyPath] }
   }
 }
-
-extension Size {
-  fileprivate static var zero: Size { Size(width: 0, height: 0) }
-}

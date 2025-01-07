@@ -9,3 +9,7 @@ public struct Size {
     self.height = height
   }
 }
+
+extension Size {
+  static var zero: Size { Size(width: 0, height: 0) }
+}
