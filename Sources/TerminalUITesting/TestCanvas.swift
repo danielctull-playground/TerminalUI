@@ -4,10 +4,10 @@ import Testing
 public struct TestCanvas: Canvas {
 
   @Mutable private var _pixels: [Position: Pixel] = [:]
-  private let size: ProposedSize
+  private let size: Size
 
   public init(width: Int, height: Int) {
-    size = ProposedSize(width: width, height: height)
+    size = Size(width: width, height: height)
   }
 
   public func draw(_ pixel: Pixel, at position: Position) {

@@ -16,7 +16,7 @@ struct AppTests {
 
     let app = TestApp()
     let canvas = TextStreamCanvas(output: .memory)
-    canvas.render(size: ProposedSize(width: 1, height: 1)) {
+    canvas.render(size: Size(width: 1, height: 1)) {
       app.body
     }
     #expect(canvas.output.controlSequences == [
@@ -48,7 +48,7 @@ struct AppTests {
 
     let app = TestApp()
     let canvas = TextStreamCanvas(output: .memory)
-    canvas.render(size: ProposedSize(width: 1, height: 1)) {
+    canvas.render(size: Size(width: 1, height: 1)) {
       app.body
     }
     #expect(canvas.output.controlSequences == [

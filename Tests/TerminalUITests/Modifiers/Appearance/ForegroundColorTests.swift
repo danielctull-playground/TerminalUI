@@ -20,7 +20,7 @@ struct ForegroundColorTests {
 
     let canvas = TextStreamCanvas(output: .memory)
 
-    canvas.render(size: ProposedSize(width: 1, height: 1)) {
+    canvas.render(size: Size(width: 1, height: 1)) {
       Text("a").foregroundColor(foregroundColor)
     }
 

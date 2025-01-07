@@ -5,12 +5,10 @@ package protocol Canvas {
 
 extension Canvas {
 
-  package func render(size proposedSize: ProposedSize, content: () -> some View) {
-    let content = content()
-    let size = content._size(for: proposedSize)
-    let offsetX = (proposedSize.width - size.width) / 2
-    let offsetY = (proposedSize.height - size.height) / 2
-    content._render(in: translateBy(x: offsetX, y: offsetY), size: size)
+  package func render(size: Size, content: () -> some View) {
+    content()
+      .frame(width: size.width, height: size.height)
+      ._render(in: self, size: size)
   }
 }
 
