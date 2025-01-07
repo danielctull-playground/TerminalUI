@@ -21,41 +21,41 @@ extension Alignment: CustomStringConvertible {
 
 extension Alignment {
 
-  public static var topLeading: Self {
-    Self(horizontal: .leading, vertical: .top)
-  }
+  public static let topLeading = Alignment(
+    horizontal: .leading,
+    vertical: .top)
 
-  public static var top: Self {
-    Self(horizontal: .center, vertical: .top)
-  }
+  public static let top = Alignment(
+    horizontal: .center,
+    vertical: .top)
 
-  public static var topTrailing: Self {
-    Self(horizontal: .trailing, vertical: .top)
-  }
+  public static let topTrailing = Alignment(
+    horizontal: .trailing,
+    vertical: .top)
 
-  public static var leading: Self {
-    Self(horizontal: .leading, vertical: .center)
-  }
+  public static let leading = Alignment(
+    horizontal: .leading,
+    vertical: .center)
 
-  public static var center: Self {
-    Self(horizontal: .center, vertical: .center)
-  }
+  public static let center = Alignment(
+    horizontal: .center,
+    vertical: .center)
 
-  public static var trailing: Self {
-    Self(horizontal: .trailing, vertical: .center)
-  }
+  public static let trailing = Alignment(
+    horizontal: .trailing,
+    vertical: .center)
 
-  public static var bottomLeading: Self {
-    Self(horizontal: .leading, vertical: .bottom)
-  }
+  public static let bottomLeading = Alignment(
+    horizontal: .leading,
+    vertical: .bottom)
 
-  public static var bottom: Self {
-    Self(horizontal: .center, vertical: .bottom)
-  }
+  public static let bottom = Alignment(
+    horizontal: .center,
+    vertical: .bottom)
 
-  public static var bottomTrailing: Self {
-    Self(horizontal: .trailing, vertical: .bottom)
-  }
+  public static let bottomTrailing = Alignment(
+    horizontal: .trailing,
+    vertical: .bottom)
 }
 
 extension Alignment {
@@ -68,7 +68,7 @@ extension Alignment {
 
 // MARK: - AlignmentID
 
-public protocol AlignmentID: Equatable {
+public protocol AlignmentID {
   static func defaultValue(in size: Size) -> Int
 }
 
@@ -110,26 +110,23 @@ extension HorizontalAlignment {
 
 extension HorizontalAlignment {
 
-  public static var leading: Self {
-    enum Leading: AlignmentID {
-      static func defaultValue(in size: Size) -> Int { 1 }
-    }
-    return Self(Leading.self)
+  private enum Leading: AlignmentID {
+    static func defaultValue(in size: Size) -> Int { 1 }
   }
 
-  public static var center: Self {
-    enum Center: AlignmentID {
-      static func defaultValue(in size: Size) -> Int { Int(size.width) / 2 }
-    }
-    return Self(Center.self)
+  private enum Center: AlignmentID {
+    static func defaultValue(in size: Size) -> Int { Int(size.width) / 2 }
   }
 
-  public static var trailing: Self {
-    enum Trailing: AlignmentID {
-      static func defaultValue(in size: Size) -> Int { Int(size.width) }
-    }
-    return Self(Trailing.self)
+  private enum Trailing: AlignmentID {
+    static func defaultValue(in size: Size) -> Int { Int(size.width) }
   }
+
+  public static let leading = HorizontalAlignment(Leading.self)
+
+  public static let center = HorizontalAlignment(Center.self)
+
+  public static let trailing = HorizontalAlignment(Trailing.self)
 }
 
 // MARK: - Vertical Alignment
@@ -155,24 +152,21 @@ extension VerticalAlignment {
 
 extension VerticalAlignment {
 
-  public static var top: Self {
-    enum Top: AlignmentID {
-      static func defaultValue(in size: Size) -> Int { 1 }
-    }
-    return Self(Top.self)
+  private enum Top: AlignmentID {
+    static func defaultValue(in size: Size) -> Int { 1 }
   }
 
-  public static var center: Self {
-    enum Center: AlignmentID {
-      static func defaultValue(in size: Size) -> Int { Int(size.height) / 2 }
-    }
-    return Self(Center.self)
+  private enum Center: AlignmentID {
+    static func defaultValue(in size: Size) -> Int { Int(size.height) / 2 }
   }
 
-  public static var bottom: Self {
-    enum Bottom: AlignmentID {
-      static func defaultValue(in size: Size) -> Int { Int(size.height) }
-    }
-    return Self(Bottom.self)
+  private enum Bottom: AlignmentID {
+    static func defaultValue(in size: Size) -> Int { Int(size.height) }
   }
+
+  public static let top = VerticalAlignment(Top.self)
+
+  public static let center = VerticalAlignment(Center.self)
+
+  public static let bottom = VerticalAlignment(Bottom.self)
 }
