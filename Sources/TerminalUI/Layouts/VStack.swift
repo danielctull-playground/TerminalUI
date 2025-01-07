@@ -1,14 +1,14 @@
 
-public struct HStack {
+public struct VStack {
 
   @Mutable private var sizes: [Size] = []
 
-  private let alignment: VerticalAlignment
+  private let alignment: HorizontalAlignment
   private let _spacing: Int?
   private let content: [any View]
 
   public init(
-    alignment: VerticalAlignment = .center,
+    alignment: HorizontalAlignment = .center,
     spacing: Int? = nil,
     content: [any View]
   ) {
@@ -18,11 +18,11 @@ public struct HStack {
   }
 }
 
-extension HStack {
+extension VStack {
   fileprivate var spacing: Int { _spacing ?? 0 }
 }
 
-extension HStack: Builtin, View {
+extension VStack: Builtin, View {
 
   func size(
     for proposal: ProposedSize,
@@ -30,11 +30,11 @@ extension HStack: Builtin, View {
   ) -> Size {
 
     let flexibilities = content.map { child in
-      let min = ProposedSize(width: 0, height: proposal.height)
-      let max = ProposedSize(width: .max, height: proposal.height)
+      let min = ProposedSize(width: proposal.width, height: 0)
+      let max = ProposedSize(width: proposal.width, height: .max)
       let smallest = child._size(for: min)
       let largest = child._size(for: max)
-      return largest.width - smallest.width
+      return largest.height - smallest.height
     }
 
     let children = zip(flexibilities, zip(content.indices, content))
@@ -44,23 +44,23 @@ extension HStack: Builtin, View {
     sizes = Array(repeating: .zero, count: children.count)
     let totalSpacing = spacing * (content.count - 1)
     var remainingChildren = children.count
-    var remainingWidth = proposal.width - totalSpacing
+    var remainingHeight = proposal.height - totalSpacing
 
     for (index, child) in children {
 
       let proposal = ProposedSize(
-        width: remainingWidth / remainingChildren,
-        height: proposal.height)
+        width: proposal.width,
+        height: remainingHeight / remainingChildren)
 
       let size = child._size(for: proposal, environment: environment)
 
       sizes[index] = size
       remainingChildren -= 1
-      remainingWidth -= size.width
+      remainingHeight -= size.height
     }
 
-    let width = sizes.map(\.width).reduce(0, +) + totalSpacing
-    let height = sizes.map(\.height).max() ?? 0
+    let width = sizes.map(\.width).max() ?? 0
+    let height = sizes.map(\.height).reduce(0, +) + totalSpacing
     return Size(width: width, height: height)
   }
 
@@ -71,10 +71,10 @@ extension HStack: Builtin, View {
   ) {
     var offset = 0
     for (child, childSize) in zip(content, sizes) {
-      let y = alignment.value(in: size) - alignment.value(in: childSize)
-      let canvas = canvas.translateBy(x: offset, y: y)
+      let x = alignment.value(in: size) - alignment.value(in: childSize)
+      let canvas = canvas.translateBy(x: x, y: offset)
       child._render(in: canvas, size: childSize, environment: environment)
-      offset += childSize.width + spacing
+      offset += childSize.height + spacing
     }
   }
 }

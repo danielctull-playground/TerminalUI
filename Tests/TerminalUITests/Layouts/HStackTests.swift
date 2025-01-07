@@ -37,7 +37,7 @@ struct HStackTests {
     ])
   }
 
-  @Test("single line")
+  @Test("single line 2")
   func singleLine2() {
 
     let canvas = TestCanvas(width: 5, height: 1)
@@ -59,7 +59,7 @@ struct HStackTests {
     ])
   }
 
-  @Test("single line")
+  @Test("single line 3")
   func singleLine3() {
 
     let canvas = TestCanvas(width: 11, height: 1)

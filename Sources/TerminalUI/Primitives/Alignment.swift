@@ -99,7 +99,7 @@ extension HorizontalAlignment: CustomStringConvertible {
 }
 
 extension HorizontalAlignment {
-  fileprivate func value(in size: Size) -> Int {
+  func value(in size: Size) -> Int {
     key.id.defaultValue(in: size)
   }
 }
