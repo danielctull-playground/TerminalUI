@@ -25,10 +25,11 @@ private struct FixedFrame<Content: View>: Builtin, View {
     for proposal: ProposedViewSize,
     environment: EnvironmentValues
   ) -> Size {
-    let proposedSize = ProposedViewSize(
-      width: width ?? proposal.width,
-      height: height ?? proposal.height)
-    let size = content._size(for: proposedSize, environment: environment)
+    var fallback: Size { proposal.replacingUnspecifiedDimensions() }
+    let proposal = ProposedViewSize(
+      width: width ?? fallback.width,
+      height: height ?? fallback.height)
+    let size = content._size(for: proposal, environment: environment)
     return Size(width: width ?? size.width, height: height ?? size.height)
   }
 
