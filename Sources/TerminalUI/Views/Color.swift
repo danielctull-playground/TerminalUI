@@ -5,7 +5,7 @@ public struct Color: Builtin, CustomStringConvertible, Equatable, Sendable, View
   let background: ControlSequence
 
   func size(
-    for proposal: ProposedSize,
+    for proposal: ProposedViewSize,
     environment: EnvironmentValues
   ) -> Size {
     Size(width: proposal.width, height: proposal.height)

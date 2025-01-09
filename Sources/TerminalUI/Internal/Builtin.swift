@@ -1,7 +1,7 @@
 
 protocol Builtin {
   func size(
-    for proposal: ProposedSize,
+    for proposal: ProposedViewSize,
     environment: EnvironmentValues
   ) -> Size
 

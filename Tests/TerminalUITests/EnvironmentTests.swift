@@ -51,7 +51,7 @@ struct EnvironmentTests {
     expectedWidth: Int,
     expectedHeight: Int
   ) {
-    let proposed = ProposedSize(width: proposedWidth, height: proposedHeight)
+    let proposed = ProposedViewSize(width: proposedWidth, height: proposedHeight)
     let view = TestView().environment(\.value, input)
     let size = view._size(for: proposed)
     #expect(size.width == expectedWidth)

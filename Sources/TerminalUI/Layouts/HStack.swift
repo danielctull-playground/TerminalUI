@@ -25,13 +25,13 @@ extension HStack {
 extension HStack: Builtin, View {
 
   func size(
-    for proposal: ProposedSize,
+    for proposal: ProposedViewSize,
     environment: EnvironmentValues
   ) -> Size {
 
     let flexibilities = content.map { child in
-      let min = ProposedSize(width: 0, height: proposal.height)
-      let max = ProposedSize(width: .max, height: proposal.height)
+      let min = ProposedViewSize(width: 0, height: proposal.height)
+      let max = ProposedViewSize(width: .max, height: proposal.height)
       let smallest = child._size(for: min)
       let largest = child._size(for: max)
       return largest.width - smallest.width
@@ -48,7 +48,7 @@ extension HStack: Builtin, View {
 
     for (index, child) in children {
 
-      let proposal = ProposedSize(
+      let proposal = ProposedViewSize(
         width: remainingWidth / remainingChildren,
         height: proposal.height)
 

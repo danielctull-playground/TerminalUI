@@ -1,6 +1,6 @@
 
 /// Amount of space a view is offered.
-package struct ProposedSize {
+package struct ProposedViewSize {
   package let width: Int
   package let height: Int
 

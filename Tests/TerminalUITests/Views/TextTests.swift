@@ -76,7 +76,7 @@ struct TextTests {
     expectedWidth: Int,
     expectedHeight: Int
   ) {
-    let proposed = ProposedSize(width: proposedWidth, height: proposedHeight)
+    let proposed = ProposedViewSize(width: proposedWidth, height: proposedHeight)
     let size = Text(input)._size(for: proposed)
     #expect(size.width == expectedWidth)
     #expect(size.height == expectedHeight)

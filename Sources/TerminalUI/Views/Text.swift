@@ -8,7 +8,7 @@ public struct Text: Builtin, View {
   }
 
   func size(
-    for proposal: ProposedSize,
+    for proposal: ProposedViewSize,
     environment: EnvironmentValues
   ) -> Size {
     let lines = string.lines(ofLength: Int(proposal.width))
