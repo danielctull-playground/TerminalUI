@@ -10,12 +10,12 @@ public protocol View {
 
 extension View {
 
-  package func _size(for proposal: ProposedSize) -> Size {
+  package func _size(for proposal: ProposedViewSize) -> Size {
     _size(for: proposal, environment: EnvironmentValues())
   }
 
   package func _size(
-    for proposal: ProposedSize,
+    for proposal: ProposedViewSize,
     environment: EnvironmentValues
   ) -> Size {
 

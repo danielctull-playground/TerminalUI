@@ -22,10 +22,10 @@ private struct FixedFrame<Content: View>: Builtin, View {
   let alignment: Alignment
 
   func size(
-    for proposal: ProposedSize,
+    for proposal: ProposedViewSize,
     environment: EnvironmentValues
   ) -> Size {
-    let proposedSize = ProposedSize(
+    let proposedSize = ProposedViewSize(
       width: width ?? proposal.width,
       height: height ?? proposal.height)
     let size = content._size(for: proposedSize, environment: environment)
@@ -38,7 +38,7 @@ private struct FixedFrame<Content: View>: Builtin, View {
     environment: EnvironmentValues
   ) {
     let parent = alignment.position(for: size)
-    let proposedSize = ProposedSize(width: size.width, height: size.height)
+    let proposedSize = ProposedViewSize(width: size.width, height: size.height)
     let size = content._size(for: proposedSize, environment: environment)
     let child = alignment.position(for: size)
     let x = parent.x - child.x
