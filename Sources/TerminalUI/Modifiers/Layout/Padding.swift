@@ -44,8 +44,8 @@ private struct Padding<Content: View>: Builtin, View {
 extension ProposedViewSize {
   fileprivate func inset(_ insets: EdgeInsets) -> ProposedViewSize {
     ProposedViewSize(
-      width: width - insets.leading - insets.trailing,
-      height: height - insets.top - insets.bottom
+      width: width.map { $0 - insets.leading - insets.trailing },
+      height: height.map { $0 - insets.top - insets.bottom }
     )
   }
 }

@@ -44,7 +44,7 @@ extension VStack: Builtin, View {
     sizes = Array(repeating: .zero, count: children.count)
     let totalSpacing = spacing * (content.count - 1)
     var remainingChildren = children.count
-    var remainingHeight = proposal.height - totalSpacing
+    var remainingHeight = proposal.replacingUnspecifiedDimensions().height - totalSpacing
 
     for (index, child) in children {
 

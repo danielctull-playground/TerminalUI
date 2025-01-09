@@ -44,7 +44,7 @@ extension HStack: Builtin, View {
     sizes = Array(repeating: .zero, count: children.count)
     let totalSpacing = spacing * (content.count - 1)
     var remainingChildren = children.count
-    var remainingWidth = proposal.width - totalSpacing
+    var remainingWidth = proposal.replacingUnspecifiedDimensions().width - totalSpacing
 
     for (index, child) in children {
 
