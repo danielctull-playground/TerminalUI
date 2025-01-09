@@ -1,9 +1,9 @@
 
 public struct Position: Equatable, Hashable, Sendable {
-  package let x: Int
-  package let y: Int
+  package let x: InfinityInt
+  package let y: InfinityInt
 
-  public init(x: Int, y: Int) {
+  public init(x: InfinityInt, y: InfinityInt) {
     self.x = x
     self.y = y
   }

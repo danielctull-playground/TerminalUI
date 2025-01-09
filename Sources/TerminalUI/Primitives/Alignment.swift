@@ -69,7 +69,7 @@ extension Alignment {
 // MARK: - AlignmentID
 
 public protocol AlignmentID {
-  static func defaultValue(in size: Size) -> Int
+  static func defaultValue(in size: Size) -> InfinityInt
 }
 
 // MARK: - AlignmentKey
@@ -99,7 +99,7 @@ extension HorizontalAlignment: CustomStringConvertible {
 }
 
 extension HorizontalAlignment {
-  func value(in size: Size) -> Int {
+  func value(in size: Size) -> InfinityInt {
     key.id.defaultValue(in: size)
   }
 }
@@ -107,15 +107,15 @@ extension HorizontalAlignment {
 extension HorizontalAlignment {
 
   private enum Leading: AlignmentID {
-    static func defaultValue(in size: Size) -> Int { 1 }
+    static func defaultValue(in size: Size) -> InfinityInt { 1 }
   }
 
   private enum Center: AlignmentID {
-    static func defaultValue(in size: Size) -> Int { Int(size.width) / 2 }
+    static func defaultValue(in size: Size) -> InfinityInt { size.width / size.height }
   }
 
   private enum Trailing: AlignmentID {
-    static func defaultValue(in size: Size) -> Int { Int(size.width) }
+    static func defaultValue(in size: Size) -> InfinityInt { size.width }
   }
 
   public static let leading = HorizontalAlignment(Leading.self)
@@ -141,7 +141,7 @@ extension VerticalAlignment: CustomStringConvertible {
 }
 
 extension VerticalAlignment {
-  func value(in size: Size) -> Int {
+  func value(in size: Size) -> InfinityInt {
     key.id.defaultValue(in: size)
   }
 }
@@ -149,15 +149,15 @@ extension VerticalAlignment {
 extension VerticalAlignment {
 
   private enum Top: AlignmentID {
-    static func defaultValue(in size: Size) -> Int { 1 }
+    static func defaultValue(in size: Size) -> InfinityInt { 1 }
   }
 
   private enum Center: AlignmentID {
-    static func defaultValue(in size: Size) -> Int { Int(size.height) / 2 }
+    static func defaultValue(in size: Size) -> InfinityInt { size.height / 2 }
   }
 
   private enum Bottom: AlignmentID {
-    static func defaultValue(in size: Size) -> Int { Int(size.height) }
+    static func defaultValue(in size: Size) -> InfinityInt { size.height }
   }
 
   public static let top = VerticalAlignment(Top.self)

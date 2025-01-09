@@ -2,8 +2,8 @@
 extension View {
 
   public func frame(
-    width: Int? = nil,
-    height: Int? = nil,
+    width: InfinityInt? = nil,
+    height: InfinityInt? = nil,
     alignment: Alignment = .center
   ) -> some View {
     FixedFrame(
@@ -17,8 +17,8 @@ extension View {
 private struct FixedFrame<Content: View>: Builtin, View {
 
   let content: Content
-  let width: Int?
-  let height: Int?
+  let width: InfinityInt?
+  let height: InfinityInt?
   let alignment: Alignment
 
   func size(

@@ -15,15 +15,15 @@ extension Canvas {
 // MARK: - Translation
 
 extension Canvas {
-  func translateBy(x: Int, y: Int) -> some Canvas {
+  func translateBy(x: InfinityInt, y: InfinityInt) -> some Canvas {
     TranslatedCanvas(base: self, x: x, y: y)
   }
 }
 
 private struct TranslatedCanvas<Base: Canvas>: Canvas {
   let base: Base
-  let x: Int
-  let y: Int
+  let x: InfinityInt
+  let y: InfinityInt
 
   func draw(_ pixel: Pixel, at position: Position) {
     let position = Position(x: x + position.x, y: y + position.y)

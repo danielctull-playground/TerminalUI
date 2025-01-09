@@ -12,9 +12,9 @@ public struct Text: Builtin, View {
     environment: EnvironmentValues
   ) -> Size {
     let size = proposal.replacingUnspecifiedDimensions()
-    let lines = string.lines(ofLength: size.width)
-    let height = lines.count
-    let width = lines.map(\.count).max() ?? 0
+    let lines = string.lines(ofLength: Int(size.width))
+    let height = InfinityInt(lines.count)
+    let width = InfinityInt(lines.map(\.count).max() ?? 0)
     return Size(width: width, height: height)
   }
 

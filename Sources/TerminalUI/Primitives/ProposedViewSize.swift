@@ -6,15 +6,15 @@ public struct ProposedViewSize: Equatable {
   ///
   /// A value of `nil` represents an unspecified width proposal, which a view
   /// interprets to mean that it should use its ideal width.
-  public let width: Int?
+  public let width: InfinityInt?
 
   /// The proposed vertical size.
   ///
   /// A value of `nil` represents an unspecified height proposal, which a view
   /// interprets to mean that it should use its ideal height.
-  public let height: Int?
+  public let height: InfinityInt?
 
-  public init(width: Int?, height: Int?) {
+  public init(width: InfinityInt?, height: InfinityInt?) {
     self.width = width
     self.height = height
   }
