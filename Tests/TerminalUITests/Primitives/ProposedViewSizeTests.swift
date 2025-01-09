@@ -1,4 +1,4 @@
-@testable import TerminalUI
+import TerminalUI
 import Testing
 
 @Suite("ProposedViewSize")
