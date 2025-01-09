@@ -111,11 +111,11 @@ extension HorizontalAlignment {
   }
 
   private enum Center: AlignmentID {
-    static func defaultValue(in size: Size) -> Int { Int(size.width) / 2 }
+    static func defaultValue(in size: Size) -> Int { size.width / 2 }
   }
 
   private enum Trailing: AlignmentID {
-    static func defaultValue(in size: Size) -> Int { Int(size.width) }
+    static func defaultValue(in size: Size) -> Int { size.width }
   }
 
   public static let leading = HorizontalAlignment(Leading.self)
@@ -153,11 +153,11 @@ extension VerticalAlignment {
   }
 
   private enum Center: AlignmentID {
-    static func defaultValue(in size: Size) -> Int { Int(size.height) / 2 }
+    static func defaultValue(in size: Size) -> Int { size.height / 2 }
   }
 
   private enum Bottom: AlignmentID {
-    static func defaultValue(in size: Size) -> Int { Int(size.height) }
+    static func defaultValue(in size: Size) -> Int { size.height }
   }
 
   public static let top = VerticalAlignment(Top.self)
