@@ -22,13 +22,14 @@ private struct FixedFrame<Content: View>: Builtin, View {
   let alignment: Alignment
 
   func size(
-    for proposal: ProposedSize,
+    for proposal: ProposedViewSize,
     environment: EnvironmentValues
   ) -> Size {
-    let proposedSize = ProposedSize(
-      width: width ?? proposal.width,
-      height: height ?? proposal.height)
-    let size = content._size(for: proposedSize, environment: environment)
+    var fallback: Size { proposal.replacingUnspecifiedDimensions() }
+    let proposal = ProposedViewSize(
+      width: width ?? fallback.width,
+      height: height ?? fallback.height)
+    let size = content._size(for: proposal, environment: environment)
     return Size(width: width ?? size.width, height: height ?? size.height)
   }
 
@@ -38,7 +39,7 @@ private struct FixedFrame<Content: View>: Builtin, View {
     environment: EnvironmentValues
   ) {
     let parent = alignment.position(for: size)
-    let proposedSize = ProposedSize(width: size.width, height: size.height)
+    let proposedSize = ProposedViewSize(width: size.width, height: size.height)
     let size = content._size(for: proposedSize, environment: environment)
     let child = alignment.position(for: size)
     let x = parent.x - child.x

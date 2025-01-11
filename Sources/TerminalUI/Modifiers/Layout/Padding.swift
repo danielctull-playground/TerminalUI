@@ -20,7 +20,7 @@ private struct Padding<Content: View>: Builtin, View {
   let insets: EdgeInsets
 
   func size(
-    for proposal: ProposedSize,
+    for proposal: ProposedViewSize,
     environment: EnvironmentValues
   ) -> Size {
     content
@@ -41,11 +41,11 @@ private struct Padding<Content: View>: Builtin, View {
   }
 }
 
-extension ProposedSize {
-  fileprivate func inset(_ insets: EdgeInsets) -> ProposedSize {
-    ProposedSize(
-      width: width - insets.leading - insets.trailing,
-      height: height - insets.top - insets.bottom
+extension ProposedViewSize {
+  fileprivate func inset(_ insets: EdgeInsets) -> ProposedViewSize {
+    ProposedViewSize(
+      width: width.map { $0 - insets.leading - insets.trailing },
+      height: height.map { $0 - insets.top - insets.bottom }
     )
   }
 }
