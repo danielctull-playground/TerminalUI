@@ -1,3 +1,3 @@
 
-public struct ViewSpacing {
+public struct ViewSpacing: Equatable {
 }

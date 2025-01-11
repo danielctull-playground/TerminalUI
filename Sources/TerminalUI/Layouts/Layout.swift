@@ -92,4 +92,35 @@ public struct LayoutSubviews {}
 
 // MARK: - LayoutSubviews
 
-public struct LayoutSubview {}
+public struct LayoutSubview: Equatable {
+
+//  public subscript<Key>(key: Key.Type) -> Key.Value where Key: LayoutValueKey {
+//  }
+
+  public let priority: Double
+
+//  public func sizeThatFits(_ proposal: ProposedViewSize) -> Size {
+//  }
+
+//  public func dimensions(in proposal: ProposedViewSize) -> ViewDimensions {
+//  }
+
+  public let spacing: ViewSpacing
+
+//  public func place(
+//    at position: Position,
+//    anchor: UnitPoint = .topLeading,
+//    proposal: ProposedViewSize
+//  ) {
+//  }
+
+//  public static func == (a: LayoutSubview, b: LayoutSubview) -> Bool {
+//  }
+}
+
+// MARK: - LayoutValueKey
+
+public protocol LayoutValueKey {
+    associatedtype Value
+    static var defaultValue: Self.Value { get }
+}
