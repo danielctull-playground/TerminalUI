@@ -52,20 +52,26 @@ public protocol Layout {
 // MARK: - Default Implementations
 
 extension Layout where Cache == Void {
-  func makeCache(subviews: Subviews) -> Cache { Cache() }
-  func updateCache(_ cache: inout Cache, subviews: Subviews) {}
+  public func makeCache(subviews: Subviews) -> Cache { Cache() }
+  public func updateCache(_ cache: inout Cache, subviews: Subviews) {}
+}
+
+extension Layout {
+  public func updateCache(_ cache: inout Cache, subviews: Subviews) {
+    cache = makeCache(subviews: subviews)
+  }
 }
 
 extension Layout {
 
-  func spacing(
+  public func spacing(
     subviews: Subviews,
     cache: inout Cache
   ) -> ViewSpacing {
     ViewSpacing()
   }
 
-  func explicitAlignment(
+  public func explicitAlignment(
     of guide: HorizontalAlignment,
     in bounds: Rect,
     proposal: ProposedViewSize,
@@ -75,7 +81,7 @@ extension Layout {
     nil
   }
 
-  func explicitAlignment(
+  public func explicitAlignment(
     of guide: VerticalAlignment,
     in bounds: Rect,
     proposal: ProposedViewSize,
@@ -88,7 +94,18 @@ extension Layout {
 
 // MARK: - LayoutSubviews
 
-public struct LayoutSubviews {}
+public struct LayoutSubviews {
+  private let raw: [LayoutSubview]
+}
+
+extension LayoutSubviews: RandomAccessCollection {
+  public typealias Index = Int
+  public var startIndex: Index { raw.startIndex }
+  public var endIndex: Index { raw.endIndex }
+  public func index(after i: Int) -> Int { raw.index(after: i) }
+  public func index(before i: Int) -> Int { raw.index(before: i) }
+  public subscript(position: Index) -> LayoutSubview { raw[position] }
+}
 
 // MARK: - LayoutSubviews
 
@@ -99,20 +116,21 @@ public struct LayoutSubview: Equatable {
 
   public let priority: Double
 
-//  public func sizeThatFits(_ proposal: ProposedViewSize) -> Size {
-//  }
+  public func sizeThatFits(_ proposal: ProposedViewSize) -> Size {
+    .zero
+  }
 
 //  public func dimensions(in proposal: ProposedViewSize) -> ViewDimensions {
 //  }
 
   public let spacing: ViewSpacing
 
-//  public func place(
-//    at position: Position,
+  public func place(
+    at position: Position,
 //    anchor: UnitPoint = .topLeading,
-//    proposal: ProposedViewSize
-//  ) {
-//  }
+    proposal: ProposedViewSize
+  ) {
+  }
 
 //  public static func == (a: LayoutSubview, b: LayoutSubview) -> Bool {
 //  }
