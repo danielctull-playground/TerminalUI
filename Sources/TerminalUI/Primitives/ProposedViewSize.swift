@@ -27,3 +27,9 @@ public struct ProposedViewSize: Equatable {
       height: height ?? size.height)
   }
 }
+
+extension ProposedViewSize {
+  public init(_ size: Size) {
+    self.init(width: size.width, height: size.height)
+  }
+}

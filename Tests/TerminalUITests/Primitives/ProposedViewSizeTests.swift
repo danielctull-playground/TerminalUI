@@ -4,11 +4,19 @@ import Testing
 @Suite("ProposedViewSize")
 struct ProposedViewSizeTests {
 
-  @Test("init")
-  func `init`() {
+  @Test("init(width:height:)")
+  func initWidthHeight() {
     let size = ProposedViewSize(width: 10, height: 8)
     #expect(size.width == 10)
     #expect(size.height == 8)
+  }
+
+  @Test("init(size:)")
+  func initSize() {
+    let size = Size(width: .random, height: .random)
+    let proposal = ProposedViewSize(size)
+    #expect(proposal.width == size.width)
+    #expect(proposal.height == size.height)
   }
 
   @Test("replacingUnspecifiedDimensions")
