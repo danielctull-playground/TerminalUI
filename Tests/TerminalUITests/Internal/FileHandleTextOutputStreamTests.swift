@@ -14,7 +14,7 @@ struct FileHandleTextOutputStreamTests {
       var stream: TextOutputStream = .fileHandle(fileHandle)
       let input = UUID().uuidString
       stream.write(input)
-      #expect(try String(contentsOf: url) == input)
+      #expect(try String(contentsOf: url, encoding: .utf8) == input)
     }
   }
 }
