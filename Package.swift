@@ -11,6 +11,15 @@ let package = Package(
   targets: [
 
     .target(
+      name: "AttributeGraph"
+    ),
+
+    .testTarget(
+      name: "AttributeGraphTests",
+      dependencies: ["AttributeGraph"]
+    ),
+
+    .target(
       name: "TerminalUI"
     ),
 
