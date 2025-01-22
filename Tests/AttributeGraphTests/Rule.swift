@@ -1,4 +1,4 @@
-import AttributeGraph
+@testable import AttributeGraph
 import Testing
 
 @Suite("Rule")
@@ -21,5 +21,18 @@ struct RuleTests {
     #expect(y.value == 2)
     x.value = 2
     #expect(y.value == 4)
+  }
+
+  @Test("dirty")
+  func dirty() {
+    let graph = Graph()
+    let x = graph.attribute("x", value: 1)
+    let y = graph.rule("y") { x.value * 2 }
+    #expect(y.value == 2)
+
+    x.value = 2
+    #expect(y.dirty == true)
+    #expect(y.value == 4)
+    #expect(y.dirty == false)
   }
 }

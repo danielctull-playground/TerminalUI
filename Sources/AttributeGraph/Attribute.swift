@@ -1,12 +1,34 @@
 
-package final class Attribute<Value> {
+package final class Attribute<Value>: Dependency {
 
   package let name: Name
-  package var value: Value
+  private unowned let graph: Graph
 
-  init(name: Name, value: Value) {
+  var dependants: [Dependant] = []
+
+  private var _value: Value
+  package var value: Value {
+    get {
+
+      if let dependant = graph.current {
+        dependants.append(dependant)
+        dependant.dependencies.append(self)
+      }
+
+      return _value
+    }
+    set {
+      _value = newValue
+      for dependant in dependants {
+        dependant.dirty = true
+      }
+    }
+  }
+
+  init(graph: Graph, name: Name, value: Value) {
+    self.graph = graph
     self.name = name
-    self.value = value
+    _value = value
   }
 }
 
