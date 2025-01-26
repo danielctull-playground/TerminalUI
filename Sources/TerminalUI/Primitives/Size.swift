@@ -1,5 +1,5 @@
 
-public struct Size: Equatable, Hashable {
+public struct Size: Equatable, Hashable, Sendable {
 
   public let width: Int
   public let height: Int
