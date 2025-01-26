@@ -26,7 +26,7 @@ public protocol Layout {
 // MARK: - LayoutSubviews
 
 public struct LayoutSubviews {
-  private let raw: [LayoutSubview]
+  fileprivate let raw: [LayoutSubview]
 }
 
 extension LayoutSubviews: RandomAccessCollection {
@@ -63,4 +63,61 @@ public struct LayoutSubview {
   ) {
     _place(position, proposal)
   }
+}
+
+// MARK: - LayoutComputer
+
+struct LayoutComputer {
+  fileprivate let sizeThatFits: (ProposedViewSize) -> Size
+  fileprivate let childGeometries: (Rect) -> [ChildGeometries]
+}
+
+extension Layout {
+
+  fileprivate func computer(
+    proposal: ProposedViewSize,
+    subviews: [LayoutComputer]
+  ) -> LayoutComputer {
+
+    var geometries: [ChildGeometries] = Array(repeating: .empty, count: subviews.count)
+
+    let subviews = LayoutSubviews(raw: subviews.enumerated().map { index, subview in
+      LayoutSubview(
+        sizeThatFits: subview.sizeThatFits,
+        place: { position, proposal in
+          let size = subview.sizeThatFits(proposal)
+          geometries[index].frames.append(Rect(origin: position, size: size))
+        })
+    })
+
+    var cache = makeCache(subviews: subviews)
+
+    return LayoutComputer { proposal in
+
+      sizeThatFits(
+        proposal: proposal,
+        subviews: subviews,
+        cache: &cache)
+
+    } childGeometries: { rect in
+
+      placeSubviews(
+        in: rect,
+        proposal: ProposedViewSize(rect.size),
+        subviews: subviews,
+        cache: &cache)
+
+      return geometries
+    }
+  }
+}
+
+// MARK: - ChildGeometries
+
+private struct ChildGeometries: Sendable {
+  var frames: [Rect]
+}
+
+extension ChildGeometries {
+  static let empty = ChildGeometries(frames: [])
 }
