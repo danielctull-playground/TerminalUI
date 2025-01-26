@@ -24,3 +24,13 @@ extension Rect {
       size: Size(width: width, height: height))
   }
 }
+
+extension Rect {
+  public var minX: Int { origin.x }
+  public var midX: Int { origin.x + size.width / 2 }
+  public var maxX: Int { origin.x + size.width - 1 }
+
+  public var minY: Int { origin.y }
+  public var midY: Int { origin.y + size.height / 2 }
+  public var maxY: Int { origin.y + size.height - 1 }
+}
