@@ -10,6 +10,12 @@ public struct Rect: Equatable, Hashable {
   }
 }
 
+extension Rect: CustomStringConvertible {
+  public var description: String {
+    "Rect(x: \(origin.x), y: \(origin.y), width: \(size.width), height: \(size.height))"
+  }
+}
+
 extension Rect {
 
   public init(x: Int, y: Int, width: Int, height: Int) {

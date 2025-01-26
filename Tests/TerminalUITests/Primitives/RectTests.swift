@@ -30,4 +30,10 @@ import Testing
     #expect(rect.size.width == width)
     #expect(rect.size.height == height)
   }
+
+  @Test("description")
+  func description() {
+    let rect = Rect(x: 1, y: 2, width: 3, height: 4)
+    #expect(rect.description == "Rect(x: 1, y: 2, width: 3, height: 4)")
+  }
 }
