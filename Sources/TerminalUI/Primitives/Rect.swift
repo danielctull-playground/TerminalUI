@@ -1,5 +1,5 @@
 
-public struct Rect: Equatable, Hashable {
+public struct Rect: Equatable, Hashable, Sendable {
 
   public let origin: Position
   public let size: Size
@@ -33,4 +33,18 @@ extension Rect {
   public var minY: Int { origin.y }
   public var midY: Int { origin.y + size.height / 2 }
   public var maxY: Int { origin.y + size.height - 1 }
+}
+
+extension Rect {
+  public func union(_ other: Rect) -> Rect {
+    let minX = min(minX, other.minX)
+    let maxX = max(maxX, other.maxX)
+    let minY = min(minY, other.minY)
+    let maxY = max(maxY, other.maxY)
+    return Rect(
+      x: minX,
+      y: minY,
+      width: maxX - minX + 1,
+      height: maxY - minY + 1)
+  }
 }
