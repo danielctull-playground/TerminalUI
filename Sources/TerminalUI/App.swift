@@ -23,10 +23,14 @@ extension App {
     let app = Self()
 
     let canvas = TextStreamCanvas(output: .fileHandle(.standardOutput))
+//    canvas.output.write(ControlSequence.clearScreen)
+//    canvas.output.write(AlternativeBuffer.on.control)
+//    canvas.output.write(CursorVisibility.off.control)
+
     canvas.render(size: .window) {
       app.body
     }
 
-    dispatchMain()
+//    dispatchMain()
   }
 }

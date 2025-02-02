@@ -6,9 +6,11 @@ package protocol Canvas {
 extension Canvas {
 
   package func render(size: Size, content: () -> some View) {
-    content()
-      .frame(width: size.width, height: size.height)
-      ._render(in: self, size: size)
+    let content = content()
+
+    let size = content._size(for: ProposedViewSize(size))
+//      .frame(width: size.width, height: size.height)
+    content._render(in: self, size: size)
   }
 }
 
