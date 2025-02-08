@@ -8,7 +8,6 @@ public protocol View {
   var body: Body { get }
 }
 
-extension View {
 
   package func _size(for proposal: ProposedViewSize) -> Size {
     _size(for: proposal, environment: EnvironmentValues())

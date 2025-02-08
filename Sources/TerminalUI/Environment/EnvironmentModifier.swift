@@ -9,11 +9,22 @@ extension View {
   }
 }
 
-private struct EnvironmentView<Content: View, Value>: Builtin, View {
+private struct EnvironmentView<Content: View, Value>: Builtin {
 
   let content: Content
   let keyPath: WritableKeyPath<EnvironmentValues, Value>
   let value: Value
+
+  static func makeView(inputs: ViewInputs<Self>) -> ViewOutputs {
+//    let content = inputs.content
+//    var environment = inputs.environment
+//    environment[keyPath: content.keyPath] = content.value
+//
+//
+
+    
+
+  }
 
   func size(
     for proposal: ProposedViewSize,

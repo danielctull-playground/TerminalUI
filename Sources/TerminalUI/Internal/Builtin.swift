@@ -1,15 +1,21 @@
 
-protocol Builtin {
-  func size(
-    for proposal: ProposedViewSize,
-    environment: EnvironmentValues
-  ) -> Size
-
-  func render(in canvas: any Canvas, size: Size, environment: EnvironmentValues)
+protocol Builtin: View {
+  static func makeView(inputs: ViewInputs<Self>) -> ViewOutputs
 }
 
 extension Builtin {
   public var body: Never {
     fatalError("Body should never be called.")
   }
+}
+
+struct ViewInputs<Content: View> {
+  let content: Content
+  let canvas: Canvas
+  let environment: EnvironmentValues
+}
+
+struct ViewOutputs {
+  let size: (ProposedViewSize) -> Size
+  let render: (Size) -> Void
 }
