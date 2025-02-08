@@ -9,13 +9,7 @@ package final class Input<Value>: Dependency {
   private var _value: Value
   package var value: Value {
     get {
-
-      if let dependant = graph.current {
-        dependants.append(dependant)
-        dependant.dependencies.append(self)
-      }
-
-      return _value
+      graph.compute(self) { _value }
     }
     set {
       _value = newValue
