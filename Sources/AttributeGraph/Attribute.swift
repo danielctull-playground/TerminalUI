@@ -11,22 +11,14 @@ package final class Attribute<Value>: Dependant, Dependency {
   var dependants: [Dependant] = []
 
   package var value: Value {
-
-    if let dependant = graph.current {
-      dependants.append(dependant)
-      dependant.dependencies.append(self)
+    graph.compute(self) {
+      if dirty { cache = nil }
+      if let cache { return cache }
+      let value = make()
+      dirty = false
+      cache = value
+      return value
     }
-
-    let previous = graph.current
-    defer { graph.current = previous }
-    graph.current = self
-
-    if dirty { cache = nil }
-    if let cache { return cache }
-    let value = make()
-    dirty = false
-    cache = value
-    return value
   }
 
   init(graph: Graph, name: Name, make: @escaping () -> Value) {

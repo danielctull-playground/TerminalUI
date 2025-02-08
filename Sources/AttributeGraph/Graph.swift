@@ -2,7 +2,36 @@
 package final class Graph {
 
   package init() {}
-  var current: Dependant?
+  private var current: Dependant?
+
+  private func setupDependency(_ dependency: any Dependency) {
+    if let dependant = current {
+      dependency.dependants.append(dependant)
+      dependant.dependencies.append(dependency)
+    }
+  }
+
+  func compute<Value>(
+    _ attribute: Attribute<Value>,
+    compute: () -> Value
+  ) -> Value {
+
+    setupDependency(attribute)
+
+    let previous = current
+    defer { current = previous }
+    current = attribute
+
+    return compute()
+  }
+
+  func compute<Value>(
+    _ input: Input<Value>,
+    compute: () -> Value
+  ) -> Value {
+    setupDependency(input)
+    return compute()
+  }
 
   package func input<Value>(
     _ name: Input.Name,
