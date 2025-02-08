@@ -35,19 +35,5 @@ package final class Input<Value>: Dependency {
 // MARK: - Input.Name
 
 extension Input {
-  package typealias Name = InputName
-}
-
-package struct InputName: Equatable {
-  private let raw: String
-}
-
-extension Input.Name: ExpressibleByStringLiteral {
-  package init(stringLiteral value: String) {
-    self.init(raw: value)
-  }
-}
-
-extension Input.Name: CustomStringConvertible {
-  package var description: String { raw }
+  package typealias Name = AttributeName
 }
