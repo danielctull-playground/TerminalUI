@@ -11,10 +11,10 @@ package final class Graph {
     Input(graph: self, name: name, value: value)
   }
 
-  package func rule<Value>(
-    _ name: Rule.Name,
+  package func attribute<Value>(
+    _ name: Attribute.Name,
     _ make: @escaping () -> Value
-  ) -> Rule<Value> {
-    Rule(graph: self, name: name, make: make)
+  ) -> Attribute<Value> {
+    Attribute(graph: self, name: name, make: make)
   }
 }

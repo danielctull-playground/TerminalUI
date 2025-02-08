@@ -1,5 +1,5 @@
 
-package final class Rule<Value>: Dependant, Dependency {
+package final class Attribute<Value>: Dependant, Dependency {
 
   package let name: Name
   private let make: () -> Value
@@ -36,22 +36,22 @@ package final class Rule<Value>: Dependant, Dependency {
   }
 }
 
-// MARK: - Rule.Name
+// MARK: - Attribute.Name
 
-extension Rule {
-  package typealias Name = RuleName
+extension Attribute {
+  package typealias Name = AttributeName
 }
 
-package struct RuleName: Equatable {
+package struct AttributeName: Equatable {
   private let raw: String
 }
 
-extension Rule.Name: ExpressibleByStringLiteral {
+extension Attribute.Name: ExpressibleByStringLiteral {
   package init(stringLiteral value: String) {
     self.init(raw: value)
   }
 }
 
-extension Rule.Name: CustomStringConvertible {
+extension Attribute.Name: CustomStringConvertible {
   package var description: String { raw }
 }
