@@ -1,5 +1,5 @@
 
-package final class Attribute<Value>: Dependency {
+package final class Input<Value>: Dependency {
 
   package let name: Name
   private unowned let graph: Graph
@@ -32,22 +32,22 @@ package final class Attribute<Value>: Dependency {
   }
 }
 
-// MARK: - Attribute.Name
+// MARK: - Input.Name
 
-extension Attribute {
-  package typealias Name = AttributeName
+extension Input {
+  package typealias Name = InputName
 }
 
-package struct AttributeName: Equatable {
+package struct InputName: Equatable {
   private let raw: String
 }
 
-extension Attribute.Name: ExpressibleByStringLiteral {
+extension Input.Name: ExpressibleByStringLiteral {
   package init(stringLiteral value: String) {
     self.init(raw: value)
   }
 }
 
-extension Attribute.Name: CustomStringConvertible {
+extension Input.Name: CustomStringConvertible {
   package var description: String { raw }
 }

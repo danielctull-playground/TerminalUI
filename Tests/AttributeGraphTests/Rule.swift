@@ -16,7 +16,7 @@ struct RuleTests {
   @Test("update")
   func update() {
     let graph = Graph()
-    let x = graph.attribute("x", value: 1)
+    let x = graph.input("x", 1)
     let y = graph.rule("y") { x.value * 2 }
     #expect(y.value == 2)
     x.value = 2
@@ -26,7 +26,7 @@ struct RuleTests {
   @Test("dirty")
   func dirty() {
     let graph = Graph()
-    let x = graph.attribute("x", value: 1)
+    let x = graph.input("x", 1)
     let y = graph.rule("y") { x.value * 2 }
     #expect(y.value == 2)
 
