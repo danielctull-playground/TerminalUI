@@ -1,23 +1,23 @@
 @testable import AttributeGraph
 import Testing
 
-@Suite("Rule")
-struct RuleTests {
+@Suite("Attribute")
+struct AttributeTests {
 
   @Test("create")
   func create() {
     let graph = Graph()
-    let rule = graph.rule("rule") { 12 }
-    #expect(rule.value == 12)
-    #expect(rule.name == "rule")
-    #expect(rule.name.description == "rule")
+    let attribute = graph.attribute("x") { 12 }
+    #expect(attribute.value == 12)
+    #expect(attribute.name == "x")
+    #expect(attribute.name.description == "x")
   }
 
   @Test("update")
   func update() {
     let graph = Graph()
     let x = graph.input("x", 1)
-    let y = graph.rule("y") { x.value * 2 }
+    let y = graph.attribute("y") { x.value * 2 }
     #expect(y.value == 2)
     x.value = 2
     #expect(y.value == 4)
@@ -27,7 +27,7 @@ struct RuleTests {
   func dirty() {
     let graph = Graph()
     let x = graph.input("x", 1)
-    let y = graph.rule("y") { x.value * 2 }
+    let y = graph.attribute("y") { x.value * 2 }
     #expect(y.value == 2)
 
     x.value = 2
