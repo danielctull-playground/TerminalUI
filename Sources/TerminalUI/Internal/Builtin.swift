@@ -1,9 +1,7 @@
 
 protocol Builtin {
-  func size(
-    for proposal: ProposedViewSize,
-    inputs: ViewInputs
-  ) -> Size
+
+  func makeView(inputs: ViewInputs) -> ViewOutputs
 
   func render(in canvas: any Canvas, size: Size, inputs: ViewInputs)
 }

@@ -15,14 +15,11 @@ private struct EnvironmentView<Content: View, Value>: Builtin, View {
   let keyPath: WritableKeyPath<EnvironmentValues, Value>
   let value: Value
 
-  func size(
-    for proposal: ProposedViewSize,
-    inputs: ViewInputs
-  ) -> Size {
+  func makeView(inputs: ViewInputs) -> ViewOutputs {
     var environment = inputs.environment
     environment[keyPath: keyPath] = value
     let inputs = ViewInputs(environment: environment)
-    return content._size(for: proposal, inputs: inputs)
+    return content._makeView(inputs: inputs)
   }
 
   func render(in canvas: any Canvas, size: Size, inputs: ViewInputs) {

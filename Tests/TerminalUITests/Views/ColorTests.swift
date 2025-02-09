@@ -31,8 +31,11 @@ struct ColorTests {
   func size(color: Color) {
     let width = Int.random(in: 0...1_000_000_000)
     let height = Int.random(in: 0...1_000_000_000)
-    let proposed = ProposedViewSize(width: width, height: height)
-    let size = color._size(for: proposed)
+    let proposal = ProposedViewSize(width: width, height: height)
+    let size = color
+      .makeView(inputs: ViewInputs(environment: EnvironmentValues()))
+      .layoutComputer
+      .sizeThatFits(proposal)
     #expect(size.width == width)
     #expect(size.height == height)
   }

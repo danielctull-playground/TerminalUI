@@ -19,13 +19,13 @@ private struct Padding<Content: View>: Builtin, View {
   let content: Content
   let insets: EdgeInsets
 
-  func size(
-    for proposal: ProposedViewSize,
-    inputs: ViewInputs
-  ) -> Size {
-    content
-      ._size(for: proposal.inset(insets), inputs: inputs)
-      .inset(-insets)
+  func makeView(inputs: ViewInputs) -> ViewOutputs {
+    ViewOutputs(layoutComputer: LayoutComputer(sizeThatFits: { proposal in
+      content._makeView(inputs: inputs)
+        .layoutComputer
+        .sizeThatFits(proposal.inset(insets))
+        .inset(-insets)
+    }))
   }
 
   func render(

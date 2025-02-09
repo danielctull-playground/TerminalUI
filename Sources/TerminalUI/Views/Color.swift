@@ -4,11 +4,10 @@ public struct Color: Builtin, CustomStringConvertible, Equatable, Sendable, View
   let foreground: ControlSequence
   let background: ControlSequence
 
-  func size(
-    for proposal: ProposedViewSize,
-    inputs: ViewInputs
-  ) -> Size {
-    proposal.replacingUnspecifiedDimensions()
+  func makeView(inputs: ViewInputs) -> ViewOutputs {
+    ViewOutputs(layoutComputer: LayoutComputer(sizeThatFits: { proposal in
+      proposal.replacingUnspecifiedDimensions()
+    }))
   }
 
   func render(in canvas: any Canvas, size: Size, inputs: ViewInputs) {

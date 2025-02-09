@@ -7,15 +7,14 @@ public struct Text: Builtin, View {
     self.string = string
   }
 
-  func size(
-    for proposal: ProposedViewSize,
-    inputs: ViewInputs
-  ) -> Size {
-    let size = proposal.replacingUnspecifiedDimensions()
-    let lines = string.lines(ofLength: size.width)
-    let height = lines.count
-    let width = lines.map(\.count).max() ?? 0
-    return Size(width: width, height: height)
+  func makeView(inputs: ViewInputs) -> ViewOutputs {
+    ViewOutputs(layoutComputer: LayoutComputer(sizeThatFits: { proposal in
+      let size = proposal.replacingUnspecifiedDimensions()
+      let lines = string.lines(ofLength: size.width)
+      let height = lines.count
+      let width = lines.map(\.count).max() ?? 0
+      return Size(width: width, height: height)
+    }))
   }
 
   func render(in canvas: any Canvas, size: Size, inputs: ViewInputs) {

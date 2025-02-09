@@ -24,44 +24,47 @@ extension HStack {
 
 extension HStack: Builtin, View {
 
-  func size(
-    for proposal: ProposedViewSize,
-    inputs: ViewInputs
-  ) -> Size {
+  func makeView(inputs: ViewInputs) -> ViewOutputs {
+    ViewOutputs(layoutComputer: LayoutComputer(sizeThatFits: { proposal in
 
-    let flexibilities = content.map { child in
-      let min = ProposedViewSize(width: 0, height: proposal.height)
-      let max = ProposedViewSize(width: .max, height: proposal.height)
-      let smallest = child._size(for: min)
-      let largest = child._size(for: max)
-      return largest.width - smallest.width
-    }
+      let flexibilities = content.map { child in
+        let min = ProposedViewSize(width: 0, height: proposal.height)
+        let max = ProposedViewSize(width: .max, height: proposal.height)
+        let childComputer = child._makeView(inputs: inputs).layoutComputer
+        let smallest = childComputer.sizeThatFits(min)
+        let largest = childComputer.sizeThatFits(max)
+        return largest.width - smallest.width
+      }
 
-    let children = zip(flexibilities, zip(content.indices, content))
-      .sorted(by: \.0)
-      .map(\.1)
+      let children = zip(flexibilities, zip(content.indices, content))
+        .sorted(by: \.0)
+        .map(\.1)
 
-    sizes = Array(repeating: .zero, count: children.count)
-    let totalSpacing = spacing * (content.count - 1)
-    var remainingChildren = children.count
-    var remainingWidth = proposal.replacingUnspecifiedDimensions().width - totalSpacing
+      sizes = Array(repeating: .zero, count: children.count)
+      let totalSpacing = spacing * (content.count - 1)
+      var remainingChildren = children.count
+      var remainingWidth = proposal.replacingUnspecifiedDimensions().width - totalSpacing
 
-    for (index, child) in children {
+      for (index, child) in children {
 
-      let proposal = ProposedViewSize(
-        width: remainingWidth / remainingChildren,
-        height: proposal.height)
+        let proposal = ProposedViewSize(
+          width: remainingWidth / remainingChildren,
+          height: proposal.height)
 
-      let size = child._size(for: proposal, inputs: inputs)
+        let size = child
+          ._makeView(inputs: inputs)
+          .layoutComputer
+          .sizeThatFits(proposal)
 
-      sizes[index] = size
-      remainingChildren -= 1
-      remainingWidth -= size.width
-    }
+        sizes[index] = size
+        remainingChildren -= 1
+        remainingWidth -= size.width
+      }
 
-    let width = sizes.map(\.width).reduce(0, +) + totalSpacing
-    let height = sizes.map(\.height).max() ?? 0
-    return Size(width: width, height: height)
+      let width = sizes.map(\.width).reduce(0, +) + totalSpacing
+      let height = sizes.map(\.height).max() ?? 0
+      return Size(width: width, height: height)
+    }))
   }
 
   func render(

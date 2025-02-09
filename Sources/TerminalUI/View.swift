@@ -10,21 +10,18 @@ public protocol View {
 
 extension View {
 
-  func _size(for proposal: ProposedViewSize) -> Size {
-    _size(for: proposal, inputs: ViewInputs(environment: EnvironmentValues()))
+  func _makeView() -> ViewOutputs {
+    _makeView(inputs: ViewInputs(environment: EnvironmentValues()))
   }
 
-  func _size(
-    for proposal: ProposedViewSize,
-    inputs: ViewInputs
-  ) -> Size {
+  func _makeView(inputs: ViewInputs) -> ViewOutputs {
 
     inputs.environment.install(on: self)
 
     if let builtin = self as? any Builtin {
-      return builtin.size(for: proposal, inputs: inputs)
+      return builtin.makeView(inputs: inputs)
     } else {
-      return body._size(for: proposal, inputs: inputs)
+      return body._makeView(inputs: inputs)
     }
   }
 
