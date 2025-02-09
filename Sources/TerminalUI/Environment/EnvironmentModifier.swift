@@ -17,16 +17,18 @@ private struct EnvironmentView<Content: View, Value>: Builtin, View {
 
   func size(
     for proposal: ProposedViewSize,
-    environment: EnvironmentValues
+    inputs: ViewInputs
   ) -> Size {
-    var environment = environment
+    var environment = inputs.environment
     environment[keyPath: keyPath] = value
-    return content._size(for: proposal, environment: environment)
+    let inputs = ViewInputs(environment: environment)
+    return content._size(for: proposal, inputs: inputs)
   }
 
-  func render(in canvas: any Canvas, size: Size, environment: EnvironmentValues) {
-    var environment = environment
+  func render(in canvas: any Canvas, size: Size, inputs: ViewInputs) {
+    var environment = inputs.environment
     environment[keyPath: keyPath] = value
-    content._render(in: canvas, size: size, environment: environment)
+    let inputs = ViewInputs(environment: environment)
+    content._render(in: canvas, size: size, inputs: inputs)
   }
 }

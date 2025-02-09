@@ -26,7 +26,7 @@ extension HStack: Builtin, View {
 
   func size(
     for proposal: ProposedViewSize,
-    environment: EnvironmentValues
+    inputs: ViewInputs
   ) -> Size {
 
     let flexibilities = content.map { child in
@@ -52,7 +52,7 @@ extension HStack: Builtin, View {
         width: remainingWidth / remainingChildren,
         height: proposal.height)
 
-      let size = child._size(for: proposal, environment: environment)
+      let size = child._size(for: proposal, inputs: inputs)
 
       sizes[index] = size
       remainingChildren -= 1
@@ -67,13 +67,13 @@ extension HStack: Builtin, View {
   func render(
     in canvas: any Canvas,
     size: Size,
-    environment: EnvironmentValues
+    inputs: ViewInputs
   ) {
     var offset = 0
     for (child, childSize) in zip(content, sizes) {
       let y = alignment.value(in: size) - alignment.value(in: childSize)
       let canvas = canvas.translateBy(x: offset, y: y)
-      child._render(in: canvas, size: childSize, environment: environment)
+      child._render(in: canvas, size: childSize, inputs: inputs)
       offset += childSize.width + spacing
     }
   }

@@ -21,22 +21,22 @@ private struct Padding<Content: View>: Builtin, View {
 
   func size(
     for proposal: ProposedViewSize,
-    environment: EnvironmentValues
+    inputs: ViewInputs
   ) -> Size {
     content
-      ._size(for: proposal.inset(insets), environment: environment)
+      ._size(for: proposal.inset(insets), inputs: inputs)
       .inset(-insets)
   }
 
   func render(
     in canvas: any Canvas,
     size: Size,
-    environment: EnvironmentValues
+    inputs: ViewInputs
   ) {
     content._render(
       in: canvas.translateBy(x: insets.leading, y: insets.top),
       size: size.inset(insets),
-      environment: environment
+      inputs: inputs
     )
   }
 }

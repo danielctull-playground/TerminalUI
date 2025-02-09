@@ -23,24 +23,24 @@ private struct FixedFrame<Content: View>: Builtin, View {
 
   func size(
     for proposal: ProposedViewSize,
-    environment: EnvironmentValues
+    inputs: ViewInputs
   ) -> Size {
     var fallback: Size { proposal.replacingUnspecifiedDimensions() }
     let proposal = ProposedViewSize(
       width: width ?? fallback.width,
       height: height ?? fallback.height)
-    let size = content._size(for: proposal, environment: environment)
+    let size = content._size(for: proposal, inputs: inputs)
     return Size(width: width ?? size.width, height: height ?? size.height)
   }
 
   func render(
     in canvas: any Canvas,
     size: Size,
-    environment: EnvironmentValues
+    inputs: ViewInputs
   ) {
     let parent = alignment.position(for: size)
     let proposedSize = ProposedViewSize(width: size.width, height: size.height)
-    let size = content._size(for: proposedSize, environment: environment)
+    let size = content._size(for: proposedSize, inputs: inputs)
     let child = alignment.position(for: size)
     let x = parent.x - child.x
     let y = parent.y - child.y
@@ -48,6 +48,6 @@ private struct FixedFrame<Content: View>: Builtin, View {
     content._render(
       in: canvas,
       size: size,
-      environment: environment)
+      inputs: inputs)
   }
 }
