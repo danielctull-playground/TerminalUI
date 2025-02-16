@@ -25,10 +25,10 @@ private struct EnvironmentView<Content: View, Value>: Builtin, View {
     return content._size(for: proposal, inputs: inputs)
   }
 
-  func render(in canvas: any Canvas, size: Size, inputs: ViewInputs) {
+  func render(in canvas: any Canvas, bounds: Rect, inputs: ViewInputs) {
     var environment = inputs.environment
     environment[keyPath: keyPath] = value
     let inputs = ViewInputs(environment: environment)
-    content._render(in: canvas, size: size, inputs: inputs)
+    content._render(in: canvas, bounds: bounds, inputs: inputs)
   }
 }

@@ -66,14 +66,17 @@ extension HStack: Builtin, View {
 
   func render(
     in canvas: any Canvas,
-    size: Size,
+    bounds: Rect,
     inputs: ViewInputs
   ) {
-    var offset = 0
+    var offset = bounds.minX
     for (child, childSize) in zip(content, sizes) {
-      let y = alignment.value(in: size) - alignment.value(in: childSize)
-      let canvas = canvas.translateBy(x: offset, y: y)
-      child._render(in: canvas, size: childSize, inputs: inputs)
+      let bounds = Rect(
+        x: offset,
+        y: bounds.minY + alignment.value(in: bounds.size) - alignment.value(in: childSize),
+        width: childSize.width,
+        height: childSize.height)
+      child._render(in: canvas, bounds: bounds, inputs: inputs)
       offset += childSize.width + spacing
     }
   }

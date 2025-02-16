@@ -28,18 +28,18 @@ extension View {
     }
   }
 
-  func _render(in canvas: any Canvas, size: Size) {
-    _render(in: canvas, size: size, inputs: ViewInputs(environment: EnvironmentValues()))
+  func _render(in canvas: any Canvas, bounds: Rect) {
+    _render(in: canvas, bounds: bounds, inputs: ViewInputs(environment: EnvironmentValues()))
   }
 
-  func _render(in canvas: any Canvas, size: Size, inputs: ViewInputs) {
+  func _render(in canvas: any Canvas, bounds: Rect, inputs: ViewInputs) {
 
     inputs.environment.install(on: self)
 
     if let builtin = self as? any Builtin {
-      builtin.render(in: canvas, size: size, inputs: inputs)
+      builtin.render(in: canvas, bounds: bounds, inputs: inputs)
     } else {
-      body._render(in: canvas, size: size, inputs: inputs)
+      body._render(in: canvas, bounds: bounds, inputs: inputs)
     }
   }
 }

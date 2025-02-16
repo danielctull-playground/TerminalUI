@@ -30,15 +30,27 @@ private struct Padding<Content: View>: Builtin, View {
 
   func render(
     in canvas: any Canvas,
-    size: Size,
+    bounds: Rect,
     inputs: ViewInputs
   ) {
     content._render(
-      in: canvas.translateBy(x: insets.leading, y: insets.top),
-      size: size.inset(insets),
+      in: canvas,
+      bounds: bounds.inset(insets),
       inputs: inputs
     )
   }
+}
+
+extension Rect {
+
+  fileprivate func inset(_ insets: EdgeInsets) -> Rect {
+    Rect(
+      x: origin.x + insets.leading,
+      y: origin.y + insets.top,
+      width: size.width - insets.leading - insets.trailing,
+      height: size.height - insets.top - insets.bottom)
+  }
+
 }
 
 extension ProposedViewSize {

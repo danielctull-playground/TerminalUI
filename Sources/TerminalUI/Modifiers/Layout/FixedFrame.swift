@@ -35,19 +35,21 @@ private struct FixedFrame<Content: View>: Builtin, View {
 
   func render(
     in canvas: any Canvas,
-    size: Size,
+    bounds: Rect,
     inputs: ViewInputs
   ) {
-    let parent = alignment.position(for: size)
-    let proposedSize = ProposedViewSize(width: size.width, height: size.height)
+    let parent = alignment.position(for: bounds.size)
+    let proposedSize = ProposedViewSize(bounds.size)
     let size = content._size(for: proposedSize, inputs: inputs)
     let child = alignment.position(for: size)
-    let x = parent.x - child.x
-    let y = parent.y - child.y
-    let canvas = canvas.translateBy(x: x, y: y)
+    let bounds = Rect(
+      x: bounds.origin.x + parent.x - child.x,
+      y: bounds.origin.y + parent.y - child.y,
+      width: size.width,
+      height: size.height)
     content._render(
       in: canvas,
-      size: size,
+      bounds: bounds,
       inputs: inputs)
   }
 }

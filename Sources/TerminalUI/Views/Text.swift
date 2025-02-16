@@ -18,14 +18,13 @@ public struct Text: Builtin, View {
     return Size(width: width, height: height)
   }
 
-  func render(in canvas: any Canvas, size: Size, inputs: ViewInputs) {
+  func render(in canvas: any Canvas, bounds: Rect, inputs: ViewInputs) {
 
-    let origin = Position.origin
-    let lines = string.lines(ofLength: Int(size.width))
+    let lines = string.lines(ofLength: Int(bounds.size.width))
     let environment = inputs.environment
 
-    for (line, y) in zip(lines, origin.y...) {
-      for (character, x) in zip(line, origin.x...) {
+    for (line, y) in zip(lines, bounds.origin.y...) {
+      for (character, x) in zip(line, bounds.origin.x...) {
         let pixel = Pixel(
           character,
           foreground: environment.foregroundColor,
