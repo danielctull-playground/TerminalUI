@@ -26,7 +26,7 @@ public protocol Layout {
 // MARK: - LayoutSubviews
 
 public struct LayoutSubviews {
-  private let raw: [LayoutSubview]
+  fileprivate let raw: [LayoutSubview]
 }
 
 extension LayoutSubviews: RandomAccessCollection {
@@ -62,5 +62,64 @@ public struct LayoutSubview {
     proposal: ProposedViewSize
   ) {
     _place(position, proposal)
+  }
+}
+
+// MARK: - LayoutView
+
+extension Layout {
+
+  public func callAsFunction(_ content: () -> [any View]) -> some View {
+    LayoutView(layout: self, content: content())
+  }
+}
+
+private struct LayoutView<Layout: TerminalUI.Layout>: Builtin, View {
+
+  @Mutable private var cache: Layout.Cache
+  private let layout: Layout
+  private let content: [any View]
+
+  init(layout: Layout, content: [any View]) {
+    self.layout = layout
+    self.content = content
+    let subviews = LayoutSubviews(raw: content.map { _ in
+      LayoutSubview { _ in .zero } place: { _, _ in }
+    })
+    cache = layout.makeCache(subviews: subviews)
+  }
+
+  func size(for proposal: ProposedViewSize, inputs: ViewInputs) -> Size {
+
+    let subviews = LayoutSubviews(raw: content.map { view in
+      LayoutSubview { proposal in
+        view._size(for: proposal, inputs: inputs)
+      } place: { _, _ in }
+    })
+
+    return layout.sizeThatFits(
+      proposal: proposal,
+      subviews: subviews,
+      cache: &cache)
+  }
+
+  func render(in bounds: Rect, inputs: ViewInputs) {
+
+    let subviews = LayoutSubviews(raw: content.map { view in
+      LayoutSubview { proposal in
+        view._size(for: proposal, inputs: inputs)
+      } place: { position, proposal in
+        let bounds = Rect(
+          origin: position,
+          size: view._size(for: proposal, inputs: inputs))
+        view._render(in: bounds, inputs: inputs)
+      }
+    })
+
+    layout.placeSubviews(
+      in: bounds,
+      proposal: ProposedViewSize(bounds.size),
+      subviews: subviews,
+      cache: &cache)
   }
 }
