@@ -11,7 +11,7 @@ struct VStackTests {
     let canvas = TestCanvas(width: 3, height: 3)
 
     canvas.render {
-      VStack(content: [])
+      VStack { [] }
     }
 
     #expect(canvas.pixels == [:])
@@ -23,11 +23,11 @@ struct VStackTests {
     let canvas = TestCanvas(width: 1, height: 3)
 
     canvas.render {
-      VStack(content: [
+      VStack {[
         Text("1"),
         Text("2"),
         Text("3"),
-      ])
+      ]}
     }
 
     #expect(canvas.pixels == [
@@ -43,11 +43,11 @@ struct VStackTests {
     let canvas = TestCanvas(width: 1, height: 5)
 
     canvas.render {
-      VStack(content: [
+      VStack {[
         Color.blue,
         Text("A"),
         Color.yellow,
-      ])
+      ]}
     }
 
     #expect(canvas.pixels == [
@@ -65,13 +65,13 @@ struct VStackTests {
     let canvas = TestCanvas(width: 1, height: 11)
 
     canvas.render {
-      VStack(content: [
+      VStack {[
         Color.blue,
         Text("A"),
         Color.yellow,
         Text("B"),
         Color.red,
-      ])
+      ]}
     }
 
     #expect(canvas.pixels == [
@@ -99,11 +99,11 @@ struct VStackTests {
     let canvas = TestCanvas(width: 3, height: 5)
 
     canvas.render {
-      VStack(alignment: alignment, content: [
+      VStack(alignment: alignment) {[
         Text("A"),
         Color.black.frame(height: 1), // Ensures full width is used for HStack.
         Text("B"),
-      ])
+      ]}
     }
 
     #expect(canvas.pixels == [
@@ -126,11 +126,11 @@ struct VStackTests {
     let canvas = TestCanvas(width: 1, height: 9)
 
     canvas.render {
-      VStack(spacing: spacing, content: [
+      VStack(spacing: spacing) {[
         Text("A"),
         Text("B"),
         Text("C"),
-      ])
+      ]}
     }
 
     #expect(canvas.pixels == [
