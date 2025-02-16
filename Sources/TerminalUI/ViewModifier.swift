@@ -37,10 +37,10 @@ private struct ModifiedView<Modifier: ViewModifier>: Builtin, View {
       ._size(for: proposal, inputs: inputs)
   }
 
-  func render(in canvas: any Canvas, bounds: Rect, inputs: ViewInputs) {
+  func render(in bounds: Rect, inputs: ViewInputs) {
     inputs.environment.install(on: modifier)
     modifier
       .body(content: content)
-      ._render(in: canvas, bounds: bounds, inputs: inputs)
+      ._render(in: bounds, inputs: inputs)
   }
 }

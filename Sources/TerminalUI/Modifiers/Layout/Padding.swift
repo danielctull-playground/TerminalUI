@@ -28,16 +28,8 @@ private struct Padding<Content: View>: Builtin, View {
       .inset(-insets)
   }
 
-  func render(
-    in canvas: any Canvas,
-    bounds: Rect,
-    inputs: ViewInputs
-  ) {
-    content._render(
-      in: canvas,
-      bounds: bounds.inset(insets),
-      inputs: inputs
-    )
+  func render(in bounds: Rect, inputs: ViewInputs) {
+    content._render(in: bounds.inset(insets), inputs: inputs)
   }
 }
 

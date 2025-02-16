@@ -11,11 +11,11 @@ public struct Color: Builtin, CustomStringConvertible, Equatable, Sendable, View
     proposal.replacingUnspecifiedDimensions()
   }
 
-  func render(in canvas: any Canvas, bounds: Rect, inputs: ViewInputs) {
+  func render(in bounds: Rect, inputs: ViewInputs) {
     let pixel = Pixel(" ", background: self)
     for x in bounds.minX...bounds.maxX {
       for y in bounds.minY...bounds.maxY {
-        canvas.draw(pixel, at: Position(x: x, y: y))
+        inputs.canvas.draw(pixel, at: Position(x: x, y: y))
       }
     }
   }

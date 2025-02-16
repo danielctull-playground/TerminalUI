@@ -5,7 +5,7 @@ protocol Builtin {
     inputs: ViewInputs
   ) -> Size
 
-  func render(in canvas: any Canvas, bounds: Rect, inputs: ViewInputs)
+  func render(in bounds: Rect, inputs: ViewInputs)
 }
 
 extension Builtin {

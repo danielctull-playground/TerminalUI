@@ -12,6 +12,6 @@ extension Canvas {
   package func render(in bounds: Rect, content: () -> some View) {
     content()
       .frame(width: bounds.size.width, height: bounds.size.height)
-      ._render(in: self, bounds: bounds)
+      ._render(in: bounds, inputs: ViewInputs(canvas: self))
   }
 }

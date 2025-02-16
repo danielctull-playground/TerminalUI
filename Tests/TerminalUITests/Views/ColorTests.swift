@@ -32,7 +32,7 @@ struct ColorTests {
     let width = Int.random(in: 0...1_000_000_000)
     let height = Int.random(in: 0...1_000_000_000)
     let proposed = ProposedViewSize(width: width, height: height)
-    let size = color._size(for: proposed)
+    let size = color._size(for: proposed, canvas: TextStreamCanvas(output: .memory))
     #expect(size.width == width)
     #expect(size.height == height)
   }

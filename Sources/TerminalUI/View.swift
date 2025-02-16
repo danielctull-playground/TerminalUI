@@ -9,9 +9,10 @@ public protocol View {
 }
 
 extension View {
-
-  func _size(for proposal: ProposedViewSize) -> Size {
-    _size(for: proposal, inputs: ViewInputs(environment: EnvironmentValues()))
+  
+  func _size(for proposal: ProposedViewSize, canvas: any Canvas) -> Size {
+    let inputs = ViewInputs(canvas: canvas, environment: EnvironmentValues())
+    return _size(for: proposal, inputs: inputs)
   }
 
   func _size(
@@ -28,18 +29,18 @@ extension View {
     }
   }
 
-  func _render(in canvas: any Canvas, bounds: Rect) {
-    _render(in: canvas, bounds: bounds, inputs: ViewInputs(environment: EnvironmentValues()))
+  func _render(in bounds: Rect, canvas: any Canvas) {
+    _render(in: bounds, inputs: ViewInputs(canvas: canvas, environment: EnvironmentValues()))
   }
 
-  func _render(in canvas: any Canvas, bounds: Rect, inputs: ViewInputs) {
+  func _render(in bounds: Rect, inputs: ViewInputs) {
 
     inputs.environment.install(on: self)
 
     if let builtin = self as? any Builtin {
-      builtin.render(in: canvas, bounds: bounds, inputs: inputs)
+      builtin.render(in: bounds, inputs: inputs)
     } else {
-      body._render(in: canvas, bounds: bounds, inputs: inputs)
+      body._render(in: bounds, inputs: inputs)
     }
   }
 }

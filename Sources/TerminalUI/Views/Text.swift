@@ -18,7 +18,7 @@ public struct Text: Builtin, View {
     return Size(width: width, height: height)
   }
 
-  func render(in canvas: any Canvas, bounds: Rect, inputs: ViewInputs) {
+  func render(in bounds: Rect, inputs: ViewInputs) {
 
     let lines = string.lines(ofLength: Int(bounds.size.width))
     let environment = inputs.environment
@@ -37,7 +37,7 @@ public struct Text: Builtin, View {
           hidden: environment.hidden,
           strikethrough: environment.strikethrough
         )
-        canvas.draw(pixel, at: Position(x: x, y: y))
+        inputs.canvas.draw(pixel, at: Position(x: x, y: y))
       }
     }
   }

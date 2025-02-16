@@ -33,11 +33,7 @@ private struct FixedFrame<Content: View>: Builtin, View {
     return Size(width: width ?? size.width, height: height ?? size.height)
   }
 
-  func render(
-    in canvas: any Canvas,
-    bounds: Rect,
-    inputs: ViewInputs
-  ) {
+  func render(in bounds: Rect, inputs: ViewInputs) {
     let parent = alignment.position(for: bounds.size)
     let proposedSize = ProposedViewSize(bounds.size)
     let size = content._size(for: proposedSize, inputs: inputs)
@@ -47,9 +43,6 @@ private struct FixedFrame<Content: View>: Builtin, View {
       y: bounds.origin.y + parent.y - child.y,
       width: size.width,
       height: size.height)
-    content._render(
-      in: canvas,
-      bounds: bounds,
-      inputs: inputs)
+    content._render(in: bounds, inputs: inputs)
   }
 }
