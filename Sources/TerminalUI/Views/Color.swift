@@ -6,16 +6,16 @@ public struct Color: Builtin, CustomStringConvertible, Equatable, Sendable, View
 
   func size(
     for proposal: ProposedViewSize,
-    environment: EnvironmentValues
+    inputs: ViewInputs
   ) -> Size {
     proposal.replacingUnspecifiedDimensions()
   }
 
-  func render(in canvas: any Canvas, size: Size, environment: EnvironmentValues) {
+  func render(in bounds: Rect, inputs: ViewInputs) {
     let pixel = Pixel(" ", background: self)
-    for x in 1...size.width {
-      for y in 1...size.height {
-        canvas.draw(pixel, at: Position(x: x, y: y))
+    for x in bounds.minX...bounds.maxX {
+      for y in bounds.minY...bounds.maxY {
+        inputs.canvas.draw(pixel, at: Position(x: x, y: y))
       }
     }
   }

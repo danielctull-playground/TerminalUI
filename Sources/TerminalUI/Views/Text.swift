@@ -9,7 +9,7 @@ public struct Text: Builtin, View {
 
   func size(
     for proposal: ProposedViewSize,
-    environment: EnvironmentValues
+    inputs: ViewInputs
   ) -> Size {
     let size = proposal.replacingUnspecifiedDimensions()
     let lines = string.lines(ofLength: size.width)
@@ -18,13 +18,13 @@ public struct Text: Builtin, View {
     return Size(width: width, height: height)
   }
 
-  func render(in canvas: any Canvas, size: Size, environment: EnvironmentValues) {
+  func render(in bounds: Rect, inputs: ViewInputs) {
 
-    let origin = Position.origin
-    let lines = string.lines(ofLength: Int(size.width))
+    let lines = string.lines(ofLength: Int(bounds.size.width))
+    let environment = inputs.environment
 
-    for (line, y) in zip(lines, origin.y...) {
-      for (character, x) in zip(line, origin.x...) {
+    for (line, y) in zip(lines, bounds.origin.y...) {
+      for (character, x) in zip(line, bounds.origin.x...) {
         let pixel = Pixel(
           character,
           foreground: environment.foregroundColor,
@@ -37,7 +37,7 @@ public struct Text: Builtin, View {
           hidden: environment.hidden,
           strikethrough: environment.strikethrough
         )
-        canvas.draw(pixel, at: Position(x: x, y: y))
+        inputs.canvas.draw(pixel, at: Position(x: x, y: y))
       }
     }
   }

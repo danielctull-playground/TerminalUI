@@ -29,18 +29,18 @@ private struct ModifiedView<Modifier: ViewModifier>: Builtin, View {
 
   func size(
     for proposal: ProposedViewSize,
-    environment: EnvironmentValues
+    inputs: ViewInputs
   ) -> Size {
-    environment.install(on: modifier)
+    inputs.environment.install(on: modifier)
     return modifier
       .body(content: content)
-      ._size(for: proposal, environment: environment)
+      ._size(for: proposal, inputs: inputs)
   }
 
-  func render(in canvas: any Canvas, size: Size, environment: EnvironmentValues) {
-    environment.install(on: modifier)
+  func render(in bounds: Rect, inputs: ViewInputs) {
+    inputs.environment.install(on: modifier)
     modifier
       .body(content: content)
-      ._render(in: canvas, size: size, environment: environment)
+      ._render(in: bounds, inputs: inputs)
   }
 }

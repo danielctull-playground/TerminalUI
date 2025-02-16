@@ -9,37 +9,38 @@ public protocol View {
 }
 
 extension View {
-
-  package func _size(for proposal: ProposedViewSize) -> Size {
-    _size(for: proposal, environment: EnvironmentValues())
+  
+  func _size(for proposal: ProposedViewSize, canvas: any Canvas) -> Size {
+    let inputs = ViewInputs(canvas: canvas, environment: EnvironmentValues())
+    return _size(for: proposal, inputs: inputs)
   }
 
-  package func _size(
+  func _size(
     for proposal: ProposedViewSize,
-    environment: EnvironmentValues
+    inputs: ViewInputs
   ) -> Size {
 
-    environment.install(on: self)
+    inputs.environment.install(on: self)
 
     if let builtin = self as? any Builtin {
-      return builtin.size(for: proposal, environment: environment)
+      return builtin.size(for: proposal, inputs: inputs)
     } else {
-      return body._size(for: proposal, environment: environment)
+      return body._size(for: proposal, inputs: inputs)
     }
   }
 
-  package func _render(in canvas: any Canvas, size: Size) {
-    _render(in: canvas, size: size, environment: EnvironmentValues())
+  func _render(in bounds: Rect, canvas: any Canvas) {
+    _render(in: bounds, inputs: ViewInputs(canvas: canvas, environment: EnvironmentValues()))
   }
 
-  package func _render(in canvas: any Canvas, size: Size, environment: EnvironmentValues) {
+  func _render(in bounds: Rect, inputs: ViewInputs) {
 
-    environment.install(on: self)
+    inputs.environment.install(on: self)
 
     if let builtin = self as? any Builtin {
-      builtin.render(in: canvas, size: size, environment: environment)
+      builtin.render(in: bounds, inputs: inputs)
     } else {
-      body._render(in: canvas, size: size, environment: environment)
+      body._render(in: bounds, inputs: inputs)
     }
   }
 }

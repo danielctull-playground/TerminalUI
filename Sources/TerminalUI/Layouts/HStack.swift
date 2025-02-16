@@ -26,14 +26,14 @@ extension HStack: Builtin, View {
 
   func size(
     for proposal: ProposedViewSize,
-    environment: EnvironmentValues
+    inputs: ViewInputs
   ) -> Size {
 
     let flexibilities = content.map { child in
       let min = ProposedViewSize(width: 0, height: proposal.height)
       let max = ProposedViewSize(width: .max, height: proposal.height)
-      let smallest = child._size(for: min)
-      let largest = child._size(for: max)
+      let smallest = child._size(for: min, inputs: inputs)
+      let largest = child._size(for: max, inputs: inputs)
       return largest.width - smallest.width
     }
 
@@ -52,7 +52,7 @@ extension HStack: Builtin, View {
         width: remainingWidth / remainingChildren,
         height: proposal.height)
 
-      let size = child._size(for: proposal, environment: environment)
+      let size = child._size(for: proposal, inputs: inputs)
 
       sizes[index] = size
       remainingChildren -= 1
@@ -64,16 +64,15 @@ extension HStack: Builtin, View {
     return Size(width: width, height: height)
   }
 
-  func render(
-    in canvas: any Canvas,
-    size: Size,
-    environment: EnvironmentValues
-  ) {
-    var offset = 0
+  func render(in bounds: Rect, inputs: ViewInputs) {
+    var offset = bounds.minX
     for (child, childSize) in zip(content, sizes) {
-      let y = alignment.value(in: size) - alignment.value(in: childSize)
-      let canvas = canvas.translateBy(x: offset, y: y)
-      child._render(in: canvas, size: childSize, environment: environment)
+      let bounds = Rect(
+        x: offset,
+        y: bounds.minY + alignment.value(in: bounds.size) - alignment.value(in: childSize),
+        width: childSize.width,
+        height: childSize.height)
+      child._render(in: bounds, inputs: inputs)
       offset += childSize.width + spacing
     }
   }
