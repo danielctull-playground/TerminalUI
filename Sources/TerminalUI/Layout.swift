@@ -23,6 +23,10 @@ public protocol Layout {
   )
 }
 
+extension Layout where Cache == () {
+  func makeCache(subviews: Subviews) -> Cache { () }
+}
+
 // MARK: - LayoutSubviews
 
 public struct LayoutSubviews {

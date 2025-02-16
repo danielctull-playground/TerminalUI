@@ -2,7 +2,7 @@
 extension View {
 
   public func padding(_ insets: EdgeInsets) -> some View {
-    Padding(content: self, insets: insets)
+    Padding(insets: insets) { [self] }
   }
 
   public func padding(_ set: Edge.Set, _ value: Int) -> some View {
@@ -14,22 +14,30 @@ extension View {
   }
 }
 
-private struct Padding<Content: View>: Builtin, View {
-
-  let content: Content
+private struct Padding {
   let insets: EdgeInsets
+}
 
-  func size(
-    for proposal: ProposedViewSize,
-    inputs: ViewInputs
+extension Padding: Layout {
+
+  func sizeThatFits(
+    proposal: ProposedViewSize,
+    subviews: Subviews,
+    cache: inout ()
   ) -> Size {
-    content
-      ._size(for: proposal.inset(insets), inputs: inputs)
+    subviews[0]
+      .sizeThatFits(proposal.inset(insets))
       .inset(-insets)
   }
 
-  func render(in bounds: Rect, inputs: ViewInputs) {
-    content._render(in: bounds.inset(insets), inputs: inputs)
+  func placeSubviews(
+    in bounds: Rect,
+    proposal: ProposedViewSize,
+    subviews: Subviews,
+    cache: inout ()
+  ) {
+    let bounds = bounds.inset(insets)
+    subviews[0].place(at: bounds.origin, proposal: ProposedViewSize(bounds.size))
   }
 }
 
