@@ -1,79 +1,77 @@
 
 public struct HStack {
 
-  @Mutable private var sizes: [Size] = []
-
   private let alignment: VerticalAlignment
   private let _spacing: Int?
-  private let content: [any View]
+  private var spacing: Int { _spacing ?? 0 }
 
   public init(
     alignment: VerticalAlignment = .center,
-    spacing: Int? = nil,
-    content: [any View]
+    spacing: Int? = nil
   ) {
     self.alignment = alignment
     self._spacing = spacing
-    self.content = content
   }
 }
 
-extension HStack {
-  fileprivate var spacing: Int { _spacing ?? 0 }
-}
+extension HStack: Layout {
 
-extension HStack: Builtin, View {
+  public func makeCache(subviews: Subviews) -> [Size] {
+    subviews.map { _ in .zero }
+  }
 
-  func size(
-    for proposal: ProposedViewSize,
-    inputs: ViewInputs
+  public func sizeThatFits(
+    proposal: ProposedViewSize,
+    subviews: Subviews,
+    cache: inout [Size]
   ) -> Size {
 
-    let flexibilities = content.map { child in
+    let flexibilities = subviews.map { subview in
       let min = ProposedViewSize(width: 0, height: proposal.height)
       let max = ProposedViewSize(width: .max, height: proposal.height)
-      let smallest = child._size(for: min, inputs: inputs)
-      let largest = child._size(for: max, inputs: inputs)
+      let smallest = subview.sizeThatFits(min)
+      let largest = subview.sizeThatFits(max)
       return largest.width - smallest.width
     }
 
-    let children = zip(flexibilities, zip(content.indices, content))
+    let indexedSubviews = zip(flexibilities, zip(subviews.indices, subviews))
       .sorted(by: \.0)
       .map(\.1)
 
-    sizes = Array(repeating: .zero, count: children.count)
-    let totalSpacing = spacing * (content.count - 1)
-    var remainingChildren = children.count
+    let totalSpacing = spacing * (subviews.count - 1)
+    var remainingSubviews = subviews.count
     var remainingWidth = proposal.replacingUnspecifiedDimensions().width - totalSpacing
 
-    for (index, child) in children {
+    for (index, subview) in indexedSubviews {
 
       let proposal = ProposedViewSize(
-        width: remainingWidth / remainingChildren,
+        width: remainingWidth / remainingSubviews,
         height: proposal.height)
 
-      let size = child._size(for: proposal, inputs: inputs)
+      let size = subview.sizeThatFits(proposal)
 
-      sizes[index] = size
-      remainingChildren -= 1
+      cache[index] = size
+      remainingSubviews -= 1
       remainingWidth -= size.width
     }
 
-    let width = sizes.map(\.width).reduce(0, +) + totalSpacing
-    let height = sizes.map(\.height).max() ?? 0
+    let width = cache.map(\.width).reduce(0, +) + totalSpacing
+    let height = cache.map(\.height).max() ?? 0
     return Size(width: width, height: height)
   }
 
-  func render(in bounds: Rect, inputs: ViewInputs) {
+  public func placeSubviews(
+    in bounds: Rect,
+    proposal: ProposedViewSize,
+    subviews: Subviews,
+    cache: inout [Size]
+  ) {
     var offset = bounds.minX
-    for (child, childSize) in zip(content, sizes) {
-      let bounds = Rect(
-        x: offset,
-        y: bounds.minY + alignment.value(in: bounds.size) - alignment.value(in: childSize),
-        width: childSize.width,
-        height: childSize.height)
-      child._render(in: bounds, inputs: inputs)
-      offset += childSize.width + spacing
+    for (subview, size) in zip(subviews, cache) {
+      let x = offset
+      let y = bounds.minY + alignment.value(in: bounds.size) - alignment.value(in: size)
+      subview.place(at: Position(x: x, y: y), proposal: ProposedViewSize(size))
+      offset += size.width + spacing
     }
   }
 }
