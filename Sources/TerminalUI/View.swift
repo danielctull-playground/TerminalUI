@@ -29,10 +29,6 @@ extension View {
     }
   }
 
-  func _render(in bounds: Rect, canvas: any Canvas) {
-    _render(in: bounds, inputs: ViewInputs(canvas: canvas, environment: EnvironmentValues()))
-  }
-
   func _render(in bounds: Rect, inputs: ViewInputs) {
 
     inputs.environment.install(on: self)
