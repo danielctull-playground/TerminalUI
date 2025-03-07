@@ -12,6 +12,6 @@ struct ViewInputs {
   ) {
     graph = Graph()
     self.canvas = canvas
-    _environment = graph.attribute(graph.input("environment", environment))
+    _environment = graph.input("environment", environment).projectedValue
   }
 }

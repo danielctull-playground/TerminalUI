@@ -17,7 +17,7 @@ struct InputTests {
   func update() {
     let graph = Graph()
     let x = graph.input("x", 1)
-    let y = graph.attribute(x)
+    let y = x.projectedValue
     #expect(y.wrappedValue == 1)
     x.wrappedValue = 2
     #expect(y.wrappedValue == 2)
@@ -27,7 +27,7 @@ struct InputTests {
   func dirty() {
     let graph = Graph()
     let x = graph.input("x", 1)
-    let y = graph.attribute(x)
+    let y = x.projectedValue
     #expect(y.wrappedValue == 1)
 
     x.wrappedValue = 2

@@ -20,6 +20,10 @@ package final class Input<Value>: Dependency {
     }
   }
 
+  package var projectedValue: Attribute<Value> {
+    graph.attribute(name) { self.wrappedValue }
+  }
+
   init(graph: Graph, name: Name, value: Value) {
     self.graph = graph
     self.name = name
