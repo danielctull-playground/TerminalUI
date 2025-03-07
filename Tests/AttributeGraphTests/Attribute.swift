@@ -17,9 +17,9 @@ struct AttributeTests {
   func update() {
     let graph = Graph()
     let x = graph.input("x", 1)
-    let y = graph.attribute("y") { x.value * 2 }
+    let y = graph.attribute("y") { x.wrappedValue * 2 }
     #expect(y.wrappedValue == 2)
-    x.value = 2
+    x.wrappedValue = 2
     #expect(y.wrappedValue == 4)
   }
 
@@ -27,10 +27,10 @@ struct AttributeTests {
   func dirty() {
     let graph = Graph()
     let x = graph.input("x", 1)
-    let y = graph.attribute("y") { x.value * 2 }
+    let y = graph.attribute("y") { x.wrappedValue * 2 }
     #expect(y.wrappedValue == 2)
 
-    x.value = 2
+    x.wrappedValue = 2
     #expect(y.dirty == true)
     #expect(y.wrappedValue == 4)
     #expect(y.dirty == false)

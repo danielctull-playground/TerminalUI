@@ -43,7 +43,7 @@ package final class Graph {
   package func attribute<Value>(
     _ input: Input<Value>
   ) -> Attribute<Value> {
-    attribute(input.name) { input.value }
+    attribute(input.name) { input.wrappedValue }
   }
 
   package func attribute<Value>(

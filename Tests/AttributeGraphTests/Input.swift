@@ -8,7 +8,7 @@ struct InputTests {
   func create() {
     let graph = Graph()
     let input = graph.input("x", 12)
-    #expect(input.value == 12)
+    #expect(input.wrappedValue == 12)
     #expect(input.name == "x")
     #expect(input.name.description == "x")
   }
@@ -19,7 +19,7 @@ struct InputTests {
     let x = graph.input("x", 1)
     let y = graph.attribute(x)
     #expect(y.wrappedValue == 1)
-    x.value = 2
+    x.wrappedValue = 2
     #expect(y.wrappedValue == 2)
   }
 
@@ -30,7 +30,7 @@ struct InputTests {
     let y = graph.attribute(x)
     #expect(y.wrappedValue == 1)
 
-    x.value = 2
+    x.wrappedValue = 2
     #expect(y.dirty == true)
     #expect(y.wrappedValue == 2)
     #expect(y.dirty == false)
