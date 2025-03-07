@@ -1,13 +1,17 @@
+import AttributeGraph
 
 struct ViewInputs {
+
+  let graph: Graph
   let canvas: any Canvas
-  let environment: EnvironmentValues
+  @Attribute var environment: EnvironmentValues
 
   init(
     canvas: any Canvas,
     environment: EnvironmentValues = EnvironmentValues()
   ) {
+    graph = Graph()
     self.canvas = canvas
-    self.environment = environment
+    _environment = graph.attribute(graph.input("environment", environment))
   }
 }
