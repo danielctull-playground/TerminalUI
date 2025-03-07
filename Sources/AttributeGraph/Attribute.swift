@@ -1,4 +1,5 @@
 
+@propertyWrapper
 package final class Attribute<Value>: Dependant, Dependency {
 
   package let name: Name
@@ -10,7 +11,7 @@ package final class Attribute<Value>: Dependant, Dependency {
   var dependencies: [Dependency] = []
   var dependants: [Dependant] = []
 
-  package var value: Value {
+  package var wrappedValue: Value {
     graph.compute(self) {
       if dirty { cache = nil }
       if let cache { return cache }

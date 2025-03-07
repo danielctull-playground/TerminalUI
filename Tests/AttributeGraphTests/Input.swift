@@ -18,9 +18,9 @@ struct InputTests {
     let graph = Graph()
     let x = graph.input("x", 1)
     let y = graph.attribute(x)
-    #expect(y.value == 1)
+    #expect(y.wrappedValue == 1)
     x.value = 2
-    #expect(y.value == 2)
+    #expect(y.wrappedValue == 2)
   }
 
   @Test("dirty")
@@ -28,11 +28,11 @@ struct InputTests {
     let graph = Graph()
     let x = graph.input("x", 1)
     let y = graph.attribute(x)
-    #expect(y.value == 1)
+    #expect(y.wrappedValue == 1)
 
     x.value = 2
     #expect(y.dirty == true)
-    #expect(y.value == 2)
+    #expect(y.wrappedValue == 2)
     #expect(y.dirty == false)
   }
 }
