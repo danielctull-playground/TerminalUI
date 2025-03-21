@@ -41,12 +41,6 @@ package final class Graph {
   }
 
   package func attribute<Value>(
-    _ input: Input<Value>
-  ) -> Attribute<Value> {
-    attribute(input.name) { input.value }
-  }
-
-  package func attribute<Value>(
     _ name: Attribute.Name,
     _ make: @escaping () -> Value
   ) -> Attribute<Value> {

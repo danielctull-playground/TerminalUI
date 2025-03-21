@@ -1,4 +1,5 @@
 
+@propertyWrapper
 package final class Input<Value>: Dependency {
 
   package let name: Name
@@ -7,7 +8,7 @@ package final class Input<Value>: Dependency {
   var dependants: [Dependant] = []
 
   private var _value: Value
-  package var value: Value {
+  package var wrappedValue: Value {
     get {
       graph.compute(self) { _value }
     }
@@ -17,6 +18,10 @@ package final class Input<Value>: Dependency {
         dependant.dirty = true
       }
     }
+  }
+
+  package var projectedValue: Attribute<Value> {
+    graph.attribute(name) { self.wrappedValue }
   }
 
   init(graph: Graph, name: Name, value: Value) {

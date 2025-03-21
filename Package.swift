@@ -20,7 +20,10 @@ let package = Package(
     ),
 
     .target(
-      name: "TerminalUI"
+      name: "TerminalUI",
+      dependencies: [
+        "AttributeGraph",
+      ]
     ),
 
     .target(
