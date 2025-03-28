@@ -2,10 +2,10 @@
 protocol Builtin {
   func size(
     for proposal: ProposedViewSize,
-    inputs: ViewInputs
+    environment: EnvironmentValues
   ) -> Size
 
-  func render(in bounds: Rect, inputs: ViewInputs)
+  func render(in bounds: Rect, canvas: any Canvas, environment: EnvironmentValues)
 }
 
 extension Builtin {

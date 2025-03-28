@@ -26,6 +26,30 @@ struct CanvasTests {
     ])
   }
 
+  @Test("translateBy(x:y:)")
+  func translateBy() {
+    let canvas = TestCanvas(width: 10, height: 10)
+    let modified = canvas.translateBy(x: -1, y: -1)
+
+    modified.render(size: Size(width: 3, height: 3)) {
+      Color.blue
+    }
+
+    let pixel = Pixel(" ", background: .blue)
+
+    #expect(canvas.pixels == [
+      Position(x: 0, y: 0): pixel,
+      Position(x: 1, y: 0): pixel,
+      Position(x: 2, y: 0): pixel,
+      Position(x: 0, y: 1): pixel,
+      Position(x: 1, y: 1): pixel,
+      Position(x: 2, y: 1): pixel,
+      Position(x: 0, y: 2): pixel,
+      Position(x: 1, y: 2): pixel,
+      Position(x: 2, y: 2): pixel,
+    ])
+  }
+
   @Test("Center alignment")
   func center() {
     let canvas = TestCanvas(width: 3, height: 3)

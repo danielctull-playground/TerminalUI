@@ -93,11 +93,11 @@ private struct LayoutView<Layout: TerminalUI.Layout>: Builtin, View {
     cache = layout.makeCache(subviews: subviews)
   }
 
-  func size(for proposal: ProposedViewSize, inputs: ViewInputs) -> Size {
+  func size(for proposal: ProposedViewSize, environment: EnvironmentValues) -> Size {
 
     let subviews = LayoutSubviews(raw: content.map { view in
       LayoutSubview { proposal in
-        view._size(for: proposal, inputs: inputs)
+        view._size(for: proposal, environment: environment)
       } place: { _, _ in }
     })
 
@@ -107,16 +107,16 @@ private struct LayoutView<Layout: TerminalUI.Layout>: Builtin, View {
       cache: &cache)
   }
 
-  func render(in bounds: Rect, inputs: ViewInputs) {
+  func render(in bounds: Rect, canvas: any Canvas, environment: EnvironmentValues) {
 
     let subviews = LayoutSubviews(raw: content.map { view in
       LayoutSubview { proposal in
-        view._size(for: proposal, inputs: inputs)
+        view._size(for: proposal, environment: environment)
       } place: { position, proposal in
         let bounds = Rect(
           origin: position,
-          size: view._size(for: proposal, inputs: inputs))
-        view._render(in: bounds, inputs: inputs)
+          size: view._size(for: proposal, environment: environment))
+        view._render(in: bounds, canvas: canvas, environment: environment)
       }
     })
 
