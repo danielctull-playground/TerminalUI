@@ -1,4 +1,4 @@
-@testable import TerminalUI
+import TerminalUI
 import TerminalUITesting
 import Testing
 
@@ -32,7 +32,7 @@ struct ColorTests {
     let width = Int.random(in: 0...1_000_000_000)
     let height = Int.random(in: 0...1_000_000_000)
     let proposed = ProposedViewSize(width: width, height: height)
-    let size = color._size(for: proposed, canvas: TextStreamCanvas(output: .memory))
+    let size = color._size(for: proposed)
     #expect(size.width == width)
     #expect(size.height == height)
   }

@@ -1,4 +1,4 @@
-@testable import TerminalUI
+import TerminalUI
 import TerminalUITesting
 import Testing
 
@@ -77,7 +77,7 @@ struct TextTests {
     expectedHeight: Int
   ) {
     let proposed = ProposedViewSize(width: proposedWidth, height: proposedHeight)
-    let size = Text(input)._size(for: proposed, canvas: TextStreamCanvas(output: .memory))
+    let size = Text(input)._size(for: proposed)
     #expect(size.width == expectedWidth)
     #expect(size.height == expectedHeight)
   }
