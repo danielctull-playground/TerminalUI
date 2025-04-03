@@ -22,25 +22,18 @@ public protocol ViewModifier {
   func body(content: Content) -> Body
 }
 
-private struct ModifiedView<Modifier: ViewModifier>: Builtin, View {
-
-  let content: Modifier.Content
+private struct ModifiedView<Content: View, Modifier: ViewModifier> where Content == Modifier.Content {
+  let content: Content
   let modifier: Modifier
+}
 
-  func size(
-    for proposal: ProposedViewSize,
-    environment: EnvironmentValues
-  ) -> Size {
-    environment.install(on: modifier)
-    return modifier
-      .body(content: content)
-      ._size(for: proposal, environment: environment)
+extension ModifiedView: View {
+
+  var body: Modifier.Body {
+    fatalError()
   }
 
-  func render(in bounds: Rect, canvas: any Canvas, environment: EnvironmentValues) {
-    environment.install(on: modifier)
-    modifier
-      .body(content: content)
-      ._render(in: bounds, canvas: canvas, environment: environment)
+  static func _makeView(_ inputs: ViewInputs<Self>) -> ViewOutputs {
+    Body._makeView(inputs.map { view in view.modifier.body(content: view.content) })
   }
 }
