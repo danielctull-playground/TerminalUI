@@ -79,7 +79,7 @@ public struct AlignmentKey: Equatable, Sendable {
   fileprivate let id: any AlignmentID.Type
 
   public static func == (lhs: AlignmentKey, rhs: AlignmentKey) -> Bool {
-    String(describing: lhs.id) == String(describing: rhs.id)
+    lhs.id == rhs.id
   }
 }
 
