@@ -5,7 +5,7 @@ extension View {
     horizontal: Bool = true,
     vertical: Bool = true
   ) -> some View {
-    FixedSize(horizontal: horizontal, vertical: vertical) { [self] }
+    FixedSize(horizontal: horizontal, vertical: vertical) { [AnyView(self)] }
   }
 }
 

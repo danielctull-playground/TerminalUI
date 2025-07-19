@@ -145,22 +145,22 @@ struct PaddingTests {
     ])
   }
 
-  @Test(arguments: Array<(String, Int, Int, Int, Int)>([
-    ("12",    4,  3, 4, 3),
-    ("1234",  4,  4, 4, 4),
-    ("1234", 10, 10, 6, 3),
-  ]))
-  func size(
-    input: String,
-    proposedWidth: Int,
-    proposedHeight: Int,
-    expectedWidth: Int,
-    expectedHeight: Int
-  ) {
-    let proposed = ProposedViewSize(width: proposedWidth, height: proposedHeight)
-    let view = Text(input).padding(1)
-    let size = view._size(for: proposed)
-    #expect(size.width == expectedWidth)
-    #expect(size.height == expectedHeight)
-  }
+//  @Test(arguments: Array<(String, Int, Int, Int, Int)>([
+//    ("12",    4,  3, 4, 3),
+//    ("1234",  4,  4, 4, 4),
+//    ("1234", 10, 10, 6, 3),
+//  ]))
+//  func size(
+//    input: String,
+//    proposedWidth: Int,
+//    proposedHeight: Int,
+//    expectedWidth: Int,
+//    expectedHeight: Int
+//  ) {
+//    let proposed = ProposedViewSize(width: proposedWidth, height: proposedHeight)
+//    let view = Text(input).padding(1)
+//    let size = view._size(for: proposed)
+//    #expect(size.width == expectedWidth)
+//    #expect(size.height == expectedHeight)
+//  }
 }

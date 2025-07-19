@@ -6,7 +6,7 @@ extension View {
     height: Int? = nil,
     alignment: Alignment = .center
   ) -> some View {
-    FixedFrame(width: width, height: height, alignment: alignment) { [self] }
+    FixedFrame(width: width, height: height, alignment: alignment) { [AnyView(self)] }
   }
 }
 

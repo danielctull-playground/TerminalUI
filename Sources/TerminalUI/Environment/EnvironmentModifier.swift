@@ -9,24 +9,25 @@ extension View {
   }
 }
 
-private struct EnvironmentView<Content: View, Value>: Builtin, View {
-
+private struct EnvironmentView<Content: View, Value> {
   let content: Content
   let keyPath: WritableKeyPath<EnvironmentValues, Value>
   let value: Value
+}
 
-  func size(
-    for proposal: ProposedViewSize,
-    environment: EnvironmentValues
-  ) -> Size {
-    var environment = environment
-    environment[keyPath: keyPath] = value
-    return content._size(for: proposal, environment: environment)
+extension EnvironmentView: View {
+
+  var body: some View {
+    fatalError()
   }
 
-  func render(in bounds: Rect, canvas: any Canvas, environment: EnvironmentValues) {
-    var environment = environment
-    environment[keyPath: keyPath] = value
-    content._render(in: bounds, canvas: canvas, environment: environment)
+  static func _makeView(
+    _ inputs: ViewInputs<EnvironmentView<Content, Value>>
+  ) -> ViewOutputs {
+
+    var inputs = inputs
+//        inputs.environment[keyPath: inputs.keyPath.node] = inputs.value.node
+
+    return Content._makeView(inputs.content)
   }
 }

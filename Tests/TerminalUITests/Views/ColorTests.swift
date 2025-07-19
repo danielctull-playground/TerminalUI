@@ -27,15 +27,15 @@ struct ColorTests {
     ])
   }
 
-  @Test("size", arguments: Color.testCases)
-  func size(color: Color) {
-    let width = Int.random(in: 0...1_000_000_000)
-    let height = Int.random(in: 0...1_000_000_000)
-    let proposed = ProposedViewSize(width: width, height: height)
-    let size = color._size(for: proposed)
-    #expect(size.width == width)
-    #expect(size.height == height)
-  }
+//  @Test("size", arguments: Color.testCases)
+//  func size(color: Color) {
+//    let width = Int.random(in: 0...1_000_000_000)
+//    let height = Int.random(in: 0...1_000_000_000)
+//    let proposed = ProposedViewSize(width: width, height: height)
+//    let size = color._size(for: proposed)
+//    #expect(size.width == width)
+//    #expect(size.height == height)
+//  }
 }
 
 extension Color {

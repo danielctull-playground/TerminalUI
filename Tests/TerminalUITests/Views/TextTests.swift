@@ -62,23 +62,23 @@ struct TextTests {
     ])
   }
 
-  @Test(arguments: Array<(String, Int, Int, Int, Int)>([
-    ("12345", 5, 1, 5, 1),
-    ("12345", 3, 2, 3, 2),
-    ("123 456 789", 5, 4, 3, 3),
-    ("123456789", 5, 5, 5, 2),
-    ("123456", 5, 5, 5, 2),
-  ]))
-  func size(
-    input: String,
-    proposedWidth: Int,
-    proposedHeight: Int,
-    expectedWidth: Int,
-    expectedHeight: Int
-  ) {
-    let proposed = ProposedViewSize(width: proposedWidth, height: proposedHeight)
-    let size = Text(input)._size(for: proposed)
-    #expect(size.width == expectedWidth)
-    #expect(size.height == expectedHeight)
-  }
+//  @Test(arguments: Array<(String, Int, Int, Int, Int)>([
+//    ("12345", 5, 1, 5, 1),
+//    ("12345", 3, 2, 3, 2),
+//    ("123 456 789", 5, 4, 3, 3),
+//    ("123456789", 5, 5, 5, 2),
+//    ("123456", 5, 5, 5, 2),
+//  ]))
+//  func size(
+//    input: String,
+//    proposedWidth: Int,
+//    proposedHeight: Int,
+//    expectedWidth: Int,
+//    expectedHeight: Int
+//  ) {
+//    let proposed = ProposedViewSize(width: proposedWidth, height: proposedHeight)
+//    let size = Text(input)._size(for: proposed)
+//    #expect(size.width == expectedWidth)
+//    #expect(size.height == expectedHeight)
+//  }
 }

@@ -1,15 +1,37 @@
 
-public struct Text: Builtin, View {
+public struct Text {
 
   private let string: String
 
   public init(_ string: String) {
     self.string = string
   }
+}
 
-  func size(
-    for proposal: ProposedViewSize,
-    environment: EnvironmentValues
+extension Text: View {
+
+  public var body: some View {
+    fatalError()
+  }
+
+  public static func _makeView(_ inputs: ViewInputs<Text>) -> ViewOutputs {
+    let layoutComputer = inputs.graph.attribute("Layout Computer") {
+      LayoutComputer(sizeThatFits: inputs.node.size, childGeometries: { [$0] })
+    }
+
+    let displayList = inputs.graph.attribute("Display List") {
+      DisplayList(items: [
+        DisplayList.Item(name: "item") { canvas in
+          inputs.node.render(in: inputs.frame, canvas: canvas, environment: inputs.environment)
+        }
+      ])
+    }
+
+    return ViewOutputs(layoutComputer: layoutComputer, displayList: displayList)
+  }
+
+  private func size(
+    for proposal: ProposedViewSize
   ) -> Size {
     let size = proposal.replacingUnspecifiedDimensions()
     let lines = string.lines(ofLength: size.width)

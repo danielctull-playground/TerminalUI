@@ -24,9 +24,9 @@ struct VStackTests {
 
     canvas.render {
       VStack {[
-        Text("1"),
-        Text("2"),
-        Text("3"),
+        AnyView(Text("1")),
+        AnyView(Text("2")),
+        AnyView(Text("3")),
       ]}
     }
 
@@ -44,9 +44,9 @@ struct VStackTests {
 
     canvas.render {
       VStack {[
-        Color.blue,
-        Text("A"),
-        Color.yellow,
+        AnyView(Color.blue),
+        AnyView(Text("A")),
+        AnyView(Color.yellow),
       ]}
     }
 
@@ -66,11 +66,11 @@ struct VStackTests {
 
     canvas.render {
       VStack {[
-        Color.blue,
-        Text("A"),
-        Color.yellow,
-        Text("B"),
-        Color.red,
+        AnyView(Color.blue),
+        AnyView(Text("A")),
+        AnyView(Color.yellow),
+        AnyView(Text("B")),
+        AnyView(Color.red),
       ]}
     }
 
@@ -100,9 +100,9 @@ struct VStackTests {
 
     canvas.render {
       VStack(alignment: alignment) {[
-        Text("A"),
-        Color.black.frame(height: 1), // Ensures full width is used for HStack.
-        Text("B"),
+        AnyView(Text("A")),
+        AnyView(Color.black.frame(height: 1)), // Ensures full width is used for HStack.
+        AnyView(Text("B")),
       ]}
     }
 
@@ -127,9 +127,9 @@ struct VStackTests {
 
     canvas.render {
       VStack(spacing: spacing) {[
-        Text("A"),
-        Text("B"),
-        Text("C"),
+        AnyView(Text("A")),
+        AnyView(Text("B")),
+        AnyView(Text("C")),
       ]}
     }
 

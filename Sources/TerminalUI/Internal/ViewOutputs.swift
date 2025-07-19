@@ -2,7 +2,7 @@ import AttributeGraph
 
 // MARK: - ViewOutputs
 
-struct ViewOutputs {
+public struct ViewOutputs {
   @Attribute var layoutComputer: LayoutComputer
   @Attribute var displayList: DisplayList
 }

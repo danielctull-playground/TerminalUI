@@ -1,3 +1,4 @@
+import AttributeGraph
 
 public protocol Layout {
 
@@ -73,57 +74,99 @@ public struct LayoutSubview {
 
 extension Layout {
 
-  public func callAsFunction(_ content: () -> [any View]) -> some View {
+  public func callAsFunction(_ content: () -> [AnyView]) -> some View {
     LayoutView(layout: self, content: content())
   }
 }
 
-private struct LayoutView<Layout: TerminalUI.Layout>: Builtin, View {
+private struct LayoutView<Layout: TerminalUI.Layout, Content: View> {
 
-  @Mutable private var cache: Layout.Cache
   private let layout: Layout
-  private let content: [any View]
+  private let content: Content
 
-  init(layout: Layout, content: [any View]) {
+  init(layout: Layout, content: Content) {
     self.layout = layout
     self.content = content
-    let subviews = LayoutSubviews(raw: content.map { _ in
-      LayoutSubview { _ in .zero } place: { _, _ in }
-    })
-    cache = layout.makeCache(subviews: subviews)
+  }
+}
+
+extension LayoutView: View {
+
+  var body: some View {
+    fatalError()
   }
 
-  func size(for proposal: ProposedViewSize, environment: EnvironmentValues) -> Size {
+  static func _makeView(_ inputs: ViewInputs<LayoutView<Layout, Content>>) -> ViewOutputs {
 
-    let subviews = LayoutSubviews(raw: content.map { view in
-      LayoutSubview { proposal in
-        view._size(for: proposal, environment: environment)
-      } place: { _, _ in }
-    })
+//    let outputs = inputs.node.content.map { view in
+//      Content._makeView(inputs.map { _ in view })
+//    }
 
-    return layout.sizeThatFits(
-      proposal: proposal,
-      subviews: subviews,
-      cache: &cache)
+    let content = Content._makeView(inputs.content)
+
+    let graph = inputs.graph
+
+    let layoutComputer: Attribute<LayoutComputer>!
+
+    
+//    let cache = graph.attribute("layout cache") {
+//
+//      
+//
+//    }
+
+    
+
+    layoutComputer = graph.attribute("layout attribute computer") {
+      LayoutComputer(sizeThatFits: <#T##(ProposedViewSize) -> Size#>, childGeometries: content.displayList.items)
+    }
+
+    let displayList = graph.attribute("layout display list") {
+      DisplayList(items: <#T##[DisplayList.Item]#>)
+    }
+
+
+
+    return ViewOutputs(layoutComputer: layoutComputer, displayList: displayList)
+
+//    outputs.reduce(ViewOutputs.init(layoutComputer: <#T##Attribute<LayoutComputer>#>, displayList: <#T##Attribute<DisplayList>#>), <#T##nextPartialResult: (Result, ViewOutputs) throws -> Result##(Result, ViewOutputs) throws -> Result##(_ partialResult: Result, ViewOutputs) throws -> Result#>)
+
   }
 
-  func render(in bounds: Rect, canvas: any Canvas, environment: EnvironmentValues) {
-
-    let subviews = LayoutSubviews(raw: content.map { view in
-      LayoutSubview { proposal in
-        view._size(for: proposal, environment: environment)
-      } place: { position, proposal in
-        let bounds = Rect(
-          origin: position,
-          size: view._size(for: proposal, environment: environment))
-        view._render(in: bounds, canvas: canvas, environment: environment)
-      }
-    })
-
-    layout.placeSubviews(
-      in: bounds,
-      proposal: ProposedViewSize(bounds.size),
-      subviews: subviews,
-      cache: &cache)
-  }
+//  func size(for proposal: ProposedViewSize, environment: EnvironmentValues) -> Size {
+//
+//    let subviews = LayoutSubviews(raw: content.map { view in
+//
+//
+//
+////      LayoutSubview { proposal in
+////        view._size(for: proposal, environment: environment)
+////      } place: { _, _ in }
+//    })
+//
+//    return layout.sizeThatFits(
+//      proposal: proposal,
+//      subviews: subviews,
+//      cache: &cache)
+//  }
+//
+//  func render(in bounds: Rect, canvas: any Canvas, environment: EnvironmentValues) {
+//
+//    let subviews = LayoutSubviews(raw: content.map { view in
+//      LayoutSubview { proposal in
+//        view._size(for: proposal, environment: environment)
+//      } place: { position, proposal in
+//        let bounds = Rect(
+//          origin: position,
+//          size: view._size(for: proposal, environment: environment))
+//        view._render(in: bounds, canvas: canvas, environment: environment)
+//      }
+//    })
+//
+//    layout.placeSubviews(
+//      in: bounds,
+//      proposal: ProposedViewSize(bounds.size),
+//      subviews: subviews,
+//      cache: &cache)
+//  }
 }

@@ -1,17 +1,38 @@
 
-public struct Color: Builtin, CustomStringConvertible, Equatable, Sendable, View {
+public struct Color: CustomStringConvertible, Equatable, Sendable {
   public let description: String
   let foreground: ControlSequence
   let background: ControlSequence
+}
 
-  func size(
-    for proposal: ProposedViewSize,
-    environment: EnvironmentValues
-  ) -> Size {
+extension Color: View {
+
+  public var body: some View {
+    fatalError()
+  }
+
+  public static func _makeView(_ inputs: ViewInputs<Self>) -> ViewOutputs {
+
+    let layoutComputer = inputs.graph.attribute("Layout Computer") {
+      LayoutComputer(sizeThatFits: inputs.node.size) { [$0] }
+    }
+
+    let displayList = inputs.graph.attribute("Display List") {
+      DisplayList(items: [
+        DisplayList.Item(name: "Color") { canvas in
+          inputs.node.render(in: inputs.frame, canvas: canvas)
+        }
+      ])
+    }
+
+    return ViewOutputs(layoutComputer: layoutComputer, displayList: displayList)
+  }
+
+  private func size(for proposal: ProposedViewSize) -> Size {
     proposal.replacingUnspecifiedDimensions()
   }
 
-  func render(in bounds: Rect, canvas: any Canvas, environment: EnvironmentValues) {
+  private func render(in bounds: Rect, canvas: any Canvas) {
     let pixel = Pixel(" ", background: self)
     for x in bounds.minX...bounds.maxX {
       for y in bounds.minY...bounds.maxY {

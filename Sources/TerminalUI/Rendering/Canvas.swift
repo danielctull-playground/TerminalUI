@@ -1,3 +1,4 @@
+import AttributeGraph
 
 package protocol Canvas {
   func draw(_ pixel: Pixel, at position: Position)
@@ -5,10 +6,25 @@ package protocol Canvas {
 
 extension Canvas {
 
-  package func render(size: Size, content: () -> some View) {
-    content()
-      .frame(width: size.width, height: size.height)
-      ._render(in: Rect(origin: .origin, size: size), canvas: self)
+  package func render<Content: View>(size: Size, content: () -> Content) {
+
+    let graph = Graph()
+    let frame = graph.input("frame", Rect(origin: .origin, size: size))
+    let environment = graph.input("environment", EnvironmentValues())
+
+    let inputs = ViewInputs(
+      graph: graph,
+      node: content(),
+      frame: frame.projectedValue,
+      environment: environment.projectedValue)
+
+    let outputs = Content._makeView(inputs)
+    for item in outputs.displayList.items {
+      item.render(self)
+    }
+//    content()
+//      .frame(width: size.width, height: size.height)
+//      ._render(in: Rect(origin: .origin, size: size), canvas: self)
   }
 }
 
