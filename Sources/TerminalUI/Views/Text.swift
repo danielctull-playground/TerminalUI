@@ -7,7 +7,15 @@ public struct Text: Builtin, View {
     self.string = string
   }
 
-  func size(
+  func displayItems(inputs: ViewInputs) -> [DisplayItem] {
+    [DisplayItem {
+      size(for: $0, inputs: inputs)
+    } render: {
+      render(in: $0, inputs: inputs)
+    }]
+  }
+
+  private func size(
     for proposal: ProposedViewSize,
     inputs: ViewInputs
   ) -> Size {
@@ -18,7 +26,7 @@ public struct Text: Builtin, View {
     return Size(width: width, height: height)
   }
 
-  func render(in bounds: Rect, inputs: ViewInputs) {
+  private func render(in bounds: Rect, inputs: ViewInputs) {
 
     let lines = string.lines(ofLength: Int(bounds.size.width))
     let environment = inputs.environment

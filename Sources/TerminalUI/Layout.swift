@@ -93,37 +93,32 @@ private struct LayoutView<Layout: TerminalUI.Layout>: Builtin, View {
     cache = layout.makeCache(subviews: subviews)
   }
 
-  func size(for proposal: ProposedViewSize, inputs: ViewInputs) -> Size {
+  func displayItems(inputs: ViewInputs) -> [DisplayItem] {
+    let children = content.flatMap { $0.displayItems(inputs: inputs) }
 
-    let subviews = LayoutSubviews(raw: content.map { view in
-      LayoutSubview { proposal in
-        view._size(for: proposal, inputs: inputs)
-      } place: { _, _ in }
-    })
-
-    return layout.sizeThatFits(
-      proposal: proposal,
-      subviews: subviews,
-      cache: &cache)
-  }
-
-  func render(in bounds: Rect, inputs: ViewInputs) {
-
-    let subviews = LayoutSubviews(raw: content.map { view in
-      LayoutSubview { proposal in
-        view._size(for: proposal, inputs: inputs)
-      } place: { position, proposal in
-        let bounds = Rect(
+    let subviews = LayoutSubviews(raw: children.map { item in
+      LayoutSubview(sizeThatFits: item.size) { position, proposal in
+        item.render(in: Rect(
           origin: position,
-          size: view._size(for: proposal, inputs: inputs))
-        view._render(in: bounds, inputs: inputs)
+          size: item.size(for: proposal)
+        ))
       }
     })
 
-    layout.placeSubviews(
-      in: bounds,
-      proposal: ProposedViewSize(bounds.size),
-      subviews: subviews,
-      cache: &cache)
+
+    let item = DisplayItem { proposal in
+      layout.sizeThatFits(
+        proposal: proposal,
+        subviews: subviews,
+        cache: &cache)
+    } render: { bounds in
+      layout.placeSubviews(
+        in: bounds,
+        proposal: ProposedViewSize(bounds.size),
+        subviews: subviews,
+        cache: &cache)
+    }
+
+    return [item]
   }
 }

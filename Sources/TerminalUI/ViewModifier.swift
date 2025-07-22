@@ -27,20 +27,8 @@ private struct ModifiedView<Modifier: ViewModifier>: Builtin, View {
   let content: Modifier.Content
   let modifier: Modifier
 
-  func size(
-    for proposal: ProposedViewSize,
-    inputs: ViewInputs
-  ) -> Size {
+  func displayItems(inputs: ViewInputs) -> [DisplayItem] {
     inputs.environment.install(on: modifier)
-    return modifier
-      .body(content: content)
-      ._size(for: proposal, inputs: inputs)
-  }
-
-  func render(in bounds: Rect, inputs: ViewInputs) {
-    inputs.environment.install(on: modifier)
-    modifier
-      .body(content: content)
-      ._render(in: bounds, inputs: inputs)
+    return modifier.body(content: content).displayItems(inputs: inputs)
   }
 }

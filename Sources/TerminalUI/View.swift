@@ -9,34 +9,13 @@ public protocol View {
 }
 
 extension View {
-  
-  func _size(for proposal: ProposedViewSize, canvas: any Canvas) -> Size {
-    let inputs = ViewInputs(canvas: canvas, environment: EnvironmentValues())
-    return _size(for: proposal, inputs: inputs)
-  }
 
-  func _size(
-    for proposal: ProposedViewSize,
-    inputs: ViewInputs
-  ) -> Size {
-
+  func displayItems(inputs: ViewInputs) -> [DisplayItem] {
     inputs.environment.install(on: self)
-
     if let builtin = self as? any Builtin {
-      return builtin.size(for: proposal, inputs: inputs)
+      return builtin.displayItems(inputs: inputs)
     } else {
-      return body._size(for: proposal, inputs: inputs)
-    }
-  }
-
-  func _render(in bounds: Rect, inputs: ViewInputs) {
-
-    inputs.environment.install(on: self)
-
-    if let builtin = self as? any Builtin {
-      builtin.render(in: bounds, inputs: inputs)
-    } else {
-      body._render(in: bounds, inputs: inputs)
+      return body.displayItems(inputs: inputs)
     }
   }
 }

@@ -4,14 +4,22 @@ public struct Color: Builtin, CustomStringConvertible, Equatable, Sendable, View
   let foreground: ControlSequence
   let background: ControlSequence
 
-  func size(
+  func displayItems(inputs: ViewInputs) -> [DisplayItem] {
+    [DisplayItem {
+      size(for: $0, inputs: inputs)
+    } render: {
+      render(in: $0, inputs: inputs)
+    }]
+  }
+
+  private func size(
     for proposal: ProposedViewSize,
     inputs: ViewInputs
   ) -> Size {
     proposal.replacingUnspecifiedDimensions()
   }
 
-  func render(in bounds: Rect, inputs: ViewInputs) {
+  private func render(in bounds: Rect, inputs: ViewInputs) {
     let pixel = Pixel(" ", background: self)
     for x in bounds.minX...bounds.maxX {
       for y in bounds.minY...bounds.maxY {
