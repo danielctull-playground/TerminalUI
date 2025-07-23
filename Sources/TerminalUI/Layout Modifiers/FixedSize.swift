@@ -5,34 +5,26 @@ extension View {
     horizontal: Bool = true,
     vertical: Bool = true
   ) -> some View {
-    FixedSize(horizontal: horizontal, vertical: vertical) { self }
+    FixedSize(content: self, horizontal: horizontal, vertical: vertical)
   }
 }
 
-private struct FixedSize {
+private struct FixedSize<Content: View>: Builtin, View {
+
+  let content: Content
   let horizontal: Bool
   let vertical: Bool
-}
 
-extension FixedSize: Layout {
-
-  func sizeThatFits(
-    proposal: ProposedViewSize,
-    subviews: Subviews,
-    cache: inout ()
-  ) -> Size {
-    var proposal = proposal
-    if horizontal { proposal.width = nil }
-    if vertical { proposal.height = nil }
-    return subviews[0].sizeThatFits(proposal)
-  }
-
-  func placeSubviews(
-    in bounds: Rect,
-    proposal: ProposedViewSize,
-    subviews: Subviews,
-    cache: inout ()
-  ) {
-    subviews[0].place(at: bounds.origin, proposal: proposal)
+  func displayItems(inputs: ViewInputs) -> [DisplayItem] {
+    content.displayItems(inputs: inputs).map { item in
+      DisplayItem { proposal in
+        var proposal = proposal
+        if horizontal { proposal.width = nil }
+        if vertical { proposal.height = nil }
+        return item.size(for: proposal)
+      } render: { bounds in
+        item.render(in: bounds)
+      }
+    }
   }
 }

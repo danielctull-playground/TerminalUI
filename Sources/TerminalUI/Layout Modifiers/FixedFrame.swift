@@ -6,43 +6,40 @@ extension View {
     height: Int? = nil,
     alignment: Alignment = .center
   ) -> some View {
-    FixedFrame(width: width, height: height, alignment: alignment) { self }
+    FixedFrame(
+      content: self,
+      width: width,
+      height: height,
+      alignment: alignment
+    )
   }
 }
 
-private struct FixedFrame {
+private struct FixedFrame<Content: View>: Builtin, View {
+
+  let content: Content
   let width: Int?
   let height: Int?
   let alignment: Alignment
-}
 
-extension FixedFrame: Layout {
-
-  func sizeThatFits(
-    proposal: ProposedViewSize,
-    subviews: Subviews,
-    cache: inout ()
-  ) -> Size {
-    var fallback: Size { proposal.replacingUnspecifiedDimensions() }
-    let proposal = ProposedViewSize(
-      width: width ?? fallback.width,
-      height: height ?? fallback.height)
-    let size = subviews[0].sizeThatFits(proposal)
-    return Size(width: width ?? size.width, height: height ?? size.height)
-  }
-
-  func placeSubviews(
-    in bounds: Rect,
-    proposal: ProposedViewSize,
-    subviews: Subviews,
-    cache: inout ()
-  ) {
-    let parent = alignment.position(for: bounds.size)
-    let size = subviews[0].sizeThatFits(proposal)
-    let child = alignment.position(for: size)
-    let position = Position(
-      x: bounds.origin.x + parent.x - child.x,
-      y: bounds.origin.y + parent.y - child.y)
-    subviews[0].place(at: position, proposal: ProposedViewSize(size))
+  func displayItems(inputs: ViewInputs) -> [DisplayItem] {
+    content.displayItems(inputs: inputs).map { item in
+      DisplayItem { proposal in
+        var fallback: Size { proposal.replacingUnspecifiedDimensions() }
+        let proposal = ProposedViewSize(
+          width: width ?? fallback.width,
+          height: height ?? fallback.height)
+        let size = item.size(for: proposal)
+        return Size(width: width ?? size.width, height: height ?? size.height)
+      } render: { bounds in
+        let parent = alignment.position(for: bounds.size)
+        let size = item.size(for: ProposedViewSize(bounds.size))
+        let child = alignment.position(for: size)
+        let position = Position(
+          x: bounds.origin.x + parent.x - child.x,
+          y: bounds.origin.y + parent.y - child.y)
+        item.render(in: Rect(origin: position, size: size))
+      }
+    }
   }
 }

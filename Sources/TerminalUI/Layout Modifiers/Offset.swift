@@ -2,37 +2,31 @@
 extension View {
 
   public func offset(x: Int = 0, y: Int = 0) -> some View {
-    Offset(x: x, y: y) { self }
+    Offset(content: self, x: x, y: y)
   }
 
   public func offset(size: Size) -> some View {
-    Offset(x: size.width, y: size.height) { self }
+    Offset(content: self, x: size.width, y: size.height)
   }
 }
 
-private struct Offset {
+private struct Offset<Content: View>: Builtin, View {
+
+  let content: Content
   let x: Int
   let y: Int
-}
 
-extension Offset: Layout {
-
-  func sizeThatFits(
-    proposal: ProposedViewSize,
-    subviews: Subviews,
-    cache: inout ()
-  ) -> Size {
-    subviews[0].sizeThatFits(proposal)
-  }
-
-  func placeSubviews(
-    in bounds: Rect,
-    proposal: ProposedViewSize,
-    subviews: Subviews,
-    cache: inout ()
-  ) {
-    subviews[0].place(
-      at: Position(x: bounds.minX + x, y: bounds.minY + y),
-      proposal: proposal)
+  func displayItems(inputs: ViewInputs) -> [DisplayItem] {
+    content.displayItems(inputs: inputs).map { item in
+      DisplayItem { proposal in
+        item.size(for: proposal)
+      } render: { bounds in
+        item.render(in: Rect(
+          x: bounds.minX + x,
+          y: bounds.minY + y,
+          width: bounds.size.width,
+          height: bounds.size.height))
+      }
+    }
   }
 }
