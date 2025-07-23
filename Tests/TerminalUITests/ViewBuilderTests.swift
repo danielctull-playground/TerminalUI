@@ -69,4 +69,22 @@ struct ViewBuilderTests {
       Position(x: 6, y: 6): Pixel(character),
     ])
   }
+
+#if !os(Linux)
+  // I can't find an #available flag that exists for linux machines.
+  @Test func limitedAvailability() {
+
+    canvas.render {
+      if #available(iOS 999, macOS 999, tvOS 999, watchOS 999, *) {
+        Text("a")
+      } else if #available(*) {  // <-- This causes the builder to hit
+        Text("b")                //     buildLimitedAvailability.
+      }
+    }
+
+    #expect(canvas.pixels == [
+      Position(x: 6, y: 6): Pixel("b"),
+    ])
+  }
+#endif
 }

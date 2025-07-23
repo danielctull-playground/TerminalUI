@@ -39,4 +39,10 @@ extension ViewBuilder {
   ) -> Either<First, Second> {
     Either(second)
   }
+
+  public static func buildLimitedAvailability(
+    _ content: some View
+  ) -> some View {
+    content
+  }
 }
