@@ -4,7 +4,7 @@ protocol Builtin {
 }
 
 extension Builtin {
-  public var body: Never {
+  public var body: some View {
     fatalError("Body should never be called.")
   }
 }

@@ -10,10 +10,12 @@ extension Canvas {
   }
 
   package func render(in bounds: Rect, content: () -> some View) {
-    content()
-      .frame(width: bounds.size.width, height: bounds.size.height)
-      .displayItems(inputs: ViewInputs(canvas: self))
-      .first!
-      .render(in: bounds)
+    VStack {
+      content()
+    }
+    .frame(width: bounds.size.width, height: bounds.size.height)
+    .displayItems(inputs: ViewInputs(canvas: self))
+    .first!
+    .render(in: bounds)
   }
 }

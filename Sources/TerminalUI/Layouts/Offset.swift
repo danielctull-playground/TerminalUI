@@ -2,11 +2,11 @@
 extension View {
 
   public func offset(x: Int = 0, y: Int = 0) -> some View {
-    Offset(x: x, y: y) { [self] }
+    Offset(x: x, y: y) { self }
   }
 
   public func offset(size: Size) -> some View {
-    Offset(x: size.width, y: size.height) { [self] }
+    Offset(x: size.width, y: size.height) { self }
   }
 }
 

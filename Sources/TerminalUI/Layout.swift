@@ -73,28 +73,25 @@ public struct LayoutSubview {
 
 extension Layout {
 
-  public func callAsFunction(_ content: () -> [any View]) -> some View {
+  public func callAsFunction(
+    @ViewBuilder _ content: () -> some View
+  ) -> some View {
     LayoutView(layout: self, content: content())
   }
 }
 
-private struct LayoutView<Layout: TerminalUI.Layout>: Builtin, View {
+private struct LayoutView<Content: View, Layout: TerminalUI.Layout>: Builtin, View {
 
-  @Mutable private var cache: Layout.Cache
   private let layout: Layout
-  private let content: [any View]
+  private let content: Content
 
-  init(layout: Layout, content: [any View]) {
+  init(layout: Layout, content: Content) {
     self.layout = layout
     self.content = content
-    let subviews = LayoutSubviews(raw: content.map { _ in
-      LayoutSubview { _ in .zero } place: { _, _ in }
-    })
-    cache = layout.makeCache(subviews: subviews)
   }
 
   func displayItems(inputs: ViewInputs) -> [DisplayItem] {
-    let children = content.flatMap { $0.displayItems(inputs: inputs) }
+    let children = content.displayItems(inputs: inputs)
 
     let subviews = LayoutSubviews(raw: children.map { item in
       LayoutSubview(sizeThatFits: item.size) { position, proposal in
@@ -105,6 +102,7 @@ private struct LayoutView<Layout: TerminalUI.Layout>: Builtin, View {
       }
     })
 
+    var cache = layout.makeCache(subviews: subviews)
 
     let item = DisplayItem { proposal in
       layout.sizeThatFits(

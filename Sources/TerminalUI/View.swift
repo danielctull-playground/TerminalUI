@@ -5,6 +5,7 @@ public protocol View {
   associatedtype Body: View
 
   /// The content and behavior of the view.
+  @ViewBuilder
   var body: Body { get }
 }
 

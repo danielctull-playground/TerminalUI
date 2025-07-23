@@ -11,7 +11,9 @@ struct HStackTests {
     let canvas = TestCanvas(width: 3, height: 3)
 
     canvas.render {
-      HStack { [] }
+      HStack {
+        EmptyView()
+      }
     }
 
     #expect(canvas.pixels == [:])
@@ -23,11 +25,11 @@ struct HStackTests {
     let canvas = TestCanvas(width: 3, height: 1)
 
     canvas.render {
-      HStack {[
-        Text("1"),
-        Text("2"),
-        Text("3"),
-      ]}
+      HStack {
+        Text("1")
+        Text("2")
+        Text("3")
+      }
     }
 
     #expect(canvas.pixels == [
@@ -43,11 +45,11 @@ struct HStackTests {
     let canvas = TestCanvas(width: 5, height: 1)
 
     canvas.render {
-      HStack {[
-        Color.blue,
-        Text("A"),
-        Color.yellow,
-      ]}
+      HStack {
+        Color.blue
+        Text("A")
+        Color.yellow
+      }
     }
 
     #expect(canvas.pixels == [
@@ -65,13 +67,13 @@ struct HStackTests {
     let canvas = TestCanvas(width: 11, height: 1)
 
     canvas.render {
-      HStack {[
-        Color.blue,
-        Text("A"),
-        Color.yellow,
-        Text("B"),
-        Color.red,
-      ]}
+      HStack {
+        Color.blue
+        Text("A")
+        Color.yellow
+        Text("B")
+        Color.red
+      }
     }
 
     #expect(canvas.pixels == [
@@ -99,11 +101,11 @@ struct HStackTests {
     let canvas = TestCanvas(width: 5, height: 3)
 
     canvas.render {
-      HStack(alignment: alignment) {[
-        Text("A"),
-        Color.black.frame(width: 1), // Ensures full height is used for HStack.
-        Text("B"),
-      ]}
+      HStack(alignment: alignment) {
+        Text("A")
+        Color.black.frame(width: 1) // Ensures full height is used for HStack.
+        Text("B")
+      }
     }
 
     #expect(canvas.pixels == [
@@ -126,11 +128,11 @@ struct HStackTests {
     let canvas = TestCanvas(width: 9, height: 1)
 
     canvas.render {
-      HStack(spacing: spacing) {[
-        Text("A"),
-        Text("B"),
-        Text("C"),
-      ]}
+      HStack(spacing: spacing) {
+        Text("A")
+        Text("B")
+        Text("C")
+      }
     }
 
     #expect(canvas.pixels == [

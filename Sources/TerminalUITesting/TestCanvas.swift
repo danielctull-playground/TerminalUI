@@ -19,7 +19,7 @@ extension TestCanvas {
 
   public var pixels: [Position: Pixel] { _pixels }
 
-  public func render(content: () -> some View) {
+  public func render(@ViewBuilder content: () -> some View) {
     render(in: bounds, content: content)
   }
 }
