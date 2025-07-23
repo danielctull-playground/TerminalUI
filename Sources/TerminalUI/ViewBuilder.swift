@@ -22,6 +22,12 @@ public enum ViewBuilder {
 
 extension ViewBuilder {
 
+  public static func buildOptional<Content: View>(
+    _ optional: Content?
+  ) -> Content? {
+    optional
+  }
+
   public static func buildEither<First: View, Second: View>(
     first: First
   ) -> Either<First, Second> {

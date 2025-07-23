@@ -37,6 +37,21 @@ struct ViewBuilderTests {
   }
 
   @Test(arguments: [
+    (true, [Position(x: 6, y: 6): Pixel("a")]),
+    (false, [:])
+  ])
+  func optional(value: Bool, expectation: [Position: Pixel]) {
+
+    canvas.render {
+      if value {
+        Text("a")
+      }
+    }
+
+    #expect(canvas.pixels == expectation)
+  }
+
+  @Test(arguments: [
     (true, "a"),
     (false, "b")
   ])

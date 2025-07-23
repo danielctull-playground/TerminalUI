@@ -1,5 +1,5 @@
 
-public struct Pixel: Equatable {
+public struct Pixel: Equatable, Sendable {
 
   package let content: Character
   let foreground: Color
