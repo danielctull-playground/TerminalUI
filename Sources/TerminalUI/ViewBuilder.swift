@@ -2,6 +2,10 @@
 @resultBuilder
 public enum ViewBuilder {
 
+  public static func buildBlock() -> some View {
+    EmptyView()
+  }
+
   public static func buildPartialBlock(
     first: some View
   ) -> some View {

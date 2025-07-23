@@ -7,6 +7,11 @@ struct ViewBuilderTests {
 
   private var canvas = TestCanvas(width: 10, height: 10)
 
+  @Test func empty() {
+    canvas.render {}
+    #expect(canvas.pixels == [:])
+  }
+
   @Test func first() {
 
     canvas.render {

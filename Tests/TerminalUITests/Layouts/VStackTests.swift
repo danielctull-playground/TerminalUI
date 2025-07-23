@@ -11,9 +11,7 @@ struct VStackTests {
     let canvas = TestCanvas(width: 3, height: 3)
 
     canvas.render {
-      VStack {
-        EmptyView()
-      }
+      VStack {}
     }
 
     #expect(canvas.pixels == [:])
