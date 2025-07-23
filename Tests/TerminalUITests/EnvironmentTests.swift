@@ -60,6 +60,12 @@ struct EnvironmentTests {
     #expect(size.width == expectedWidth)
     #expect(size.height == expectedHeight)
   }
+
+  @Test func called_from_outside_view_body() async {
+    await #expect(processExitsWith: .failure) {
+      _ = TestView().value
+    }
+  }
 }
 
 private struct TestView: View {
