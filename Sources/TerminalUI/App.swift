@@ -6,6 +6,7 @@ public protocol App {
   associatedtype Body: View
 
   /// The content and behavior of the app.
+  @ViewBuilder
   var body: Body { get }
 
   /// Creates an instance of the app using the body that you define for its

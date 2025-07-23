@@ -1,15 +1,10 @@
 
 protocol Builtin {
-  func size(
-    for proposal: ProposedViewSize,
-    inputs: ViewInputs
-  ) -> Size
-
-  func render(in bounds: Rect, inputs: ViewInputs)
+  func displayItems(inputs: ViewInputs) -> [DisplayItem]
 }
 
 extension Builtin {
-  public var body: Never {
+  public var body: some View {
     fatalError("Body should never be called.")
   }
 }
