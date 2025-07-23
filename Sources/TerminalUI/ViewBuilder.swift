@@ -15,3 +15,18 @@ public enum ViewBuilder {
     Accumulated(accumulated, next)
   }
 }
+
+extension ViewBuilder {
+
+  public static func buildEither<First: View, Second: View>(
+    first: First
+  ) -> Either<First, Second> {
+    Either(first)
+  }
+
+  public static func buildEither<First: View, Second: View>(
+    second: Second
+  ) -> Either<First, Second> {
+    Either(second)
+  }
+}
