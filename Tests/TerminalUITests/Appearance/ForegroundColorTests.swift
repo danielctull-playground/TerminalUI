@@ -16,6 +16,12 @@ struct ForegroundColorTests {
     (Color.cyan, "[36m"),
     (Color.white, "[37m"),
 
+    (Color(white: 0), "[38;2;0;0;0m"),
+    (Color(white: 1), "[38;2;255;255;255m"),
+    (Color(white: 0.4), "[38;2;102;102;102m"),
+    (Color(white: -1), "[38;2;0;0;0m"), // Clamped
+    (Color(white: 2), "[38;2;255;255;255m"), // Clamped
+
     (Color(red: 0, green: 0, blue: 0), "[38;2;0;0;0m"),
     (Color(red: 1, green: 1, blue: 1), "[38;2;255;255;255m"),
     (Color(red: 1.0, green: 0.5, blue: 0), "[38;2;255;127;0m"),

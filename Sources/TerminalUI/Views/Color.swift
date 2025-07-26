@@ -74,6 +74,15 @@ extension Color {
       background: .selectGraphicRendition([48,2,r,g,b])
     )
   }
+
+  public init(white: Double) {
+    let w = white.in(0...255)
+    self.init(
+      description: "white: \(white)",
+      foreground: .selectGraphicRendition([38,2,w,w,w]),
+      background: .selectGraphicRendition([48,2,w,w,w])
+    )
+  }
 }
 
 extension Double {
