@@ -55,3 +55,32 @@ extension Color {
       background: .selectGraphicRendition(background))
   }
 }
+
+// MARK: - RGB
+
+extension Color {
+
+  public init(
+    red: Double,
+    green: Double,
+    blue: Double
+  ) {
+    let r = red.in(0...255)
+    let g = green.in(0...255)
+    let b = blue.in(0...255)
+    self.init(
+      description: "red: \(red), green: \(green), blue: \(blue)",
+      foreground: .selectGraphicRendition([38,2,r,g,b]),
+      background: .selectGraphicRendition([48,2,r,g,b])
+    )
+  }
+}
+
+extension Double {
+
+  fileprivate func `in`(_ range: ClosedRange<Int>) -> Int {
+    let upper = range.upperBound
+    let lower = range.lowerBound
+    return max(min(Int(Double(upper) * self) - lower, upper), lower)
+  }
+}
