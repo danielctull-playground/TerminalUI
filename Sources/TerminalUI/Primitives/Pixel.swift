@@ -28,7 +28,7 @@ public struct Pixel: Equatable, Sendable {
     background: Color = .default,
     bold: Bold,
     italic: Italic,
-    underline: Underline,
+    underline: UnderlineStyle,
     blinking: Blinking,
     inverse: Inverse,
     hidden: Hidden,

@@ -11,6 +11,7 @@ struct Demo: App {
         HStack {
           Text("daniel")
             .italic()
+            .underline(style: .double)
             .padding(1)
           Text("tull")
             .underline()
