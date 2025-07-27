@@ -26,13 +26,13 @@ public struct Pixel: Equatable, Sendable {
     _ content: Character,
     foreground: Color = .default,
     background: Color = .default,
-    bold: Bold = .off,
-    italic: Italic = .off,
-    underline: Underline = .off,
-    blinking: Blinking = .off,
-    inverse: Inverse = .off,
-    hidden: Hidden = .off,
-    strikethrough: Strikethrough = .off
+    bold: Bold,
+    italic: Italic,
+    underline: Underline,
+    blinking: Blinking,
+    inverse: Inverse,
+    hidden: Hidden,
+    strikethrough: Strikethrough
   ) {
     self.content = content
     self.graphicRendition = [
