@@ -48,31 +48,13 @@ extension GraphicRendition: ExpressibleByArrayLiteral {
   }
 }
 
-extension GraphicRendition: Comparable {
-
-  static func < (lhs: GraphicRendition, rhs: GraphicRendition) -> Bool {
-
-    // Compare the first two non-equal elements
-    let compared = zip(lhs.values, rhs.values)
-      .first(where: !=)
-      .map { $0.0 < $0.1 }
-
-    if let compared {
-      return compared
-    } else {
-      return lhs.values.count < rhs.values.count
-    }
-  }
-}
-
 extension ControlSequence {
 
   static func selectGraphicRendition(
-    _ rendition: Set<GraphicRendition>
+    _ rendition: [GraphicRendition]
   ) -> ControlSequence {
 
     let values = rendition
-      .sorted()
       .map { $0.values.map(String.init).joined(separator: ";") }
       .joined(separator: ";")
 

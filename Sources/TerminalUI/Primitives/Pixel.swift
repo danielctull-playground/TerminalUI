@@ -2,7 +2,7 @@
 public struct Pixel: Equatable, Sendable {
 
   package let content: Character
-  let graphicRendition: Set<GraphicRendition>
+  let graphicRendition: [GraphicRendition]
 
   public init(
     _ content: Character,

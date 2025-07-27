@@ -5,34 +5,23 @@ import Testing
 @Suite("Hidden", .tags(.modifier))
 struct HiddenTests {
 
-  private let canvas = TextStreamCanvas(output: .memory)
+  @Test("Text Output", arguments: [
+    (true,  "8" ),
+    (false, "28"),
+  ])
+  func textOutput(hidden: Bool, expected: String) {
 
-  @Test func on() {
+    let canvas = TextStreamCanvas(output: .memory)
 
     canvas.render(size: Size(width: 1, height: 1)) {
-      Text("a").hidden(true)
+      Text("a").hidden(hidden)
     }
 
     #expect(canvas.output.controlSequences == [
       "[2J",     // Clear screen
       "[?1049h", // Alternative buffer on
       "[?25l",   // Cursor visibility off
-      "[8;22;23;24;25;27;29;39;49m",
-      "[1;1Ha",  // Position + content
-    ])
-  }
-
-  @Test func off() {
-
-    canvas.render(size: Size(width: 1, height: 1)) {
-      Text("a").hidden(false)
-    }
-
-    #expect(canvas.output.controlSequences == [
-      "[2J",     // Clear screen
-      "[?1049h", // Alternative buffer on
-      "[?25l",   // Cursor visibility off
-      "[22;23;24;25;27;28;29;39;49m",
+      "[39;49;22;23;24;25;27;\(expected);29m",
       "[1;1Ha",  // Position + content
     ])
   }

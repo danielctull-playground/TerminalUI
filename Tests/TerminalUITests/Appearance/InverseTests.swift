@@ -5,34 +5,23 @@ import Testing
 @Suite("Inverse", .tags(.modifier))
 struct InverseTests {
 
-  private let canvas = TextStreamCanvas(output: .memory)
+  @Test("Text Output", arguments: [
+    (true,  "7" ),
+    (false, "27"),
+  ])
+  func textOutput(inverse: Bool, expected: String) {
 
-  @Test func on() {
+    let canvas = TextStreamCanvas(output: .memory)
 
     canvas.render(size: Size(width: 1, height: 1)) {
-      Text("a").inverse(true)
+      Text("a").inverse(inverse)
     }
 
     #expect(canvas.output.controlSequences == [
       "[2J",     // Clear screen
       "[?1049h", // Alternative buffer on
       "[?25l",   // Cursor visibility off
-      "[7;22;23;24;25;28;29;39;49m",
-      "[1;1Ha",  // Position + content
-    ])
-  }
-
-  @Test func off() {
-
-    canvas.render(size: Size(width: 1, height: 1)) {
-      Text("a").inverse(false)
-    }
-
-    #expect(canvas.output.controlSequences == [
-      "[2J",     // Clear screen
-      "[?1049h", // Alternative buffer on
-      "[?25l",   // Cursor visibility off
-      "[22;23;24;25;27;28;29;39;49m",
+      "[39;49;22;23;24;25;\(expected);28;29m",
       "[1;1Ha",  // Position + content
     ])
   }

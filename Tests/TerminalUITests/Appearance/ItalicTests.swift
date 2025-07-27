@@ -5,34 +5,23 @@ import Testing
 @Suite("Italic", .tags(.modifier))
 struct ItalicTests {
 
-  private let canvas = TextStreamCanvas(output: .memory)
+  @Test("Text Output", arguments: [
+    (true,  "3" ),
+    (false, "23"),
+  ])
+  func textOutput(italic: Bool, expected: String) {
 
-  @Test func on() {
+    let canvas = TextStreamCanvas(output: .memory)
 
     canvas.render(size: Size(width: 1, height: 1)) {
-      Text("a").italic(true)
+      Text("a").italic(italic)
     }
 
     #expect(canvas.output.controlSequences == [
       "[2J",     // Clear screen
       "[?1049h", // Alternative buffer on
       "[?25l",   // Cursor visibility off
-      "[3;22;24;25;27;28;29;39;49m",
-      "[1;1Ha",  // Position + content
-    ])
-  }
-
-  @Test func off() {
-
-    canvas.render(size: Size(width: 1, height: 1)) {
-      Text("a").italic(false)
-    }
-
-    #expect(canvas.output.controlSequences == [
-      "[2J",     // Clear screen
-      "[?1049h", // Alternative buffer on
-      "[?25l",   // Cursor visibility off
-      "[22;23;24;25;27;28;29;39;49m",
+      "[39;49;22;\(expected);24;25;27;28;29m",
       "[1;1Ha",  // Position + content
     ])
   }

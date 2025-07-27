@@ -5,34 +5,23 @@ import Testing
 @Suite("Underline", .tags(.modifier))
 struct UnderlineTests {
 
-  private let canvas = TextStreamCanvas(output: .memory)
+  @Test("Text Output", arguments: [
+    (true,  "4" ),
+    (false, "24"),
+  ])
+  func textOutput(underline: Bool, expected: String) {
 
-  @Test func on() {
+    let canvas = TextStreamCanvas(output: .memory)
 
     canvas.render(size: Size(width: 1, height: 1)) {
-      Text("a").underline(true)
+      Text("a").underline(underline)
     }
 
     #expect(canvas.output.controlSequences == [
       "[2J",     // Clear screen
       "[?1049h", // Alternative buffer on
       "[?25l",   // Cursor visibility off
-      "[4;22;23;25;27;28;29;39;49m",
-      "[1;1Ha",  // Position + content
-    ])
-  }
-
-  @Test func off() {
-
-    canvas.render(size: Size(width: 1, height: 1)) {
-      Text("a").underline(false)
-    }
-
-    #expect(canvas.output.controlSequences == [
-      "[2J",     // Clear screen
-      "[?1049h", // Alternative buffer on
-      "[?25l",   // Cursor visibility off
-      "[22;23;24;25;27;28;29;39;49m",
+      "[39;49;22;23;\(expected);25;27;28;29m",
       "[1;1Ha",  // Position + content
     ])
   }
