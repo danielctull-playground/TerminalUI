@@ -18,7 +18,7 @@ extension EnvironmentValues {
 }
 
 struct Hidden: Equatable {
-  let controlSequence: ControlSequence
-  static let on = Hidden(controlSequence: .selectGraphicRendition(8))
-  static let off = Hidden(controlSequence: .selectGraphicRendition(28))
+  let graphicRendition: GraphicRendition
+  static let on = Hidden(graphicRendition: 8)
+  static let off = Hidden(graphicRendition: 28)
 }

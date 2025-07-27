@@ -18,7 +18,7 @@ extension EnvironmentValues {
 }
 
 struct Blinking: Equatable {
-  let controlSequence: ControlSequence
-  static let on = Blinking(controlSequence: .selectGraphicRendition(5))
-  static let off = Blinking(controlSequence: .selectGraphicRendition(25))
+  let graphicRendition: GraphicRendition
+  static let on = Blinking(graphicRendition: 5)
+  static let off = Blinking(graphicRendition: 25)
 }
