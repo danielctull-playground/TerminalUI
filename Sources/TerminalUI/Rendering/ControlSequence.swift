@@ -32,7 +32,7 @@ struct CursorVisibility {
 
 // MARK: - GraphicRendition
 
-struct GraphicRendition: Equatable {
+struct GraphicRendition: Equatable, Hashable {
   fileprivate let values: [Int]
 }
 
@@ -49,10 +49,15 @@ extension GraphicRendition: ExpressibleByArrayLiteral {
 }
 
 extension ControlSequence {
+
   static func selectGraphicRendition(
-    _ rendition: GraphicRendition
+    _ rendition: [GraphicRendition]
   ) -> ControlSequence {
-    let values = rendition.values.map(String.init).joined(separator: ";")
+
+    let values = rendition
+      .map { $0.values.map(String.init).joined(separator: ";") }
+      .joined(separator: ";")
+
     return ControlSequence("\(values)m")
   }
 }

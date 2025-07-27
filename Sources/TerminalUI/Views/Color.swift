@@ -1,8 +1,8 @@
 
 public struct Color: Builtin, CustomStringConvertible, Equatable, Sendable, View {
   public let description: String
-  let foreground: ControlSequence
-  let background: ControlSequence
+  let foreground: GraphicRendition
+  let background: GraphicRendition
 
   func displayItems(inputs: ViewInputs) -> [DisplayItem] {
     [DisplayItem {
@@ -51,8 +51,8 @@ extension Color {
   ) -> Color {
     Color(
       description: "ansi(\(name))",
-      foreground: .selectGraphicRendition(foreground),
-      background: .selectGraphicRendition(background))
+      foreground: foreground,
+      background: background)
   }
 }
 
@@ -70,8 +70,8 @@ extension Color {
     let b = blue.in(0...255)
     self.init(
       description: "red: \(red), green: \(green), blue: \(blue)",
-      foreground: .selectGraphicRendition([38,2,r,g,b]),
-      background: .selectGraphicRendition([48,2,r,g,b])
+      foreground: [38,2,r,g,b],
+      background: [48,2,r,g,b]
     )
   }
 
@@ -79,8 +79,8 @@ extension Color {
     let w = white.in(0...255)
     self.init(
       description: "white: \(white)",
-      foreground: .selectGraphicRendition([38,2,w,w,w]),
-      background: .selectGraphicRendition([48,2,w,w,w])
+      foreground: [38,2,w,w,w],
+      background: [48,2,w,w,w]
     )
   }
 }

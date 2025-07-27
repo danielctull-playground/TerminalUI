@@ -2,31 +2,24 @@
 public struct Pixel: Equatable, Sendable {
 
   package let content: Character
-  let foreground: Color
-  let background: Color
-  let bold: Bold
-  let italic: Italic
-  let underline: Underline
-  let blinking: Blinking
-  let inverse: Inverse
-  let hidden: Hidden
-  let strikethrough: Strikethrough
+  let graphicRendition: [GraphicRendition]
 
   public init(
     _ content: Character,
     foreground: Color = .default,
     background: Color = .default
   ) {
-    self.content = content
-    self.foreground = foreground
-    self.background = background
-    self.bold = .off
-    self.italic = .off
-    self.underline = .off
-    self.blinking = .off
-    self.inverse = .off
-    self.hidden = .off
-    self.strikethrough = .off
+    self.init(
+      content,
+      foreground: foreground,
+      background: background,
+      bold: .off,
+      italic: .off,
+      underline: .off,
+      blinking: .off,
+      inverse: .off,
+      hidden: .off,
+      strikethrough: .off)
   }
 
   init(
@@ -42,14 +35,16 @@ public struct Pixel: Equatable, Sendable {
     strikethrough: Strikethrough = .off
   ) {
     self.content = content
-    self.foreground = foreground
-    self.background = background
-    self.bold = bold
-    self.italic = italic
-    self.underline = underline
-    self.blinking = blinking
-    self.inverse = inverse
-    self.hidden = hidden
-    self.strikethrough = strikethrough
+    self.graphicRendition = [
+      foreground.foreground,
+      background.background,
+      bold.graphicRendition,
+      italic.graphicRendition,
+      underline.graphicRendition,
+      blinking.graphicRendition,
+      inverse.graphicRendition,
+      hidden.graphicRendition,
+      strikethrough.graphicRendition,
+    ]
   }
 }

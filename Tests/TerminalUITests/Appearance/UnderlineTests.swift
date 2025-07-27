@@ -6,8 +6,8 @@ import Testing
 struct UnderlineTests {
 
   @Test("Text Output", arguments: [
-    (true,  "[4m" ),
-    (false, "[24m"),
+    (true,  "4" ),
+    (false, "24"),
   ])
   func textOutput(underline: Bool, expected: String) {
 
@@ -21,15 +21,7 @@ struct UnderlineTests {
       "[2J",     // Clear screen
       "[?1049h", // Alternative buffer on
       "[?25l",   // Cursor visibility off
-      "[39m",    // ForegroundColor default
-      "[49m",    // BackgroundColor default
-      "[22m",    // Bold off
-      "[23m",    // Italic off
-      expected,  // Underline
-      "[25m",    // Blinking off
-      "[27m",    // Inverse off
-      "[28m",    // Hidden off
-      "[29m",    // Strikethrough off
+      "[39;49;22;23;\(expected);25;27;28;29m",
       "[1;1Ha",  // Position + content
     ])
   }

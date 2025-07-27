@@ -18,7 +18,7 @@ extension EnvironmentValues {
 }
 
 struct Underline: Equatable {
-  let controlSequence: ControlSequence
-  static let on = Underline(controlSequence: .selectGraphicRendition(4))
-  static let off = Underline(controlSequence: .selectGraphicRendition(24))
+  let graphicRendition: GraphicRendition
+  static let on = Underline(graphicRendition: 4)
+  static let off = Underline(graphicRendition: 24)
 }

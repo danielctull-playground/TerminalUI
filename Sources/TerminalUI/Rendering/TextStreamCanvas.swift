@@ -10,15 +10,7 @@ struct TextStreamCanvas<Output: TextOutputStream>: Canvas {
   }
 
   func draw(_ pixel: Pixel, at position: Position) {
-    output.write(pixel.foreground.foreground)
-    output.write(pixel.background.background)
-    output.write(pixel.bold.controlSequence)
-    output.write(pixel.italic.controlSequence)
-    output.write(pixel.underline.controlSequence)
-    output.write(pixel.blinking.controlSequence)
-    output.write(pixel.inverse.controlSequence)
-    output.write(pixel.hidden.controlSequence)
-    output.write(pixel.strikethrough.controlSequence)
+    output.write(.selectGraphicRendition(pixel.graphicRendition))
     output.write(position.controlSequence)
     output.write(pixel.content)
   }

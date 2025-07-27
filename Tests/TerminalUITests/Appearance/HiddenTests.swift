@@ -6,8 +6,8 @@ import Testing
 struct HiddenTests {
 
   @Test("Text Output", arguments: [
-    (true,  "[8m" ),
-    (false, "[28m"),
+    (true,  "8" ),
+    (false, "28"),
   ])
   func textOutput(hidden: Bool, expected: String) {
 
@@ -21,15 +21,7 @@ struct HiddenTests {
       "[2J",     // Clear screen
       "[?1049h", // Alternative buffer on
       "[?25l",   // Cursor visibility off
-      "[39m",    // ForegroundColor default
-      "[49m",    // BackgroundColor default
-      "[22m",    // Bold off
-      "[23m",    // Italic off
-      "[24m",    // Underline off
-      "[25m",    // Blinking off
-      "[27m",    // Inverse off
-      expected,  // Hidden
-      "[29m",    // Strikethrough off
+      "[39;49;22;23;24;25;27;\(expected);29m",
       "[1;1Ha",  // Position + content
     ])
   }

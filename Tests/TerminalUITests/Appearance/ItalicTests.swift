@@ -6,8 +6,8 @@ import Testing
 struct ItalicTests {
 
   @Test("Text Output", arguments: [
-    (true,  "[3m" ),
-    (false, "[23m"),
+    (true,  "3" ),
+    (false, "23"),
   ])
   func textOutput(italic: Bool, expected: String) {
 
@@ -21,15 +21,7 @@ struct ItalicTests {
       "[2J",     // Clear screen
       "[?1049h", // Alternative buffer on
       "[?25l",   // Cursor visibility off
-      "[39m",    // ForegroundColor default
-      "[49m",    // BackgroundColor default
-      "[22m",    // Bold off
-      expected,  // Italic
-      "[24m",    // Underline off
-      "[25m",    // Blinking off
-      "[27m",    // Inverse off
-      "[28m",    // Hidden off
-      "[29m",    // Strikethrough off
+      "[39;49;22;\(expected);24;25;27;28;29m",
       "[1;1Ha",  // Position + content
     ])
   }
