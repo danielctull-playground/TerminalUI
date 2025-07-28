@@ -1,6 +1,6 @@
 import AttributeGraph
 
-struct ViewOutputs {
+public struct ViewOutputs {
   let displayItems: [DisplayItem]
 }
 

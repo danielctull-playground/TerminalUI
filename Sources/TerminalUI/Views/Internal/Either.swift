@@ -1,5 +1,5 @@
 
-public struct Either<First: View, Second: View>: Builtin, View {
+public struct Either<First: View, Second: View>: View {
 
   private enum Value {
     case first(First)
@@ -16,10 +16,16 @@ public struct Either<First: View, Second: View>: Builtin, View {
     value = .second(second)
   }
 
-  func makeView(inputs: ViewInputs) -> ViewOutputs {
-    switch value {
-    case .first(let first): first.makeView(inputs: inputs)
-    case .second(let second): second.makeView(inputs: inputs)
+  public var body: some View {
+    fatalError("Body should never be called.")
+  }
+
+  public static func makeView(inputs: ViewInputs<Self>) -> ViewOutputs {
+    switch inputs.node.value {
+    case let .first(first):
+      First.makeView(inputs: inputs.modifyNode("first") { first })
+    case let .second(second):
+      Second.makeView(inputs: inputs.modifyNode("second") { second })
     }
   }
 }

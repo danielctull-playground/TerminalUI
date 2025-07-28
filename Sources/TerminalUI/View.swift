@@ -7,16 +7,14 @@ public protocol View {
   /// The content and behavior of the view.
   @ViewBuilder
   var body: Body { get }
+
+  static func makeView(inputs: ViewInputs<Self>) -> ViewOutputs
 }
 
 extension View {
 
-  func makeView(inputs: ViewInputs) -> ViewOutputs{
-    inputs.environment.install(on: self)
-    if let builtin = self as? any Builtin {
-      return builtin.makeView(inputs: inputs)
-    } else {
-      return body.makeView(inputs: inputs)
-    }
+  public static func makeView(inputs: ViewInputs<Self>) -> ViewOutputs {
+    inputs.environment.install(on: inputs.node)
+    return Body.makeView(inputs: inputs.body)
   }
 }

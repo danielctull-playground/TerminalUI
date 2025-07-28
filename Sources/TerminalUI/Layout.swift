@@ -80,7 +80,7 @@ extension Layout {
   }
 }
 
-private struct LayoutView<Content: View, Layout: TerminalUI.Layout>: Builtin, View {
+private struct LayoutView<Content: View, Layout: TerminalUI.Layout>: View {
 
   private let layout: Layout
   private let content: Content
@@ -90,8 +90,12 @@ private struct LayoutView<Content: View, Layout: TerminalUI.Layout>: Builtin, Vi
     self.content = content
   }
 
-  func makeView(inputs: ViewInputs) -> ViewOutputs {
-    let children = content.makeView(inputs: inputs).displayItems
+  var body: some View {
+    fatalError("Body should never be called.")
+  }
+
+  static func makeView(inputs: ViewInputs<Self>) -> ViewOutputs {
+    let children = Content.makeView(inputs: inputs.content).displayItems
 
     let subviews = LayoutSubviews(raw: children.map { item in
       LayoutSubview(sizeThatFits: item.size) { position, proposal in
@@ -102,6 +106,7 @@ private struct LayoutView<Content: View, Layout: TerminalUI.Layout>: Builtin, Vi
       }
     })
 
+    let layout = inputs.node.layout
     var cache = layout.makeCache(subviews: subviews)
 
     let item = DisplayItem { proposal in

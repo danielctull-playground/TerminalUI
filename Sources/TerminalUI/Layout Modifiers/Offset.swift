@@ -10,20 +10,25 @@ extension View {
   }
 }
 
-private struct Offset<Content: View>: Builtin, View {
+private struct Offset<Content: View>: View {
 
   let content: Content
   let x: Int
   let y: Int
 
-  func makeView(inputs: ViewInputs) -> ViewOutputs {
-    ViewOutputs(displayItems: content.makeView(inputs: inputs).displayItems.map { item in
+  var body: some View {
+    fatalError("Body should never be called.")
+  }
+
+  static func makeView(inputs: ViewInputs<Self>) -> ViewOutputs {
+    let content = Content.makeView(inputs: inputs.content).displayItems
+    return ViewOutputs(displayItems: content.map { item in
       DisplayItem { proposal in
         item.size(for: proposal)
       } render: { bounds in
         item.render(in: Rect(
-          x: bounds.minX + x,
-          y: bounds.minY + y,
+          x: bounds.minX + inputs.node.x,
+          y: bounds.minY + inputs.node.y,
           width: bounds.size.width,
           height: bounds.size.height))
       }

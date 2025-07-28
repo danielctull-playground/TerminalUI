@@ -1,10 +1,14 @@
 
-public struct Color: Builtin, CustomStringConvertible, Equatable, Sendable, View {
+public struct Color: CustomStringConvertible, Equatable, Sendable, View {
   public let description: String
   let foreground: GraphicRendition
   let background: GraphicRendition
 
-  func makeView(inputs: ViewInputs) -> ViewOutputs {
+  public var body: some View {
+    fatalError("Body should never be called.")
+  }
+
+  public static func makeView(inputs: ViewInputs<Self>) -> ViewOutputs {
     ViewOutputs(
       displayItem: DisplayItem {
         size(for: $0, inputs: inputs)
@@ -14,15 +18,15 @@ public struct Color: Builtin, CustomStringConvertible, Equatable, Sendable, View
     )
   }
 
-  private func size(
+  static private func size(
     for proposal: ProposedViewSize,
-    inputs: ViewInputs
+    inputs: ViewInputs<Self>
   ) -> Size {
     proposal.replacingUnspecifiedDimensions()
   }
 
-  private func render(in bounds: Rect, inputs: ViewInputs) {
-    let pixel = Pixel(" ", background: self)
+  static private func render(in bounds: Rect, inputs: ViewInputs<Self>) {
+    let pixel = Pixel(" ", background: inputs.node)
     for x in bounds.minX...bounds.maxX {
       for y in bounds.minY...bounds.maxY {
         inputs.canvas.draw(pixel, at: Position(x: x, y: y))
