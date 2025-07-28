@@ -10,14 +10,18 @@ extension View {
   }
 }
 
-private struct Offset<Content: View>: Builtin, View {
+private struct Offset<Content: View>: View {
 
   let content: Content
   let x: Int
   let y: Int
 
-  func displayItems(inputs: ViewInputs) -> [DisplayItem] {
-    content.displayItems(inputs: inputs).map { item in
+  var body: some View {
+    fatalError("Body should never be called.")
+  }
+
+  func makeView(inputs: ViewInputs<Self>) -> ViewOutputs {
+    ViewOutputs(displayItems: Content.makeView(inputs: inputs.content).displayItems.map { item in
       DisplayItem { proposal in
         item.size(for: proposal)
       } render: { bounds in
@@ -27,6 +31,6 @@ private struct Offset<Content: View>: Builtin, View {
           width: bounds.size.width,
           height: bounds.size.height))
       }
-    }
+    })
   }
 }

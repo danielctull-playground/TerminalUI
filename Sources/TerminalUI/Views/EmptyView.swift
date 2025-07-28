@@ -1,9 +1,13 @@
 
-public struct EmptyView: Builtin, View {
+public struct EmptyView: View {
 
   public init() {}
 
-  func displayItems(inputs: ViewInputs) -> [DisplayItem] {
-    []
+  public var body: some View {
+    fatalError("Body should never be called.")
+  }
+
+  public func makeView(inputs: ViewInputs<Self>) -> ViewOutputs {
+    ViewOutputs(displayItems: [])
   }
 }

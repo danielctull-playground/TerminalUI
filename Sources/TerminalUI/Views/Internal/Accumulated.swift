@@ -1,5 +1,5 @@
 
-struct Accumulated<A: View, B: View>: Builtin, View {
+struct Accumulated<A: View, B: View>: View {
 
   private let a: A
   private let b: B
@@ -9,7 +9,13 @@ struct Accumulated<A: View, B: View>: Builtin, View {
     self.b = b
   }
 
-  func displayItems(inputs: ViewInputs) -> [DisplayItem] {
-    a.displayItems(inputs: inputs) + b.displayItems(inputs: inputs)
+  var body: some View {
+    fatalError("Body should never be called.")
+  }
+
+  static func makeView(inputs: ViewInputs<Self>) -> ViewOutputs {
+    let a = A.makeView(inputs: inputs.a)
+    let b = B.makeView(inputs: inputs.b)
+    return ViewOutputs(displayItems: a.displayItems + b.displayItems)
   }
 }

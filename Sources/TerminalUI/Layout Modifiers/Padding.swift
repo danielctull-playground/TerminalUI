@@ -14,13 +14,17 @@ extension View {
   }
 }
 
-private struct Padding<Content: View>: Builtin, View {
+private struct Padding<Content: View>: View {
 
   let content: Content
   let insets: EdgeInsets
 
-  func displayItems(inputs: ViewInputs) -> [DisplayItem] {
-    content.displayItems(inputs: inputs).map { item in
+  var body: some View {
+    fatalError("Body should never be called.")
+  }
+
+  func makeView(inputs: ViewInputs<Self>) -> ViewOutputs {
+    ViewOutputs(displayItems: Content.makeView(inputs: inputs.content).displayItems.map { item in
       DisplayItem { proposal in
         item
           .size(for: proposal.inset(insets))
@@ -28,7 +32,7 @@ private struct Padding<Content: View>: Builtin, View {
       } render: { bounds in
         item.render(in: bounds.inset(insets))
       }
-    }
+    })
   }
 }
 

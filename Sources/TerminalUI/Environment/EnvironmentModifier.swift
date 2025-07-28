@@ -9,16 +9,32 @@ extension View {
   }
 }
 
-private struct EnvironmentView<Content: View, Value>: Builtin, View {
+public struct EnvironmentView<Content: View, Value>: View {
 
   let content: Content
   let keyPath: WritableKeyPath<EnvironmentValues, Value>
   let value: Value
 
-  func displayItems(inputs: ViewInputs) -> [DisplayItem] {
-    var environment = inputs.environment
-    environment[keyPath: keyPath] = value
-    let inputs = ViewInputs(canvas: inputs.canvas, environment: environment)
-    return content.displayItems(inputs: inputs)
+  public var body: some View {
+    fatalError("Body should never be called.")
+  }
+
+  public static func makeView(inputs: ViewInputs<Self>) -> ViewOutputs {
+
+    let environment = inputs.graph.attribute("environment writer") {
+      let keyPath = inputs.node.keyPath
+      let value = inputs.node.value
+      var environment = inputs.environment
+      environment[keyPath: keyPath] = value
+      return environment
+    }
+
+    let inputs = ViewInputs(
+      graph: inputs.graph,
+      canvas: inputs.canvas,
+      node: inputs.nodeAttribute.content,
+      environment: environment)
+
+    return Content.makeView(inputs: inputs)
   }
 }

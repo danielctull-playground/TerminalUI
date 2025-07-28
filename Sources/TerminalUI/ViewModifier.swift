@@ -22,13 +22,19 @@ public protocol ViewModifier {
   func body(content: Content) -> Body
 }
 
-private struct ModifiedView<Modifier: ViewModifier>: Builtin, View {
+private struct ModifiedView<Modifier: ViewModifier>: View {
 
   let content: Modifier.Content
   let modifier: Modifier
 
-  func displayItems(inputs: ViewInputs) -> [DisplayItem] {
-    inputs.environment.install(on: modifier)
-    return modifier.body(content: content).displayItems(inputs: inputs)
+  var body: some View {
+    fatalError("Body should never be called.")
+  }
+
+  static func makeView(inputs: ViewInputs<Self>) -> ViewOutputs {
+    Modifier.Body.makeView(inputs: inputs.modifyNode("modifier body") {
+      inputs.environment.install(on: inputs.node.modifier)
+      return inputs.node.modifier.body(content: inputs.node.content)
+    })
   }
 }
