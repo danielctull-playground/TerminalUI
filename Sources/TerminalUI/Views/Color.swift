@@ -4,12 +4,14 @@ public struct Color: Builtin, CustomStringConvertible, Equatable, Sendable, View
   let foreground: GraphicRendition
   let background: GraphicRendition
 
-  func displayItems(inputs: ViewInputs) -> [DisplayItem] {
-    [DisplayItem {
-      size(for: $0, inputs: inputs)
-    } render: {
-      render(in: $0, inputs: inputs)
-    }]
+  func makeView(inputs: ViewInputs) -> ViewOutputs {
+    ViewOutputs(
+      displayItem: DisplayItem {
+        size(for: $0, inputs: inputs)
+      } render: {
+        render(in: $0, inputs: inputs)
+      }
+    )
   }
 
   private func size(

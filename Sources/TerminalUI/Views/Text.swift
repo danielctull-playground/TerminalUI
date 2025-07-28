@@ -7,12 +7,12 @@ public struct Text: Builtin, View {
     self.string = string
   }
 
-  func displayItems(inputs: ViewInputs) -> [DisplayItem] {
-    [DisplayItem {
+  func makeView(inputs: ViewInputs) -> ViewOutputs {
+    ViewOutputs(displayItem: DisplayItem {
       size(for: $0, inputs: inputs)
     } render: {
       render(in: $0, inputs: inputs)
-    }]
+    })
   }
 
   private func size(

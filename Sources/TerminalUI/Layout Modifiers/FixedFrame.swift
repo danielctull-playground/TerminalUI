@@ -22,8 +22,8 @@ private struct FixedFrame<Content: View>: Builtin, View {
   let height: Int?
   let alignment: Alignment
 
-  func displayItems(inputs: ViewInputs) -> [DisplayItem] {
-    content.displayItems(inputs: inputs).map { item in
+  func makeView(inputs: ViewInputs) -> ViewOutputs {
+    ViewOutputs(displayItems: content.makeView(inputs: inputs).displayItems.map { item in
       DisplayItem { proposal in
         var fallback: Size { proposal.replacingUnspecifiedDimensions() }
         let proposal = ProposedViewSize(
@@ -40,6 +40,6 @@ private struct FixedFrame<Content: View>: Builtin, View {
           y: bounds.origin.y + parent.y - child.y)
         item.render(in: Rect(origin: position, size: size))
       }
-    }
+    })
   }
 }

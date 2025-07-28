@@ -1,10 +1,10 @@
 
 extension Optional: Builtin & View where Wrapped: View {
 
-  func displayItems(inputs: ViewInputs) -> [DisplayItem] {
+  func makeView(inputs: ViewInputs) -> ViewOutputs {
     switch self {
-    case .none: []
-    case .some(let content): content.displayItems(inputs: inputs)
+    case .none: ViewOutputs(displayItems: [])
+    case .some(let content): content.makeView(inputs: inputs)
     }
   }
 }

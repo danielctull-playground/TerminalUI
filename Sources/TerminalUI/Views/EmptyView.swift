@@ -3,7 +3,7 @@ public struct EmptyView: Builtin, View {
 
   public init() {}
 
-  func displayItems(inputs: ViewInputs) -> [DisplayItem] {
-    []
+  func makeView(inputs: ViewInputs) -> ViewOutputs {
+    ViewOutputs(displayItems: [])
   }
 }

@@ -19,8 +19,8 @@ private struct Padding<Content: View>: Builtin, View {
   let content: Content
   let insets: EdgeInsets
 
-  func displayItems(inputs: ViewInputs) -> [DisplayItem] {
-    content.displayItems(inputs: inputs).map { item in
+  func makeView(inputs: ViewInputs) -> ViewOutputs {
+    ViewOutputs(displayItems: content.makeView(inputs: inputs).displayItems.map { item in
       DisplayItem { proposal in
         item
           .size(for: proposal.inset(insets))
@@ -28,7 +28,7 @@ private struct Padding<Content: View>: Builtin, View {
       } render: { bounds in
         item.render(in: bounds.inset(insets))
       }
-    }
+    })
   }
 }
 

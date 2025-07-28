@@ -90,8 +90,8 @@ private struct LayoutView<Content: View, Layout: TerminalUI.Layout>: Builtin, Vi
     self.content = content
   }
 
-  func displayItems(inputs: ViewInputs) -> [DisplayItem] {
-    let children = content.displayItems(inputs: inputs)
+  func makeView(inputs: ViewInputs) -> ViewOutputs {
+    let children = content.makeView(inputs: inputs).displayItems
 
     let subviews = LayoutSubviews(raw: children.map { item in
       LayoutSubview(sizeThatFits: item.size) { position, proposal in
@@ -117,6 +117,6 @@ private struct LayoutView<Content: View, Layout: TerminalUI.Layout>: Builtin, Vi
         cache: &cache)
     }
 
-    return [item]
+    return ViewOutputs(displayItems: [item])
   }
 }

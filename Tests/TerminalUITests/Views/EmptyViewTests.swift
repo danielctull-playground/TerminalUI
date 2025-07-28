@@ -5,10 +5,10 @@ import Testing
 @Suite("EmptyView", .tags(.view))
 struct EmptyViewTests {
 
-  @Test("displayItems")
-  func displayItems() {
+  @Test("makeView")
+  func makeView() {
     let inputs = ViewInputs(canvas: TextStreamCanvas(output: .memory))
-    let items = EmptyView().displayItems(inputs: inputs)
+    let items = EmptyView().makeView(inputs: inputs).displayItems
     #expect(items.isEmpty)
   }
 }

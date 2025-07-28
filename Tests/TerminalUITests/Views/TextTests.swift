@@ -78,7 +78,7 @@ struct TextTests {
   ) throws {
     let proposed = ProposedViewSize(width: proposedWidth, height: proposedHeight)
     let inputs = ViewInputs(canvas: TextStreamCanvas(output: .memory))
-    let items = Text(input).displayItems(inputs: inputs)
+    let items = Text(input).makeView(inputs: inputs).displayItems
     try #require(items.count == 1)
     let size = items[0].size(for: proposed)
     #expect(size.width == expectedWidth)

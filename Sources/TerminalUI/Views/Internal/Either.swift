@@ -16,10 +16,10 @@ public struct Either<First: View, Second: View>: Builtin, View {
     value = .second(second)
   }
 
-  func displayItems(inputs: ViewInputs) -> [DisplayItem] {
+  func makeView(inputs: ViewInputs) -> ViewOutputs {
     switch value {
-    case .first(let first): first.displayItems(inputs: inputs)
-    case .second(let second): second.displayItems(inputs: inputs)
+    case .first(let first): first.makeView(inputs: inputs)
+    case .second(let second): second.makeView(inputs: inputs)
     }
   }
 }

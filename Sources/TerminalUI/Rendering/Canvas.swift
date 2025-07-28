@@ -14,7 +14,8 @@ extension Canvas {
       content()
     }
     .frame(width: bounds.size.width, height: bounds.size.height)
-    .displayItems(inputs: ViewInputs(canvas: self))
+    .makeView(inputs: ViewInputs(canvas: self))
+    .displayItems
     .first!
     .render(in: bounds)
   }

@@ -33,7 +33,7 @@ struct ColorTests {
     let height = Int.random(in: 0...1_000_000_000)
     let proposed = ProposedViewSize(width: width, height: height)
     let inputs = ViewInputs(canvas: TextStreamCanvas(output: .memory))
-    let items = color.displayItems(inputs: inputs)
+    let items = color.makeView(inputs: inputs).displayItems
     try #require(items.count == 1)
     let size = items[0].size(for: proposed)
     #expect(size.width == width)

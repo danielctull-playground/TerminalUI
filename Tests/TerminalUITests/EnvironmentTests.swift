@@ -54,7 +54,7 @@ struct EnvironmentTests {
     let proposed = ProposedViewSize(width: proposedWidth, height: proposedHeight)
     let view = TestView().environment(\.value, input)
     let inputs = ViewInputs(canvas: TextStreamCanvas(output: .memory))
-    let items = view.displayItems(inputs: inputs)
+    let items = view.makeView(inputs: inputs).displayItems
     try #require(items.count == 1)
     let size = items[0].size(for: proposed)
     #expect(size.width == expectedWidth)
