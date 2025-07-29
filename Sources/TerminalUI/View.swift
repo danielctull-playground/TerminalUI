@@ -11,12 +11,12 @@ public protocol View {
 
 extension View {
 
-  func makeView(inputs: ViewInputs) -> ViewOutputs{
+  func makeView(inputs: ViewInputs<Self>) -> ViewOutputs{
     inputs.environment.install(on: self)
     if let builtin = self as? any Builtin {
       return builtin.makeView(inputs: inputs)
     } else {
-      return body.makeView(inputs: inputs)
+      return body.makeView(inputs: inputs.body)
     }
   }
 }

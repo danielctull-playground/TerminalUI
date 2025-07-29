@@ -16,8 +16,8 @@ private struct Offset<Content: View>: Builtin, View {
   let x: Int
   let y: Int
 
-  func makeView(inputs: ViewInputs) -> ViewOutputs {
-    ViewOutputs(displayItems: content.makeView(inputs: inputs).displayItems.map { item in
+  func makeView(inputs: ViewInputs<Self>) -> ViewOutputs {
+    ViewOutputs(displayItems: content.makeView(inputs: inputs.content).displayItems.map { item in
       DisplayItem { proposal in
         item.size(for: proposal)
       } render: { bounds in

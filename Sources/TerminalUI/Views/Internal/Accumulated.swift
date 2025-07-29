@@ -9,9 +9,9 @@ struct Accumulated<A: View, B: View>: Builtin, View {
     self.b = b
   }
 
-  func makeView(inputs: ViewInputs) -> ViewOutputs {
-    let a = a.makeView(inputs: inputs)
-    let b = b.makeView(inputs: inputs)
+  func makeView(inputs: ViewInputs<Self>) -> ViewOutputs {
+    let a = a.makeView(inputs: inputs.a)
+    let b = b.makeView(inputs: inputs.b)
     return ViewOutputs(displayItems: a.displayItems + b.displayItems)
   }
 }

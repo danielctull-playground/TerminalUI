@@ -90,7 +90,7 @@ private struct LayoutView<Content: View, Layout: TerminalUI.Layout>: Builtin, Vi
     self.content = content
   }
 
-  func makeView(inputs: ViewInputs) -> ViewOutputs {
+  func makeView(inputs: ViewInputs<Self>) -> ViewOutputs {
     let children = content.makeView(inputs: inputs).displayItems
 
     let subviews = LayoutSubviews(raw: children.map { item in

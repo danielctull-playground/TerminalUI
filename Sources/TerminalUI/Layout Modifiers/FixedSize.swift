@@ -15,8 +15,8 @@ private struct FixedSize<Content: View>: Builtin, View {
   let horizontal: Bool
   let vertical: Bool
 
-  func makeView(inputs: ViewInputs) -> ViewOutputs {
-    ViewOutputs(displayItems: content.makeView(inputs: inputs).displayItems.map { item in
+  func makeView(inputs: ViewInputs<Self>) -> ViewOutputs {
+    ViewOutputs(displayItems: content.makeView(inputs: inputs.content).displayItems.map { item in
       DisplayItem { proposal in
         var proposal = proposal
         if horizontal { proposal.width = nil }

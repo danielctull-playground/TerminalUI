@@ -15,10 +15,9 @@ private struct EnvironmentView<Content: View, Value>: Builtin, View {
   let keyPath: WritableKeyPath<EnvironmentValues, Value>
   let value: Value
 
-  func makeView(inputs: ViewInputs) -> ViewOutputs {
+  func makeView(inputs: ViewInputs<Self>) -> ViewOutputs {
     var environment = inputs.environment
     environment[keyPath: keyPath] = value
-    let inputs = ViewInputs(canvas: inputs.canvas, environment: environment)
-    return content.makeView(inputs: inputs)
+    return content.makeView(inputs: inputs.content)
   }
 }

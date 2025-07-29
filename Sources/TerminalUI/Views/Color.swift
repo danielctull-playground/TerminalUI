@@ -4,7 +4,7 @@ public struct Color: Builtin, CustomStringConvertible, Equatable, Sendable, View
   let foreground: GraphicRendition
   let background: GraphicRendition
 
-  func makeView(inputs: ViewInputs) -> ViewOutputs {
+  func makeView(inputs: ViewInputs<Self>) -> ViewOutputs {
     ViewOutputs(
       displayItem: DisplayItem {
         size(for: $0, inputs: inputs)
@@ -21,7 +21,7 @@ public struct Color: Builtin, CustomStringConvertible, Equatable, Sendable, View
     proposal.replacingUnspecifiedDimensions()
   }
 
-  private func render(in bounds: Rect, inputs: ViewInputs) {
+  private func render(in bounds: Rect, inputs: ViewInputs<Self>) {
     let pixel = Pixel(" ", background: self)
     for x in bounds.minX...bounds.maxX {
       for y in bounds.minY...bounds.maxY {

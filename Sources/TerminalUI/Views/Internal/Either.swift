@@ -6,7 +6,7 @@ public struct Either<First: View, Second: View>: Builtin, View {
     case second(Second)
   }
 
-  private let value: Value
+  private let value2: Value
 
   init(_ first: First) {
     value = .first(first)
@@ -16,8 +16,9 @@ public struct Either<First: View, Second: View>: Builtin, View {
     value = .second(second)
   }
 
-  func makeView(inputs: ViewInputs) -> ViewOutputs {
-    switch value {
+  func makeView(inputs: ViewInputs<Self>) -> ViewOutputs {
+    let f = inputs.value.value2
+    switch inputs.value.value2 {
     case .first(let first): first.makeView(inputs: inputs)
     case .second(let second): second.makeView(inputs: inputs)
     }
