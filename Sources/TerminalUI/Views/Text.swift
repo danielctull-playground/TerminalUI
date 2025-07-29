@@ -7,7 +7,7 @@ public struct Text: Builtin, View {
     self.string = string
   }
 
-  func makeView(inputs: ViewInputs<Self>) -> ViewOutputs {
+  static func makeView(inputs: ViewInputs<Self>) -> ViewOutputs {
     ViewOutputs(displayItem: DisplayItem {
       size(for: $0, inputs: inputs)
     } render: {
@@ -15,20 +15,20 @@ public struct Text: Builtin, View {
     })
   }
 
-  private func size(
+  static private func size(
     for proposal: ProposedViewSize,
     inputs: ViewInputs<Self>
   ) -> Size {
     let size = proposal.replacingUnspecifiedDimensions()
-    let lines = string.lines(ofLength: size.width)
+    let lines = inputs.node.string.lines(ofLength: size.width)
     let height = lines.count
     let width = lines.map(\.count).max() ?? 0
     return Size(width: width, height: height)
   }
 
-  private func render(in bounds: Rect, inputs: ViewInputs<Self>) {
+  static private func render(in bounds: Rect, inputs: ViewInputs<Self>) {
 
-    let lines = inputs.value.string.lines(ofLength: Int(bounds.size.width))
+    let lines = inputs.node.string.lines(ofLength: Int(bounds.size.width))
     let environment = inputs.environment
 
     for (line, y) in zip(lines, bounds.origin.y...) {

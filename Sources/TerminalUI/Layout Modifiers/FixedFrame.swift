@@ -22,19 +22,19 @@ private struct FixedFrame<Content: View>: Builtin, View {
   let height: Int?
   let alignment: Alignment
 
-  func makeView(inputs: ViewInputs<Self>) -> ViewOutputs {
-    ViewOutputs(displayItems: content.makeView(inputs: inputs.content).displayItems.map { item in
+  static func makeView(inputs: ViewInputs<Self>) -> ViewOutputs {
+    ViewOutputs(displayItems: Content.makeView(inputs: inputs.content).displayItems.map { item in
       DisplayItem { proposal in
         var fallback: Size { proposal.replacingUnspecifiedDimensions() }
         let proposal = ProposedViewSize(
-          width: width ?? fallback.width,
-          height: height ?? fallback.height)
+          width: inputs.node.width ?? fallback.width,
+          height: inputs.node.height ?? fallback.height)
         let size = item.size(for: proposal)
-        return Size(width: width ?? size.width, height: height ?? size.height)
+        return Size(width: inputs.node.width ?? size.width, height: inputs.node.height ?? size.height)
       } render: { bounds in
-        let parent = alignment.position(for: bounds.size)
+        let parent = inputs.node.alignment.position(for: bounds.size)
         let size = item.size(for: ProposedViewSize(bounds.size))
-        let child = alignment.position(for: size)
+        let child = inputs.node.alignment.position(for: size)
         let position = Position(
           x: bounds.origin.x + parent.x - child.x,
           y: bounds.origin.y + parent.y - child.y)

@@ -15,9 +15,16 @@ private struct EnvironmentView<Content: View, Value>: Builtin, View {
   let keyPath: WritableKeyPath<EnvironmentValues, Value>
   let value: Value
 
-  func makeView(inputs: ViewInputs<Self>) -> ViewOutputs {
-    var environment = inputs.environment
-    environment[keyPath: keyPath] = value
-    return content.makeView(inputs: inputs.content)
+  static func makeView(inputs: ViewInputs<Self>) -> ViewOutputs {
+
+    let environment = inputs.graph.attribute("environment writer") {
+      var environment = inputs.environment
+      environment[keyPath: inputs.node.keyPath] = inputs.node.value
+      return environment
+    }
+
+    var inputs = inputs.content
+//    inputs._environment = environment
+    return Content.makeView(inputs: inputs)
   }
 }

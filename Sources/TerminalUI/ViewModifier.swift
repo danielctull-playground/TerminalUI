@@ -27,9 +27,10 @@ private struct ModifiedView<Modifier: ViewModifier>: Builtin, View {
   let content: Modifier.Content
   let modifier: Modifier
 
-  func makeView(inputs: ViewInputs<Self>) -> ViewOutputs {
-    inputs.environment.install(on: modifier)
-    return modifier.body(content: inputs.value.content)
-//      .makeView(inputs: inputs)
+  static func makeView(inputs: ViewInputs<Self>) -> ViewOutputs {
+    Modifier.Body.makeView(inputs: inputs.modifyNode("modifier body") {
+      inputs.environment.install(on: inputs.node.modifier)
+      return inputs.node.modifier.body(content: inputs.node.content)
+    })
   }
 }

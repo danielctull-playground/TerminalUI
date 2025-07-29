@@ -1,6 +1,6 @@
 
 protocol Builtin {
-  func makeView(inputs: ViewInputs<Self>) -> ViewOutputs
+  static func makeView(inputs: ViewInputs<Self>) -> ViewOutputs
 }
 
 extension Builtin {

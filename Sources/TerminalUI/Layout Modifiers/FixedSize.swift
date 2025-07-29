@@ -15,12 +15,12 @@ private struct FixedSize<Content: View>: Builtin, View {
   let horizontal: Bool
   let vertical: Bool
 
-  func makeView(inputs: ViewInputs<Self>) -> ViewOutputs {
-    ViewOutputs(displayItems: content.makeView(inputs: inputs.content).displayItems.map { item in
+  static func makeView(inputs: ViewInputs<Self>) -> ViewOutputs {
+    ViewOutputs(displayItems: Content.makeView(inputs: inputs.content).displayItems.map { item in
       DisplayItem { proposal in
         var proposal = proposal
-        if horizontal { proposal.width = nil }
-        if vertical { proposal.height = nil }
+        if inputs.node.horizontal { proposal.width = nil }
+        if inputs.node.vertical { proposal.height = nil }
         return item.size(for: proposal)
       } render: { bounds in
         item.render(in: bounds)

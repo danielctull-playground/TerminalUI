@@ -1,30 +1,49 @@
 import AttributeGraph
 
 @dynamicMemberLookup
-struct ViewInputs<Value> {
+struct ViewInputs<Node> {
 
   let graph: Graph
   let canvas: any Canvas
-  @Attribute var value: Value
+  @Attribute var node: Node
   @Attribute var environment: EnvironmentValues
 
   init(
-    value: Attribute<Value>,
+    node: Attribute<Node>,
     canvas: any Canvas,
     environment: EnvironmentValues = EnvironmentValues()
   ) {
     graph = Graph()
-    _value = value
+    _node = node
     self.canvas = canvas
     _environment = graph.input("environment", environment).projectedValue
   }
 
+  init(
+    graph: Graph,
+    canvas: any Canvas,
+    node: Attribute<Node>,
+    environment: Attribute<EnvironmentValues>
+  ) {
+    self.graph = graph
+    self.canvas = canvas
+    _node = node
+    _environment = environment
+  }
+
   public subscript<Property>(
-    dynamicMember keyPath: KeyPath<Value, Property>
+    dynamicMember keyPath: KeyPath<Node, Property>
   ) -> ViewInputs<Property> {
-    ViewInputs<Property>(
-      value: _value[dynamicMember: keyPath],
+    modifyNode("\(type(of: Node.self)) -> \(type(of: Property.self))") {
+      node[keyPath: keyPath]
+    }
+  }
+
+  func modifyNode<New>(_ name: AttributeName, compute: @escaping () -> New) -> ViewInputs<New> {
+    ViewInputs<New>(
+      graph: graph,
       canvas: canvas,
-      environment: environment)
+      node: graph.attribute(name, compute),
+      environment: _environment)
   }
 }
