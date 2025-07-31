@@ -1,5 +1,6 @@
 
 public struct Color: CustomStringConvertible, Equatable, Sendable, View {
+
   public let description: String
   let foreground: GraphicRendition
   let background: GraphicRendition
@@ -9,29 +10,16 @@ public struct Color: CustomStringConvertible, Equatable, Sendable, View {
   }
 
   public static func makeView(inputs: ViewInputs<Self>) -> ViewOutputs {
-    ViewOutputs(
-      displayItem: DisplayItem {
-        size(for: $0, inputs: inputs)
-      } render: {
-        render(in: $0, inputs: inputs)
+    ViewOutputs(displayItem: DisplayItem {
+      $0.replacingUnspecifiedDimensions()
+    } render: { bounds in
+      let pixel = Pixel(" ", background: inputs.node)
+      for x in bounds.minX...bounds.maxX {
+        for y in bounds.minY...bounds.maxY {
+          inputs.canvas.draw(pixel, at: Position(x: x, y: y))
+        }
       }
-    )
-  }
-
-  static private func size(
-    for proposal: ProposedViewSize,
-    inputs: ViewInputs<Self>
-  ) -> Size {
-    proposal.replacingUnspecifiedDimensions()
-  }
-
-  static private func render(in bounds: Rect, inputs: ViewInputs<Self>) {
-    let pixel = Pixel(" ", background: inputs.node)
-    for x in bounds.minX...bounds.maxX {
-      for y in bounds.minY...bounds.maxY {
-        inputs.canvas.draw(pixel, at: Position(x: x, y: y))
-      }
-    }
+    })
   }
 }
 
