@@ -6,9 +6,12 @@ extension Optional: View where Wrapped: View {
   }
 
   public static func makeView(inputs: ViewInputs<Self>) -> ViewOutputs {
-    switch inputs.node {
-    case .none: ViewOutputs(displayItems: [])
-    case .some(let content): Wrapped.makeView(inputs: inputs.modifyNode("optional") { content })
-    }
+    ViewOutputs(displayItems: inputs.graph.attribute("optional") {
+      switch inputs.node {
+      case .none: []
+      case .some(let content):
+        Wrapped.makeView(inputs: inputs.modifyNode("optional") { content }).displayItems
+      }
+    })
   }
 }

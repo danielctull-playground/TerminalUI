@@ -14,8 +14,10 @@ struct Accumulated<A: View, B: View>: View {
   }
 
   static func makeView(inputs: ViewInputs<Self>) -> ViewOutputs {
-    let a = A.makeView(inputs: inputs.a)
-    let b = B.makeView(inputs: inputs.b)
-    return ViewOutputs(displayItems: a.displayItems + b.displayItems)
+    ViewOutputs(displayItems: inputs.graph.attribute("accumulated") {
+      let a = A.makeView(inputs: inputs.a)
+      let b = B.makeView(inputs: inputs.b)
+      return a.displayItems + b.displayItems
+    })
   }
 }

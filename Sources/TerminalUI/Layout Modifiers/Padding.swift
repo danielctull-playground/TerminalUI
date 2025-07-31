@@ -24,15 +24,19 @@ private struct Padding<Content: View>: View {
   }
 
   static func makeView(inputs: ViewInputs<Self>) -> ViewOutputs {
-    let content = Content.makeView(inputs: inputs.content).displayItems
-    return ViewOutputs(displayItems: content.map { item in
-      DisplayItem { proposal in
-        item
-          .size(for: proposal.inset(inputs.node.insets))
-          .inset(-inputs.node.insets)
-      } render: { bounds in
-        item.render(in: bounds.inset(inputs.node.insets))
-      }
+    ViewOutputs(displayItems: inputs.graph.attribute("padding") {
+      Content
+        .makeView(inputs: inputs.content)
+        .displayItems
+        .map { item in
+          DisplayItem { proposal in
+            item
+              .size(for: proposal.inset(inputs.node.insets))
+              .inset(-inputs.node.insets)
+          } render: { bounds in
+            item.render(in: bounds.inset(inputs.node.insets))
+          }
+        }
     })
   }
 }

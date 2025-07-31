@@ -95,33 +95,35 @@ private struct LayoutView<Content: View, Layout: TerminalUI.Layout>: View {
   }
 
   static func makeView(inputs: ViewInputs<Self>) -> ViewOutputs {
-    let children = Content.makeView(inputs: inputs.content).displayItems
+    ViewOutputs(displayItems: inputs.graph.attribute("\(type(of: Layout.self))") {
+      let content = Content.makeView(inputs: inputs.content).displayItems
 
-    let subviews = LayoutSubviews(raw: children.map { item in
-      LayoutSubview(sizeThatFits: item.size) { position, proposal in
-        item.render(in: Rect(
-          origin: position,
-          size: item.size(for: proposal)
-        ))
+      let subviews = LayoutSubviews(raw: content.map { item in
+        LayoutSubview(sizeThatFits: item.size) { position, proposal in
+          item.render(in: Rect(
+            origin: position,
+            size: item.size(for: proposal)
+          ))
+        }
+      })
+
+      let layout = inputs.node.layout
+      var cache = layout.makeCache(subviews: subviews)
+
+      let item = DisplayItem { proposal in
+        layout.sizeThatFits(
+          proposal: proposal,
+          subviews: subviews,
+          cache: &cache)
+      } render: { bounds in
+        layout.placeSubviews(
+          in: bounds,
+          proposal: ProposedViewSize(bounds.size),
+          subviews: subviews,
+          cache: &cache)
       }
+
+      return [item]
     })
-
-    let layout = inputs.node.layout
-    var cache = layout.makeCache(subviews: subviews)
-
-    let item = DisplayItem { proposal in
-      layout.sizeThatFits(
-        proposal: proposal,
-        subviews: subviews,
-        cache: &cache)
-    } render: { bounds in
-      layout.placeSubviews(
-        in: bounds,
-        proposal: ProposedViewSize(bounds.size),
-        subviews: subviews,
-        cache: &cache)
-    }
-
-    return ViewOutputs(displayItems: [item])
   }
 }

@@ -8,6 +8,6 @@ public struct EmptyView: View {
   }
 
   public static func makeView(inputs: ViewInputs<Self>) -> ViewOutputs {
-    ViewOutputs(displayItems: [])
+    ViewOutputs(displayItems: inputs.graph.attribute("empty view") { [] })
   }
 }

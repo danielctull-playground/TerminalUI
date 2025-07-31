@@ -27,24 +27,28 @@ private struct FixedFrame<Content: View>: View {
   }
 
   static func makeView(inputs: ViewInputs<Self>) -> ViewOutputs {
-    let content = Content.makeView(inputs: inputs.content).displayItems
-    return ViewOutputs(displayItems: content.map { item in
-      DisplayItem { proposal in
-        var fallback: Size { proposal.replacingUnspecifiedDimensions() }
-        let proposal = ProposedViewSize(
-          width: inputs.node.width ?? fallback.width,
-          height: inputs.node.height ?? fallback.height)
-        let size = item.size(for: proposal)
-        return Size(width: inputs.node.width ?? size.width, height: inputs.node.height ?? size.height)
-      } render: { bounds in
-        let parent = inputs.node.alignment.position(for: bounds.size)
-        let size = item.size(for: ProposedViewSize(bounds.size))
-        let child = inputs.node.alignment.position(for: size)
-        let position = Position(
-          x: bounds.origin.x + parent.x - child.x,
-          y: bounds.origin.y + parent.y - child.y)
-        item.render(in: Rect(origin: position, size: size))
-      }
+    ViewOutputs(displayItems: inputs.graph.attribute("fixed frame") {
+      Content
+        .makeView(inputs: inputs.content)
+        .displayItems
+        .map { item in
+          DisplayItem { proposal in
+            var fallback: Size { proposal.replacingUnspecifiedDimensions() }
+            let proposal = ProposedViewSize(
+              width: inputs.node.width ?? fallback.width,
+              height: inputs.node.height ?? fallback.height)
+            let size = item.size(for: proposal)
+            return Size(width: inputs.node.width ?? size.width, height: inputs.node.height ?? size.height)
+          } render: { bounds in
+            let parent = inputs.node.alignment.position(for: bounds.size)
+            let size = item.size(for: ProposedViewSize(bounds.size))
+            let child = inputs.node.alignment.position(for: size)
+            let position = Position(
+              x: bounds.origin.x + parent.x - child.x,
+              y: bounds.origin.y + parent.y - child.y)
+            item.render(in: Rect(origin: position, size: size))
+          }
+        }
     })
   }
 }
