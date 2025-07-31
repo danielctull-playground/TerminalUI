@@ -33,7 +33,7 @@ private struct ModifiedView<Modifier: ViewModifier>: View {
 
   static func makeView(inputs: ViewInputs<Self>) -> ViewOutputs {
     Modifier.Body.makeView(inputs: inputs.modifyNode("modifier body") {
-      inputs.environment.install(on: inputs.node.modifier)
+      inputs.dynamicProperties.install(on: inputs.node.modifier)
       return inputs.node.modifier.body(content: inputs.node.content)
     })
   }
