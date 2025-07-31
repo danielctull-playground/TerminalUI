@@ -20,14 +20,14 @@ private struct Offset<Content: View>: View {
     fatalError("Body should never be called.")
   }
 
-  func makeView(inputs: ViewInputs<Self>) -> ViewOutputs {
+  static func makeView(inputs: ViewInputs<Self>) -> ViewOutputs {
     ViewOutputs(displayItems: Content.makeView(inputs: inputs.content).displayItems.map { item in
       DisplayItem { proposal in
         item.size(for: proposal)
       } render: { bounds in
         item.render(in: Rect(
-          x: bounds.minX + x,
-          y: bounds.minY + y,
+          x: bounds.minX + inputs.node.x,
+          y: bounds.minY + inputs.node.y,
           width: bounds.size.width,
           height: bounds.size.height))
       }

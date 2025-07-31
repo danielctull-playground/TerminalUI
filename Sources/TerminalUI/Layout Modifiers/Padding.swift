@@ -23,8 +23,10 @@ private struct Padding<Content: View>: View {
     fatalError("Body should never be called.")
   }
 
-  func makeView(inputs: ViewInputs<Self>) -> ViewOutputs {
-    ViewOutputs(displayItems: Content.makeView(inputs: inputs.content).displayItems.map { item in
+  static func makeView(inputs: ViewInputs<Self>) -> ViewOutputs {
+    let insets = inputs.node.insets
+    let children = Content.makeView(inputs: inputs.content).displayItems
+    return ViewOutputs(displayItems: children.map { item in
       DisplayItem { proposal in
         item
           .size(for: proposal.inset(insets))

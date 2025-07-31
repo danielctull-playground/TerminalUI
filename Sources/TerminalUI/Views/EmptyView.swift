@@ -7,7 +7,7 @@ public struct EmptyView: View {
     fatalError("Body should never be called.")
   }
 
-  public func makeView(inputs: ViewInputs<Self>) -> ViewOutputs {
+  public static func makeView(inputs: ViewInputs<Self>) -> ViewOutputs {
     ViewOutputs(displayItems: [])
   }
 }

@@ -14,7 +14,7 @@ public protocol View {
 extension View {
 
   public static func makeView(inputs: ViewInputs<Self>) -> ViewOutputs {
-    inputs.environment.install(on: self)
+    inputs.environment.install(on: inputs.node)
     return Body.makeView(inputs: inputs.body)
   }
 }
