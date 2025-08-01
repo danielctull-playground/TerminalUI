@@ -24,10 +24,7 @@ extension App {
     let app = Self()
 
     let canvas = TextStreamCanvas(output: .fileHandle(.standardOutput))
-    canvas.render(size: .window) {
-      app.body
-    }
-
-    dispatchMain()
+    let renderer = Renderer(canvas: canvas, content: app.body)
+    renderer.run()
   }
 }
