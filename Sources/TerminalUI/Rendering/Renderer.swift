@@ -3,17 +3,17 @@ import Dispatch
 
 struct Renderer<Content: View, Canvas: TerminalUI.Canvas> {
 
-  private let canvas: Canvas
-  private let content: Content
   private let graph: Graph
+  private let canvas: Canvas
+  @Attribute private var screen: Screen<Content>
   @Input private var environment: EnvironmentValues
 
   let windowChange = DispatchSource.makeSignalSource(signal: SIGWINCH, queue: .main)
 
   init(canvas: Canvas, content: Content) {
-    self.canvas = canvas
-    self.content = content
     graph = Graph()
+    self.canvas = canvas
+    _screen = graph.attribute("screen") { Screen(content: content) }
     _environment = graph.input("environment", EnvironmentValues())
   }
 
@@ -22,7 +22,7 @@ struct Renderer<Content: View, Canvas: TerminalUI.Canvas> {
     let inputs = ViewInputs(
       graph: graph,
       canvas: canvas,
-      node: graph.attribute("root view") { Screen(content: self.content) },
+      node: $screen,
       environment: $environment)
 
     let output = Screen.makeView(inputs: inputs)
