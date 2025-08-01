@@ -1,5 +1,5 @@
 import AttributeGraph
-import Dispatch
+import Foundation
 
 struct Renderer<Content: View, Canvas: TerminalUI.Canvas> {
 
