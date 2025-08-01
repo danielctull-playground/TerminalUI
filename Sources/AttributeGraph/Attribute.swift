@@ -23,6 +23,10 @@ package final class Attribute<Value>: Dependant, Dependency {
     }
   }
 
+  package var projectedValue: Attribute<Value> {
+    self
+  }
+
   init(graph: Graph, name: Name, make: @escaping () -> Value) {
     self.graph = graph
     self.name = name
