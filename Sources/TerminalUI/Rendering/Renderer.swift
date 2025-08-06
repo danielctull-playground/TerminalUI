@@ -35,7 +35,7 @@ struct Renderer<Content: View, Canvas: TerminalUI.Canvas> {
     }
 
     func updateWindow() {
-      environment.windowBounds = .window
+      environment.windowBounds = Rect(origin: .origin, size: .window)
       render()
     }
 
