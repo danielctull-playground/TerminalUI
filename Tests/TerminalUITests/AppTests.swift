@@ -14,11 +14,10 @@ struct AppTests {
       }
     }
 
-    let app = TestApp()
+    Rect.window = Rect(x: 1, y: 1, width: 1, height: 1)
     let canvas = TextStreamCanvas(output: .memory)
-    canvas.render(size: Size(width: 1, height: 1)) {
-      app.body
-    }
+    TestApp.run(canvas: canvas)
+
     #expect(canvas.output.controlSequences == [
       "[2J",     // Clear screen
       "[?1049h", // Alternative buffer on
@@ -38,11 +37,10 @@ struct AppTests {
       }
     }
 
-    let app = TestApp()
+    Rect.window = Rect(x: 1, y: 1, width: 1, height: 1)
     let canvas = TextStreamCanvas(output: .memory)
-    canvas.render(size: Size(width: 1, height: 1)) {
-      app.body
-    }
+    TestApp.run(canvas: canvas)
+
     #expect(canvas.output.controlSequences == [
       "[2J",     // Clear screen
       "[?1049h", // Alternative buffer on

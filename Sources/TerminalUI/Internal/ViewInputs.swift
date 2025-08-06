@@ -9,18 +9,6 @@ public struct ViewInputs<Node> {
   @Attribute var environment: EnvironmentValues
 
   var nodeAttribute: Attribute<Node> { _node }
-  var environmentAttribute: Attribute<EnvironmentValues> { _environment }
-
-  init(
-    node: Attribute<Node>,
-    canvas: any Canvas,
-    environment: EnvironmentValues = EnvironmentValues()
-  ) {
-    graph = Graph()
-    _node = node
-    self.canvas = canvas
-    _environment = graph.input("environment", environment).projectedValue
-  }
 
   init(
     graph: Graph,
