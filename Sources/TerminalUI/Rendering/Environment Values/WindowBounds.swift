@@ -17,7 +17,8 @@ extension Rect {
   static var window: Rect {
     get {
       var size = winsize()
-      _ = ioctl(STDOUT_FILENO, UInt(TIOCGWINSZ), &size)
+      let result = ioctl(STDOUT_FILENO, UInt(TIOCGWINSZ), &size)
+      print("get window size", result)
       return Rect(
         x: Int(size.ws_xpixel),
         y: Int(size.ws_ypixel),
@@ -32,7 +33,8 @@ extension Rect {
         ws_xpixel: UInt16(newValue.origin.x),
         ws_ypixel: UInt16(newValue.origin.y)
       )
-      _ = ioctl(STDOUT_FILENO, UInt(TIOCSWINSZ), &size)
+      let result = ioctl(STDOUT_FILENO, UInt(TIOCSWINSZ), &size)
+      print("set window size", result)
     }
   }
 }
