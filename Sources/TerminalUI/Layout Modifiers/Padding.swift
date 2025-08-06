@@ -14,21 +14,30 @@ extension View {
   }
 }
 
-private struct Padding<Content: View>: Builtin, View {
+private struct Padding<Content: View>: View {
 
   let content: Content
   let insets: EdgeInsets
 
-  func displayItems(inputs: ViewInputs) -> [DisplayItem] {
-    content.displayItems(inputs: inputs).map { item in
-      DisplayItem { proposal in
-        item
-          .size(for: proposal.inset(insets))
-          .inset(-insets)
-      } render: { bounds in
-        item.render(in: bounds.inset(insets))
-      }
-    }
+  var body: some View {
+    fatalError("Body should never be called.")
+  }
+
+  static func makeView(inputs: ViewInputs<Self>) -> ViewOutputs {
+    ViewOutputs(displayItems: inputs.graph.attribute("padding") {
+      Content
+        .makeView(inputs: inputs.content)
+        .displayItems
+        .map { item in
+          DisplayItem { proposal in
+            item
+              .size(for: proposal.inset(inputs.node.insets))
+              .inset(-inputs.node.insets)
+          } render: { bounds in
+            item.render(in: bounds.inset(inputs.node.insets))
+          }
+        }
+    })
   }
 }
 

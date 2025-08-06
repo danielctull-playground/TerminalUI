@@ -10,23 +10,32 @@ extension View {
   }
 }
 
-private struct Offset<Content: View>: Builtin, View {
+private struct Offset<Content: View>: View {
 
   let content: Content
   let x: Int
   let y: Int
 
-  func displayItems(inputs: ViewInputs) -> [DisplayItem] {
-    content.displayItems(inputs: inputs).map { item in
-      DisplayItem { proposal in
-        item.size(for: proposal)
-      } render: { bounds in
-        item.render(in: Rect(
-          x: bounds.minX + x,
-          y: bounds.minY + y,
-          width: bounds.size.width,
-          height: bounds.size.height))
-      }
-    }
+  var body: some View {
+    fatalError("Body should never be called.")
+  }
+
+  static func makeView(inputs: ViewInputs<Self>) -> ViewOutputs {
+    ViewOutputs(displayItems: inputs.graph.attribute("offset") {
+      Content
+        .makeView(inputs: inputs.content)
+        .displayItems
+        .map { item in
+          DisplayItem { proposal in
+            item.size(for: proposal)
+          } render: { bounds in
+            item.render(in: Rect(
+              x: bounds.minX + inputs.node.x,
+              y: bounds.minY + inputs.node.y,
+              width: bounds.size.width,
+              height: bounds.size.height))
+          }
+        }
+    })
   }
 }

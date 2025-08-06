@@ -1,5 +1,6 @@
 
 @propertyWrapper
+@dynamicMemberLookup
 package final class Attribute<Value>: Dependant, Dependency {
 
   package let name: Name
@@ -27,6 +28,14 @@ package final class Attribute<Value>: Dependant, Dependency {
     self.name = name
     self.make = make
   }
+
+  package subscript<Property>(
+    dynamicMember keyPath: KeyPath<Value, Property>
+  ) -> Attribute<Property> {
+    graph.attribute("\(type(of: Value.self)) -> \(type(of: Property.self))") {
+      self.wrappedValue[keyPath: keyPath]
+    }
+  }
 }
 
 // MARK: - Attribute.Name
@@ -44,6 +53,8 @@ extension Attribute.Name: ExpressibleByStringLiteral {
     self.init(raw: value)
   }
 }
+
+extension Attribute.Name: ExpressibleByStringInterpolation {}
 
 extension Attribute.Name: CustomStringConvertible {
   package var description: String { raw }

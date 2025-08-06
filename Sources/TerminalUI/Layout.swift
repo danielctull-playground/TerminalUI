@@ -80,7 +80,7 @@ extension Layout {
   }
 }
 
-private struct LayoutView<Content: View, Layout: TerminalUI.Layout>: Builtin, View {
+private struct LayoutView<Content: View, Layout: TerminalUI.Layout>: View {
 
   private let layout: Layout
   private let content: Content
@@ -90,33 +90,40 @@ private struct LayoutView<Content: View, Layout: TerminalUI.Layout>: Builtin, Vi
     self.content = content
   }
 
-  func displayItems(inputs: ViewInputs) -> [DisplayItem] {
-    let children = content.displayItems(inputs: inputs)
+  var body: some View {
+    fatalError("Body should never be called.")
+  }
 
-    let subviews = LayoutSubviews(raw: children.map { item in
-      LayoutSubview(sizeThatFits: item.size) { position, proposal in
-        item.render(in: Rect(
-          origin: position,
-          size: item.size(for: proposal)
-        ))
+  static func makeView(inputs: ViewInputs<Self>) -> ViewOutputs {
+    ViewOutputs(displayItems: inputs.graph.attribute("\(type(of: Layout.self))") {
+      let content = Content.makeView(inputs: inputs.content).displayItems
+
+      let subviews = LayoutSubviews(raw: content.map { item in
+        LayoutSubview(sizeThatFits: item.size) { position, proposal in
+          item.render(in: Rect(
+            origin: position,
+            size: item.size(for: proposal)
+          ))
+        }
+      })
+
+      let layout = inputs.node.layout
+      var cache = layout.makeCache(subviews: subviews)
+
+      let item = DisplayItem { proposal in
+        layout.sizeThatFits(
+          proposal: proposal,
+          subviews: subviews,
+          cache: &cache)
+      } render: { bounds in
+        layout.placeSubviews(
+          in: bounds,
+          proposal: ProposedViewSize(bounds.size),
+          subviews: subviews,
+          cache: &cache)
       }
+
+      return [item]
     })
-
-    var cache = layout.makeCache(subviews: subviews)
-
-    let item = DisplayItem { proposal in
-      layout.sizeThatFits(
-        proposal: proposal,
-        subviews: subviews,
-        cache: &cache)
-    } render: { bounds in
-      layout.placeSubviews(
-        in: bounds,
-        proposal: ProposedViewSize(bounds.size),
-        subviews: subviews,
-        cache: &cache)
-    }
-
-    return [item]
   }
 }

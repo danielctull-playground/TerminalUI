@@ -1,10 +1,17 @@
 
-extension Optional: Builtin & View where Wrapped: View {
+extension Optional: View where Wrapped: View {
 
-  func displayItems(inputs: ViewInputs) -> [DisplayItem] {
-    switch self {
-    case .none: []
-    case .some(let content): content.displayItems(inputs: inputs)
-    }
+  public var body: some View {
+    fatalError("Body should never be called.")
+  }
+
+  public static func makeView(inputs: ViewInputs<Self>) -> ViewOutputs {
+    ViewOutputs(displayItems: inputs.graph.attribute("optional") {
+      switch inputs.node {
+      case .none: []
+      case .some(let content):
+        Wrapped.makeView(inputs: inputs.modifyNode("optional") { content }).displayItems
+      }
+    })
   }
 }
