@@ -1,5 +1,5 @@
 import AttributeGraph
-import Dispatch
+import Foundation
 
 struct Renderer<Content: View, Canvas: TerminalUI.Canvas> {
 
@@ -17,7 +17,7 @@ struct Renderer<Content: View, Canvas: TerminalUI.Canvas> {
     _environment = graph.input("environment", EnvironmentValues())
   }
 
-  func run() -> Never {
+  func run() {
 
     let inputs = ViewInputs(
       graph: graph,
@@ -35,7 +35,7 @@ struct Renderer<Content: View, Canvas: TerminalUI.Canvas> {
     }
 
     func updateWindow() {
-      environment.windowBounds = Rect(origin: .origin, size: .window)
+      environment.windowBounds = .window
       render()
     }
 
@@ -43,6 +43,6 @@ struct Renderer<Content: View, Canvas: TerminalUI.Canvas> {
     windowChange.resume()
     updateWindow()
 
-    dispatchMain()
+    RunLoop.main.run()
   }
 }

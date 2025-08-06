@@ -21,8 +21,13 @@ public protocol App {
 extension App {
 
   public static func main() {
+    run()
+  }
+
+  static func run(
+    canvas: some Canvas = TextStreamCanvas(output: .fileHandle(.standardOutput))
+  ) {
     let app = Self()
-    let canvas = TextStreamCanvas(output: .fileHandle(.standardOutput))
     let renderer = Renderer(canvas: canvas, content: app.body)
     renderer.run()
   }
