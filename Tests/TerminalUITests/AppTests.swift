@@ -2,6 +2,7 @@
 import TerminalUITesting
 import Testing
 
+@MainActor
 @Suite("App")
 struct AppTests {
 
@@ -14,7 +15,7 @@ struct AppTests {
       }
     }
 
-    Rect.window = Rect(x: 1, y: 1, width: 1, height: 1)
+    Size.window = Size(width: 1, height: 1)
     let canvas = TextStreamCanvas(output: .memory)
     TestApp.run(canvas: canvas)
 
@@ -37,7 +38,7 @@ struct AppTests {
       }
     }
 
-    Rect.window = Rect(x: 1, y: 1, width: 1, height: 1)
+    Size.window = Size(width: 1, height: 1)
     let canvas = TextStreamCanvas(output: .memory)
     TestApp.run(canvas: canvas)
 

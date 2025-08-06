@@ -1,5 +1,6 @@
 import Foundation
 
+@MainActor
 public protocol App {
 
   /// The type of view representing the body of the app.
@@ -22,6 +23,7 @@ extension App {
 
   public static func main() {
     run()
+    RunLoop.main.run()
   }
 
   static func run(

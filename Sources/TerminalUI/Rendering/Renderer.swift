@@ -1,6 +1,7 @@
 import AttributeGraph
 import Foundation
 
+@MainActor
 struct Renderer<Content: View, Canvas: TerminalUI.Canvas> {
 
   private let graph: Graph
@@ -28,21 +29,17 @@ struct Renderer<Content: View, Canvas: TerminalUI.Canvas> {
     let output = Screen.makeView(inputs: inputs)
 
     func render() {
+      environment.windowBounds = Rect(origin: .origin, size: .window)
       output
         .displayItems
         .first!
         .render(in: environment.windowBounds)
     }
 
-    func updateWindow() {
-      environment.windowBounds = .window
+    windowChange.setEventHandler {
       render()
     }
-
-    windowChange.setEventHandler(handler: updateWindow)
     windowChange.resume()
-    updateWindow()
-
-    RunLoop.main.run()
+    render()
   }
 }
