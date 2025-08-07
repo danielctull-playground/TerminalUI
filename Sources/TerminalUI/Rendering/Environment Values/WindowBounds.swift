@@ -21,7 +21,7 @@ extension Size {
 
   /// The size of the window of a terminal device.
   @MainActor
-  static var window: Size {
+  package static var window: Size {
     get {
       var size = winsize()
       let result = ioctl(STDOUT_FILENO, UInt(TIOCGWINSZ), &size)

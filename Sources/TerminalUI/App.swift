@@ -26,7 +26,7 @@ extension App {
     RunLoop.main.run()
   }
 
-  static func run(
+  package static func run(
     canvas: some Canvas = TextStreamCanvas(output: .fileHandle(.standardOutput))
   ) {
     let app = Self()
