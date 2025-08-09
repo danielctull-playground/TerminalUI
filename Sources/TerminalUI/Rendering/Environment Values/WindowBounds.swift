@@ -1,14 +1,14 @@
 import Foundation
 
 extension EnvironmentValues {
-  var windowBounds: Rect  {
-    get { self[WindowBoundsEnvironmentKey.self] }
-    set { self[WindowBoundsEnvironmentKey.self] = newValue }
+  var windowSize: Size  {
+    get { self[WindowSizeEnvironmentKey.self] }
+    set { self[WindowSizeEnvironmentKey.self] = newValue }
   }
 }
 
-private struct WindowBoundsEnvironmentKey: EnvironmentKey {
-  static var defaultValue: Rect { Rect(origin: .origin, size: .zero) }
+private struct WindowSizeEnvironmentKey: EnvironmentKey {
+  static let defaultValue = Size.zero
 }
 
 @MainActor

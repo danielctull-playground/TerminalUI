@@ -29,11 +29,11 @@ struct Renderer<Content: View, Canvas: TerminalUI.Canvas> {
     let output = Screen.makeView(inputs: inputs)
 
     func render() {
-      environment.windowBounds = Rect(origin: .origin, size: .window)
+      environment.windowSize = .window
       output
         .displayItems
         .first!
-        .render(in: environment.windowBounds)
+        .render(in: Rect(origin: .origin, size: environment.windowSize))
     }
 
     windowChange.setEventHandler {
