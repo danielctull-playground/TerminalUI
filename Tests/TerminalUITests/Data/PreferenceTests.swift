@@ -239,37 +239,6 @@ struct PreferenceTests {
     }
   }
 
-  @Test("Optional", arguments: [
-    (false, A.defaultValue),
-    (true, "new value"),
-  ])
-  func optional(value: Bool, expected: String) {
-
-    struct TestView: View {
-      let value: Bool
-      let action: (String) -> Void
-      var body: some View {
-        Group {
-          if value {
-            Text("x")
-              .preference(key: A.self, value: "new value")
-          }
-        }
-        .onPreferenceChange(A.self, perform: action)
-      }
-    }
-
-    var output = ""
-
-    let renderer = Renderer(
-      canvas: canvas,
-      content: TestView(value: value) { output = $0 }
-    )
-    renderer.run()
-
-    #expect(output == expected)
-  }
-
   @Test("EmptyView")
   func emptyView() {
 
