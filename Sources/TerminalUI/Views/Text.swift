@@ -16,7 +16,7 @@ public struct Text: View {
       preferenceValues: inputs.graph.attribute("[Text] preference values") {
         .empty
       },
-      displayItems: inputs.graph.attribute("[Text] displayItems") {
+      displayItems: inputs.graph.attribute("[Text] display items") {
         [
           DisplayItem {
             size(for: $0, inputs: inputs)

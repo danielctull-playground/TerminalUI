@@ -23,7 +23,7 @@ struct Accumulated<A: View, B: View>: View {
           )
         }
       },
-      displayItems: inputs.graph.attribute("[Accumulated] displayItems") {
+      displayItems: inputs.graph.attribute("[Accumulated] display items") {
         let a = A.makeView(inputs: inputs.a)
         let b = B.makeView(inputs: inputs.b)
         return a.displayItems + b.displayItems

@@ -99,7 +99,7 @@ private struct LayoutView<Content: View, Layout: TerminalUI.Layout>: View {
       preferenceValues: inputs.graph.attribute("[\(Layout.self)] preference values") {
         Content.makeView(inputs: inputs.content).preferenceValues
       },
-      displayItems: inputs.graph.attribute("[\(Layout.self)] displayItems") {
+      displayItems: inputs.graph.attribute("[\(Layout.self)] display items") {
         let content = Content.makeView(inputs: inputs.content).displayItems
 
         let subviews = LayoutSubviews(raw: content.map { item in

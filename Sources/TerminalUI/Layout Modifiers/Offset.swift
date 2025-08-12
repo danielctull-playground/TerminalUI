@@ -25,7 +25,7 @@ private struct Offset<Content: View>: View {
       preferenceValues: inputs.graph.attribute("[Offset] preference values") {
         Content.makeView(inputs: inputs.content).preferenceValues
       },
-      displayItems: inputs.graph.attribute("[Offset] displayItems") {
+      displayItems: inputs.graph.attribute("[Offset] display items") {
         Content
           .makeView(inputs: inputs.content)
           .displayItems

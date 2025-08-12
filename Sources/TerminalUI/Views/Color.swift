@@ -14,7 +14,7 @@ public struct Color: CustomStringConvertible, Equatable, Sendable, View {
       preferenceValues: inputs.graph.attribute("[Color] preference values") {
         .empty
       },
-      displayItems: inputs.graph.attribute("[Color] displayItems") {
+      displayItems: inputs.graph.attribute("[Color] display items") {
         [
           DisplayItem {
             $0.replacingUnspecifiedDimensions()

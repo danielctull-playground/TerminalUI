@@ -24,7 +24,7 @@ private struct FixedSize<Content: View>: View {
       preferenceValues: inputs.graph.attribute("[FixedSize] preference values") {
         Content.makeView(inputs: inputs.content).preferenceValues
       },
-      displayItems: inputs.graph.attribute("[FixedSize] displayItems") {
+      displayItems: inputs.graph.attribute("[FixedSize] display items") {
         Content
           .makeView(inputs: inputs.content)
           .displayItems

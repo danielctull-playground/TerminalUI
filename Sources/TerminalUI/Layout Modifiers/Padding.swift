@@ -28,7 +28,7 @@ private struct Padding<Content: View>: View {
       preferenceValues: inputs.graph.attribute("[Padding] preference values") {
         Content.makeView(inputs: inputs.content).preferenceValues
       },
-      displayItems: inputs.graph.attribute("[Padding] displayItems") {
+      displayItems: inputs.graph.attribute("[Padding] display items") {
         Content
           .makeView(inputs: inputs.content)
           .displayItems

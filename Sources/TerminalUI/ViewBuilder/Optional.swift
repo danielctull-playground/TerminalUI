@@ -14,7 +14,7 @@ extension Optional: View where Wrapped: View {
           Wrapped.makeView(inputs: inputs.modifyNode("optional") { content }).preferenceValues
         }
       },
-      displayItems: inputs.graph.attribute("[Optional] displayItems") {
+      displayItems: inputs.graph.attribute("[Optional] display items") {
         switch inputs.node {
         case .none: []
         case .some(let content):

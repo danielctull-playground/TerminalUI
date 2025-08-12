@@ -33,7 +33,7 @@ private struct PreferenceWriter<Content: View, Key: PreferenceKey>: View {
         Content.makeView(inputs: inputs.content).preferenceValues
           .setting(inputs.node.value, for: inputs.node.key)
       },
-      displayItems: inputs.graph.attribute("[PreferenceWriter] displayItems") {
+      displayItems: inputs.graph.attribute("[PreferenceWriter] display items") {
         Content.makeView(inputs: inputs.content).displayItems
       }
     )
@@ -72,7 +72,7 @@ private struct PreferenceReader<
         inputs.node.action(preferenceValues[Key.self] ?? Key.defaultValue)
         return preferenceValues
       },
-      displayItems: inputs.graph.attribute("[PreferenceReader] displayItems") {
+      displayItems: inputs.graph.attribute("[PreferenceReader] display items") {
         Content.makeView(inputs: inputs.content).displayItems
       }
     )

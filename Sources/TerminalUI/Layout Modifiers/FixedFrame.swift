@@ -31,7 +31,7 @@ private struct FixedFrame<Content: View>: View {
       preferenceValues: inputs.graph.attribute("[FixedFrame] preference values") {
         Content.makeView(inputs: inputs.content).preferenceValues
       },
-      displayItems: inputs.graph.attribute("[FixedFrame] displayItems") {
+      displayItems: inputs.graph.attribute("[FixedFrame] display items") {
         Content
           .makeView(inputs: inputs.content)
           .displayItems

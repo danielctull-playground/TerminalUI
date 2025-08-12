@@ -12,7 +12,7 @@ public struct EmptyView: View {
       preferenceValues: inputs.graph.attribute("[EmptyView] preference values") {
         .empty
       },
-      displayItems: inputs.graph.attribute("[EmptyView] displayItems") {
+      displayItems: inputs.graph.attribute("[EmptyView] display items") {
         []
       }
     )
