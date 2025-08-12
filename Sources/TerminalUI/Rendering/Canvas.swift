@@ -20,8 +20,8 @@ extension Canvas {
     let inputs = ViewInputs(
       graph: graph,
       canvas: self,
-      node: canvasView,
-      environment: environment)
+      dynamicProperties: DynamicProperties(environment: environment),
+      node: canvasView)
 
     CanvasView.makeView(inputs: inputs)
       .displayItems

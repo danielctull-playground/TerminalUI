@@ -5,21 +5,21 @@ public struct ViewInputs<Node> {
 
   let graph: Graph
   let canvas: any Canvas
+  let dynamicProperties: DynamicProperties
   @Attribute var node: Node
-  @Attribute var environment: EnvironmentValues
 
   var nodeAttribute: Attribute<Node> { _node }
 
   init(
     graph: Graph,
     canvas: any Canvas,
-    node: Attribute<Node>,
-    environment: Attribute<EnvironmentValues>
+    dynamicProperties: DynamicProperties,
+    node: Attribute<Node>
   ) {
     self.graph = graph
     self.canvas = canvas
+    self.dynamicProperties = dynamicProperties
     _node = node
-    _environment = environment
   }
 
   subscript<Property>(
@@ -34,7 +34,8 @@ public struct ViewInputs<Node> {
     ViewInputs<New>(
       graph: graph,
       canvas: canvas,
-      node: graph.attribute(name, compute),
-      environment: _environment)
+      dynamicProperties: dynamicProperties,
+      node: graph.attribute(name, compute)
+    )
   }
 }

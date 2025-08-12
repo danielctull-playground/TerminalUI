@@ -24,20 +24,8 @@ public struct Environment<Value> {
 
 extension Environment: DynamicProperty {
 
-  func install(_ values: EnvironmentValues) {
-    self.values = values
-  }
-}
-
-extension EnvironmentValues {
-
-  func install<Target>(on target: Target) {
-    let mirror = Mirror(reflecting: target)
-    for child in mirror.children {
-      if let property = child.value as? DynamicProperty {
-        property.install(self)
-      }
-    }
+  func install(_ properties: DynamicProperties) {
+    values = properties.environment
   }
 }
 
@@ -68,7 +56,7 @@ private struct EnvironmentWriter<Content: View, Value>: View {
     let environment = inputs.graph.attribute("[EnvironmentWriter]") {
       let keyPath = inputs.node.keyPath
       let value = inputs.node.value
-      var environment = inputs.environment
+      var environment = inputs.dynamicProperties.environment
       environment[keyPath: keyPath] = value
       return environment
     }
@@ -76,8 +64,8 @@ private struct EnvironmentWriter<Content: View, Value>: View {
     let inputs = ViewInputs(
       graph: inputs.graph,
       canvas: inputs.canvas,
-      node: inputs.nodeAttribute.content,
-      environment: environment)
+      dynamicProperties: DynamicProperties(environment: environment),
+      node: inputs.nodeAttribute.content)
 
     return Content.makeView(inputs: inputs)
   }
