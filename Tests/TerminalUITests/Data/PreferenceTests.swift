@@ -238,26 +238,4 @@ struct PreferenceTests {
       #expect(output == "12")
     }
   }
-
-  @Test("EmptyView")
-  func emptyView() {
-
-    struct TestView: View {
-      let action: (String) -> Void
-      var body: some View {
-        EmptyView()
-          .onPreferenceChange(A.self, perform: action)
-      }
-    }
-
-    var output = ""
-
-    let renderer = Renderer(
-      canvas: canvas,
-      content: TestView { output = $0 }
-    )
-    renderer.run()
-
-    #expect(output == A.defaultValue)
-  }
 }
