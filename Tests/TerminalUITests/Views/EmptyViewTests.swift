@@ -2,8 +2,22 @@
 import TerminalUITesting
 import Testing
 
+@MainActor
 @Suite("EmptyView", .tags(.view))
 struct EmptyViewTests {
+
+  @Test("Display Items")
+  func displayItems() {
+
+    let canvas = TestCanvas(width: 3, height: 3)
+    let renderer = Renderer(canvas: canvas) {
+      EmptyView()
+    }
+
+    renderer.run()
+
+    #expect(canvas.pixels.isEmpty)
+  }
 
   @MainActor
   @Suite("Preferences", .tags(.preferences))
