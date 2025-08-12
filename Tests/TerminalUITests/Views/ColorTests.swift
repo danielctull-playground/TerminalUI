@@ -41,8 +41,8 @@ struct ColorTests {
 //  }
 
   @MainActor
-  @Suite("Preferences", .tags(.preferences))
-  struct Preferences {
+  @Suite("Preference Values", .tags(.preferenceValues))
+  struct PreferenceValues {
 
     @Test("default value", arguments: Color.testCases)
     func defaultValue(color: Color) {

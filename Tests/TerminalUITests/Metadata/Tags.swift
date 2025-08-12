@@ -5,5 +5,5 @@ extension Tag {
   @Tag static var viewBuilder: Self
   @Tag static var modifier: Self
   @Tag static var layout: Self
-  @Tag static var preferences: Self
+  @Tag static var preferenceValues: Self
 }

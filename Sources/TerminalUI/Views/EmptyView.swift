@@ -9,7 +9,7 @@ public struct EmptyView: View {
 
   public static func makeView(inputs: ViewInputs<Self>) -> ViewOutputs {
     ViewOutputs(
-      preferences: inputs.graph.attribute("[EmptyView] preferences") {
+      preferenceValues: inputs.graph.attribute("[EmptyView] preference values") {
         .empty
       },
       displayItems: inputs.graph.attribute("[EmptyView] displayItems") {

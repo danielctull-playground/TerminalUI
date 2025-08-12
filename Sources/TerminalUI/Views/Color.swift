@@ -11,7 +11,7 @@ public struct Color: CustomStringConvertible, Equatable, Sendable, View {
 
   public static func makeView(inputs: ViewInputs<Self>) -> ViewOutputs {
     ViewOutputs(
-      preferences: inputs.graph.attribute("[Color] preferences") {
+      preferenceValues: inputs.graph.attribute("[Color] preference values") {
         .empty
       },
       displayItems: inputs.graph.attribute("[Color] displayItems") {

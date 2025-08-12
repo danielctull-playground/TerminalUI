@@ -96,8 +96,8 @@ private struct LayoutView<Content: View, Layout: TerminalUI.Layout>: View {
 
   static func makeView(inputs: ViewInputs<Self>) -> ViewOutputs {
     ViewOutputs(
-      preferences: inputs.graph.attribute("[\(Layout.self)] preferences") {
-        Content.makeView(inputs: inputs.content).preferences
+      preferenceValues: inputs.graph.attribute("[\(Layout.self)] preference values") {
+        Content.makeView(inputs: inputs.content).preferenceValues
       },
       displayItems: inputs.graph.attribute("[\(Layout.self)] displayItems") {
         let content = Content.makeView(inputs: inputs.content).displayItems

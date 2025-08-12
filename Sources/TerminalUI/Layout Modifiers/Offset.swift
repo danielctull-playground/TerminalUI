@@ -22,8 +22,8 @@ private struct Offset<Content: View>: View {
 
   static func makeView(inputs: ViewInputs<Self>) -> ViewOutputs {
     ViewOutputs(
-      preferences: inputs.graph.attribute("[Offset] preferences") {
-        Content.makeView(inputs: inputs.content).preferences
+      preferenceValues: inputs.graph.attribute("[Offset] preference values") {
+        Content.makeView(inputs: inputs.content).preferenceValues
       },
       displayItems: inputs.graph.attribute("[Offset] displayItems") {
         Content

@@ -21,8 +21,8 @@ private struct FixedSize<Content: View>: View {
 
   static func makeView(inputs: ViewInputs<Self>) -> ViewOutputs {
     ViewOutputs(
-      preferences: inputs.graph.attribute("[FixedSize] preferences") {
-        Content.makeView(inputs: inputs.content).preferences
+      preferenceValues: inputs.graph.attribute("[FixedSize] preference values") {
+        Content.makeView(inputs: inputs.content).preferenceValues
       },
       displayItems: inputs.graph.attribute("[FixedSize] displayItems") {
         Content

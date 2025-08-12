@@ -6,8 +6,8 @@ import Testing
 struct AccumulatedTests {
 
   @MainActor
-  @Suite("Preferences", .tags(.preferences))
-  struct Preferences {
+  @Suite("Preference Values", .tags(.preferenceValues))
+  struct PreferenceValues {
 
     @Test("modified lhs value")
     func modifiedLHSValue() {

@@ -29,8 +29,8 @@ private struct PreferenceWriter<Content: View, Key: PreferenceKey>: View {
 
   public static func makeView(inputs: ViewInputs<Self>) -> ViewOutputs {
     ViewOutputs(
-      preferences: inputs.graph.attribute("[PreferenceWriter] preferences") {
-        Content.makeView(inputs: inputs.content).preferences
+      preferenceValues: inputs.graph.attribute("[PreferenceWriter] preference values") {
+        Content.makeView(inputs: inputs.content).preferenceValues
           .setting(inputs.node.value, for: inputs.node.key)
       },
       displayItems: inputs.graph.attribute("[PreferenceWriter] displayItems") {
@@ -67,10 +67,10 @@ private struct PreferenceReader<
 
   public static func makeView(inputs: ViewInputs<Self>) -> ViewOutputs {
     ViewOutputs(
-      preferences: inputs.graph.attribute("[PreferenceReader] preferences") {
-        let preferences = Content.makeView(inputs: inputs.content).preferences
-        inputs.node.action(preferences[Key.self] ?? Key.defaultValue)
-        return preferences
+      preferenceValues: inputs.graph.attribute("[PreferenceReader] preference values") {
+        let preferenceValues = Content.makeView(inputs: inputs.content).preferenceValues
+        inputs.node.action(preferenceValues[Key.self] ?? Key.defaultValue)
+        return preferenceValues
       },
       displayItems: inputs.graph.attribute("[PreferenceReader] displayItems") {
         Content.makeView(inputs: inputs.content).displayItems

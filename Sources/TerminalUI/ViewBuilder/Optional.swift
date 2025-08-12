@@ -7,11 +7,11 @@ extension Optional: View where Wrapped: View {
 
   public static func makeView(inputs: ViewInputs<Self>) -> ViewOutputs {
     ViewOutputs(
-      preferences: inputs.graph.attribute("[Optional] preferences") {
+      preferenceValues: inputs.graph.attribute("[Optional] preference values") {
         switch inputs.node {
         case .none: .empty
         case .some(let content):
-          Wrapped.makeView(inputs: inputs.modifyNode("optional") { content }).preferences
+          Wrapped.makeView(inputs: inputs.modifyNode("optional") { content }).preferenceValues
         }
       },
       displayItems: inputs.graph.attribute("[Optional] displayItems") {

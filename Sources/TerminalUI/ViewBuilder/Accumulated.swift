@@ -15,11 +15,11 @@ struct Accumulated<A: View, B: View>: View {
 
   static func makeView(inputs: ViewInputs<Self>) -> ViewOutputs {
     ViewOutputs(
-      preferences: inputs.graph.attribute("[Accumulated] preferences") {
+      preferenceValues: inputs.graph.attribute("[Accumulated] preference values") {
         PreferenceValues { key in
           key.value(
-            lhs: A.makeView(inputs: inputs.a).preferences,
-            rhs: B.makeView(inputs: inputs.b).preferences
+            lhs: A.makeView(inputs: inputs.a).preferenceValues,
+            rhs: B.makeView(inputs: inputs.b).preferenceValues
           )
         }
       },

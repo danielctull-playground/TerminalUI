@@ -30,7 +30,7 @@ struct Renderer<Content: View, Canvas: TerminalUI.Canvas> {
 
     func render() {
       environment.windowSize = .window
-      _ = output.preferences // Trigger preferences
+      _ = output.preferenceValues // Trigger preference values
       output
         .displayItems
         .first!

@@ -78,8 +78,8 @@ struct FixedSizeTests {
   }
 
   @MainActor
-  @Suite("Preferences", .tags(.preferences))
-  struct Preferences {
+  @Suite("Preference Values", .tags(.preferenceValues))
+  struct PreferenceValues {
 
     @Test("default value")
     func defaultValue() {

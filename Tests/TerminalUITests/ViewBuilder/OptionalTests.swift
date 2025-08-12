@@ -6,11 +6,11 @@ import Testing
 @Suite("Optional", .tags(.viewBuilder))
 struct OptionalTests {
 
-  @Test("Preferences", arguments: [
+  @Test("Preference Values", arguments: [
     (false, PreferenceKey.A.defaultValue),
     (true, "new value"),
   ])
-  func preferences(value: Bool, expected: String) {
+  func preferenceValues(value: Bool, expected: String) {
 
     var output = ""
 

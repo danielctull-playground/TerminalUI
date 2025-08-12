@@ -13,7 +13,7 @@ public struct Text: View {
 
   public static func makeView(inputs: ViewInputs<Self>) -> ViewOutputs {
     ViewOutputs(
-      preferences: inputs.graph.attribute("[Text] preferences") {
+      preferenceValues: inputs.graph.attribute("[Text] preference values") {
         .empty
       },
       displayItems: inputs.graph.attribute("[Text] displayItems") {
