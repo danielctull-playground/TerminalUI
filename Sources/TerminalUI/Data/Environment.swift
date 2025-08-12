@@ -24,20 +24,8 @@ public struct Environment<Value> {
 
 extension Environment: DynamicProperty {
 
-  func install(_ values: EnvironmentValues) {
-    self.values = values
-  }
-}
-
-extension EnvironmentValues {
-
-  func install<Target>(on target: Target) {
-    let mirror = Mirror(reflecting: target)
-    for child in mirror.children {
-      if let property = child.value as? DynamicProperty {
-        property.install(self)
-      }
-    }
+  func install(_ properties: DynamicProperties) {
+    values = properties.environment
   }
 }
 
