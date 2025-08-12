@@ -39,6 +39,41 @@ struct ColorTests {
 //    #expect(size.width == width)
 //    #expect(size.height == height)
 //  }
+
+  @MainActor
+  @Suite("Preferences", .tags(.preferences))
+  struct Preferences {
+
+    @Test("default value", arguments: Color.testCases)
+    func defaultValue(color: Color) {
+
+      var output = ""
+
+      let renderer = Renderer(canvas: TestCanvas(width: 3, height: 3)) {
+        color
+          .onPreferenceChange(PreferenceKey.A.self) { output = $0 }
+      }
+      renderer.run()
+
+      #expect(output == PreferenceKey.A.defaultValue)
+    }
+
+
+    @Test("modified value", arguments: Color.testCases)
+    func modifiedValue(color: Color) {
+
+      var output = ""
+
+      let renderer = Renderer(canvas: TestCanvas(width: 3, height: 3)) {
+        color
+          .preference(key: PreferenceKey.A.self, value: "new")
+          .onPreferenceChange(PreferenceKey.A.self) { output = $0 }
+      }
+      renderer.run()
+
+      #expect(output == "new")
+    }
+  }
 }
 
 extension Color {

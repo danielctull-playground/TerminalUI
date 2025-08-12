@@ -1,4 +1,4 @@
-import TerminalUI
+@testable import TerminalUI
 import TerminalUITesting
 import Testing
 
@@ -152,5 +152,41 @@ struct FixedFrameTests {
     }
 
     #expect(canvas.pixels == [position: pixel])
+  }
+
+  @MainActor
+  @Suite("Preferences", .tags(.preferences))
+  struct Preferences {
+
+    @Test("default value")
+    func defaultValue() {
+
+      var output = ""
+
+      let renderer = Renderer(canvas: TestCanvas(width: 3, height: 3)) {
+        Text("x")
+          .frame(width: 1, height: 1)
+          .onPreferenceChange(PreferenceKey.A.self) { output = $0 }
+      }
+      renderer.run()
+
+      #expect(output == PreferenceKey.A.defaultValue)
+    }
+
+    @Test("modified value")
+    func modifiedValue() {
+
+      var output = ""
+
+      let renderer = Renderer(canvas: TestCanvas(width: 3, height: 3)) {
+        Text("x")
+          .preference(key: PreferenceKey.A.self, value: "new")
+          .frame(width: 1, height: 1)
+          .onPreferenceChange(PreferenceKey.A.self) { output = $0 }
+      }
+      renderer.run()
+
+      #expect(output == "new")
+    }
   }
 }

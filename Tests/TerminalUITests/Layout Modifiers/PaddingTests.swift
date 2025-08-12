@@ -166,4 +166,40 @@ struct PaddingTests {
 //    #expect(size.width == expectedWidth)
 //    #expect(size.height == expectedHeight)
 //  }
+
+  @MainActor
+  @Suite("Preferences", .tags(.preferences))
+  struct Preferences {
+
+    @Test("default value")
+    func defaultValue() {
+
+      var output = ""
+
+      let renderer = Renderer(canvas: TestCanvas(width: 3, height: 3)) {
+        Text("x")
+          .padding(.all, 1)
+          .onPreferenceChange(PreferenceKey.A.self) { output = $0 }
+      }
+      renderer.run()
+
+      #expect(output == PreferenceKey.A.defaultValue)
+    }
+
+    @Test("modified value")
+    func modifiedValue() {
+
+      var output = ""
+
+      let renderer = Renderer(canvas: TestCanvas(width: 3, height: 3)) {
+        Text("x")
+          .preference(key: PreferenceKey.A.self, value: "new")
+          .padding(.all, 1)
+          .onPreferenceChange(PreferenceKey.A.self) { output = $0 }
+      }
+      renderer.run()
+
+      #expect(output == "new")
+    }
+  }
 }

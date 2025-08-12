@@ -30,6 +30,7 @@ struct Renderer<Content: View, Canvas: TerminalUI.Canvas> {
 
     func render() {
       environment.windowSize = .window
+      _ = output.preferences // Trigger preferences
       output
         .displayItems
         .first!
@@ -41,5 +42,16 @@ struct Renderer<Content: View, Canvas: TerminalUI.Canvas> {
     }
     windowChange.resume()
     render()
+  }
+}
+
+
+extension Renderer {
+
+  init(
+    canvas: Canvas,
+    @ViewBuilder content: () -> Content
+  ) {
+    self.init(canvas: canvas, content: content())
   }
 }

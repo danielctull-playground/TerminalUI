@@ -6,12 +6,21 @@ extension Optional: View where Wrapped: View {
   }
 
   public static func makeView(inputs: ViewInputs<Self>) -> ViewOutputs {
-    ViewOutputs(displayItems: inputs.graph.attribute("optional") {
-      switch inputs.node {
-      case .none: []
-      case .some(let content):
-        Wrapped.makeView(inputs: inputs.modifyNode("optional") { content }).displayItems
+    ViewOutputs(
+      preferences: inputs.graph.attribute("[Optional] preferences") {
+        switch inputs.node {
+        case .none: .empty
+        case .some(let content):
+          Wrapped.makeView(inputs: inputs.modifyNode("optional") { content }).preferences
+        }
+      },
+      displayItems: inputs.graph.attribute("[Optional] displayItems") {
+        switch inputs.node {
+        case .none: []
+        case .some(let content):
+          Wrapped.makeView(inputs: inputs.modifyNode("optional") { content }).displayItems
+        }
       }
-    })
+    )
   }
 }
