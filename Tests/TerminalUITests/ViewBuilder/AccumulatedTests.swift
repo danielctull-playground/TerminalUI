@@ -2,44 +2,12 @@
 import TerminalUITesting
 import Testing
 
-@Suite("Group", .tags(.view))
-struct GroupTests {
-
-  private var canvas = TestCanvas(width: 10, height: 10)
-
-  @Test func test() {
-
-    canvas.render {
-      Group {
-        Text("a")
-        Text("b")
-      }
-      .padding(1)
-    }
-
-    #expect(canvas.pixels == [
-      Position(x: 6, y: 4): Pixel("a"),
-      Position(x: 6, y: 7): Pixel("b"),
-    ])
-  }
+@Suite("Accumulated", .tags(.viewBuilder))
+struct AccumulatedTests {
 
   @MainActor
   @Suite("Preference Values", .tags(.preferenceValues))
   struct PreferenceValues {
-
-    @Test("default value")
-    func defaultValue() {
-
-      var output = ""
-
-      let renderer = Renderer(canvas: TestCanvas(width: 3, height: 3)) {
-        Group {}
-          .onPreferenceChange(PreferenceKey.A.self) { output = $0 }
-      }
-      renderer.run()
-
-      #expect(output == PreferenceKey.A.defaultValue)
-    }
 
     @Test("modified lhs value")
     func modifiedLHSValue() {

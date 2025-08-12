@@ -84,4 +84,38 @@ struct TextTests {
 //    #expect(size.width == expectedWidth)
 //    #expect(size.height == expectedHeight)
 //  }
+
+  @MainActor
+  @Suite("Preference Values", .tags(.preferenceValues))
+  struct PreferenceValues {
+
+    @Test("default value")
+    func defaultValue() {
+
+      var output = ""
+
+      let renderer = Renderer(canvas: TestCanvas(width: 3, height: 3)) {
+        Text("Hello")
+          .onPreferenceChange(PreferenceKey.A.self) { output = $0 }
+      }
+      renderer.run()
+
+      #expect(output == PreferenceKey.A.defaultValue)
+    }
+
+    @Test("modified value")
+    func modifiedValue() {
+
+      var output = ""
+
+      let renderer = Renderer(canvas: TestCanvas(width: 3, height: 3)) {
+        Text("Hello")
+          .preference(key: PreferenceKey.A.self, value: "new")
+          .onPreferenceChange(PreferenceKey.A.self) { output = $0 }
+      }
+      renderer.run()
+
+      #expect(output == "new")
+    }
+  }
 }

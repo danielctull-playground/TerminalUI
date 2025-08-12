@@ -20,20 +20,25 @@ private struct FixedSize<Content: View>: View {
   }
 
   static func makeView(inputs: ViewInputs<Self>) -> ViewOutputs {
-    ViewOutputs(displayItems: inputs.graph.attribute("fixed size") {
-      Content
-        .makeView(inputs: inputs.content)
-        .displayItems
-        .map { item in
-          DisplayItem { proposal in
-            var proposal = proposal
-            if inputs.node.horizontal { proposal.width = nil }
-            if inputs.node.vertical { proposal.height = nil }
-            return item.size(for: proposal)
-          } render: { bounds in
-            item.render(in: bounds)
+    ViewOutputs(
+      preferenceValues: inputs.graph.attribute("[FixedSize] preference values") {
+        Content.makeView(inputs: inputs.content).preferenceValues
+      },
+      displayItems: inputs.graph.attribute("[FixedSize] display items") {
+        Content
+          .makeView(inputs: inputs.content)
+          .displayItems
+          .map { item in
+            DisplayItem { proposal in
+              var proposal = proposal
+              if inputs.node.horizontal { proposal.width = nil }
+              if inputs.node.vertical { proposal.height = nil }
+              return item.size(for: proposal)
+            } render: { bounds in
+              item.render(in: bounds)
+            }
           }
-        }
-    })
+      }
+    )
   }
 }

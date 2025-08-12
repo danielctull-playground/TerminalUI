@@ -59,4 +59,40 @@ struct OffsetTests {
       Position(x: 3, y: 6): pixel,
     ])
   }
+
+  @MainActor
+  @Suite("Preference Values", .tags(.preferenceValues))
+  struct PreferenceValues {
+
+    @Test("default value")
+    func defaultValue() {
+
+      var output = ""
+
+      let renderer = Renderer(canvas: TestCanvas(width: 3, height: 3)) {
+        Text("x")
+          .offset(x: 1, y: 2)
+          .onPreferenceChange(PreferenceKey.A.self) { output = $0 }
+      }
+      renderer.run()
+
+      #expect(output == PreferenceKey.A.defaultValue)
+    }
+
+    @Test("modified value")
+    func modifiedValue() {
+
+      var output = ""
+
+      let renderer = Renderer(canvas: TestCanvas(width: 3, height: 3)) {
+        Text("x")
+          .preference(key: PreferenceKey.A.self, value: "new")
+          .offset(x: 1, y: 2)
+          .onPreferenceChange(PreferenceKey.A.self) { output = $0 }
+      }
+      renderer.run()
+
+      #expect(output == "new")
+    }
+  }
 }

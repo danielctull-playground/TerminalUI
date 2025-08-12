@@ -10,18 +10,25 @@ public struct Color: CustomStringConvertible, Equatable, Sendable, View {
   }
 
   public static func makeView(inputs: ViewInputs<Self>) -> ViewOutputs {
-    ViewOutputs(displayItems: inputs.graph.attribute("color") {[
-      DisplayItem {
-        $0.replacingUnspecifiedDimensions()
-      } render: { bounds in
-        let pixel = Pixel(" ", background: inputs.node)
-        for x in bounds.minX...bounds.maxX {
-          for y in bounds.minY...bounds.maxY {
-            inputs.canvas.draw(pixel, at: Position(x: x, y: y))
+    ViewOutputs(
+      preferenceValues: inputs.graph.attribute("[Color] preference values") {
+        .empty
+      },
+      displayItems: inputs.graph.attribute("[Color] display items") {
+        [
+          DisplayItem {
+            $0.replacingUnspecifiedDimensions()
+          } render: { bounds in
+            let pixel = Pixel(" ", background: inputs.node)
+            for x in bounds.minX...bounds.maxX {
+              for y in bounds.minY...bounds.maxY {
+                inputs.canvas.draw(pixel, at: Position(x: x, y: y))
+              }
+            }
           }
-        }
+        ]
       }
-    ]})
+    )
   }
 }
 

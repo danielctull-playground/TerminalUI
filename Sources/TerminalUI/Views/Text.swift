@@ -12,13 +12,20 @@ public struct Text: View {
   }
 
   public static func makeView(inputs: ViewInputs<Self>) -> ViewOutputs {
-    ViewOutputs(displayItems: inputs.graph.attribute("text") {[
-      DisplayItem {
-        size(for: $0, inputs: inputs)
-      } render: {
-        render(in: $0, inputs: inputs)
+    ViewOutputs(
+      preferenceValues: inputs.graph.attribute("[Text] preference values") {
+        .empty
+      },
+      displayItems: inputs.graph.attribute("[Text] display items") {
+        [
+          DisplayItem {
+            size(for: $0, inputs: inputs)
+          } render: {
+            render(in: $0, inputs: inputs)
+          }
+        ]
       }
-    ]})
+    )
   }
 
   static private func size(
