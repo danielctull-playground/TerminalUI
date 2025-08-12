@@ -68,7 +68,7 @@ private struct EnvironmentWriter<Content: View, Value>: View {
     let environment = inputs.graph.attribute("[EnvironmentWriter]") {
       let keyPath = inputs.node.keyPath
       let value = inputs.node.value
-      var environment = inputs.environment
+      var environment = inputs.dynamicProperties.environment
       environment[keyPath: keyPath] = value
       return environment
     }
@@ -76,8 +76,8 @@ private struct EnvironmentWriter<Content: View, Value>: View {
     let inputs = ViewInputs(
       graph: inputs.graph,
       canvas: inputs.canvas,
-      node: inputs.nodeAttribute.content,
-      environment: environment)
+      dynamicProperties: DynamicProperties(environment: environment),
+      node: inputs.nodeAttribute.content)
 
     return Content.makeView(inputs: inputs)
   }

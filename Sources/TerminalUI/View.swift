@@ -15,7 +15,7 @@ extension View {
 
   public static func makeView(inputs: ViewInputs<Self>) -> ViewOutputs {
     Body.makeView(inputs: inputs.modifyNode("[\(Self.self)] body") {
-      inputs.environment.install(on: inputs.node)
+      inputs.dynamicProperties.environment.install(on: inputs.node)
       return inputs.node.body
     })
   }

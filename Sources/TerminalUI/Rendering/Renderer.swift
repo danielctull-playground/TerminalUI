@@ -23,8 +23,8 @@ struct Renderer<Content: View, Canvas: TerminalUI.Canvas> {
     let inputs = ViewInputs(
       graph: graph,
       canvas: canvas,
-      node: $screen,
-      environment: $environment)
+      dynamicProperties: DynamicProperties(environment: $environment),
+      node: $screen)
 
     let output = Screen.makeView(inputs: inputs)
 

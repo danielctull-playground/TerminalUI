@@ -42,7 +42,7 @@ public struct Text: View {
   static private func render(in bounds: Rect, inputs: ViewInputs<Self>) {
 
     let lines = inputs.node.string.lines(ofLength: Int(bounds.size.width))
-    let environment = inputs.environment
+    let environment = inputs.dynamicProperties.environment
 
     for (line, y) in zip(lines, bounds.origin.y...) {
       for (character, x) in zip(line, bounds.origin.x...) {
