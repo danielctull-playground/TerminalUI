@@ -49,11 +49,11 @@ extension View {
     _ keyPath: WritableKeyPath<EnvironmentValues, Value>,
     _ value: Value
   ) -> some View {
-    EnvironmentView(content: self, keyPath: keyPath, value: value)
+    EnvironmentWriter(content: self, keyPath: keyPath, value: value)
   }
 }
 
-public struct EnvironmentView<Content: View, Value>: View {
+private struct EnvironmentWriter<Content: View, Value>: View {
 
   let content: Content
   let keyPath: WritableKeyPath<EnvironmentValues, Value>
@@ -65,7 +65,7 @@ public struct EnvironmentView<Content: View, Value>: View {
 
   public static func makeView(inputs: ViewInputs<Self>) -> ViewOutputs {
 
-    let environment = inputs.graph.attribute("environment writer") {
+    let environment = inputs.graph.attribute("[EnvironmentWriter]") {
       let keyPath = inputs.node.keyPath
       let value = inputs.node.value
       var environment = inputs.environment
