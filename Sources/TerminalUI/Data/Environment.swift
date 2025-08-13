@@ -58,7 +58,7 @@ private struct EnvironmentWriter<Content: View, Value>: View {
           .makeView(
             inputs: inputs
               .settingEnvironmentValue(inputs.node.value, for: inputs.node.keyPath)
-              .content
+              .map(\.content)
           )
           .preferenceValues
       },
@@ -67,7 +67,7 @@ private struct EnvironmentWriter<Content: View, Value>: View {
           .makeView(
             inputs: inputs
               .settingEnvironmentValue(inputs.node.value, for: inputs.node.keyPath)
-              .content
+              .map(\.content)
           )
           .displayItems
       }

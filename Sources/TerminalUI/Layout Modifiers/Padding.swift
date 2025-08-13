@@ -26,11 +26,11 @@ private struct Padding<Content: View>: View {
   static func makeView(inputs: ViewInputs<Self>) -> ViewOutputs {
     ViewOutputs(
       preferenceValues: inputs.graph.attribute("[Padding] preference values") {
-        Content.makeView(inputs: inputs.content).preferenceValues
+        Content.makeView(inputs: inputs.map(\.content)).preferenceValues
       },
       displayItems: inputs.graph.attribute("[Padding] display items") {
         Content
-          .makeView(inputs: inputs.content)
+          .makeView(inputs: inputs.map(\.content))
           .displayItems
           .map { item in
             DisplayItem { proposal in

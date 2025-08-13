@@ -1,6 +1,5 @@
 import AttributeGraph
 
-@dynamicMemberLookup
 public struct ViewInputs<Node> {
 
   let graph: Graph
@@ -20,12 +19,6 @@ public struct ViewInputs<Node> {
     self.canvas = canvas
     self.dynamicProperties = dynamicProperties
     _node = node
-  }
-
-  subscript<Property>(
-    dynamicMember keyPath: KeyPath<Node, Property>
-  ) -> ViewInputs<Property> {
-    map { $0[keyPath: keyPath] }
   }
 
   func modifyNode<New>(_ name: AttributeName, compute: @escaping () -> New) -> ViewInputs<New> {
