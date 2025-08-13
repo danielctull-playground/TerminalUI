@@ -32,9 +32,17 @@ private struct ModifiedView<Modifier: ViewModifier>: View {
   }
 
   static func makeView(inputs: ViewInputs<Self>) -> ViewOutputs {
-    Modifier.Body.makeView(inputs: inputs.modifyNode("[\(Self.self)] body") {
-      inputs.dynamicProperties.install(on: inputs.node.modifier)
-      return inputs.node.modifier.body(content: inputs.node.content)
-    })
+    ViewOutputs(
+      preferenceValues: inputs.graph.attribute("[\(Self.self)] preference values") {
+        inputs.dynamicProperties.install(on: inputs.node.modifier)
+        let inputs = inputs.map { $0.modifier.body(content: inputs.node.content) }
+        return Modifier.Body.makeView(inputs: inputs).preferenceValues
+      },
+      displayItems: inputs.graph.attribute("[\(Self.self)] display items") {
+        inputs.dynamicProperties.install(on: inputs.node.modifier)
+        let inputs = inputs.map { $0.modifier.body(content: inputs.node.content) }
+        return Modifier.Body.makeView(inputs: inputs).displayItems
+      }
+    )
   }
 }

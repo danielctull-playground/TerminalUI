@@ -52,22 +52,46 @@ private struct EnvironmentWriter<Content: View, Value>: View {
   }
 
   public static func makeView(inputs: ViewInputs<Self>) -> ViewOutputs {
+    ViewOutputs(
+      preferenceValues: inputs.graph.attribute("[EnvironmentWriter] preference values") {
+        Content
+          .makeView(
+            inputs: inputs
+              .settingEnvironmentValue(inputs.node.value, for: inputs.node.keyPath)
+              .content
+          )
+          .preferenceValues
+      },
+      displayItems: inputs.graph.attribute("[EnvironmentWriter] display items") {
+        Content
+          .makeView(
+            inputs: inputs
+              .settingEnvironmentValue(inputs.node.value, for: inputs.node.keyPath)
+              .content
+          )
+          .displayItems
+      }
+    )
+  }
+}
 
-    let environment = inputs.graph.attribute("[EnvironmentWriter]") {
-      let keyPath = inputs.node.keyPath
-      let value = inputs.node.value
-      var environment = inputs.dynamicProperties.environment
-      environment[keyPath: keyPath] = value
-      return environment
-    }
+extension ViewInputs {
 
-    let inputs = ViewInputs(
-      graph: inputs.graph,
-      canvas: inputs.canvas,
-      dynamicProperties: DynamicProperties(environment: environment),
-      node: inputs.nodeAttribute.content)
-
-    return Content.makeView(inputs: inputs)
+  func settingEnvironmentValue<Value>(
+    _ value: Value,
+    for keyPath: WritableKeyPath<EnvironmentValues, Value>
+  ) -> ViewInputs {
+    ViewInputs(
+      graph: graph,
+      canvas: canvas,
+      dynamicProperties: DynamicProperties(
+        environment: graph.attribute("") {
+          var environment = dynamicProperties.environment
+          environment[keyPath: keyPath] = value
+          return environment
+        }
+      ),
+      node: nodeAttribute)
   }
 }
 

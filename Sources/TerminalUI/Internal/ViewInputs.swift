@@ -25,9 +25,7 @@ public struct ViewInputs<Node> {
   subscript<Property>(
     dynamicMember keyPath: KeyPath<Node, Property>
   ) -> ViewInputs<Property> {
-    modifyNode("\(type(of: Node.self)) -> \(type(of: Property.self))") {
-      node[keyPath: keyPath]
-    }
+    map { $0[keyPath: keyPath] }
   }
 
   func modifyNode<New>(_ name: AttributeName, compute: @escaping () -> New) -> ViewInputs<New> {
@@ -36,6 +34,17 @@ public struct ViewInputs<Node> {
       canvas: canvas,
       dynamicProperties: dynamicProperties,
       node: graph.attribute(name, compute)
+    )
+  }
+
+  func map<New>(_ transform: @escaping (Node) -> New) -> ViewInputs<New> {
+    ViewInputs<New>(
+      graph: graph,
+      canvas: canvas,
+      dynamicProperties: dynamicProperties,
+      node: graph.attribute("[map] \(Node.self) -> \(New.self)") {
+        transform(node)
+      }
     )
   }
 }

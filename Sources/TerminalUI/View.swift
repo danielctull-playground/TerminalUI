@@ -14,9 +14,15 @@ public protocol View {
 extension View {
 
   public static func makeView(inputs: ViewInputs<Self>) -> ViewOutputs {
-    Body.makeView(inputs: inputs.modifyNode("[\(Self.self)] body") {
-      inputs.dynamicProperties.install(on: inputs.node)
-      return inputs.node.body
-    })
+    ViewOutputs(
+      preferenceValues: inputs.graph.attribute("[\(Self.self)] preference values") {
+        inputs.dynamicProperties.install(on: inputs.node)
+        return Body.makeView(inputs: inputs.body).preferenceValues
+      },
+      displayItems: inputs.graph.attribute("[\(Self.self)] display items") {
+        inputs.dynamicProperties.install(on: inputs.node)
+        return Body.makeView(inputs: inputs.body).displayItems
+      }
+    )
   }
 }
