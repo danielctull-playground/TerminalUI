@@ -22,7 +22,9 @@ package final class Graph {
     defer { current = previous }
     current = attribute
 
-    return compute()
+    let value = compute()
+    print("computing \(attribute.name)", value)
+    return value
   }
 
   func compute<Value>(
@@ -30,7 +32,9 @@ package final class Graph {
     compute: () -> Value
   ) -> Value {
     setupDependency(input)
-    return compute()
+    let value = compute()
+    print("computing", value)
+    return value
   }
 
   package func input<Value>(
