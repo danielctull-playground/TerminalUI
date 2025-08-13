@@ -21,15 +21,6 @@ public struct ViewInputs<Node> {
     _node = node
   }
 
-  func modifyNode<New>(_ name: AttributeName, compute: @escaping () -> New) -> ViewInputs<New> {
-    ViewInputs<New>(
-      graph: graph,
-      canvas: canvas,
-      dynamicProperties: dynamicProperties,
-      node: graph.attribute(name, compute)
-    )
-  }
-
   func map<New>(_ transform: @escaping (Node) -> New) -> ViewInputs<New> {
     ViewInputs<New>(
       graph: graph,

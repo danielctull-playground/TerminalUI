@@ -11,14 +11,14 @@ extension Optional: View where Wrapped: View {
         switch inputs.node {
         case .none: .empty
         case .some(let content):
-          Wrapped.makeView(inputs: inputs.modifyNode("optional") { content }).preferenceValues
+          Wrapped.makeView(inputs: inputs.map { _ in content }).preferenceValues
         }
       },
       displayItems: inputs.graph.attribute("[Optional] display items") {
         switch inputs.node {
         case .none: []
         case .some(let content):
-          Wrapped.makeView(inputs: inputs.modifyNode("optional") { content }).displayItems
+          Wrapped.makeView(inputs: inputs.map { _ in content }).displayItems
         }
       }
     )
