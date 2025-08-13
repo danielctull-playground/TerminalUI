@@ -5,6 +5,7 @@ protocol DynamicProperty {
 }
 
 struct DynamicProperties {
+  let graph: Graph
   @Attribute var environment: EnvironmentValues
 }
 

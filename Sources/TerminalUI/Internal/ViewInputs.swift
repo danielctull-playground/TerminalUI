@@ -7,8 +7,6 @@ public struct ViewInputs<Node> {
   let dynamicProperties: DynamicProperties
   @Attribute var node: Node
 
-  var nodeAttribute: Attribute<Node> { _node }
-
   init(
     graph: Graph,
     canvas: any Canvas,
@@ -29,6 +27,17 @@ public struct ViewInputs<Node> {
       node: graph.attribute("[map] \(Node.self) -> \(New.self)") {
         transform(node)
       }
+    )
+  }
+
+  func mapDynamicProperties(
+    _ transform: @escaping (DynamicProperties) -> DynamicProperties
+  ) -> ViewInputs {
+    ViewInputs(
+      graph: graph,
+      canvas: canvas,
+      dynamicProperties: transform(dynamicProperties),
+      node: _node
     )
   }
 }
