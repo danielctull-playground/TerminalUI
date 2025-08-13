@@ -1,6 +1,7 @@
 
 protocol Dependency: AnyObject {
   var dependants: [any Dependant] { get set }
+  var name: AttributeName { get }
 }
 
 protocol Dependant: AnyObject {
