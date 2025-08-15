@@ -44,7 +44,7 @@ private struct PreferenceWriter<Content: View, Key: PreferenceKey>: View {
 
 extension View {
 
-  func onPreferenceChange<Key: PreferenceKey>(
+  public func onPreferenceChange<Key: PreferenceKey>(
       _ key: Key.Type,
       perform action: @escaping (Key.Value) -> Void
   ) -> some View where Key.Value: Equatable {
