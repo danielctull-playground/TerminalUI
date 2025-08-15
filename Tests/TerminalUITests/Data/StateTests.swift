@@ -31,4 +31,30 @@ struct StateTests {
       Position(x: 5, y: 2): Pixel("o"),
     ])
   }
+
+  @Test("writing") func writing() {
+
+    struct TestView: View {
+      @State var value = "hello"
+      var body: some View {
+        Text(value)
+          .preference(key: PreferenceKey.A.self, value: "new")
+          .onPreferenceChange(PreferenceKey.A.self) { value = $0 }
+      }
+    }
+
+    Size.window = Size(width: 5, height: 1)
+    let canvas = TestCanvas(width: 5, height: 1)
+    let renderer = Renderer(canvas: canvas) {
+      TestView()
+    }
+
+    renderer.run()
+
+    #expect(canvas.pixels == [
+      Position(x: 2, y: 1): Pixel("n"),
+      Position(x: 3, y: 1): Pixel("e"),
+      Position(x: 4, y: 1): Pixel("w"),
+    ])
+  }
 }
