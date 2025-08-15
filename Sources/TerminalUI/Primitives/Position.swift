@@ -18,3 +18,9 @@ extension Position {
     "\(y);\(x)H"
   }
 }
+
+extension Position: CustomStringConvertible {
+  public var description: String {
+    "Position(x: \(x), y: \(y))"
+  }
+}
