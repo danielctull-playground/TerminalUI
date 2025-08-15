@@ -18,14 +18,14 @@ struct Accumulated<A: View, B: View>: View {
       preferenceValues: inputs.graph.attribute("[Accumulated] preference values") {
         PreferenceValues { key in
           key.value(
-            lhs: A.makeView(inputs: inputs.map(\.a)).preferenceValues,
-            rhs: B.makeView(inputs: inputs.map(\.b)).preferenceValues
+            lhs: A.makeView(inputs: inputs.mapNode(\.a)).preferenceValues,
+            rhs: B.makeView(inputs: inputs.mapNode(\.b)).preferenceValues
           )
         }
       },
       displayItems: inputs.graph.attribute("[Accumulated] display items") {
-        let a = A.makeView(inputs: inputs.map(\.a))
-        let b = B.makeView(inputs: inputs.map(\.b))
+        let a = A.makeView(inputs: inputs.mapNode(\.a))
+        let b = B.makeView(inputs: inputs.mapNode(\.b))
         return a.displayItems + b.displayItems
       }
     )

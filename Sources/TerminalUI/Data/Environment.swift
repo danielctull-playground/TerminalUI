@@ -62,7 +62,7 @@ private struct EnvironmentWriter<Content: View, Value>: View {
                   $0[keyPath: inputs.node.keyPath] = inputs.node.value
                 }
               }
-              .map(\.content)
+              .mapNode(\.content)
           )
           .preferenceValues
       },
@@ -75,7 +75,7 @@ private struct EnvironmentWriter<Content: View, Value>: View {
                   $0[keyPath: inputs.node.keyPath] = inputs.node.value
                 }
               }
-              .map(\.content)
+              .mapNode(\.content)
           )
           .displayItems
       }

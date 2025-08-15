@@ -19,12 +19,12 @@ public struct ViewInputs<Node> {
     _node = node
   }
 
-  func map<New>(_ transform: @escaping (Node) -> New) -> ViewInputs<New> {
+  func mapNode<New>(_ transform: @escaping (Node) -> New) -> ViewInputs<New> {
     ViewInputs<New>(
       graph: graph,
       canvas: canvas,
       dynamicProperties: dynamicProperties,
-      node: graph.attribute("[map] \(Node.self) -> \(New.self)") {
+      node: graph.attribute("[mapNode] \(Node.self) -> \(New.self)") {
         transform(node)
       }
     )

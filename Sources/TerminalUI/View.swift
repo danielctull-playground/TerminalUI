@@ -17,11 +17,11 @@ extension View {
     ViewOutputs(
       preferenceValues: inputs.graph.attribute("[\(Self.self)] preference values") {
         inputs.dynamicProperties.install(on: inputs.node)
-        return Body.makeView(inputs: inputs.map(\.body)).preferenceValues
+        return Body.makeView(inputs: inputs.mapNode(\.body)).preferenceValues
       },
       displayItems: inputs.graph.attribute("[\(Self.self)] display items") {
         inputs.dynamicProperties.install(on: inputs.node)
-        return Body.makeView(inputs: inputs.map(\.body)).displayItems
+        return Body.makeView(inputs: inputs.mapNode(\.body)).displayItems
       }
     )
   }

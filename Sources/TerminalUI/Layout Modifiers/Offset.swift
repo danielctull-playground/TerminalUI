@@ -23,11 +23,11 @@ private struct Offset<Content: View>: View {
   static func makeView(inputs: ViewInputs<Self>) -> ViewOutputs {
     ViewOutputs(
       preferenceValues: inputs.graph.attribute("[Offset] preference values") {
-        Content.makeView(inputs: inputs.map(\.content)).preferenceValues
+        Content.makeView(inputs: inputs.mapNode(\.content)).preferenceValues
       },
       displayItems: inputs.graph.attribute("[Offset] display items") {
         Content
-          .makeView(inputs: inputs.map(\.content))
+          .makeView(inputs: inputs.mapNode(\.content))
           .displayItems
           .map { item in
             DisplayItem { proposal in

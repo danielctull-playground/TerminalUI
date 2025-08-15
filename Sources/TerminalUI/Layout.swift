@@ -97,10 +97,10 @@ private struct LayoutView<Content: View, Layout: TerminalUI.Layout>: View {
   static func makeView(inputs: ViewInputs<Self>) -> ViewOutputs {
     ViewOutputs(
       preferenceValues: inputs.graph.attribute("[\(Layout.self)] preference values") {
-        Content.makeView(inputs: inputs.map(\.content)).preferenceValues
+        Content.makeView(inputs: inputs.mapNode(\.content)).preferenceValues
       },
       displayItems: inputs.graph.attribute("[\(Layout.self)] display items") {
-        let content = Content.makeView(inputs: inputs.map(\.content)).displayItems
+        let content = Content.makeView(inputs: inputs.mapNode(\.content)).displayItems
 
         let subviews = LayoutSubviews(raw: content.map { item in
           LayoutSubview(sizeThatFits: item.size) { position, proposal in

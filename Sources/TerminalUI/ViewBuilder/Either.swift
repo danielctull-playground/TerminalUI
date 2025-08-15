@@ -25,17 +25,17 @@ public struct Either<First: View, Second: View>: View {
       preferenceValues: inputs.graph.attribute("[Either] preference values") {
         switch inputs.node.value {
         case let .first(first):
-          First.makeView(inputs: inputs.map { _ in first }).preferenceValues
+          First.makeView(inputs: inputs.mapNode { _ in first }).preferenceValues
         case let .second(second):
-          Second.makeView(inputs: inputs.map { _ in second }).preferenceValues
+          Second.makeView(inputs: inputs.mapNode { _ in second }).preferenceValues
         }
       },
       displayItems: inputs.graph.attribute("[Either] display items") {
         switch inputs.node.value {
         case let .first(first):
-          First.makeView(inputs: inputs.map { _ in first }).displayItems
+          First.makeView(inputs: inputs.mapNode { _ in first }).displayItems
         case let .second(second):
-          Second.makeView(inputs: inputs.map { _ in second }).displayItems
+          Second.makeView(inputs: inputs.mapNode { _ in second }).displayItems
         }
       }
     )
