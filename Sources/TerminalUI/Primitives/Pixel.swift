@@ -48,3 +48,9 @@ public struct Pixel: Equatable, Sendable {
     ]
   }
 }
+
+extension Pixel: CustomStringConvertible {
+  public var description: String {
+    "Pixel(\"\(content)\")"
+  }
+}
