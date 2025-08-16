@@ -2,7 +2,7 @@ import AttributeGraph
 import Foundation
 
 @MainActor
-struct Renderer<Content: View, Canvas: TerminalUI.Canvas> {
+package struct Renderer<Content: View, Canvas: TerminalUI.Canvas> {
 
   private let graph: Graph
   private let canvas: Canvas
@@ -18,7 +18,7 @@ struct Renderer<Content: View, Canvas: TerminalUI.Canvas> {
     _environment = graph.input("environment", EnvironmentValues())
   }
 
-  func run() {
+  package func run() {
 
     let inputs = ViewInputs(
       graph: graph,
@@ -51,7 +51,7 @@ struct Renderer<Content: View, Canvas: TerminalUI.Canvas> {
 
 extension Renderer {
 
-  init(
+  package init(
     canvas: Canvas,
     @ViewBuilder content: () -> Content
   ) {

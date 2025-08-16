@@ -2,6 +2,7 @@
 import TerminalUITesting
 import Testing
 
+@MainActor
 @Suite("Offset", .tags(.modifier))
 struct OffsetTests {
 

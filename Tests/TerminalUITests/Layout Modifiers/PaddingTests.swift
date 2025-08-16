@@ -2,6 +2,7 @@
 import TerminalUITesting
 import Testing
 
+@MainActor
 @Suite("Padding", .tags(.modifier))
 struct PaddingTests {
 

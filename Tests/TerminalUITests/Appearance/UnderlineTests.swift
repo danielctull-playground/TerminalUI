@@ -2,6 +2,7 @@
 import TerminalUITesting
 import Testing
 
+@MainActor
 @Suite("Underline", .tags(.modifier))
 struct UnderlineTests {
 

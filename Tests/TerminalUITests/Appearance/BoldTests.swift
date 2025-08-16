@@ -2,6 +2,7 @@
 import TerminalUITesting
 import Testing
 
+@MainActor
 @Suite("Bold", .tags(.modifier))
 struct BoldTests {
 

@@ -2,6 +2,7 @@
 import TerminalUITesting
 import Testing
 
+@MainActor
 @Suite("Color", .tags(.view))
 struct ColorTests {
 

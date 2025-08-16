@@ -2,6 +2,7 @@
 import TerminalUITesting
 import Testing
 
+@MainActor
 @Suite("FixedSize", .tags(.modifier))
 struct FixedSizeTests {
 

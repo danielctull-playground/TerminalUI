@@ -2,6 +2,7 @@ import TerminalUI
 import TerminalUITesting
 import Testing
 
+@MainActor
 @Suite("VStack", .tags(.view, .layout))
 struct VStackTests {
 
