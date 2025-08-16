@@ -7,6 +7,7 @@ protocol DynamicProperty {
 struct DynamicProperties {
   let graph: Graph
   @Attribute var environment: EnvironmentValues
+  @Attribute var state: StateValues
 }
 
 extension DynamicProperties {
