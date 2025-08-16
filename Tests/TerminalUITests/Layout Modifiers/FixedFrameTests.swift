@@ -169,7 +169,7 @@ struct FixedFrameTests {
           .frame(width: 1, height: 1)
           .onPreferenceChange(PreferenceKey.A.self) { output = $0 }
       }
-      renderer.run()
+      renderer.render()
 
       #expect(output == PreferenceKey.A.defaultValue)
     }
@@ -185,7 +185,7 @@ struct FixedFrameTests {
           .frame(width: 1, height: 1)
           .onPreferenceChange(PreferenceKey.A.self) { output = $0 }
       }
-      renderer.run()
+      renderer.render()
 
       #expect(output == "new")
     }

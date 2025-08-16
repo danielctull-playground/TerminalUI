@@ -99,7 +99,7 @@ struct TextTests {
         Text("Hello")
           .onPreferenceChange(PreferenceKey.A.self) { output = $0 }
       }
-      renderer.run()
+      renderer.render()
 
       #expect(output == PreferenceKey.A.defaultValue)
     }
@@ -114,7 +114,7 @@ struct TextTests {
           .preference(key: PreferenceKey.A.self, value: "new")
           .onPreferenceChange(PreferenceKey.A.self) { output = $0 }
       }
-      renderer.run()
+      renderer.render()
 
       #expect(output == "new")
     }

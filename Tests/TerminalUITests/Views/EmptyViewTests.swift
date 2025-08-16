@@ -14,7 +14,7 @@ struct EmptyViewTests {
       EmptyView()
     }
 
-    renderer.run()
+    renderer.render()
 
     #expect(canvas.pixels.isEmpty)
   }
@@ -32,7 +32,7 @@ struct EmptyViewTests {
         EmptyView()
           .onPreferenceChange(PreferenceKey.A.self) { output = $0 }
       }
-      renderer.run()
+      renderer.render()
 
       #expect(output == PreferenceKey.A.defaultValue)
     }
@@ -47,7 +47,7 @@ struct EmptyViewTests {
           .preference(key: PreferenceKey.A.self, value: "new")
           .onPreferenceChange(PreferenceKey.A.self) { output = $0 }
       }
-      renderer.run()
+      renderer.render()
 
       #expect(output == "new")
     }

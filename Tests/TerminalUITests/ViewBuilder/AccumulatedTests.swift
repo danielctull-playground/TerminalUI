@@ -22,7 +22,7 @@ struct AccumulatedTests {
         }
         .onPreferenceChange(PreferenceKey.A.self) { output = $0 }
       }
-      renderer.run()
+      renderer.render()
 
       #expect(output == "lhs")
     }
@@ -40,7 +40,7 @@ struct AccumulatedTests {
         }
         .onPreferenceChange(PreferenceKey.A.self) { output = $0 }
       }
-      renderer.run()
+      renderer.render()
 
       #expect(output == "rhs")
     }
@@ -59,7 +59,7 @@ struct AccumulatedTests {
         }
         .onPreferenceChange(PreferenceKey.A.self) { output = $0 }
       }
-      renderer.run()
+      renderer.render()
 
       #expect(output == "leftright")
     }

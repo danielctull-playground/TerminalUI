@@ -92,7 +92,7 @@ struct FixedSizeTests {
           .fixedSize(horizontal: true, vertical: false)
           .onPreferenceChange(PreferenceKey.A.self) { output = $0 }
       }
-      renderer.run()
+      renderer.render()
 
       #expect(output == PreferenceKey.A.defaultValue)
     }
@@ -108,7 +108,7 @@ struct FixedSizeTests {
           .fixedSize(horizontal: true, vertical: false)
           .onPreferenceChange(PreferenceKey.A.self) { output = $0 }
       }
-      renderer.run()
+      renderer.render()
 
       #expect(output == "new")
     }

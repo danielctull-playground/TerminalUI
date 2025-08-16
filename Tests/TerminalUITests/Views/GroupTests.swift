@@ -37,7 +37,7 @@ struct GroupTests {
         Group {}
           .onPreferenceChange(PreferenceKey.A.self) { output = $0 }
       }
-      renderer.run()
+      renderer.render()
 
       #expect(output == PreferenceKey.A.defaultValue)
     }
@@ -55,7 +55,7 @@ struct GroupTests {
         }
         .onPreferenceChange(PreferenceKey.A.self) { output = $0 }
       }
-      renderer.run()
+      renderer.render()
 
       #expect(output == "lhs")
     }
@@ -73,7 +73,7 @@ struct GroupTests {
         }
         .onPreferenceChange(PreferenceKey.A.self) { output = $0 }
       }
-      renderer.run()
+      renderer.render()
 
       #expect(output == "rhs")
     }
@@ -92,7 +92,7 @@ struct GroupTests {
         }
         .onPreferenceChange(PreferenceKey.A.self) { output = $0 }
       }
-      renderer.run()
+      renderer.render()
 
       #expect(output == "leftright")
     }

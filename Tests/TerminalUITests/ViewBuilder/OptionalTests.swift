@@ -24,7 +24,7 @@ struct OptionalTests {
       .onPreferenceChange(PreferenceKey.A.self) { output = $0 }
     }
 
-    renderer.run()
+    renderer.render()
 
     #expect(output == expected)
   }

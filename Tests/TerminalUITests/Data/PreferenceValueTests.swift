@@ -45,7 +45,7 @@ struct PreferenceTests {
         canvas: canvas,
         content: TestView { output = $0 }
       )
-      renderer.run()
+      renderer.render()
 
       #expect(output == A.defaultValue)
     }
@@ -76,7 +76,7 @@ struct PreferenceTests {
         canvas: canvas,
         content: TestView { output = $0 }
       )
-      renderer.run()
+      renderer.render()
 
       #expect(output == "new")
     }
@@ -99,7 +99,7 @@ struct PreferenceTests {
         canvas: canvas,
         content: TestView { output = $0 }
       )
-      renderer.run()
+      renderer.render()
 
       #expect(output == A.defaultValue)
     }
@@ -122,7 +122,7 @@ struct PreferenceTests {
         canvas: canvas,
         content: TestView { output = $0 }
       )
-      renderer.run()
+      renderer.render()
 
       #expect(output == "b")
     }
@@ -154,7 +154,7 @@ struct PreferenceTests {
         canvas: canvas,
         content: TestView { output = $0 }
       )
-      renderer.run()
+      renderer.render()
 
       #expect(output == A.defaultValue)
     }
@@ -180,7 +180,7 @@ struct PreferenceTests {
         canvas: canvas,
         content: TestView { output = $0 }
       )
-      renderer.run()
+      renderer.render()
 
       #expect(output == "lhs")
     }
@@ -206,7 +206,7 @@ struct PreferenceTests {
         canvas: canvas,
         content: TestView { output = $0 }
       )
-      renderer.run()
+      renderer.render()
 
       #expect(output == "rhs")
     }
@@ -233,7 +233,7 @@ struct PreferenceTests {
         canvas: canvas,
         content: TestView { output = $0 }
       )
-      renderer.run()
+      renderer.render()
 
       #expect(output == "12")
     }

@@ -31,6 +31,6 @@ extension App {
   ) {
     let app = Self()
     let renderer = Renderer(canvas: canvas, content: app.body)
-    renderer.run()
+    renderer.render()
   }
 }

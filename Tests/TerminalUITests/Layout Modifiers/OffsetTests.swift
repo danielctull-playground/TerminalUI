@@ -75,7 +75,7 @@ struct OffsetTests {
           .offset(x: 1, y: 2)
           .onPreferenceChange(PreferenceKey.A.self) { output = $0 }
       }
-      renderer.run()
+      renderer.render()
 
       #expect(output == PreferenceKey.A.defaultValue)
     }
@@ -91,7 +91,7 @@ struct OffsetTests {
           .offset(x: 1, y: 2)
           .onPreferenceChange(PreferenceKey.A.self) { output = $0 }
       }
-      renderer.run()
+      renderer.render()
 
       #expect(output == "new")
     }

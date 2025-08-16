@@ -18,7 +18,7 @@ package struct Renderer<Content: View, Canvas: TerminalUI.Canvas> {
     _environment = graph.input("environment", EnvironmentValues())
   }
 
-  package func run() {
+  package func render() {
 
     let inputs = ViewInputs(
       graph: graph,
