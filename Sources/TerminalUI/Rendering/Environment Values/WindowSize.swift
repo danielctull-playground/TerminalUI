@@ -11,6 +11,18 @@ private struct WindowSizeEnvironmentKey: EnvironmentKey {
   static let defaultValue = Size.zero
 }
 
+extension ExternalEnvironment {
+
+  @MainActor
+  static var windowSize: ExternalEnvironment {
+    var size = Size.window
+    let windowChange = DispatchSource.makeSignalSource(signal: SIGWINCH, queue: .main)
+    windowChange.setEventHandler { size = .window }
+    windowChange.resume()
+    return ExternalEnvironment { $0.windowSize = size }
+  }
+}
+
 @MainActor
 /// Stores the window size for when getting the window size fails.
 ///

@@ -8,14 +8,14 @@ package struct Renderer<Content: View, Canvas: TerminalUI.Canvas> {
   private let canvas: Canvas
   @Attribute private var screen: Screen<Content>
   @Input private var environment: EnvironmentValues
-
-  let windowChange = DispatchSource.makeSignalSource(signal: SIGWINCH, queue: .main)
+  private let externalEnvironment: ExternalEnvironment
 
   init(canvas: Canvas, content: Content) {
     graph = Graph()
     self.canvas = canvas
     _screen = graph.attribute("screen") { Screen(content: content) }
     _environment = graph.input("environment", EnvironmentValues())
+    externalEnvironment = .windowSize
   }
 
   package func render() {
@@ -32,7 +32,9 @@ package struct Renderer<Content: View, Canvas: TerminalUI.Canvas> {
     let output = Screen.makeView(inputs: inputs)
 
     func render() {
-      environment.windowSize = .window
+
+      externalEnvironment.update(&environment)
+
       _ = output.preferenceValues // Trigger preference values
       output
         .displayItems
@@ -40,10 +42,6 @@ package struct Renderer<Content: View, Canvas: TerminalUI.Canvas> {
         .render(in: Rect(origin: .origin, size: environment.windowSize))
     }
 
-    windowChange.setEventHandler {
-      render()
-    }
-    windowChange.resume()
     render()
   }
 }
