@@ -41,11 +41,9 @@ struct PreferenceTests {
 
       var output = ""
 
-      let renderer = Renderer(
-        canvas: canvas,
-        content: TestView { output = $0 }
-      )
-      renderer.render()
+      canvas.render {
+        TestView { output = $0 }
+      }
 
       #expect(output == A.defaultValue)
     }
@@ -72,11 +70,9 @@ struct PreferenceTests {
 
       var output = ""
 
-      let renderer = Renderer(
-        canvas: canvas,
-        content: TestView { output = $0 }
-      )
-      renderer.render()
+      canvas.render {
+        TestView { output = $0 }
+      }
 
       #expect(output == "new")
     }
@@ -95,11 +91,9 @@ struct PreferenceTests {
 
       var output = ""
 
-      let renderer = Renderer(
-        canvas: canvas,
-        content: TestView { output = $0 }
-      )
-      renderer.render()
+      canvas.render {
+        TestView { output = $0 }
+      }
 
       #expect(output == A.defaultValue)
     }
@@ -118,11 +112,9 @@ struct PreferenceTests {
 
       var output = ""
 
-      let renderer = Renderer(
-        canvas: canvas,
-        content: TestView { output = $0 }
-      )
-      renderer.render()
+      canvas.render {
+        TestView { output = $0 }
+      }
 
       #expect(output == "b")
     }
@@ -150,11 +142,9 @@ struct PreferenceTests {
 
       var output = ""
 
-      let renderer = Renderer(
-        canvas: canvas,
-        content: TestView { output = $0 }
-      )
-      renderer.render()
+      canvas.render {
+        TestView { output = $0 }
+      }
 
       #expect(output == A.defaultValue)
     }
@@ -176,11 +166,9 @@ struct PreferenceTests {
 
       var output = ""
 
-      let renderer = Renderer(
-        canvas: canvas,
-        content: TestView { output = $0 }
-      )
-      renderer.render()
+      canvas.render {
+        TestView { output = $0 }
+      }
 
       #expect(output == "lhs")
     }
@@ -202,11 +190,9 @@ struct PreferenceTests {
 
       var output = ""
 
-      let renderer = Renderer(
-        canvas: canvas,
-        content: TestView { output = $0 }
-      )
-      renderer.render()
+      canvas.render {
+        TestView { output = $0 }
+      }
 
       #expect(output == "rhs")
     }
@@ -229,11 +215,9 @@ struct PreferenceTests {
 
       var output = ""
 
-      let renderer = Renderer(
-        canvas: canvas,
-        content: TestView { output = $0 }
-      )
-      renderer.render()
+      canvas.render {
+        TestView { output = $0 }
+      }
 
       #expect(output == "12")
     }

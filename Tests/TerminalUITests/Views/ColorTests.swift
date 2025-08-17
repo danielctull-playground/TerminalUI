@@ -50,11 +50,10 @@ struct ColorTests {
 
       var output = ""
 
-      let renderer = Renderer(canvas: TestCanvas(width: 3, height: 3)) {
+      TestCanvas(width: 3, height: 3).render {
         color
           .onPreferenceChange(PreferenceKey.A.self) { output = $0 }
       }
-      renderer.render()
 
       #expect(output == PreferenceKey.A.defaultValue)
     }
@@ -65,12 +64,11 @@ struct ColorTests {
 
       var output = ""
 
-      let renderer = Renderer(canvas: TestCanvas(width: 3, height: 3)) {
+      TestCanvas(width: 3, height: 3).render {
         color
           .preference(key: PreferenceKey.A.self, value: "new")
           .onPreferenceChange(PreferenceKey.A.self) { output = $0 }
       }
-      renderer.render()
 
       #expect(output == "new")
     }
