@@ -22,15 +22,12 @@ public protocol App {
 extension App {
 
   public static func main() {
-    run()
-    RunLoop.main.run()
-  }
-
-  package static func run(
-    canvas: some Canvas = TextStreamCanvas(output: .fileHandle(.standardOutput))
-  ) {
-    let app = Self()
-    let renderer = Renderer(canvas: canvas, content: app.body)
-    renderer.render()
+    let renderer = Renderer(
+      canvas: TextStreamCanvas(output: .fileHandle(.standardOutput)),
+      content: Self().body
+    )
+    while true {
+      renderer.render()
+    }
   }
 }
