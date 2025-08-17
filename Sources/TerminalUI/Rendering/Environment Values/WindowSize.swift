@@ -1,7 +1,7 @@
 import Foundation
 
 extension EnvironmentValues {
-  var windowSize: Size  {
+  fileprivate(set) var windowSize: Size  {
     get { self[WindowSizeEnvironmentKey.self] }
     set { self[WindowSizeEnvironmentKey.self] = newValue }
   }
