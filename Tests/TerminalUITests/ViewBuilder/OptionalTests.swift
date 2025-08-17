@@ -13,7 +13,7 @@ struct OptionalTests {
 
     var output = ""
 
-    let renderer = Renderer(canvas: TestCanvas(width: 3, height: 3)) {
+    TestCanvas(width: 3, height: 3).render {
       Group {
         if value {
           Text("x")
@@ -22,8 +22,6 @@ struct OptionalTests {
       }
       .onPreferenceChange(PreferenceKey.A.self) { output = $0 }
     }
-
-    renderer.render()
 
     #expect(output == expected)
   }

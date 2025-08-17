@@ -85,12 +85,11 @@ struct FixedSizeTests {
 
       var output = ""
 
-      let renderer = Renderer(canvas: TestCanvas(width: 3, height: 3)) {
+      TestCanvas(width: 3, height: 3).render {
         Text("x")
           .fixedSize(horizontal: true, vertical: false)
           .onPreferenceChange(PreferenceKey.A.self) { output = $0 }
       }
-      renderer.render()
 
       #expect(output == PreferenceKey.A.defaultValue)
     }
@@ -100,13 +99,12 @@ struct FixedSizeTests {
 
       var output = ""
 
-      let renderer = Renderer(canvas: TestCanvas(width: 3, height: 3)) {
+      TestCanvas(width: 3, height: 3).render {
         Text("x")
           .preference(key: PreferenceKey.A.self, value: "new")
           .fixedSize(horizontal: true, vertical: false)
           .onPreferenceChange(PreferenceKey.A.self) { output = $0 }
       }
-      renderer.render()
 
       #expect(output == "new")
     }

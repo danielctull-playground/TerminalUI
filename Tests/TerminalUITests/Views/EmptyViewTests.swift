@@ -9,11 +9,9 @@ struct EmptyViewTests {
   func displayItems() {
 
     let canvas = TestCanvas(width: 3, height: 3)
-    let renderer = Renderer(canvas: canvas) {
+    canvas.render {
       EmptyView()
     }
-
-    renderer.render()
 
     #expect(canvas.pixels.isEmpty)
   }
@@ -26,11 +24,10 @@ struct EmptyViewTests {
 
       var output = ""
 
-      let renderer = Renderer(canvas: TestCanvas(width: 3, height: 3)) {
+      TestCanvas(width: 3, height: 3).render {
         EmptyView()
           .onPreferenceChange(PreferenceKey.A.self) { output = $0 }
       }
-      renderer.render()
 
       #expect(output == PreferenceKey.A.defaultValue)
     }
@@ -40,12 +37,11 @@ struct EmptyViewTests {
 
       var output = ""
 
-      let renderer = Renderer(canvas: TestCanvas(width: 3, height: 3)) {
+      TestCanvas(width: 3, height: 3).render {
         EmptyView()
           .preference(key: PreferenceKey.A.self, value: "new")
           .onPreferenceChange(PreferenceKey.A.self) { output = $0 }
       }
-      renderer.render()
 
       #expect(output == "new")
     }

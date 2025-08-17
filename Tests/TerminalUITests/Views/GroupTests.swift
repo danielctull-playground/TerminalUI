@@ -31,11 +31,10 @@ struct GroupTests {
 
       var output = ""
 
-      let renderer = Renderer(canvas: TestCanvas(width: 3, height: 3)) {
+      TestCanvas(width: 3, height: 3).render {
         Group {}
           .onPreferenceChange(PreferenceKey.A.self) { output = $0 }
       }
-      renderer.render()
 
       #expect(output == PreferenceKey.A.defaultValue)
     }
@@ -45,7 +44,7 @@ struct GroupTests {
 
       var output = ""
 
-      let renderer = Renderer(canvas: TestCanvas(width: 3, height: 3)) {
+      TestCanvas(width: 3, height: 3).render {
         Group {
           Text("x")
             .preference(key: PreferenceKey.A.self, value: "lhs")
@@ -53,7 +52,6 @@ struct GroupTests {
         }
         .onPreferenceChange(PreferenceKey.A.self) { output = $0 }
       }
-      renderer.render()
 
       #expect(output == "lhs")
     }
@@ -63,7 +61,7 @@ struct GroupTests {
 
       var output = ""
 
-      let renderer = Renderer(canvas: TestCanvas(width: 3, height: 3)) {
+      TestCanvas(width: 3, height: 3).render {
         Group {
           Text("x")
           Text("y")
@@ -71,7 +69,6 @@ struct GroupTests {
         }
         .onPreferenceChange(PreferenceKey.A.self) { output = $0 }
       }
-      renderer.render()
 
       #expect(output == "rhs")
     }
@@ -81,7 +78,7 @@ struct GroupTests {
 
       var output = ""
 
-      let renderer = Renderer(canvas: TestCanvas(width: 3, height: 3)) {
+      TestCanvas(width: 3, height: 3).render {
         Group {
           Text("x")
             .preference(key: PreferenceKey.A.self, value: "left")
@@ -90,7 +87,6 @@ struct GroupTests {
         }
         .onPreferenceChange(PreferenceKey.A.self) { output = $0 }
       }
-      renderer.render()
 
       #expect(output == "leftright")
     }

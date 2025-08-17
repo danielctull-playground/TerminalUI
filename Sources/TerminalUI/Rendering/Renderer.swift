@@ -54,7 +54,7 @@ extension Renderer {
 
   package init(
     canvas: Canvas,
-    environment: ExternalEnvironment = nil,
+    environment: ExternalEnvironment,
     @ViewBuilder content: () -> Content
   ) {
     self.init(canvas: canvas, environment: environment, content: content())
