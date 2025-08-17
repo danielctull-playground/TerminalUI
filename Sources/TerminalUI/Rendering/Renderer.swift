@@ -10,12 +10,16 @@ package struct Renderer<Content: View, Canvas: TerminalUI.Canvas> {
   @Input private var environment: EnvironmentValues
   private let externalEnvironment: ExternalEnvironment
 
-  init(canvas: Canvas, content: Content) {
+  init(
+    canvas: Canvas,
+    environment: ExternalEnvironment,
+    content: Content
+  ) {
     graph = Graph()
     self.canvas = canvas
     _screen = graph.attribute("screen") { Screen(content: content) }
     _environment = graph.input("environment", EnvironmentValues())
-    externalEnvironment = .windowSize
+    externalEnvironment = environment
   }
 
   package func render() {
@@ -51,8 +55,9 @@ extension Renderer {
 
   package init(
     canvas: Canvas,
+    environment: ExternalEnvironment = nil,
     @ViewBuilder content: () -> Content
   ) {
-    self.init(canvas: canvas, content: content())
+    self.init(canvas: canvas, environment: environment, content: content())
   }
 }

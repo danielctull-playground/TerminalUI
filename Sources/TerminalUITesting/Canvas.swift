@@ -4,8 +4,11 @@ extension Canvas {
 
   @MainActor
   package func render(size: Size, content: () -> some View) {
-    Size.window = size
-    let renderer = Renderer(canvas: self, content: content)
+    let renderer = Renderer(
+      canvas: self,
+      environment: .windowSize(size),
+      content: content
+    )
     renderer.render()
   }
 }

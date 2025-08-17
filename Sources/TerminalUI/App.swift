@@ -24,6 +24,7 @@ extension App {
   public static func main() {
     let renderer = Renderer(
       canvas: TextStreamCanvas(output: .fileHandle(.standardOutput)),
+      environment: .windowSize,
       content: Self().body
     )
     while true {
