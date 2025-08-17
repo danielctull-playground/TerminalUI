@@ -2,7 +2,6 @@
 import TerminalUITesting
 import Testing
 
-@MainActor
 @Suite("Color", .tags(.view))
 struct ColorTests {
 
@@ -41,7 +40,6 @@ struct ColorTests {
 //    #expect(size.height == height)
 //  }
 
-  @MainActor
   @Suite("Preference Values", .tags(.preferenceValues))
   struct PreferenceValues {
 

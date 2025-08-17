@@ -2,7 +2,6 @@
 import TerminalUITesting
 import Testing
 
-@MainActor
 @Suite("FixedFrame", .tags(.modifier))
 struct FixedFrameTests {
 
@@ -155,7 +154,6 @@ struct FixedFrameTests {
     #expect(canvas.pixels == [position: pixel])
   }
 
-  @MainActor
   @Suite("Preference Values", .tags(.preferenceValues))
   struct PreferenceValues {
 

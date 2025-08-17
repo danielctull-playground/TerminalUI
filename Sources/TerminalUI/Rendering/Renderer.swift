@@ -1,7 +1,6 @@
 import AttributeGraph
 import Foundation
 
-@MainActor
 package struct Renderer<Content: View, Canvas: TerminalUI.Canvas> {
 
   private let graph: Graph

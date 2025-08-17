@@ -16,13 +16,11 @@ private struct B: PreferenceKey {
   }
 }
 
-@MainActor
 @Suite("Preference")
 struct PreferenceTests {
 
   private let canvas = TestCanvas(width: 7, height: 1)
 
-  @MainActor
   @Suite("Reader")
   struct Reader {
 
@@ -49,8 +47,6 @@ struct PreferenceTests {
     }
   }
 
-
-  @MainActor
   @Suite("Writer")
   struct Writer {
 
@@ -120,7 +116,6 @@ struct PreferenceTests {
     }
   }
 
-  @MainActor
   @Suite("Accumulated")
   struct Accumulated {
 

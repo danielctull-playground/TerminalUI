@@ -1,6 +1,5 @@
 import Foundation
 
-@MainActor
 public protocol App {
 
   /// The type of view representing the body of the app.

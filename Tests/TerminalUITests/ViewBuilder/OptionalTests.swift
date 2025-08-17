@@ -2,7 +2,6 @@
 import TerminalUITesting
 import Testing
 
-@MainActor
 @Suite("Optional", .tags(.viewBuilder))
 struct OptionalTests {
 

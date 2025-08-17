@@ -2,7 +2,6 @@
 import TerminalUITesting
 import Testing
 
-@MainActor
 @Suite("EmptyView", .tags(.view))
 struct EmptyViewTests {
 
@@ -19,7 +18,6 @@ struct EmptyViewTests {
     #expect(canvas.pixels.isEmpty)
   }
 
-  @MainActor
   @Suite("Preference Values", .tags(.preferenceValues))
   struct PreferenceValues {
 

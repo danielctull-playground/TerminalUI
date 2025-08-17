@@ -2,7 +2,6 @@
 import TerminalUITesting
 import Testing
 
-@MainActor
 @Suite("Strikethrough", .tags(.modifier))
 struct StrikethroughTests {
 

@@ -2,7 +2,6 @@
 import TerminalUITesting
 import Testing
 
-@MainActor
 @Suite("FixedSize", .tags(.modifier))
 struct FixedSizeTests {
 
@@ -78,7 +77,6 @@ struct FixedSizeTests {
     #expect(canvas.pixels == expected)
   }
 
-  @MainActor
   @Suite("Preference Values", .tags(.preferenceValues))
   struct PreferenceValues {
 

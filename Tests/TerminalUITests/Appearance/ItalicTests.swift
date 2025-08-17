@@ -2,7 +2,6 @@
 import TerminalUITesting
 import Testing
 
-@MainActor
 @Suite("Italic", .tags(.modifier))
 struct ItalicTests {
 

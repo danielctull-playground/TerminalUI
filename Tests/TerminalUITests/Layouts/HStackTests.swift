@@ -2,7 +2,6 @@ import TerminalUI
 import TerminalUITesting
 import Testing
 
-@MainActor
 @Suite("HStack", .tags(.view, .layout))
 struct HStackTests {
 

@@ -5,7 +5,6 @@ import Testing
 @Suite("Accumulated", .tags(.viewBuilder))
 struct AccumulatedTests {
 
-  @MainActor
   @Suite("Preference Values", .tags(.preferenceValues))
   struct PreferenceValues {
 
