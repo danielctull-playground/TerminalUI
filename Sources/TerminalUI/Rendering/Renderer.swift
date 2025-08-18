@@ -3,49 +3,45 @@ import Foundation
 
 package struct Renderer<Content: View, Canvas: TerminalUI.Canvas> {
 
-  private let graph: Graph
   private let canvas: Canvas
-  @Attribute private var screen: Screen<Content>
   @Input private var environment: EnvironmentValues
   private let externalEnvironment: ExternalEnvironment
+  private let outputs: ViewOutputs
 
   init(
     canvas: Canvas,
-    environment: ExternalEnvironment,
+    environment externalEnvironment: ExternalEnvironment,
     content: Content
   ) {
-    graph = Graph()
-    self.canvas = canvas
-    _screen = graph.attribute("screen") { Screen(content: content) }
-    _environment = graph.input("environment", EnvironmentValues())
-    externalEnvironment = environment
-  }
-
-  package func render() {
+    let graph = Graph()
+    let screen = graph.attribute("screen") { Screen(content: content) }
+    let environment = graph.input("environment", EnvironmentValues())
 
     let inputs = ViewInputs(
       graph: graph,
       canvas: canvas,
       dynamicProperties: DynamicProperties(
         graph: graph,
-        environment: $environment
+        environment: environment.projectedValue
       ),
-      node: $screen)
+      node: screen)
 
-    let output = Screen.makeView(inputs: inputs)
+    self.canvas = canvas
+    self.outputs = Screen.makeView(inputs: inputs)
+    self.externalEnvironment = externalEnvironment
+    self._environment = environment
+  }
 
-    func render() {
+  package func render() {
 
-      externalEnvironment.update(&environment)
+    externalEnvironment.update(&environment)
 
-      _ = output.preferenceValues // Trigger preference values
-      output
-        .displayItems
-        .first!
-        .render(in: Rect(origin: .origin, size: environment.windowSize))
-    }
+    _ = outputs.preferenceValues // Trigger preference values
 
-    render()
+    outputs
+      .displayItems
+      .first!
+      .render(in: Rect(origin: .origin, size: environment.windowSize))
   }
 }
 
