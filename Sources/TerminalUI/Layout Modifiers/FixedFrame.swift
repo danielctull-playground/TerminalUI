@@ -21,7 +21,11 @@ private struct FixedFrame: LayoutModifier {
     subview: Subview
   ) -> Size {
 
-    lazy var fallback = proposal.replacingUnspecifiedDimensions()
+    if let width, let height {
+      return Size(width: width, height: height)
+    }
+
+    let fallback = proposal.replacingUnspecifiedDimensions()
 
     let proposal = ProposedViewSize(
       width: width ?? fallback.width,
