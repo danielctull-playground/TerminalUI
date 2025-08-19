@@ -5,40 +5,30 @@ extension View {
     horizontal: Bool = true,
     vertical: Bool = true
   ) -> some View {
-    FixedSize(content: self, horizontal: horizontal, vertical: vertical)
+    FixedSize(horizontal: horizontal, vertical: vertical) { self }
   }
 }
 
-private struct FixedSize<Content: View>: View {
+private struct FixedSize: LayoutModifier {
 
-  let content: Content
   let horizontal: Bool
   let vertical: Bool
 
-  var body: some View {
-    fatalError("Body should never be called.")
+  func sizeThatFits(
+    proposal: ProposedViewSize,
+    subview: Subview
+  ) -> Size {
+    var proposal = proposal
+    if horizontal { proposal.width = nil }
+    if vertical { proposal.height = nil }
+    return subview.sizeThatFits(proposal)
   }
 
-  static func makeView(inputs: ViewInputs<Self>) -> ViewOutputs {
-    ViewOutputs(
-      preferenceValues: inputs.graph.attribute("[FixedSize] preference values") {
-        Content.makeView(inputs: inputs.mapNode(\.content)).preferenceValues
-      },
-      displayItems: inputs.graph.attribute("[FixedSize] display items") {
-        Content
-          .makeView(inputs: inputs.mapNode(\.content))
-          .displayItems
-          .map { item in
-            DisplayItem { proposal in
-              var proposal = proposal
-              if inputs.node.horizontal { proposal.width = nil }
-              if inputs.node.vertical { proposal.height = nil }
-              return item.size(for: proposal)
-            } render: { bounds in
-              item.render(in: bounds)
-            }
-          }
-      }
-    )
+  func placeSubview(
+    in bounds: Rect,
+    proposal: ProposedViewSize,
+    subview: Subview
+  ) {
+    subview.place(at: bounds.origin, proposal: proposal)
   }
 }

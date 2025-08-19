@@ -2,45 +2,33 @@
 extension View {
 
   public func offset(x: Int = 0, y: Int = 0) -> some View {
-    Offset(content: self, x: x, y: y)
+    Offset(x: x, y: y) { self }
   }
 
   public func offset(size: Size) -> some View {
-    Offset(content: self, x: size.width, y: size.height)
+    Offset(x: size.width, y: size.height) { self }
   }
 }
 
-private struct Offset<Content: View>: View {
+private struct Offset: LayoutModifier {
 
-  let content: Content
   let x: Int
   let y: Int
 
-  var body: some View {
-    fatalError("Body should never be called.")
+  func sizeThatFits(
+    proposal: ProposedViewSize,
+    subview: Subview
+  ) -> Size {
+    subview.sizeThatFits(proposal)
   }
 
-  static func makeView(inputs: ViewInputs<Self>) -> ViewOutputs {
-    ViewOutputs(
-      preferenceValues: inputs.graph.attribute("[Offset] preference values") {
-        Content.makeView(inputs: inputs.mapNode(\.content)).preferenceValues
-      },
-      displayItems: inputs.graph.attribute("[Offset] display items") {
-        Content
-          .makeView(inputs: inputs.mapNode(\.content))
-          .displayItems
-          .map { item in
-            DisplayItem { proposal in
-              item.size(for: proposal)
-            } render: { bounds in
-              item.render(in: Rect(
-                x: bounds.minX + inputs.node.x,
-                y: bounds.minY + inputs.node.y,
-                width: bounds.size.width,
-                height: bounds.size.height))
-            }
-          }
-      }
-    )
+  func placeSubview(
+    in bounds: Rect,
+    proposal: ProposedViewSize,
+    subview: Subview
+  ) {
+    subview.place(
+      at: Position(x: bounds.minX + x, y: bounds.minY + y),
+      proposal: proposal)
   }
 }

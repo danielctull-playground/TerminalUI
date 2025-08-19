@@ -2,7 +2,7 @@
 extension View {
 
   public func padding(_ insets: EdgeInsets) -> some View {
-    Padding(content: self, insets: insets)
+    Padding(insets: insets) { self }
   }
 
   public func padding(_ set: Edge.Set, _ value: Int) -> some View {
@@ -14,75 +14,43 @@ extension View {
   }
 }
 
-private struct Padding<Content: View>: View {
+private struct Padding: LayoutModifier {
 
-  let content: Content
   let insets: EdgeInsets
 
-  var body: some View {
-    fatalError("Body should never be called.")
+  func sizeThatFits(
+    proposal: ProposedViewSize,
+    subview: Subview
+  ) -> Size {
+
+    let width = insets.leading + insets.trailing
+    let height = insets.top + insets.bottom
+
+    let proposal = ProposedViewSize(
+      width: proposal.width.map { $0 - width },
+      height: proposal.height.map { $0 - height })
+
+    let size = subview.sizeThatFits(proposal)
+
+    return Size(
+      width: size.width + width,
+      height: size.height + height)
   }
 
-  static func makeView(inputs: ViewInputs<Self>) -> ViewOutputs {
-    ViewOutputs(
-      preferenceValues: inputs.graph.attribute("[Padding] preference values") {
-        Content.makeView(inputs: inputs.mapNode(\.content)).preferenceValues
-      },
-      displayItems: inputs.graph.attribute("[Padding] display items") {
-        Content
-          .makeView(inputs: inputs.mapNode(\.content))
-          .displayItems
-          .map { item in
-            DisplayItem { proposal in
-              item
-                .size(for: proposal.inset(inputs.node.insets))
-                .inset(-inputs.node.insets)
-            } render: { bounds in
-              item.render(in: bounds.inset(inputs.node.insets))
-            }
-          }
-      }
-    )
-  }
-}
+  func placeSubview(
+    in bounds: Rect,
+    proposal: ProposedViewSize,
+    subview: Subview
+  ) {
 
-extension Rect {
+    let origin = Position(
+      x: bounds.origin.x + insets.leading,
+      y: bounds.origin.y + insets.top)
 
-  fileprivate func inset(_ insets: EdgeInsets) -> Rect {
-    Rect(
-      x: origin.x + insets.leading,
-      y: origin.y + insets.top,
-      width: size.width - insets.leading - insets.trailing,
-      height: size.height - insets.top - insets.bottom)
-  }
+    let proposal = ProposedViewSize(
+      width: proposal.width.map { $0 - insets.leading - insets.trailing },
+      height: proposal.height.map { $0 - insets.top - insets.bottom })
 
-}
-
-extension ProposedViewSize {
-  fileprivate func inset(_ insets: EdgeInsets) -> ProposedViewSize {
-    ProposedViewSize(
-      width: width.map { $0 - insets.leading - insets.trailing },
-      height: height.map { $0 - insets.top - insets.bottom }
-    )
-  }
-}
-
-extension Size {
-  fileprivate func inset(_ insets: EdgeInsets) -> Size {
-    Size(
-      width: width - insets.leading - insets.trailing,
-      height: height - insets.top - insets.bottom
-    )
-  }
-}
-
-extension EdgeInsets {
-  fileprivate static prefix func - (insets: EdgeInsets) -> EdgeInsets {
-    EdgeInsets(
-      top: -insets.top,
-      leading: -insets.leading,
-      bottom: -insets.bottom,
-      trailing: -insets.trailing
-    )
+    subview.place(at: origin, proposal: proposal)
   }
 }

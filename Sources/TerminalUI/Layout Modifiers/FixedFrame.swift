@@ -6,54 +6,45 @@ extension View {
     height: Int? = nil,
     alignment: Alignment = .center
   ) -> some View {
-    FixedFrame(
-      content: self,
-      width: width,
-      height: height,
-      alignment: alignment
-    )
+    FixedFrame(width: width, height: height, alignment: alignment) { self }
   }
 }
 
-private struct FixedFrame<Content: View>: View {
+private struct FixedFrame: LayoutModifier {
 
-  let content: Content
   let width: Int?
   let height: Int?
   let alignment: Alignment
 
-  var body: some View {
-    fatalError("Body should never be called.")
+  func sizeThatFits(
+    proposal: ProposedViewSize,
+    subview: Subview
+  ) -> Size {
+
+    lazy var fallback = proposal.replacingUnspecifiedDimensions()
+
+    let proposal = ProposedViewSize(
+      width: width ?? fallback.width,
+      height: height ?? fallback.height)
+
+    let size = subview.sizeThatFits(proposal)
+
+    return Size(
+      width: width ?? size.width,
+      height: height ?? size.height)
   }
 
-  static func makeView(inputs: ViewInputs<Self>) -> ViewOutputs {
-    ViewOutputs(
-      preferenceValues: inputs.graph.attribute("[FixedFrame] preference values") {
-        Content.makeView(inputs: inputs.mapNode(\.content)).preferenceValues
-      },
-      displayItems: inputs.graph.attribute("[FixedFrame] display items") {
-        Content
-          .makeView(inputs: inputs.mapNode(\.content))
-          .displayItems
-          .map { item in
-            DisplayItem { proposal in
-              var fallback: Size { proposal.replacingUnspecifiedDimensions() }
-              let proposal = ProposedViewSize(
-                width: inputs.node.width ?? fallback.width,
-                height: inputs.node.height ?? fallback.height)
-              let size = item.size(for: proposal)
-              return Size(width: inputs.node.width ?? size.width, height: inputs.node.height ?? size.height)
-            } render: { bounds in
-              let parent = inputs.node.alignment.position(for: bounds.size)
-              let size = item.size(for: ProposedViewSize(bounds.size))
-              let child = inputs.node.alignment.position(for: size)
-              let position = Position(
-                x: bounds.origin.x + parent.x - child.x,
-                y: bounds.origin.y + parent.y - child.y)
-              item.render(in: Rect(origin: position, size: size))
-            }
-          }
-      }
-    )
+  func placeSubview(
+    in bounds: Rect,
+    proposal: ProposedViewSize,
+    subview: Subview
+  ) {
+    let parent = alignment.position(for: bounds.size)
+    let size = subview.sizeThatFits(ProposedViewSize(bounds.size))
+    let child = alignment.position(for: size)
+    let position = Position(
+      x: bounds.origin.x + parent.x - child.x,
+      y: bounds.origin.y + parent.y - child.y)
+    subview.place(at: position, proposal: ProposedViewSize(size))
   }
 }
