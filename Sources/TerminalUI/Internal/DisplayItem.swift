@@ -16,6 +16,8 @@ struct DisplayItem {
   }
 
   func render(in bounds: Rect) {
+    guard bounds.size.height > 0 else { return }
+    guard bounds.size.width > 0 else { return }
     render(bounds)
   }
 }
