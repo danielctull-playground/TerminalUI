@@ -49,12 +49,14 @@ public struct LayoutSubview {
   private let _sizeThatFits: (ProposedViewSize) -> Size
   private let _place: (Position, ProposedViewSize) -> Void
 
-  fileprivate init(
-    sizeThatFits: @escaping (ProposedViewSize) -> Size,
-    place: @escaping (Position, ProposedViewSize) -> Void
-  ) {
-    _sizeThatFits = sizeThatFits
-    _place = place
+  init(displayItem: DisplayItem) {
+    _sizeThatFits = displayItem.size(for:)
+    _place = { position, proposal in
+      displayItem.render(in: Rect(
+        origin: position,
+        size: displayItem.size(for: proposal)
+      ))
+    }
   }
 
   public func sizeThatFits(_ proposal: ProposedViewSize) -> Size {
@@ -102,14 +104,7 @@ private struct LayoutView<Content: View, Layout: TerminalUI.Layout>: View {
       displayItems: inputs.graph.attribute("[\(Layout.self)] display items") {
         let content = Content.makeView(inputs: inputs.mapNode(\.content)).displayItems
 
-        let subviews = LayoutSubviews(raw: content.map { item in
-          LayoutSubview(sizeThatFits: item.size) { position, proposal in
-            item.render(in: Rect(
-              origin: position,
-              size: item.size(for: proposal)
-            ))
-          }
-        })
+        let subviews = LayoutSubviews(raw: content.map(LayoutSubview.init))
 
         let layout = inputs.node.layout
         var cache = layout.makeCache(subviews: subviews)
