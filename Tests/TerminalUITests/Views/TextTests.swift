@@ -115,4 +115,22 @@ struct TextTests {
       #expect(output == "new")
     }
   }
+
+  @Test("height: zero")
+  func zeroHeight() {
+    let canvas = TestCanvas(width: 3, height: 0)
+    canvas.render {
+      Text("A")
+    }
+    #expect(canvas.pixels.isEmpty)
+  }
+
+  @Test("width: zero")
+  func zeroWidth() {
+    let canvas = TestCanvas(width: 0, height: 3)
+    canvas.render {
+      Text("A")
+    }
+    #expect(canvas.pixels.isEmpty)
+  }
 }

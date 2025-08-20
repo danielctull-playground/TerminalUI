@@ -27,6 +27,24 @@ struct ColorTests {
     ])
   }
 
+  @Test("height: zero")
+  func zeroHeight() {
+    let canvas = TestCanvas(width: 3, height: 0)
+    canvas.render {
+      Color.red
+    }
+    #expect(canvas.pixels.isEmpty)
+  }
+
+  @Test("width: zero")
+  func zeroWidth() {
+    let canvas = TestCanvas(width: 0, height: 3)
+    canvas.render {
+      Color.red
+    }
+    #expect(canvas.pixels.isEmpty)
+  }
+
 //  @Test("size", arguments: Color.testCases)
 //  func size(color: Color) throws {
 //    let width = Int.random(in: 0...1_000_000_000)
