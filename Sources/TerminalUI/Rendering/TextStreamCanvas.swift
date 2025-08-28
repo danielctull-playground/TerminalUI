@@ -4,9 +4,9 @@ package struct TextStreamCanvas<Output: TextOutputStream>: Canvas {
 
   package init(output: Output) {
     self.output = output
-    self.output.write(ControlSequence.clearScreen)
-    self.output.write(AlternativeBuffer.on.control)
-    self.output.write(CursorVisibility.off.control)
+    self.output.write(.clearScreen)
+    self.output.write(.alternativeBuffer(.on))
+    self.output.write(.cursorVisibility(.off))
   }
 
   package func draw(_ pixel: Pixel, at position: Position) {

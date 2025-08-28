@@ -18,14 +18,26 @@ extension ControlSequence {
   static let clearScreen: ControlSequence = "2J"
 }
 
+extension ControlSequence {
+  static func alternativeBuffer(_ value: AlternativeBuffer) -> Self {
+    value.control
+  }
+}
+
 struct AlternativeBuffer {
-  let control: ControlSequence
+  fileprivate let control: ControlSequence
   static let on = AlternativeBuffer(control: "?1049h")
   static let off = AlternativeBuffer(control: "?1049l")
 }
 
+extension ControlSequence {
+  static func cursorVisibility(_ value: CursorVisibility) -> Self {
+    value.control
+  }
+}
+
 struct CursorVisibility {
-  let control: ControlSequence
+  fileprivate let control: ControlSequence
   static let on = CursorVisibility(control: "?25h")
   static let off = CursorVisibility(control: "?25l")
 }
