@@ -104,10 +104,38 @@ extension DynamicProperties {
 
 public struct EnvironmentValues {
 
-  private var values: [ObjectIdentifier: Any] = [:]
+  private var values: [AnyEnvironmentPropertyKey: Any] = [:]
 
   public subscript<Key: EnvironmentKey>(key: Key.Type) -> Key.Value {
-    get { values[ObjectIdentifier(key)] as? Key.Value ?? Key.defaultValue }
-    set { values[ObjectIdentifier(key)] = newValue }
+    get { values[EnvironmentPropertyKey(key)] as? Key.Value ?? Key.defaultValue }
+    set { values[EnvironmentPropertyKey(key)] = newValue }
+  }
+}
+
+private final class EnvironmentPropertyKey<Key>: AnyEnvironmentPropertyKey {
+  init(_ type: Key.Type) {
+    super.init(id: ObjectIdentifier(type))
+  }
+}
+
+private class AnyEnvironmentPropertyKey {
+  private let id: ObjectIdentifier
+  init(id: ObjectIdentifier) {
+    self.id = id
+  }
+}
+
+extension AnyEnvironmentPropertyKey: Equatable {
+  static func == (
+    lhs: AnyEnvironmentPropertyKey,
+    rhs: AnyEnvironmentPropertyKey
+  ) -> Bool {
+    lhs.id == rhs.id
+  }
+}
+
+extension AnyEnvironmentPropertyKey: Hashable {
+  func hash(into hasher: inout Hasher) {
+    hasher.combine(id)
   }
 }
