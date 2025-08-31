@@ -5,10 +5,10 @@ import Testing
 @Suite("Environment")
 struct EnvironmentTests {
 
-  private let canvas = TestCanvas(width: 7, height: 1)
-
   @Test("default")
   func defaultValue() {
+
+    let canvas = TestCanvas(width: 7, height: 1)
 
     canvas.render {
       TestView()
@@ -25,8 +25,10 @@ struct EnvironmentTests {
     ])
   }
 
-  @Test("modifier")
-  func modifier() {
+  @Test("write")
+  func write() {
+
+    let canvas = TestCanvas(width: 7, height: 1)
 
     canvas.render {
       TestView().environment(\.value, "b")
@@ -34,6 +36,27 @@ struct EnvironmentTests {
 
     #expect(canvas.pixels == [
       Position(x: 4, y: 1): Pixel("b"),
+    ])
+  }
+
+  @Test("transform")
+  func modifier() {
+
+    let canvas = TestCanvas(width: 8, height: 1)
+
+    canvas.render {
+      TestView().transformEnvironment(\.value) { $0.append("a") }
+    }
+
+    #expect(canvas.pixels == [
+      Position(x: 1, y: 1): Pixel("d"),
+      Position(x: 2, y: 1): Pixel("e"),
+      Position(x: 3, y: 1): Pixel("f"),
+      Position(x: 4, y: 1): Pixel("a"),
+      Position(x: 5, y: 1): Pixel("u"),
+      Position(x: 6, y: 1): Pixel("l"),
+      Position(x: 7, y: 1): Pixel("t"),
+      Position(x: 8, y: 1): Pixel("a"),
     ])
   }
 

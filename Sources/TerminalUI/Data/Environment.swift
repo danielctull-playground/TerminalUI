@@ -29,7 +29,7 @@ extension Environment: DynamicProperty {
   }
 }
 
-// MARK: - Environment Writer
+// MARK: - Write
 
 extension View {
 
@@ -83,6 +83,43 @@ private struct EnvironmentWriter<Content: View, Value>: View {
   }
 }
 
+// MARK: - Transform
+
+extension View {
+
+  public func transformEnvironment<Value>(
+      _ keyPath: WritableKeyPath<EnvironmentValues, Value>,
+      transform: @escaping (inout Value) -> Void
+  ) -> some View {
+    modifier(EnvironmentTransformer(keyPath: keyPath, transform: transform))
+  }
+}
+
+private struct EnvironmentTransformer<Content: View, Value>: ViewModifier {
+
+  @Environment private var value: Value
+  private let keyPath: WritableKeyPath<EnvironmentValues, Value>
+  private let transform: (Value) -> Value
+
+  init(
+    keyPath: WritableKeyPath<EnvironmentValues, Value>,
+    transform: @escaping (inout Value) -> Void
+  ) {
+    _value = Environment(keyPath)
+    self.keyPath = keyPath
+    self.transform = { value in
+      var value = value
+      transform(&value)
+      return value
+    }
+  }
+
+  func body(content: Content) -> some View {
+    content.environment(keyPath, transform(value))
+  }
+}
+
+// MARK: - Helper
 
 extension DynamicProperties {
 
