@@ -1,10 +1,12 @@
 
+// MARK: EnvironmentKey
+
 public protocol EnvironmentKey {
   associatedtype Value
   static var defaultValue: Value { get }
 }
 
-// MARK: - Environment Property Wrapper
+// MARK: - @Environment
 
 @propertyWrapper
 public struct Environment<Value> {
@@ -29,7 +31,7 @@ extension Environment: DynamicProperty {
   }
 }
 
-// MARK: - Write
+// MARK: - Writing
 
 extension View {
 
@@ -83,7 +85,7 @@ private struct EnvironmentWriter<Content: View, Value>: View {
   }
 }
 
-// MARK: - Transform
+// MARK: - Transforming
 
 extension View {
 
@@ -119,25 +121,7 @@ private struct EnvironmentTransformer<Content: View, Value>: ViewModifier {
   }
 }
 
-// MARK: - Helper
-
-extension DynamicProperties {
-
-  fileprivate func modifyEnvironment(
-    _ transform: @escaping (inout EnvironmentValues) -> Void
-  ) -> DynamicProperties {
-    DynamicProperties(
-      graph: graph,
-      environment: graph.attribute("[modify env]") {
-        var environment = self.environment
-        transform(&environment)
-        return environment
-      }
-    )
-  }
-}
-
-// MARK: - Environment Values
+// MARK: - EnvironmentValues
 
 public struct EnvironmentValues {
 
@@ -174,5 +158,23 @@ extension AnyEnvironmentPropertyKey: Equatable {
 extension AnyEnvironmentPropertyKey: Hashable {
   func hash(into hasher: inout Hasher) {
     hasher.combine(id)
+  }
+}
+
+// MARK: - Helpers
+
+extension DynamicProperties {
+
+  fileprivate func modifyEnvironment(
+    _ transform: @escaping (inout EnvironmentValues) -> Void
+  ) -> DynamicProperties {
+    DynamicProperties(
+      graph: graph,
+      environment: graph.attribute("[modify env]") {
+        var environment = self.environment
+        transform(&environment)
+        return environment
+      }
+    )
   }
 }
