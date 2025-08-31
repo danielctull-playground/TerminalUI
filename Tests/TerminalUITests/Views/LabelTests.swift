@@ -1,0 +1,106 @@
+@testable import TerminalUI
+import TerminalUITesting
+import Testing
+
+@Suite("Label", .tags(.view))
+struct LabelTests {
+
+  @Suite("Display Items", .tags(.preferenceValues))
+  struct DisplayItems {
+
+    @Test("Default LabelStyle")
+    func defaultLabelStyle() {
+
+      let canvas = TestCanvas(width: 10, height: 1)
+      canvas.render {
+        Label {
+          Text("title")
+        } icon: {
+          Text("icon")
+        }
+      }
+
+      #expect(canvas.pixels == [
+        Position(x:  1, y: 1): Pixel("i"),
+        Position(x:  2, y: 1): Pixel("c"),
+        Position(x:  3, y: 1): Pixel("o"),
+        Position(x:  4, y: 1): Pixel("n"),
+
+        Position(x:  6, y: 1): Pixel("t"),
+        Position(x:  7, y: 1): Pixel("i"),
+        Position(x:  8, y: 1): Pixel("t"),
+        Position(x:  9, y: 1): Pixel("l"),
+        Position(x: 10, y: 1): Pixel("e"),
+      ])
+    }
+
+    @Test("Custom LabelStyle")
+    func customLabelStyle() {
+
+      struct Custom: LabelStyle {
+        func makeBody(configuration: Configuration) -> some View {
+          VStack(spacing: 1) {
+            configuration.icon
+            configuration.title
+          }
+        }
+      }
+
+      let canvas = TestCanvas(width: 5, height: 3)
+      canvas.render {
+        Group {
+          Label {
+            Text("title")
+          } icon: {
+            Text("icon")
+          }
+        }
+        .labelStyle(Custom())
+      }
+
+      #expect(canvas.pixels == [
+        Position(x: 1, y: 1): Pixel("i"),
+        Position(x: 2, y: 1): Pixel("c"),
+        Position(x: 3, y: 1): Pixel("o"),
+        Position(x: 4, y: 1): Pixel("n"),
+
+        Position(x: 1, y: 3): Pixel("t"),
+        Position(x: 2, y: 3): Pixel("i"),
+        Position(x: 3, y: 3): Pixel("t"),
+        Position(x: 4, y: 3): Pixel("l"),
+        Position(x: 5, y: 3): Pixel("e"),
+      ])
+    }
+  }
+
+  @Suite("Preference Values", .tags(.preferenceValues))
+  struct PreferenceValues {
+
+    @Test("default value")
+    func defaultValue() {
+
+      var output = ""
+
+      TestCanvas(width: 3, height: 3).render {
+        Label { Color.black } icon: { Color.blue }
+          .onPreferenceChange(PreferenceKey.A.self) { output = $0 }
+      }
+
+      #expect(output == PreferenceKey.A.defaultValue)
+    }
+
+    @Test("modified value")
+    func modifiedValue() {
+
+      var output = ""
+
+      TestCanvas(width: 3, height: 3).render {
+        Label { Color.black } icon: { Color.blue }
+          .preference(key: PreferenceKey.A.self, value: "new")
+          .onPreferenceChange(PreferenceKey.A.self) { output = $0 }
+      }
+
+      #expect(output == "new")
+    }
+  }
+}
