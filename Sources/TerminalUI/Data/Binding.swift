@@ -19,6 +19,10 @@ public struct Binding<Value> {
     nonmutating set { set(newValue) }
   }
 
+  public var projectedValue: Binding<Value> {
+    self
+  }
+
   public subscript<Subject>(
     dynamicMember keyPath: WritableKeyPath<Value, Subject>
   ) -> Binding<Subject> {

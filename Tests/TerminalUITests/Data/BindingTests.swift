@@ -38,6 +38,20 @@ struct BindingTests {
     #expect(foo.value == "newer")
   }
 
+  @Test("projectedValue")
+  func projectedValue() {
+
+    var value = "old"
+    let original = Binding { value } set: { value = $0 }
+    let projected = original.projectedValue
+    #expect(projected.wrappedValue == "old")
+
+    projected.wrappedValue = "new"
+    #expect(projected.wrappedValue == "new")
+    #expect(original.wrappedValue == "new")
+    #expect(value == "new")
+  }
+
   @Test("constant")
   func constant() {
     let binding = Binding.constant("old")
