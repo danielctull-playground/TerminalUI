@@ -47,3 +47,12 @@ extension Binding {
     Binding { value } set: { _ in }
   }
 }
+
+// MARK: - Identifiable
+
+extension Binding: Identifiable where Value: Identifiable {
+
+  public var id: Value.ID {
+    wrappedValue.id
+  }
+}

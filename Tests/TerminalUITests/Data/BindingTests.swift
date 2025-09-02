@@ -91,4 +91,22 @@ struct BindingTests {
     #expect(fooBinding.wrappedValue == Foo(value: "new"))
     #expect(foo == Foo(value: "new"))
   }
+
+  @Test("Identifiable")
+  func identifiable() {
+
+    struct Foo: Equatable, Identifiable {
+      var id: String
+    }
+
+    var value = Foo(id: "old")
+    let binding = Binding { value } set: { value = $0 }
+    #expect(binding.id == "old")
+
+    value = Foo(id: "new")
+    #expect(binding.id == "new")
+
+    binding.wrappedValue = Foo(id: "newer")
+    #expect(binding.id == "newer")
+  }
 }
