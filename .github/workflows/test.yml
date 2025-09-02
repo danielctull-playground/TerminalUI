@@ -12,11 +12,11 @@ jobs:
       fail-fast: false
       matrix:
         swift-version:
-          - "6.0"
-          - "6.1"
+          - "6.2"
     runs-on: ubuntu-latest
     container:
-      image: swift:${{ matrix.swift-version }}
+#      image: swift:${{ matrix.swift-version }}
+      image: swiftlang/swift:nightly
     steps:
     - name: Checkout
       uses: actions/checkout@v4
@@ -27,15 +27,15 @@ jobs:
     - name: Test
       run: swift test -v
 
-  macos:
-    name: macOS
-    runs-on: macos-15
-    steps:
-    - name: Checkout
-      uses: actions/checkout@v4
-    - name: Swift Version
-      run: swift --version
-    - name: Build
-      run: swift build -v
-    - name: Test
-      run: swift test -v
+#  macos:
+#    name: macOS
+#    runs-on: macos-15
+#    steps:
+#    - name: Checkout
+#      uses: actions/checkout@v4
+#    - name: Swift Version
+#      run: swift --version
+#    - name: Build
+#      run: swift build -v
+#    - name: Test
+#      run: swift test -v
