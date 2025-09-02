@@ -37,4 +37,12 @@ struct BindingTests {
     binding.wrappedValue = "newer"
     #expect(foo.value == "newer")
   }
+
+  @Test("constant")
+  func constant() {
+    let binding = Binding.constant("old")
+    #expect(binding.wrappedValue == "old")
+    binding.wrappedValue = "new"
+    #expect(binding.wrappedValue == "old")
+  }
 }

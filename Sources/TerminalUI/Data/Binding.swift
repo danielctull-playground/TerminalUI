@@ -18,3 +18,10 @@ public struct Binding<Value> {
     nonmutating set { set(newValue) }
   }
 }
+
+extension Binding {
+
+  public static func constant(_ value: Value) -> Binding {
+    Binding { value } set: { _ in }
+  }
+}
