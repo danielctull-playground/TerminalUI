@@ -5,6 +5,13 @@ import Testing
 @Suite("Environment")
 struct EnvironmentTests {
 
+  @Test("read outside of body: fatal")
+  func readOutsideOfBody() async {
+    await #expect(processExitsWith: .failure) {
+      _ = TestView().value
+    }
+  }
+
   @Test("default")
   func defaultValue() {
 
