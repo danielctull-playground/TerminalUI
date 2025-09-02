@@ -36,6 +36,13 @@ public struct Binding<Value> {
 
 extension Binding {
 
+  public init(projectedValue: Binding<Value>) {
+    self = projectedValue
+  }
+}
+
+extension Binding {
+
   public static func constant(_ value: Value) -> Binding {
     Binding { value } set: { _ in }
   }
