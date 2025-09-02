@@ -18,4 +18,23 @@ struct BindingTests {
     #expect(binding.wrappedValue == "newer")
     #expect(value == "newer")
   }
+
+  @Test("@propertyWrapper")
+  func propertyWrapper() {
+
+    struct Foo {
+      @Binding var value: String
+    }
+
+    var value = "old"
+    let binding = Binding { value } set: { value = $0 }
+    let foo = Foo(value: binding)
+    #expect(foo.value == "old")
+
+    value = "new"
+    #expect(foo.value == "new")
+
+    binding.wrappedValue = "newer"
+    #expect(foo.value == "newer")
+  }
 }
