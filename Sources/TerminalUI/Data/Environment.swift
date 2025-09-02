@@ -26,7 +26,7 @@ public struct Environment<Value> {
 
 extension Environment: DynamicProperty {
 
-  func install(_ properties: DynamicProperties) {
+  func install(_ properties: DynamicProperties, for label: String) {
     values = properties.environment
   }
 }
@@ -174,7 +174,8 @@ extension DynamicProperties {
         var environment = self.environment
         transform(&environment)
         return environment
-      }
+      },
+      state: graph.input("state", StateValues())
     )
   }
 }

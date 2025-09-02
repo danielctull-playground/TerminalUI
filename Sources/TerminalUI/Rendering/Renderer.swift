@@ -22,7 +22,8 @@ package struct Renderer<Content: View, Canvas: TerminalUI.Canvas> {
       canvas: canvas,
       dynamicProperties: DynamicProperties(
         graph: graph,
-        environment: environment.projectedValue
+        environment: environment.projectedValue,
+        state: graph.input("state", StateValues())
       ),
       node: screen)
 
