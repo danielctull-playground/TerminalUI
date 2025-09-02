@@ -21,6 +21,10 @@ public struct State<Value> {
     get { get() }
     nonmutating set { set(newValue) }
   }
+
+  public var projectedValue: Binding<Value> {
+    Binding(get: get, set: set)
+  }
 }
 
 extension State: DynamicProperty {
