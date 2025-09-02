@@ -7,6 +7,13 @@ struct TextTests {
 
   private let canvas = TestCanvas(width: 5, height: 3)
 
+  @Test("body: fatal")
+  func body() async {
+    await #expect(processExitsWith: .failure) {
+      _ = Text("").body
+    }
+  }
+
   @Test("single line")
   func singleLine() {
 

@@ -8,6 +8,13 @@ struct OffsetTests {
   private let view = Text("X")
   private let pixel = Pixel("X")
 
+  @Test("body: fatal")
+  func body() async {
+    await #expect(processExitsWith: .failure) {
+      _ = Color.black.offset().body
+    }
+  }
+
   @Test("x:")
   func x() {
 
