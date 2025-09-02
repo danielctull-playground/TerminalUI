@@ -1,4 +1,5 @@
 
+@dynamicMemberLookup
 @propertyWrapper
 public struct Binding<Value> {
 
@@ -16,6 +17,16 @@ public struct Binding<Value> {
   public var wrappedValue: Value {
     get { get() }
     nonmutating set { set(newValue) }
+  }
+
+  public subscript<Subject>(
+    dynamicMember keyPath: WritableKeyPath<Value, Subject>
+  ) -> Binding<Subject> {
+    Binding<Subject> {
+      wrappedValue[keyPath: keyPath]
+    } set: {
+      wrappedValue[keyPath: keyPath] = $0
+    }
   }
 }
 

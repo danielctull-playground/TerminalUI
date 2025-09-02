@@ -45,4 +45,22 @@ struct BindingTests {
     binding.wrappedValue = "new"
     #expect(binding.wrappedValue == "old")
   }
+
+  @Test("@dynamicMemberLookup")
+  func dynamicMemberLookup() {
+
+    struct Foo: Equatable {
+      var value: String
+    }
+
+    var foo = Foo(value: "old")
+    let fooBinding = Binding { foo } set: { foo = $0 }
+    let valueBinding = fooBinding.value
+    #expect(valueBinding.wrappedValue == "old")
+
+    valueBinding.wrappedValue = "new"
+    #expect(valueBinding.wrappedValue == "new")
+    #expect(fooBinding.wrappedValue == Foo(value: "new"))
+    #expect(foo == Foo(value: "new"))
+  }
 }
