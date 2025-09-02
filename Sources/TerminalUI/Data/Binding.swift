@@ -56,3 +56,64 @@ extension Binding: Identifiable where Value: Identifiable {
     wrappedValue.id
   }
 }
+
+// MARK: - Sequence
+
+extension Binding: Sequence where Value: MutableCollection {
+  public typealias Element = Binding<Value.Element>
+  public typealias Iterator = IndexingIterator<Binding<Value>>
+  public typealias SubSequence = Slice<Binding<Value>>
+}
+
+// MARK: - Collection
+
+extension Binding: Collection where Value: MutableCollection {
+
+  public typealias Index = Value.Index
+  public typealias Indices = Value.Indices
+
+  public var startIndex: Index {
+    wrappedValue.startIndex
+  }
+
+  public var endIndex: Index {
+    wrappedValue.endIndex
+  }
+
+  public var indices: Indices {
+    wrappedValue.indices
+  }
+
+  public func index(after index: Index) -> Index {
+    wrappedValue.index(after: index)
+  }
+
+  public func formIndex(after index: inout Index) {
+    wrappedValue.formIndex(after: &index)
+  }
+
+  public subscript(position: Index) -> Element {
+    Element {
+      wrappedValue[position]
+    } set: {
+      wrappedValue[position] = $0
+    }
+  }
+}
+
+// MARK: - BidirectionalCollection
+
+extension Binding: BidirectionalCollection where Value: BidirectionalCollection, Value: MutableCollection {
+
+  public func index(before index: Index) -> Index {
+    wrappedValue.index(before: index)
+  }
+
+  public func formIndex(before index: inout Index) {
+    wrappedValue.formIndex(before: &index)
+  }
+}
+
+// MARK: - RandomAccessCollection
+
+extension Binding: RandomAccessCollection where Value: RandomAccessCollection, Value: MutableCollection {}

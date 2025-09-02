@@ -109,4 +109,51 @@ struct BindingTests {
     binding.wrappedValue = Foo(id: "newer")
     #expect(binding.id == "newer")
   }
+
+  @Test("Collection")
+  func collection() {
+
+    var value = ["0", "1", "2"]
+    let binding = Binding { value } set: { value = $0 }
+
+    for index in binding.indices {
+      binding[index].wrappedValue += "a"
+    }
+    #expect(value == ["0a", "1a", "2a"])
+
+    var index = binding.startIndex
+    while index < binding.endIndex {
+      binding[index].wrappedValue += "b"
+      binding.formIndex(after: &index)
+    }
+    #expect(value == ["0ab", "1ab", "2ab"])
+
+    index = binding.startIndex
+    while index < binding.endIndex {
+      binding[index].wrappedValue += "c"
+      index = binding.index(after: index)
+    }
+    #expect(value == ["0abc", "1abc", "2abc"])
+  }
+
+  @Test("BidirectionalCollection")
+  func bidirectionalCollection() {
+
+    var value = ["0", "1", "2"]
+    let binding = Binding { value } set: { value = $0 }
+
+    var index = binding.endIndex
+    while index > binding.startIndex {
+      binding.formIndex(before: &index)
+      binding[index].wrappedValue += "a"
+    }
+    #expect(value == ["0a", "1a", "2a"])
+
+    index = binding.endIndex
+    while index > binding.startIndex {
+      index = binding.index(before: index)
+      binding[index].wrappedValue += "b"
+    }
+    #expect(value == ["0ab", "1ab", "2ab"])
+  }
 }
