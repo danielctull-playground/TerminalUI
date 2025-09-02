@@ -8,6 +8,13 @@ struct FixedSizeTests {
   private let view = Color.blue
   private let pixel = Pixel(" ", background: .blue)
 
+  @Test("body: fatal")
+  func body() async {
+    await #expect(processExitsWith: .failure) {
+      _ = Color.black.fixedSize().body
+    }
+  }
+
   @Test("horizontal")
   func horizontal() {
 

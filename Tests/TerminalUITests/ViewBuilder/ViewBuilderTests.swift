@@ -23,6 +23,15 @@ struct ViewBuilderTests {
     ])
   }
 
+  @Test("first body: fatal")
+  func firstBody() async {
+    await #expect(processExitsWith: .failure) {
+      _ = ViewBuilder
+        .buildPartialBlock(first: Color.black)
+        .body
+    }
+  }
+
   @Test func accumulated() {
 
     canvas.render {
@@ -34,6 +43,15 @@ struct ViewBuilderTests {
       Position(x: 6, y: 5): Pixel("a"),
       Position(x: 6, y: 6): Pixel("b"),
     ])
+  }
+
+  @Test("accumulated body: fatal")
+  func accumulatedBody() async {
+    await #expect(processExitsWith: .failure) {
+      _ = ViewBuilder
+        .buildPartialBlock(accumulated: Color.black, next: Color.blue)
+        .body
+    }
   }
 
   @Test(arguments: [
@@ -49,6 +67,15 @@ struct ViewBuilderTests {
     }
 
     #expect(canvas.pixels == expectation)
+  }
+
+  @Test("optional body: fatal")
+  func optionalBody() async {
+    await #expect(processExitsWith: .failure) {
+      _ = ViewBuilder
+        .buildOptional(Color.black)
+        .body
+    }
   }
 
   @Test(arguments: [
@@ -70,6 +97,18 @@ struct ViewBuilderTests {
     ])
   }
 
+  @Test("either body: fatal")
+  func eitherBody() async {
+    await #expect(processExitsWith: .failure) {
+      let either: Either<Color, Color> = ViewBuilder.buildEither(first: Color.black)
+      _ = either.body
+    }
+    await #expect(processExitsWith: .failure) {
+      let either: Either<Color, Color> = ViewBuilder.buildEither(second: Color.black)
+      _ = either.body
+    }
+  }
+
 #if !os(Linux)
   // I can't find an #available flag that exists for linux machines.
   @Test func limitedAvailability() {
@@ -87,4 +126,11 @@ struct ViewBuilderTests {
     ])
   }
 #endif
+
+  @Test("limited availability body: fatal")
+  func limitedAvailabilityBody() async {
+    await #expect(processExitsWith: .failure) {
+      _ = ViewBuilder.buildLimitedAvailability(Color.black).body
+    }
+  }
 }

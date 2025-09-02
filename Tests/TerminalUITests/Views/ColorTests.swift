@@ -7,6 +7,13 @@ struct ColorTests {
 
   private let canvas = TestCanvas(width: 3, height: 3)
 
+  @Test("body: fatal")
+  func body() async {
+    await #expect(processExitsWith: .failure) {
+      _ = Color.black.body
+    }
+  }
+
   @Test("render", arguments: Color.testCases)
   func render(color: Color) {
 

@@ -39,6 +39,13 @@ struct EnvironmentTests {
     ])
   }
 
+  @Test("write body: fatal")
+  func writeBody() async {
+    await #expect(processExitsWith: .failure) {
+      _ = TestView().environment(\.value, "b").body
+    }
+  }
+
   @Test("transform")
   func modifier() {
 
@@ -58,6 +65,13 @@ struct EnvironmentTests {
       Position(x: 7, y: 1): Pixel("t"),
       Position(x: 8, y: 1): Pixel("a"),
     ])
+  }
+
+  @Test("transform body: fatal")
+  func transformBody() async {
+    await #expect(processExitsWith: .failure) {
+      _ = TestView().transformEnvironment(\.value) { $0.append("a") }.body
+    }
   }
 
 //  @Test(arguments: Array<(String, Int, Int, Int, Int)>([

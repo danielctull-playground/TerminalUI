@@ -9,6 +9,13 @@ struct FixedFrameTests {
   private let view = Color.blue
   private let pixel = Pixel(" ", background: .blue)
 
+  @Test("body: fatal")
+  func body() async {
+    await #expect(processExitsWith: .failure) {
+      _ = Color.black.frame().body
+    }
+  }
+
   @Test("width: nil, height: nil")
   func widthNil_heightNil() {
 

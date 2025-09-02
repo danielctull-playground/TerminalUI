@@ -5,6 +5,13 @@ import Testing
 @Suite("EmptyView", .tags(.view))
 struct EmptyViewTests {
 
+  @Test("body: fatal")
+  func body() async {
+    await #expect(processExitsWith: .failure) {
+      _ = EmptyView().body
+    }
+  }
+
   @Test("Display Items")
   func displayItems() {
 

@@ -5,6 +5,14 @@ import Testing
 @Suite("Optional", .tags(.viewBuilder))
 struct OptionalTests {
 
+  @Test("body: fatal")
+  func body() async {
+    await #expect(processExitsWith: .failure) {
+      _ = Optional<EmptyView>.none.body
+      _ = Optional<EmptyView>.some(EmptyView()).body
+    }
+  }
+
   @Test("Preference Values", arguments: [
     (false, PreferenceKey.A.defaultValue),
     (true, "new value"),

@@ -5,6 +5,13 @@ import Testing
 @Suite("HStack", .tags(.view, .layout))
 struct HStackTests {
 
+  @Test("body: fatal")
+  func body() async {
+    await #expect(processExitsWith: .failure) {
+      _ = HStack {}.body
+    }
+  }
+
   @Test("empty")
   func empty() {
 

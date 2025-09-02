@@ -9,6 +9,13 @@ struct PaddingTests {
   private let view = Color.blue
   private let pixel = Pixel(" ", background: .blue)
 
+  @Test("body: fatal")
+  func body() async {
+    await #expect(processExitsWith: .failure) {
+      _ = Color.black.padding(0).body
+    }
+  }
+
   @Test("edge insets")
   func edgeInsets() {
 

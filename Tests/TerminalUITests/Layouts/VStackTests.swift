@@ -5,6 +5,13 @@ import Testing
 @Suite("VStack", .tags(.view, .layout))
 struct VStackTests {
 
+  @Test("body: fatal")
+  func body() async {
+    await #expect(processExitsWith: .failure) {
+      _ = VStack {}.body
+    }
+  }
+
   @Test("empty")
   func empty() {
 
