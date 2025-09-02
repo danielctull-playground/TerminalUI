@@ -207,4 +207,17 @@ struct BindingTests {
       _ = binding.wrappedValue
     }
   }
+
+  @Test("hashable")
+  func hashable() {
+
+    var value = "old"
+    let hashable = Binding { value } set: { value = $0 }
+    let binding = Binding<AnyHashable>(hashable)
+    #expect(binding.wrappedValue == AnyHashable("old"))
+
+    binding.wrappedValue = AnyHashable("new")
+    #expect(value == "new")
+    #expect(binding.wrappedValue == AnyHashable("new"))
+  }
 }

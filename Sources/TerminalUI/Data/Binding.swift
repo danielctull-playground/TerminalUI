@@ -76,6 +76,19 @@ extension Binding {
   }
 }
 
+// MARK: - Hashable
+
+extension Binding {
+
+  public init<V: Hashable>(_ base: Binding<V>) where Value == AnyHashable {
+    self.init {
+      AnyHashable(base.wrappedValue)
+    } set: {
+      base.wrappedValue = $0.base as! V
+    }
+  }
+}
+
 // MARK: - Identifiable
 
 extension Binding: Identifiable where Value: Identifiable {
