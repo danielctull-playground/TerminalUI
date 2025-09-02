@@ -62,6 +62,18 @@ extension Binding {
       }
     }
   }
+
+  public init?(_ base: Binding<Value?>) {
+    guard base.wrappedValue != nil else { return nil }
+    self.init {
+      switch base.wrappedValue {
+      case .none: fatalError("Accessed binding after value became nil.")
+      case .some(let value): return value
+      }
+    } set: {
+      base.wrappedValue = $0
+    }
+  }
 }
 
 // MARK: - Identifiable

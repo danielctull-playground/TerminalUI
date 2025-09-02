@@ -174,4 +174,37 @@ struct BindingTests {
     #expect(binding.wrappedValue == "new")
     #expect(value == "new")
   }
+
+  @Test("init (from optional value)")
+  func fromOptional() throws {
+
+    var value: String? = "old"
+    let optional = Binding { value } set: { value = $0 }
+    let binding = try #require(Binding(optional))
+    #expect(binding.wrappedValue == "old")
+
+    value = "new"
+    #expect(binding.wrappedValue == "new")
+
+    binding.wrappedValue = "newer"
+    #expect(value == "newer")
+  }
+
+  @Test("init (from optional value) - fails when nil")
+  func fromOptional_failure_nil() {
+    var value: String?
+    let optional = Binding { value } set: { value = $0 }
+    #expect(Binding(optional) == nil)
+  }
+
+  @Test("init (from optional value) - fatal error on read of nil")
+  func fromOptional_fatal_nil() async {
+    await #expect(processExitsWith: .failure) {
+      var value: String? = "old"
+      let optional = Binding { value } set: { value = $0 }
+      let binding = try #require(Binding(optional))
+      value = nil
+      _ = binding.wrappedValue
+    }
+  }
 }
