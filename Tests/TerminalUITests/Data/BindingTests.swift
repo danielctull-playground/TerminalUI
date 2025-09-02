@@ -156,4 +156,22 @@ struct BindingTests {
     }
     #expect(value == ["0ab", "1ab", "2ab"])
   }
+
+  @Test("init (to optional value)")
+  func toOptional() {
+
+    var value = "old"
+    let binding = Binding { value } set: { value = $0 }
+    let optional = Binding<String?>(binding)
+
+    optional.wrappedValue = "new"
+    #expect(optional.wrappedValue == "new")
+    #expect(binding.wrappedValue == "new")
+    #expect(value == "new")
+
+    optional.wrappedValue = nil
+    #expect(optional.wrappedValue == "new")
+    #expect(binding.wrappedValue == "new")
+    #expect(value == "new")
+  }
 }

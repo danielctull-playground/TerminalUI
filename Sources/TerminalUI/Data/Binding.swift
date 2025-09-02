@@ -48,6 +48,22 @@ extension Binding {
   }
 }
 
+// MARK: - Optional
+
+extension Binding {
+
+  public init<V>(_ base: Binding<V>) where Value == V? {
+    self.init {
+      base.wrappedValue
+    } set: { optional in
+      switch optional {
+      case .none: return
+      case .some(let value): base.wrappedValue = value
+      }
+    }
+  }
+}
+
 // MARK: - Identifiable
 
 extension Binding: Identifiable where Value: Identifiable {
