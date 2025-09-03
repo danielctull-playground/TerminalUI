@@ -91,6 +91,36 @@ struct StateTests {
       Position(x: 4, y: 1): Pixel("w"),
     ])
   }
+
+  @Test("binding") func binding() {
+
+    struct Inner: View {
+      @Binding var value: String
+      var body: some View {
+        Text(value)
+      }
+    }
+
+    struct Outer: View {
+      @State var value = "hello"
+      var body: some View {
+        Inner(value: $value)
+          .preference(key: PreferenceKey.A.self, value: "new")
+          .onPreferenceChange(PreferenceKey.A.self) { value = $0 }
+      }
+    }
+
+    let canvas = TestCanvas(width: 5, height: 1)
+    canvas.render {
+      Outer()
+    }
+
+    #expect(canvas.pixels == [
+      Position(x: 2, y: 1): Pixel("n"),
+      Position(x: 3, y: 1): Pixel("e"),
+      Position(x: 4, y: 1): Pixel("w"),
+    ])
+  }
 }
 
 private struct TestView: View {
