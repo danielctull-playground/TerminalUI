@@ -5,11 +5,10 @@ import Testing
 @Suite("Label", .tags(.view))
 struct LabelTests {
 
-  @Suite("Display Items", .tags(.preferenceValues))
-  struct DisplayItems {
+  @Suite("Style")
+  struct Style {
 
-    @Test("Default LabelStyle")
-    func defaultLabelStyle() {
+    @Test("default") func `default`() {
 
       let canvas = TestCanvas(width: 10, height: 1)
       canvas.render {
@@ -34,8 +33,78 @@ struct LabelTests {
       ])
     }
 
-    @Test("Custom LabelStyle")
-    func customLabelStyle() {
+    @Test("titleAndIcon")
+    func titleAndIcon() {
+
+      let canvas = TestCanvas(width: 10, height: 1)
+      canvas.render {
+        Label {
+          Text("title")
+        } icon: {
+          Text("icon")
+        }
+        .labelStyle(.titleAndIcon)
+      }
+
+      #expect(canvas.pixels == [
+        Position(x:  1, y: 1): Pixel("i"),
+        Position(x:  2, y: 1): Pixel("c"),
+        Position(x:  3, y: 1): Pixel("o"),
+        Position(x:  4, y: 1): Pixel("n"),
+
+        Position(x:  6, y: 1): Pixel("t"),
+        Position(x:  7, y: 1): Pixel("i"),
+        Position(x:  8, y: 1): Pixel("t"),
+        Position(x:  9, y: 1): Pixel("l"),
+        Position(x: 10, y: 1): Pixel("e"),
+      ])
+    }
+
+    @Test("titleOnly")
+    func titleOnly() {
+
+      let canvas = TestCanvas(width: 10, height: 1)
+      canvas.render {
+        Label {
+          Text("title")
+        } icon: {
+          Text("icon")
+        }
+        .labelStyle(.titleOnly)
+      }
+
+      #expect(canvas.pixels == [
+        Position(x: 4, y: 1): Pixel("t"),
+        Position(x: 5, y: 1): Pixel("i"),
+        Position(x: 6, y: 1): Pixel("t"),
+        Position(x: 7, y: 1): Pixel("l"),
+        Position(x: 8, y: 1): Pixel("e"),
+      ])
+    }
+
+    @Test("iconOnly")
+    func iconOnly() {
+
+      let canvas = TestCanvas(width: 10, height: 1)
+      canvas.render {
+        Label {
+          Text("title")
+        } icon: {
+          Text("icon")
+        }
+        .labelStyle(.iconOnly)
+      }
+
+      #expect(canvas.pixels == [
+        Position(x: 4, y: 1): Pixel("i"),
+        Position(x: 5, y: 1): Pixel("c"),
+        Position(x: 6, y: 1): Pixel("o"),
+        Position(x: 7, y: 1): Pixel("n"),
+      ])
+    }
+
+    @Test("custom")
+    func custom() {
 
       struct Custom: LabelStyle {
         func makeBody(configuration: Configuration) -> some View {

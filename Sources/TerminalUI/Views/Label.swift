@@ -35,7 +35,7 @@ extension View {
 }
 
 private struct LabelStyleKey: EnvironmentKey {
-  static var defaultValue: any LabelStyle { DefaultLabelStyle() }
+  static var defaultValue: any LabelStyle { .titleAndIcon }
 }
 
 extension EnvironmentValues {
@@ -85,14 +85,41 @@ private struct ResolvedLabelStyle<Style: LabelStyle>: View {
   }
 }
 
-// MARK: - DefaultLabelStyle
+// MARK: - TitleAndIconLabelStyle
 
-private struct DefaultLabelStyle: LabelStyle {
+extension LabelStyle where Self == TitleAndIconLabelStyle {
+  public static var titleAndIcon: Self { Self() }
+}
 
-  func makeBody(configuration: Configuration) -> some View {
+public struct TitleAndIconLabelStyle: LabelStyle {
+  public func makeBody(configuration: Configuration) -> some View {
     HStack(spacing: 1) {
       configuration.icon
       configuration.title
     }
+  }
+}
+
+// MARK: - TitleOnlyLabelStyle
+
+extension LabelStyle where Self == TitleOnlyLabelStyle {
+  public static var titleOnly: Self { Self() }
+}
+
+public struct TitleOnlyLabelStyle: LabelStyle {
+  public func makeBody(configuration: Configuration) -> some View {
+    configuration.title
+  }
+}
+
+// MARK: - IconOnlyLabelStyle
+
+extension LabelStyle where Self == IconOnlyLabelStyle {
+  public static var iconOnly: Self { Self() }
+}
+
+public struct IconOnlyLabelStyle: LabelStyle {
+  public func makeBody(configuration: Configuration) -> some View {
+    configuration.icon
   }
 }
