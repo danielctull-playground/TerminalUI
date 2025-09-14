@@ -1,5 +1,6 @@
 // swift-tools-version: 6.2
 
+import CompilerPluginSupport
 import PackageDescription
 
 let package = Package(
@@ -13,6 +14,9 @@ let package = Package(
   products: [
     .library(name: "TerminalUI", targets: ["TerminalUI"]),
     .library(name: "TerminalUITesting", targets: ["TerminalUITesting"]),
+  ],
+  dependencies: [
+    .package(url: "https://github.com/apple/swift-syntax.git", from: "601.0.0"),
   ],
   targets: [
 
@@ -29,6 +33,16 @@ let package = Package(
       name: "TerminalUI",
       dependencies: [
         "AttributeGraph",
+        "TerminalUIMacros",
+      ]
+    ),
+
+    .macro(
+      name: "TerminalUIMacros",
+      dependencies: [
+        .product(name: "SwiftSyntax", package: "swift-syntax"),
+        .product(name: "SwiftSyntaxMacros", package: "swift-syntax"),
+        .product(name: "SwiftCompilerPlugin", package: "swift-syntax"),
       ]
     ),
 
