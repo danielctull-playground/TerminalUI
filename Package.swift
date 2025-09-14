@@ -55,7 +55,11 @@ let package = Package(
       name: "TerminalUITests",
       dependencies: [
         "TerminalUI",
+        "TerminalUIMacros",
         "TerminalUITesting",
+        .product(name: "SwiftDiagnostics", package: "swift-syntax"),
+        .product(name: "SwiftSyntaxMacros", package: "swift-syntax"),
+        .product(name: "SwiftSyntaxMacrosTestSupport", package: "swift-syntax"),
       ]
     ),
 

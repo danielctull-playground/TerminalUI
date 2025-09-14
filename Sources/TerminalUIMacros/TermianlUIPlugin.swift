@@ -5,5 +5,6 @@ import SwiftSyntaxMacros
 struct TermianlUIPlugin: CompilerPlugin {
 
   let providingMacros: [Macro.Type] = [
+    EntryMacro.self,
   ]
 }

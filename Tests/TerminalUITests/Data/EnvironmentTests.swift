@@ -1,4 +1,5 @@
 @testable import TerminalUI
+import TerminalUIMacros
 import TerminalUITesting
 import Testing
 
@@ -121,5 +122,72 @@ extension EnvironmentValues {
   fileprivate var value: String {
     get { self[ValueKey.self] }
     set { self[ValueKey.self] = newValue }
+  }
+}
+
+import SwiftSyntaxMacros
+import SwiftSyntaxMacrosTestSupport
+import XCTest
+
+final class EnvironmentEntryTests: XCTestCase {
+
+  func testSuccess() {
+    assertMacroExpansion(
+      """
+      extension EnvironmentValues {
+        @Entry var foo = Foo()
+      }
+      """,
+      expandedSource: """
+      extension EnvironmentValues {
+        var foo {
+            get {
+              self[__Key_foo.self]
+            }
+            set {
+              self[__Key_foo.self] = newValue
+            }
+        }
+
+        private struct __Key_foo: EnvironmentKey {
+          typealias Value = Foo
+          static var defaultValue: Foo {
+            Foo()
+          }
+        }
+      }
+      """,
+      macros: ["Entry": EntryMacro.self]
+    )
+  }
+
+  func testSubclass() {
+    assertMacroExpansion(
+      """
+      extension EnvironmentValues {
+        @Entry var foo: Foo = Bar()
+      }
+      """,
+      expandedSource: """
+      extension EnvironmentValues {
+        var foo: Foo {
+            get {
+              self[__Key_foo.self]
+            }
+            set {
+              self[__Key_foo.self] = newValue
+            }
+        }
+
+        private struct __Key_foo: EnvironmentKey {
+          typealias Value = Foo
+          static var defaultValue: Foo  {
+            Bar()
+          }
+        }
+      }
+      """,
+      macros: ["Entry": EntryMacro.self]
+    )
   }
 }
