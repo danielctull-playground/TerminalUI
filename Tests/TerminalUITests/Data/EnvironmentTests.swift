@@ -125,6 +125,7 @@ extension EnvironmentValues {
   }
 }
 
+import SwiftDiagnostics
 import SwiftSyntaxMacros
 import SwiftSyntaxMacrosTestSupport
 import XCTest
@@ -187,6 +188,36 @@ final class EnvironmentEntryTests: XCTestCase {
         }
       }
       """,
+      macros: ["Entry": EntryMacro.self]
+    )
+  }
+
+  func testInvalidExtensionType() {
+    assertMacroExpansion(
+      """
+      extension UnhandledType {
+        @Entry var foo = Foo()
+      }
+      """,
+      expandedSource: """
+      extension UnhandledType {
+        var foo = Foo()
+      }
+      """,
+      diagnostics: [
+        DiagnosticSpec(
+          id: MessageID(domain: "SwiftDiagnostics", id: "Failure"),
+          message: "Can only be used inside EnvironmentValues.",
+          line: 2,
+          column: 3
+        ),
+        DiagnosticSpec(
+          id: MessageID(domain: "SwiftDiagnostics", id: "Failure"),
+          message: "Can only be used inside EnvironmentValues.",
+          line: 2,
+          column: 3
+        ),
+      ],
       macros: ["Entry": EntryMacro.self]
     )
   }
