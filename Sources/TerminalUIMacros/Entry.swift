@@ -1,10 +1,6 @@
 import SwiftSyntax
 import SwiftSyntaxMacros
 
-struct Failure: Error {
-  let description: String
-}
-
 public enum EntryMacro: Macro {}
 
 extension EntryMacro: AccessorMacro {
@@ -16,21 +12,21 @@ extension EntryMacro: AccessorMacro {
   ) throws -> [AccessorDeclSyntax] {
 
     guard context.extendedType == "EnvironmentValues" else {
-      throw Failure(description: "Can only be used inside EnvironmentValues.")
+      throw Failure("Can only be used inside EnvironmentValues.")
     }
 
     guard let variable = declaration.as(VariableDeclSyntax.self) else {
-      throw Failure(description: "Not a variable")
+      throw Failure("Not a variable")
     }
 
     guard variable.bindings.count == 1 else {
-      throw Failure(description: "Can only apply to a single variable")
+      throw Failure("Can only apply to a single variable")
     }
 
     let binding = variable.bindings.first!
 
     guard let identifier = binding.pattern.as(IdentifierPatternSyntax.self) else {
-      throw Failure(description: "")
+      throw Failure("")
     }
 
     let name = identifier.identifier.text
@@ -57,27 +53,27 @@ extension EntryMacro: PeerMacro {
   ) throws -> [DeclSyntax] {
 
     guard context.extendedType == "EnvironmentValues" else {
-      throw Failure(description: "Can only be used inside EnvironmentValues.")
+      throw Failure("Can only be used inside EnvironmentValues.")
     }
 
     guard let variable = declaration.as(VariableDeclSyntax.self) else {
-      throw Failure(description: "Not a variable")
+      throw Failure("Not a variable")
     }
 
     guard variable.bindings.count == 1 else {
-      throw Failure(description: "Can only apply to a single variable")
+      throw Failure("Can only apply to a single variable")
     }
 
     let binding = variable.bindings.first!
 
     guard let identifier = binding.pattern.as(IdentifierPatternSyntax.self) else {
-      throw Failure(description: "")
+      throw Failure("")
     }
 
     let name = identifier.identifier.text
 
     guard let initializer = binding.initializer else {
-      throw Failure(description: "Must provide a default value.")
+      throw Failure("Must provide a default value.")
     }
 
     let value = initializer.value
@@ -91,7 +87,7 @@ extension EntryMacro: PeerMacro {
         let functionCall = value.as(FunctionCallExprSyntax.self),
         let reference = functionCall.calledExpression.as(DeclReferenceExprSyntax.self)
       else {
-        throw Failure(description: "")
+        throw Failure("")
       }
 
       type = reference.baseName.trimmed.text
