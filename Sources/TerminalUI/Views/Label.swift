@@ -34,15 +34,8 @@ extension View {
   }
 }
 
-private struct LabelStyleKey: EnvironmentKey {
-  static var defaultValue: any LabelStyle { .titleAndIcon }
-}
-
 extension EnvironmentValues {
-  fileprivate var labelStyle: any LabelStyle {
-    get { self[LabelStyleKey.self] }
-    set { self[LabelStyleKey.self] = newValue }
-  }
+  @Entry fileprivate var labelStyle: any LabelStyle = .titleAndIcon
 }
 
 // MARK: - LabelStyleConfiguration

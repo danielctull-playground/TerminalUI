@@ -6,15 +6,8 @@ extension View {
   }
 }
 
-private struct StrikethroughEnvironmentKey: EnvironmentKey {
-  static var defaultValue: Strikethrough { .off }
-}
-
 extension EnvironmentValues {
-  fileprivate(set) var strikethrough: Strikethrough {
-    get { self[StrikethroughEnvironmentKey.self] }
-    set { self[StrikethroughEnvironmentKey.self] = newValue }
-  }
+  @Entry fileprivate(set) var strikethrough = Strikethrough.off
 }
 
 struct Strikethrough: Equatable {

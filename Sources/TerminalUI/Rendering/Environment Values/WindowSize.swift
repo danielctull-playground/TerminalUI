@@ -1,14 +1,7 @@
 import Foundation
 
 extension EnvironmentValues {
-  fileprivate(set) var windowSize: Size  {
-    get { self[WindowSizeEnvironmentKey.self] }
-    set { self[WindowSizeEnvironmentKey.self] = newValue }
-  }
-}
-
-private struct WindowSizeEnvironmentKey: EnvironmentKey {
-  static let defaultValue = Size.zero
+  @Entry fileprivate(set) var windowSize = Size.zero
 }
 
 extension ExternalEnvironment {

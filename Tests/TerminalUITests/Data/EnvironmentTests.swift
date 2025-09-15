@@ -1,4 +1,5 @@
 @testable import TerminalUI
+import TerminalUIMacros
 import TerminalUITesting
 import Testing
 
@@ -121,5 +122,133 @@ extension EnvironmentValues {
   fileprivate var value: String {
     get { self[ValueKey.self] }
     set { self[ValueKey.self] = newValue }
+  }
+}
+
+import SwiftDiagnostics
+import SwiftSyntaxMacros
+import SwiftSyntaxMacrosTestSupport
+import XCTest
+
+final class EnvironmentEntryTests: XCTestCase {
+
+  func testFunctionCallExpression() {
+    assertMacroExpansion(
+      """
+      extension EnvironmentValues {
+        @Entry var foo = Foo()
+      }
+      """,
+      expandedSource: """
+      extension EnvironmentValues {
+        var foo {
+            get {
+              self[__Key_foo.self]
+            }
+            set {
+              self[__Key_foo.self] = newValue
+            }
+        }
+
+        private struct __Key_foo: EnvironmentKey {
+          typealias Value = Foo
+          static var defaultValue: Foo {
+            Foo()
+          }
+        }
+      }
+      """,
+      macros: ["Entry": EntryMacro.self]
+    )
+  }
+
+  func testMemberAccessExpression() {
+    assertMacroExpansion(
+      """
+      extension EnvironmentValues {
+        @Entry var foo = Foo.Bar.Baz.value
+      }
+      """,
+      expandedSource: """
+      extension EnvironmentValues {
+        var foo {
+            get {
+              self[__Key_foo.self]
+            }
+            set {
+              self[__Key_foo.self] = newValue
+            }
+        }
+
+        private struct __Key_foo: EnvironmentKey {
+          typealias Value = Foo.Bar.Baz
+          static var defaultValue: Foo.Bar.Baz {
+            Foo.Bar.Baz.value
+          }
+        }
+      }
+      """,
+      macros: ["Entry": EntryMacro.self]
+    )
+  }
+
+  func testSubclass() {
+    assertMacroExpansion(
+      """
+      extension EnvironmentValues {
+        @Entry var foo: Foo = Bar()
+      }
+      """,
+      expandedSource: """
+      extension EnvironmentValues {
+        var foo: Foo {
+            get {
+              self[__Key_foo.self]
+            }
+            set {
+              self[__Key_foo.self] = newValue
+            }
+        }
+
+        private struct __Key_foo: EnvironmentKey {
+          typealias Value = Foo
+          static var defaultValue: Foo  {
+            Bar()
+          }
+        }
+      }
+      """,
+      macros: ["Entry": EntryMacro.self]
+    )
+  }
+
+  func testInvalidExtensionType() {
+    assertMacroExpansion(
+      """
+      extension UnhandledType {
+        @Entry var foo = Foo()
+      }
+      """,
+      expandedSource: """
+      extension UnhandledType {
+        var foo = Foo()
+      }
+      """,
+      diagnostics: [
+        DiagnosticSpec(
+          id: MessageID(domain: "SwiftDiagnostics", id: "Failure"),
+          message: "Can only be used inside EnvironmentValues.",
+          line: 2,
+          column: 3
+        ),
+        DiagnosticSpec(
+          id: MessageID(domain: "SwiftDiagnostics", id: "Failure"),
+          message: "Can only be used inside EnvironmentValues.",
+          line: 2,
+          column: 3
+        ),
+      ],
+      macros: ["Entry": EntryMacro.self]
+    )
   }
 }

@@ -6,15 +6,8 @@ extension View {
   }
 }
 
-private struct InverseEnvironmentKey: EnvironmentKey {
-  static var defaultValue: Inverse { .off }
-}
-
 extension EnvironmentValues {
-  fileprivate(set) var inverse: Inverse {
-    get { self[InverseEnvironmentKey.self] }
-    set { self[InverseEnvironmentKey.self] = newValue }
-  }
+  @Entry fileprivate(set) var inverse = Inverse.off
 }
 
 struct Inverse: Equatable {

@@ -9,15 +9,8 @@ extension View {
   }
 }
 
-private struct UnderlineEnvironmentKey: EnvironmentKey {
-  static var defaultValue: UnderlineStyle { .off }
-}
-
 extension EnvironmentValues {
-  fileprivate(set) var underline: UnderlineStyle {
-    get { self[UnderlineEnvironmentKey.self] }
-    set { self[UnderlineEnvironmentKey.self] = newValue }
-  }
+  @Entry fileprivate(set) var underline = UnderlineStyle.off
 }
 
 public struct UnderlineStyle: Equatable, Sendable {
