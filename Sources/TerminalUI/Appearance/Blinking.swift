@@ -6,15 +6,8 @@ extension View {
   }
 }
 
-private struct BlinkingEnvironmentKey: EnvironmentKey {
-  static var defaultValue: Blinking { .off }
-}
-
 extension EnvironmentValues {
-  fileprivate(set) var blinking: Blinking {
-    get { self[BlinkingEnvironmentKey.self] }
-    set { self[BlinkingEnvironmentKey.self] = newValue }
-  }
+  @Entry fileprivate(set) var blinking = Blinking.off
 }
 
 struct Blinking: Equatable {

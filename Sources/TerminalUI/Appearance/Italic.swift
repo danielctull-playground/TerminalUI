@@ -6,15 +6,8 @@ extension View {
   }
 }
 
-private struct ItalicEnvironmentKey: EnvironmentKey {
-  static var defaultValue: Italic { .off }
-}
-
 extension EnvironmentValues {
-  fileprivate(set) var italic: Italic {
-    get { self[ItalicEnvironmentKey.self] }
-    set { self[ItalicEnvironmentKey.self] = newValue }
-  }
+  @Entry fileprivate(set) var italic = Italic.off
 }
 
 struct Italic: Equatable {

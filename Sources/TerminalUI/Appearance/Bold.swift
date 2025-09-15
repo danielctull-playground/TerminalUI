@@ -6,15 +6,8 @@ extension View {
   }
 }
 
-private struct BoldEnvironmentKey: EnvironmentKey {
-  static var defaultValue: Bold { .off }
-}
-
 extension EnvironmentValues {
-  fileprivate(set) var bold: Bold {
-    get { self[BoldEnvironmentKey.self] }
-    set { self[BoldEnvironmentKey.self] = newValue }
-  }
+  @Entry fileprivate(set) var bold = Bold.off
 }
 
 struct Bold: Equatable {

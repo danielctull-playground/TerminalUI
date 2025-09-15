@@ -6,15 +6,8 @@ extension View {
   }
 }
 
-private struct HiddenEnvironmentKey: EnvironmentKey {
-  static var defaultValue: Hidden { .off }
-}
-
 extension EnvironmentValues {
-  fileprivate(set) var hidden: Hidden {
-    get { self[HiddenEnvironmentKey.self] }
-    set { self[HiddenEnvironmentKey.self] = newValue }
-  }
+  @Entry fileprivate(set) var hidden = Hidden.off
 }
 
 struct Hidden: Equatable {

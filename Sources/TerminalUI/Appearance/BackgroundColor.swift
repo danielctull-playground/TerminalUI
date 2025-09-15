@@ -6,13 +6,6 @@ extension View {
   }
 }
 
-private struct BackgroundColorEnvironmentKey: EnvironmentKey {
-  static var defaultValue: Color { .default }
-}
-
 extension EnvironmentValues {
-  fileprivate(set) var backgroundColor: Color {
-    get { self[BackgroundColorEnvironmentKey.self] }
-    set { self[BackgroundColorEnvironmentKey.self] = newValue }
-  }
+  @Entry fileprivate(set) var backgroundColor = Color.default
 }
