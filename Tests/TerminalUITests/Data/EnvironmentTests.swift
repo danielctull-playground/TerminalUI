@@ -132,7 +132,7 @@ import XCTest
 
 final class EnvironmentEntryTests: XCTestCase {
 
-  func testSuccess() {
+  func testFunctionCallExpression() {
     assertMacroExpansion(
       """
       extension EnvironmentValues {
@@ -154,6 +154,36 @@ final class EnvironmentEntryTests: XCTestCase {
           typealias Value = Foo
           static var defaultValue: Foo {
             Foo()
+          }
+        }
+      }
+      """,
+      macros: ["Entry": EntryMacro.self]
+    )
+  }
+
+  func testMemberAccessExpression() {
+    assertMacroExpansion(
+      """
+      extension EnvironmentValues {
+        @Entry var foo = Foo.Bar.Baz.value
+      }
+      """,
+      expandedSource: """
+      extension EnvironmentValues {
+        var foo {
+            get {
+              self[__Key_foo.self]
+            }
+            set {
+              self[__Key_foo.self] = newValue
+            }
+        }
+
+        private struct __Key_foo: EnvironmentKey {
+          typealias Value = Foo.Bar.Baz
+          static var defaultValue: Foo.Bar.Baz {
+            Foo.Bar.Baz.value
           }
         }
       }

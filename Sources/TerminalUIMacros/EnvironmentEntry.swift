@@ -68,8 +68,10 @@ extension EnvironmentEntry {
 
     var type: String
     if let typeAnnotation = binding.typeAnnotation {
+
       type = typeAnnotation.type.description
-    } else {
+
+    } else if value.is(FunctionCallExprSyntax.self) {
 
       guard
         let functionCall = value.as(FunctionCallExprSyntax.self),
@@ -79,6 +81,17 @@ extension EnvironmentEntry {
       }
 
       type = reference.baseName.trimmed.text
+
+    } else {
+
+      guard
+        let memberAccess = value.as(MemberAccessExprSyntax.self),
+        let base = memberAccess.base
+      else {
+        throw Failure("")
+      }
+
+      type = base.description
     }
 
     return [
