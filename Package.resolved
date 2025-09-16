@@ -1,13 +1,13 @@
 {
-  "originHash" : "a7d3248ccadb8c6e0d93fa5a6a8a48c411b1b185e613f48174030860b1e5e42c",
+  "originHash" : "2dfa5329e36d5c57dfaff6ba0bea433067a7243d519fd2a2950e48427b439070",
   "pins" : [
     {
       "identity" : "swift-syntax",
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/apple/swift-syntax.git",
       "state" : {
-        "revision" : "f99ae8aa18f0cf0d53481901f88a0991dc3bd4a2",
-        "version" : "601.0.1"
+        "revision" : "4799286537280063c85a32f09884cfbca301b1a1",
+        "version" : "602.0.0"
       }
     }
   ],
