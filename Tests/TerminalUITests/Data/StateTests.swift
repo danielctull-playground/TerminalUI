@@ -18,7 +18,7 @@ struct StateTests {
     }
   }
 
-  @Test("reading") func reading() {
+  @Test func `reading`() {
 
     let canvas = TestCanvas(width: 5, height: 3)
     canvas.render {
@@ -34,7 +34,7 @@ struct StateTests {
     ])
   }
 
-  @Test("writing") func writing() {
+  @Test func `writing`() {
 
     struct TestView: View {
       @State var value = "hello"
@@ -89,7 +89,7 @@ struct StateTests {
     ])
   }
 
-  @Test("binding") func binding() {
+  @Test func `binding`() {
 
     struct Inner: View {
       @Binding var value: String

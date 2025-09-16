@@ -8,7 +8,7 @@ struct LabelTests {
   @Suite("Style")
   struct Style {
 
-    @Test("default") func `default`() {
+    @Test func `default`() {
 
       let canvas = TestCanvas(width: 10, height: 1)
       canvas.render {
