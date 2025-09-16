@@ -152,8 +152,8 @@ struct FixedFrameTests {
     #expect(canvas.pixels == [position: pixel])
   }
 
-  @Suite("Preference Values", .tags(.preferenceValues))
-  struct PreferenceValues {
+  @Suite(.tags(.preferenceValues))
+  struct `Preference Values` {
 
     @Test func `default value`() {
 

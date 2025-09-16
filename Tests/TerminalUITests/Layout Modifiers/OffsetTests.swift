@@ -62,8 +62,8 @@ struct OffsetTests {
     ])
   }
 
-  @Suite("Preference Values", .tags(.preferenceValues))
-  struct PreferenceValues {
+  @Suite(.tags(.preferenceValues))
+  struct `Preference Values` {
 
     @Test func `default value`() {
 

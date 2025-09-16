@@ -62,8 +62,8 @@ struct ColorTests {
 //    #expect(size.height == height)
 //  }
 
-  @Suite("Preference Values", .tags(.preferenceValues))
-  struct PreferenceValues {
+  @Suite(.tags(.preferenceValues))
+  struct `Preference Values` {
 
     @Test(arguments: Color.testCases)
     func `default value`(color: Color) {
