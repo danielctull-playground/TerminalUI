@@ -5,11 +5,11 @@ import Testing
 @Suite("Hidden", .tags(.modifier))
 struct HiddenTests {
 
-  @Test("Text Output", arguments: [
+  @Test(arguments: [
     (true,  "8" ),
     (false, "28"),
   ])
-  func textOutput(hidden: Bool, expected: String) {
+  func `Text Output`(hidden: Bool, expected: String) {
 
     let canvas = TextStreamCanvas(output: .memory)
 

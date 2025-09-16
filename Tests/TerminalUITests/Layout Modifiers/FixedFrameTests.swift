@@ -130,7 +130,7 @@ struct FixedFrameTests {
     ])
   }
 
-  @Test("alignment", arguments: Array<(Alignment, Position)>([
+  @Test(arguments: Array<(Alignment, Position)>([
     (.topLeading,     Position(x: 1, y: 1)),
     (.top,            Position(x: 2, y: 1)),
     (.topTrailing,    Position(x: 3, y: 1)),
@@ -141,7 +141,7 @@ struct FixedFrameTests {
     (.bottom,         Position(x: 2, y: 3)),
     (.bottomTrailing, Position(x: 3, y: 3)),
   ]))
-  func alignment(alignment: Alignment, position: Position) {
+  func `alignment`(alignment: Alignment, position: Position) {
 
     canvas.render {
       view

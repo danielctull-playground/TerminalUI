@@ -64,7 +64,7 @@ import Testing
     #expect(Rect(x: 5, y: 6, width: 7, height: 8).maxY == 13)
   }
 
-  @Test("union", arguments: Array<(Rect, Rect, Rect)>([
+  @Test(arguments: Array<(Rect, Rect, Rect)>([
     // Same
     (Rect(x:1, y:2, w:3, h:4), Rect(x:1, y:2, w:3, h:4), Rect(x:1, y:2, w:3, h:4)),
 
@@ -75,7 +75,7 @@ import Testing
     // Intersect
     (Rect(x:1, y:1, w:1, h:1), Rect(x:1, y:1, w:2, h:2), Rect(x:1, y:1, w:2, h:2)),
   ]))
-  func union(lhs: Rect, rhs: Rect, expected: Rect) {
+  func `union`(lhs: Rect, rhs: Rect, expected: Rect) {
     #expect(lhs.union(rhs) == expected)
     #expect(rhs.union(lhs) == expected)
   }

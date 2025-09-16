@@ -91,12 +91,12 @@ struct VStackTests {
     ])
   }
 
-  @Test("alignment", arguments: Array<(HorizontalAlignment, Int)>([
+  @Test(arguments: Array<(HorizontalAlignment, Int)>([
     (.leading,  1),
     (.center,   2),
     (.trailing, 3),
   ]))
-  func alignment(alignment: HorizontalAlignment, x: Int) {
+  func `alignment`(alignment: HorizontalAlignment, x: Int) {
 
     let canvas = TestCanvas(width: 3, height: 5)
 
@@ -117,13 +117,13 @@ struct VStackTests {
     ])
   }
 
-  @Test("spacing", arguments: Array<(Int, Int, Int, Int)>([
+  @Test(arguments: Array<(Int, Int, Int, Int)>([
     (0, 4, 5, 6),
     (1, 3, 5, 7),
     (2, 2, 5, 8),
     (3, 1, 5, 9),
   ]))
-  func spacing(spacing: Int, a: Int, b: Int, c: Int) {
+  func `spacing`(spacing: Int, a: Int, b: Int, c: Int) {
 
     let canvas = TestCanvas(width: 1, height: 9)
 

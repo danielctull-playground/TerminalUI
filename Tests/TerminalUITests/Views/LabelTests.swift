@@ -5,8 +5,7 @@ import Testing
 @Suite("Label", .tags(.view))
 struct LabelTests {
 
-  @Suite("Style")
-  struct Style {
+  @Suite struct Style {
 
     @Test func `default`() {
 
@@ -138,8 +137,8 @@ struct LabelTests {
     }
   }
 
-  @Suite("Preference Values", .tags(.preferenceValues))
-  struct PreferenceValues {
+  @Suite(.tags(.preferenceValues))
+  struct `Preference Values` {
 
     @Test func `default value`() {
 

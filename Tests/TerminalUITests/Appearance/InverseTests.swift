@@ -5,11 +5,11 @@ import Testing
 @Suite("Inverse", .tags(.modifier))
 struct InverseTests {
 
-  @Test("Text Output", arguments: [
+  @Test(arguments: [
     (true,  "7" ),
     (false, "27"),
   ])
-  func textOutput(inverse: Bool, expected: String) {
+  func `Text Output`(inverse: Bool, expected: String) {
 
     let canvas = TextStreamCanvas(output: .memory)
 

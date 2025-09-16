@@ -4,7 +4,7 @@ import Testing
 
 @Suite("Alignment") struct AlignmentTests {
 
-  @Test("static values", arguments: Array<
+  @Test(arguments: Array<
     (Alignment,       VerticalAlignment, HorizontalAlignment)
   >([
     (.topLeading,     .top,              .leading ),
@@ -17,7 +17,7 @@ import Testing
     (.bottom,         .bottom,           .center  ),
     (.bottomTrailing, .bottom,           .trailing),
   ]))
-  func staticValues(
+  func `static values`(
     alignment: Alignment,
     vertical: VerticalAlignment,
     horizontal: HorizontalAlignment

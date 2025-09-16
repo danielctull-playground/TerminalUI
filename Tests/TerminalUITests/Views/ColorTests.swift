@@ -13,8 +13,8 @@ struct ColorTests {
     }
   }
 
-  @Test("render", arguments: Color.testCases)
-  func render(color: Color) {
+  @Test(arguments: Color.testCases)
+  func `render`(color: Color) {
 
     canvas.render {
       color
@@ -65,8 +65,8 @@ struct ColorTests {
   @Suite("Preference Values", .tags(.preferenceValues))
   struct PreferenceValues {
 
-    @Test("default value", arguments: Color.testCases)
-    func defaultValue(color: Color) {
+    @Test(arguments: Color.testCases)
+    func `default value`(color: Color) {
 
       var output = ""
 
@@ -79,8 +79,8 @@ struct ColorTests {
     }
 
 
-    @Test("modified value", arguments: Color.testCases)
-    func modifiedValue(color: Color) {
+    @Test(arguments: Color.testCases)
+    func `modified value`(color: Color) {
 
       var output = ""
 

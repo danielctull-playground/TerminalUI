@@ -5,11 +5,11 @@ import Testing
 @Suite("Blinking", .tags(.modifier))
 struct BlinkingTests {
 
-  @Test("Text Output", arguments: [
+  @Test(arguments: [
     (true,  "5" ),
     (false, "25"),
   ])
-  func textOutput(blinking: Bool, expected: String) {
+  func `Text Output`(blinking: Bool, expected: String) {
 
     let canvas = TextStreamCanvas(output: .memory)
 

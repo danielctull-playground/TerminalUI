@@ -12,11 +12,11 @@ struct OptionalTests {
     }
   }
 
-  @Test("Preference Values", arguments: [
+  @Test(arguments: [
     (false, PreferenceKey.A.defaultValue),
     (true, "new value"),
   ])
-  func preferenceValues(value: Bool, expected: String) {
+  func `Preference Values`(value: Bool, expected: String) {
 
     var output = ""
 
