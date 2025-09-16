@@ -68,7 +68,7 @@ extension Alignment {
 
 // MARK: - AlignmentID
 
-public protocol AlignmentID {
+public protocol AlignmentID: SendableMetatype {
   static func defaultValue(in size: Size) -> Int
 }
 
