@@ -15,8 +15,7 @@ jobs:
           - "6.2"
     runs-on: ubuntu-latest
     container:
-#      image: swift:${{ matrix.swift-version }}
-      image: swiftlang/swift:nightly
+      image: swift:${{ matrix.swift-version }}
     steps:
     - name: Checkout
       uses: actions/checkout@v4
