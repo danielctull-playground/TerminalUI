@@ -5,15 +5,13 @@ import Testing
 @Suite("HStack", .tags(.view, .layout))
 struct HStackTests {
 
-  @Test("body: fatal")
-  func body() async {
+  @Test func `body: fatal`() async {
     await #expect(processExitsWith: .failure) {
       _ = HStack {}.body
     }
   }
 
-  @Test("empty")
-  func empty() {
+  @Test func `empty`() {
 
     let canvas = TestCanvas(width: 3, height: 3)
 
@@ -24,8 +22,7 @@ struct HStackTests {
     #expect(canvas.pixels == [:])
   }
 
-  @Test("single line")
-  func singleLine() {
+  @Test func `single line`() {
 
     let canvas = TestCanvas(width: 3, height: 1)
 
@@ -44,8 +41,7 @@ struct HStackTests {
     ])
   }
 
-  @Test("single line 2")
-  func singleLine2() {
+  @Test func `single line 2`() {
 
     let canvas = TestCanvas(width: 5, height: 1)
 
@@ -66,8 +62,7 @@ struct HStackTests {
     ])
   }
 
-  @Test("single line 3")
-  func singleLine3() {
+  @Test func `single line 3`() {
 
     let canvas = TestCanvas(width: 11, height: 1)
 
@@ -96,12 +91,12 @@ struct HStackTests {
     ])
   }
 
-  @Test("alignment", arguments: Array<(VerticalAlignment, Int)>([
+  @Test(arguments: Array<(VerticalAlignment, Int)>([
     (.top,    1),
     (.center, 2),
     (.bottom, 3),
   ]))
-  func alignment(alignment: VerticalAlignment, y: Int) {
+  func `alignment`(alignment: VerticalAlignment, y: Int) {
 
     let canvas = TestCanvas(width: 5, height: 3)
 
@@ -122,13 +117,13 @@ struct HStackTests {
     ])
   }
 
-  @Test("spacing", arguments: Array<(Int, Int, Int, Int)>([
+  @Test(arguments: Array<(Int, Int, Int, Int)>([
     (0, 4, 5, 6),
     (1, 3, 5, 7),
     (2, 2, 5, 8),
     (3, 1, 5, 9),
   ]))
-  func spacing(spacing: Int, a: Int, b: Int, c: Int) {
+  func `spacing`(spacing: Int, a: Int, b: Int, c: Int) {
 
     let canvas = TestCanvas(width: 9, height: 1)
 

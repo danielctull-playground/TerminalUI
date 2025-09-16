@@ -5,8 +5,7 @@ import Testing
 @Suite("TestCanvas")
 struct TestCanvasTests {
 
-  @Test("CustomStringConvertible")
-  func customStringConvertible() async throws {
+  @Test func `CustomStringConvertible`() async throws {
 
     let canvas = TestCanvas(width: 5, height: 1)
 

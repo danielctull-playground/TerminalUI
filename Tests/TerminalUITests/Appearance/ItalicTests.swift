@@ -5,11 +5,11 @@ import Testing
 @Suite("Italic", .tags(.modifier))
 struct ItalicTests {
 
-  @Test("Text Output", arguments: [
+  @Test(arguments: [
     (true,  "3" ),
     (false, "23"),
   ])
-  func textOutput(italic: Bool, expected: String) {
+  func `Text Output`(italic: Bool, expected: String) {
 
     let canvas = TextStreamCanvas(output: .memory)
 

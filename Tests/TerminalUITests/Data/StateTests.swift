@@ -6,21 +6,19 @@ import Testing
 @Suite("State")
 struct StateTests {
 
-  @Test("read outside of body: fatal")
-  func readOutsideOfBody() async {
+  @Test func `read outside of body: fatal`() async {
     await #expect(processExitsWith: .failure) {
       _ = TestView().value
     }
   }
 
-  @Test("write outside of body: fatal")
-  func writeOutsideOfBody() async {
+  @Test func `write outside of body: fatal`() async {
     await #expect(processExitsWith: .failure) {
       TestView().value = "nope"
     }
   }
 
-  @Test("reading") func reading() {
+  @Test func `reading`() {
 
     let canvas = TestCanvas(width: 5, height: 3)
     canvas.render {
@@ -36,7 +34,7 @@ struct StateTests {
     ])
   }
 
-  @Test("writing") func writing() {
+  @Test func `writing`() {
 
     struct TestView: View {
       @State var value = "hello"
@@ -59,8 +57,7 @@ struct StateTests {
     ])
   }
 
-  @Test("nesting")
-  func nesting() {
+  @Test func `nesting`() {
 
     struct Inner: View {
       @State var value = "hello"
@@ -92,7 +89,7 @@ struct StateTests {
     ])
   }
 
-  @Test("binding") func binding() {
+  @Test func `binding`() {
 
     struct Inner: View {
       @Binding var value: String

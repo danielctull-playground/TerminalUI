@@ -5,7 +5,7 @@ import Testing
 @Suite("BackgroundColor", .tags(.modifier))
 struct BackgroundColorTests {
 
-  @Test("Text Output", arguments: [
+  @Test(arguments: [
     (Color.`default`, "49"),
     (Color.black, "40"),
     (Color.red, "41"),
@@ -16,7 +16,7 @@ struct BackgroundColorTests {
     (Color.cyan, "46"),
     (Color.white, "47"),
   ])
-  func textOutput(backgroundColor: Color, expected: String) {
+  func `Text Output`(backgroundColor: Color, expected: String) {
 
     let canvas = TextStreamCanvas(output: .memory)
 

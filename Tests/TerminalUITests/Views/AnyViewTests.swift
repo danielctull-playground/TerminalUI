@@ -5,15 +5,13 @@ import Testing
 @Suite("AnyView", .tags(.view))
 struct AnyViewTests {
 
-  @Test("body: fatal")
-  func body() async {
+  @Test func `body: fatal`() async {
     await #expect(processExitsWith: .failure) {
       _ = AnyView(Color.black).body
     }
   }
 
-  @Test("Display Items")
-  func displayItems() {
+  @Test func `Display Items`() {
 
     let canvas = TestCanvas(width: 5, height: 3)
     canvas.render {
@@ -29,11 +27,10 @@ struct AnyViewTests {
     ])
   }
 
-  @Suite("Preference Values", .tags(.preferenceValues))
-  struct PreferenceValues {
+  @Suite(.tags(.preferenceValues))
+  struct `Preference Values` {
 
-    @Test("default value")
-    func defaultValue() {
+    @Test func `default value`() {
 
       var output = ""
 
@@ -45,8 +42,7 @@ struct AnyViewTests {
       #expect(output == PreferenceKey.A.defaultValue)
     }
 
-    @Test("modified value")
-    func modifiedValue() {
+    @Test func `modified value`() {
 
       var output = ""
 

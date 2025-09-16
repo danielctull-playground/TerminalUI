@@ -5,11 +5,11 @@ import Testing
 @Suite("Strikethrough", .tags(.modifier))
 struct StrikethroughTests {
 
-  @Test("Text Output", arguments: [
+  @Test(arguments: [
     (true,  "9" ),
     (false, "29"),
   ])
-  func textOutput(strikethrough: Bool, expected: String) {
+  func `Text Output`(strikethrough: Bool, expected: String) {
 
     let canvas = TextStreamCanvas(output: .memory)
 

@@ -4,8 +4,7 @@ import Testing
 @Suite("Pixel")
 struct PixelTests {
 
-  @Test("CustomStringConvertible")
-  func customStringConvertible() {
+  @Test func `CustomStringConvertible`() {
     #expect(Pixel("a").description == #"Pixel("a")"#)
     #expect(Pixel("z").description == #"Pixel("z")"#)
   }

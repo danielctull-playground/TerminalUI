@@ -9,15 +9,13 @@ struct FixedFrameTests {
   private let view = Color.blue
   private let pixel = Pixel(" ", background: .blue)
 
-  @Test("body: fatal")
-  func body() async {
+  @Test func `body: fatal`() async {
     await #expect(processExitsWith: .failure) {
       _ = Color.black.frame().body
     }
   }
 
-  @Test("width: nil, height: nil")
-  func widthNil_heightNil() {
+  @Test func `width: nil, height: nil`() {
 
     canvas.render {
       view.frame()
@@ -36,8 +34,7 @@ struct FixedFrameTests {
     ])
   }
 
-  @Test("width: 1, height: nil")
-  func width1_heightNil() {
+  @Test func `width: 1, height: nil`() {
 
     canvas.render {
       view.frame(width: 1)
@@ -50,8 +47,7 @@ struct FixedFrameTests {
     ])
   }
 
-  @Test("width: 2, height: nil")
-  func width2_heightNil() {
+  @Test func `width: 2, height: nil`() {
 
     canvas.render {
       view.frame(width: 2)
@@ -67,8 +63,7 @@ struct FixedFrameTests {
     ])
   }
 
-  @Test("width: nil, height: 1")
-  func widthNil_height1() {
+  @Test func `width: nil, height: 1`() {
 
     canvas.render {
       view.frame(height: 1)
@@ -81,8 +76,7 @@ struct FixedFrameTests {
     ])
   }
 
-  @Test("width: nil, height: 2")
-  func widthNil_height2() {
+  @Test func `width: nil, height: 2`() {
 
     canvas.render {
       view.frame(height: 2)
@@ -98,8 +92,7 @@ struct FixedFrameTests {
     ])
   }
 
-  @Test("width: 1, height: 1")
-  func width1_height1() {
+  @Test func `width: 1, height: 1`() {
 
     canvas.render {
       view.frame(width: 1, height: 1)
@@ -110,8 +103,7 @@ struct FixedFrameTests {
     ])
   }
 
-  @Test("width: 2, height: 2")
-  func width2_height2() {
+  @Test func `width: 2, height: 2`() {
 
     canvas.render {
       view.frame(width: 2, height: 2)
@@ -125,8 +117,7 @@ struct FixedFrameTests {
     ])
   }
 
-  @Test("nested")
-  func nested() {
+  @Test func `nested`() {
 
     canvas.render {
       view
@@ -139,7 +130,7 @@ struct FixedFrameTests {
     ])
   }
 
-  @Test("alignment", arguments: Array<(Alignment, Position)>([
+  @Test(arguments: Array<(Alignment, Position)>([
     (.topLeading,     Position(x: 1, y: 1)),
     (.top,            Position(x: 2, y: 1)),
     (.topTrailing,    Position(x: 3, y: 1)),
@@ -150,7 +141,7 @@ struct FixedFrameTests {
     (.bottom,         Position(x: 2, y: 3)),
     (.bottomTrailing, Position(x: 3, y: 3)),
   ]))
-  func alignment(alignment: Alignment, position: Position) {
+  func `alignment`(alignment: Alignment, position: Position) {
 
     canvas.render {
       view
@@ -161,11 +152,10 @@ struct FixedFrameTests {
     #expect(canvas.pixels == [position: pixel])
   }
 
-  @Suite("Preference Values", .tags(.preferenceValues))
-  struct PreferenceValues {
+  @Suite(.tags(.preferenceValues))
+  struct `Preference Values` {
 
-    @Test("default value")
-    func defaultValue() {
+    @Test func `default value`() {
 
       var output = ""
 
@@ -178,8 +168,7 @@ struct FixedFrameTests {
       #expect(output == PreferenceKey.A.defaultValue)
     }
 
-    @Test("modified value")
-    func modifiedValue() {
+    @Test func `modified value`() {
 
       var output = ""
 

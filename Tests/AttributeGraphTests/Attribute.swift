@@ -4,8 +4,7 @@ import Testing
 @Suite("Attribute")
 struct AttributeTests {
 
-  @Test("create")
-  func create() {
+  @Test func `create`() {
     let graph = Graph()
     let attribute = graph.attribute("x") { 12 }
     #expect(attribute.wrappedValue == 12)
@@ -13,8 +12,7 @@ struct AttributeTests {
     #expect(attribute.name.description == "x")
   }
 
-  @Test("update")
-  func update() {
+  @Test func `update`() {
     let graph = Graph()
     let x = graph.input("x", 1)
     let y = graph.attribute("y") { x.wrappedValue * 2 }
@@ -23,8 +21,7 @@ struct AttributeTests {
     #expect(y.wrappedValue == 4)
   }
 
-  @Test("dirty")
-  func dirty() {
+  @Test func `dirty`() {
     let graph = Graph()
     let x = graph.input("x", 1)
     let y = graph.attribute("y") { x.wrappedValue * 2 }

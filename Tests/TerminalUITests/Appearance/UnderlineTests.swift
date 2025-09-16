@@ -5,8 +5,7 @@ import Testing
 @Suite("Underline", .tags(.modifier))
 struct UnderlineTests {
 
-  @Test("Output: default")
-  func output_default() {
+  @Test func `Output: default`() {
 
     let canvas = TextStreamCanvas(output: .memory)
 
@@ -23,11 +22,11 @@ struct UnderlineTests {
     ])
   }
 
-  @Test("Output", arguments: [
+  @Test(arguments: [
     (true,  "4" ),
     (false, "24"),
   ])
-  func output(underline: Bool, expected: String) {
+  func `Text Output`(underline: Bool, expected: String) {
 
     let canvas = TextStreamCanvas(output: .memory)
 
@@ -44,13 +43,17 @@ struct UnderlineTests {
     ])
   }
 
-  @Test("Output: style", arguments: [
+  @Test(arguments: [
     (true,  UnderlineStyle.single, "4" ),
     (false, UnderlineStyle.single, "24"),
     (true,  UnderlineStyle.double, "21"),
     (false, UnderlineStyle.double, "24"),
   ])
-  func output(underline: Bool, style: UnderlineStyle, expected: String) {
+  func `Text Output: style`(
+    underline: Bool,
+    style: UnderlineStyle,
+    expected: String
+  ) {
 
     let canvas = TextStreamCanvas(output: .memory)
 

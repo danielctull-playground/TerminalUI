@@ -5,11 +5,11 @@ import Testing
 @Suite("Bold", .tags(.modifier))
 struct BoldTests {
 
-  @Test("Text Output", arguments: [
+  @Test(arguments: [
     (true,  "1" ),
     (false, "22"),
   ])
-  func textOutput(bold: Bool, expected: String) {
+  func `Text Output`(bold: Bool, expected: String) {
 
     let canvas = TextStreamCanvas(output: .memory)
 

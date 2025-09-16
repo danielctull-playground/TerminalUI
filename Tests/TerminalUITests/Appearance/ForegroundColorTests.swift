@@ -5,7 +5,7 @@ import Testing
 @Suite("ForegroundColor", .tags(.modifier))
 struct ForegroundColorTests {
 
-  @Test("Text Output", arguments: [
+  @Test(arguments: [
     (Color.`default`, "39"),
     (Color.black, "30"),
     (Color.red, "31"),
@@ -30,7 +30,7 @@ struct ForegroundColorTests {
     (Color(red: -21, green: -0.1, blue: -2), "38;2;0;0;0"), // Clamped
     (Color(red: 10, green: 1.1, blue: 2.1), "38;2;255;255;255"), // Clamped
   ])
-  func textOutput(foregroundColor: Color, expected: String) {
+  func `Text Output`(foregroundColor: Color, expected: String) {
 
     let canvas = TextStreamCanvas(output: .memory)
 

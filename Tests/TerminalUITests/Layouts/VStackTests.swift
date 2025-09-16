@@ -5,15 +5,13 @@ import Testing
 @Suite("VStack", .tags(.view, .layout))
 struct VStackTests {
 
-  @Test("body: fatal")
-  func body() async {
+  @Test func `body: fatal`() async {
     await #expect(processExitsWith: .failure) {
       _ = VStack {}.body
     }
   }
 
-  @Test("empty")
-  func empty() {
+  @Test func `empty`() {
 
     let canvas = TestCanvas(width: 3, height: 3)
 
@@ -24,8 +22,7 @@ struct VStackTests {
     #expect(canvas.pixels == [:])
   }
 
-  @Test("single column")
-  func singleColumn() {
+  @Test func `single column`() {
 
     let canvas = TestCanvas(width: 1, height: 3)
 
@@ -44,8 +41,7 @@ struct VStackTests {
     ])
   }
 
-  @Test("single column 2")
-  func singleLine2() {
+  @Test func `single column 2`() {
 
     let canvas = TestCanvas(width: 1, height: 5)
 
@@ -66,8 +62,7 @@ struct VStackTests {
     ])
   }
 
-  @Test("single coloumn 3")
-  func singleColumn3() {
+  @Test func `single coloumn 3`() {
 
     let canvas = TestCanvas(width: 1, height: 11)
 
@@ -96,12 +91,12 @@ struct VStackTests {
     ])
   }
 
-  @Test("alignment", arguments: Array<(HorizontalAlignment, Int)>([
+  @Test(arguments: Array<(HorizontalAlignment, Int)>([
     (.leading,  1),
     (.center,   2),
     (.trailing, 3),
   ]))
-  func alignment(alignment: HorizontalAlignment, x: Int) {
+  func `alignment`(alignment: HorizontalAlignment, x: Int) {
 
     let canvas = TestCanvas(width: 3, height: 5)
 
@@ -122,13 +117,13 @@ struct VStackTests {
     ])
   }
 
-  @Test("spacing", arguments: Array<(Int, Int, Int, Int)>([
+  @Test(arguments: Array<(Int, Int, Int, Int)>([
     (0, 4, 5, 6),
     (1, 3, 5, 7),
     (2, 2, 5, 8),
     (3, 1, 5, 9),
   ]))
-  func spacing(spacing: Int, a: Int, b: Int, c: Int) {
+  func `spacing`(spacing: Int, a: Int, b: Int, c: Int) {
 
     let canvas = TestCanvas(width: 1, height: 9)
 

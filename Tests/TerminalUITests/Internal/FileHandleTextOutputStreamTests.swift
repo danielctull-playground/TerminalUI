@@ -5,8 +5,7 @@ import Testing
 @Suite("FileHandleTextOutputStream")
 struct FileHandleTextOutputStreamTests {
 
-  @Test("Stream output is correct")
-  func streamOutput() throws {
+  @Test func `Stream output is correct`() throws {
     try FileManager().withTemporaryDirectory { directory in
       let url = directory.appending(path: "file")
       try Data().write(to: url)

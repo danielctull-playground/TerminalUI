@@ -7,15 +7,14 @@ struct ColorTests {
 
   private let canvas = TestCanvas(width: 3, height: 3)
 
-  @Test("body: fatal")
-  func body() async {
+  @Test func `body: fatal`() async {
     await #expect(processExitsWith: .failure) {
       _ = Color.black.body
     }
   }
 
-  @Test("render", arguments: Color.testCases)
-  func render(color: Color) {
+  @Test(arguments: Color.testCases)
+  func `render`(color: Color) {
 
     canvas.render {
       color
@@ -34,8 +33,7 @@ struct ColorTests {
     ])
   }
 
-  @Test("height: zero")
-  func zeroHeight() {
+  @Test func `height: zero`() {
     let canvas = TestCanvas(width: 3, height: 0)
     canvas.render {
       Color.red
@@ -43,8 +41,7 @@ struct ColorTests {
     #expect(canvas.pixels.isEmpty)
   }
 
-  @Test("width: zero")
-  func zeroWidth() {
+  @Test func `width: zero`() {
     let canvas = TestCanvas(width: 0, height: 3)
     canvas.render {
       Color.red
@@ -65,11 +62,11 @@ struct ColorTests {
 //    #expect(size.height == height)
 //  }
 
-  @Suite("Preference Values", .tags(.preferenceValues))
-  struct PreferenceValues {
+  @Suite(.tags(.preferenceValues))
+  struct `Preference Values` {
 
-    @Test("default value", arguments: Color.testCases)
-    func defaultValue(color: Color) {
+    @Test(arguments: Color.testCases)
+    func `default value`(color: Color) {
 
       var output = ""
 
@@ -82,8 +79,8 @@ struct ColorTests {
     }
 
 
-    @Test("modified value", arguments: Color.testCases)
-    func modifiedValue(color: Color) {
+    @Test(arguments: Color.testCases)
+    func `modified value`(color: Color) {
 
       var output = ""
 

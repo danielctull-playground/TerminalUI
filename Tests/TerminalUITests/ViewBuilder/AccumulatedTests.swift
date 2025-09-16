@@ -5,11 +5,10 @@ import Testing
 @Suite("Accumulated", .tags(.viewBuilder))
 struct AccumulatedTests {
 
-  @Suite("Preference Values", .tags(.preferenceValues))
-  struct PreferenceValues {
+  @Suite(.tags(.preferenceValues))
+  struct `Preference Values` {
 
-    @Test("modified lhs value")
-    func modifiedLHSValue() {
+    @Test func `modified lhs value`() {
 
       var output = ""
 
@@ -25,8 +24,7 @@ struct AccumulatedTests {
       #expect(output == "lhs")
     }
 
-    @Test("modified rhs value")
-    func modifiedRHSValue() {
+    @Test func `modified rhs value`() {
 
       var output = ""
 
@@ -42,8 +40,7 @@ struct AccumulatedTests {
       #expect(output == "rhs")
     }
 
-    @Test("modified both values")
-    func modifiedBothValues() {
+    @Test func `modified both values`() {
 
       var output = ""
 

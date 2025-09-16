@@ -5,10 +5,9 @@ import Testing
 @Suite("Label", .tags(.view))
 struct LabelTests {
 
-  @Suite("Style")
-  struct Style {
+  @Suite struct Style {
 
-    @Test("default") func `default`() {
+    @Test func `default`() {
 
       let canvas = TestCanvas(width: 10, height: 1)
       canvas.render {
@@ -33,8 +32,7 @@ struct LabelTests {
       ])
     }
 
-    @Test("titleAndIcon")
-    func titleAndIcon() {
+    @Test func `titleAndIcon`() {
 
       let canvas = TestCanvas(width: 10, height: 1)
       canvas.render {
@@ -60,8 +58,7 @@ struct LabelTests {
       ])
     }
 
-    @Test("titleOnly")
-    func titleOnly() {
+    @Test func `titleOnly`() {
 
       let canvas = TestCanvas(width: 10, height: 1)
       canvas.render {
@@ -82,8 +79,7 @@ struct LabelTests {
       ])
     }
 
-    @Test("iconOnly")
-    func iconOnly() {
+    @Test func `iconOnly`() {
 
       let canvas = TestCanvas(width: 10, height: 1)
       canvas.render {
@@ -103,8 +99,7 @@ struct LabelTests {
       ])
     }
 
-    @Test("custom")
-    func custom() {
+    @Test func `custom`() {
 
       struct Custom: LabelStyle {
         func makeBody(configuration: Configuration) -> some View {
@@ -142,11 +137,10 @@ struct LabelTests {
     }
   }
 
-  @Suite("Preference Values", .tags(.preferenceValues))
-  struct PreferenceValues {
+  @Suite(.tags(.preferenceValues))
+  struct `Preference Values` {
 
-    @Test("default value")
-    func defaultValue() {
+    @Test func `default value`() {
 
       var output = ""
 
@@ -158,8 +152,7 @@ struct LabelTests {
       #expect(output == PreferenceKey.A.defaultValue)
     }
 
-    @Test("modified value")
-    func modifiedValue() {
+    @Test func `modified value`() {
 
       var output = ""
 

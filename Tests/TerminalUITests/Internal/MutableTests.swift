@@ -10,15 +10,13 @@ struct MutableTests {
     @Mutable var value: String
   }
 
-  @Test("Initial value")
-  func initialValue() {
+  @Test func `Initial value`() {
     let a = UUID().uuidString
     let foo = Foo(value: a)
     #expect(foo.value == a)
   }
 
-  @Test("Change value")
-  func changeValue() {
+  @Test func `Change value`() {
     let a = UUID().uuidString
     let foo = Foo(value: a)
     #expect(foo.value == a)
