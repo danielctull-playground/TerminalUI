@@ -21,8 +21,7 @@ struct PreferenceTests {
 
   private let canvas = TestCanvas(width: 7, height: 1)
 
-  @Suite("Reader")
-  struct Reader {
+  @Suite struct `Reader` {
 
     private let canvas = TestCanvas(width: 7, height: 1)
 
@@ -46,8 +45,7 @@ struct PreferenceTests {
     }
   }
 
-  @Suite("Writer")
-  struct Writer {
+  @Suite struct `Writer` {
 
     private let canvas = TestCanvas(width: 7, height: 1)
 
@@ -112,8 +110,7 @@ struct PreferenceTests {
     }
   }
 
-  @Suite("Accumulated")
-  struct Accumulated {
+  @Suite struct `Accumulated` {
 
     private let canvas = TestCanvas(width: 7, height: 1)
 
