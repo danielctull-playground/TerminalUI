@@ -7,15 +7,13 @@ struct TextTests {
 
   private let canvas = TestCanvas(width: 5, height: 3)
 
-  @Test("body: fatal")
-  func body() async {
+  @Test func `body: fatal`() async {
     await #expect(processExitsWith: .failure) {
       _ = Text("").body
     }
   }
 
-  @Test("single line")
-  func singleLine() {
+  @Test func `single line`() {
 
     canvas.render {
       Text("Hello")
@@ -30,8 +28,7 @@ struct TextTests {
     ])
   }
 
-  @Test("two lines")
-  func twoLines() {
+  @Test func `two lines`() {
 
     canvas.render {
       Text("Hi there")
@@ -48,8 +45,7 @@ struct TextTests {
     ])
   }
 
-  @Test("two lines (space is just after end)")
-  func twoLines_spaceIsJustAfterEnd() {
+  @Test func `two lines (space is just after end)`() {
 
     canvas.render {
       Text("Hello there")
@@ -95,8 +91,7 @@ struct TextTests {
   @Suite("Preference Values", .tags(.preferenceValues))
   struct PreferenceValues {
 
-    @Test("default value")
-    func defaultValue() {
+    @Test func `default value`() {
 
       var output = ""
 
@@ -108,8 +103,7 @@ struct TextTests {
       #expect(output == PreferenceKey.A.defaultValue)
     }
 
-    @Test("modified value")
-    func modifiedValue() {
+    @Test func `modified value`() {
 
       var output = ""
 
@@ -123,8 +117,7 @@ struct TextTests {
     }
   }
 
-  @Test("height: zero")
-  func zeroHeight() {
+  @Test func `height: zero`() {
     let canvas = TestCanvas(width: 3, height: 0)
     canvas.render {
       Text("A")
@@ -132,8 +125,7 @@ struct TextTests {
     #expect(canvas.pixels.isEmpty)
   }
 
-  @Test("width: zero")
-  func zeroWidth() {
+  @Test func `width: zero`() {
     let canvas = TestCanvas(width: 0, height: 3)
     canvas.render {
       Text("A")

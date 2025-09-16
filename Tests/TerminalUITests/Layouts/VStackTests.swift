@@ -5,15 +5,13 @@ import Testing
 @Suite("VStack", .tags(.view, .layout))
 struct VStackTests {
 
-  @Test("body: fatal")
-  func body() async {
+  @Test func `body: fatal`() async {
     await #expect(processExitsWith: .failure) {
       _ = VStack {}.body
     }
   }
 
-  @Test("empty")
-  func empty() {
+  @Test func `empty`() {
 
     let canvas = TestCanvas(width: 3, height: 3)
 
@@ -24,8 +22,7 @@ struct VStackTests {
     #expect(canvas.pixels == [:])
   }
 
-  @Test("single column")
-  func singleColumn() {
+  @Test func `single column`() {
 
     let canvas = TestCanvas(width: 1, height: 3)
 
@@ -44,8 +41,7 @@ struct VStackTests {
     ])
   }
 
-  @Test("single column 2")
-  func singleLine2() {
+  @Test func `single column 2`() {
 
     let canvas = TestCanvas(width: 1, height: 5)
 
@@ -66,8 +62,7 @@ struct VStackTests {
     ])
   }
 
-  @Test("single coloumn 3")
-  func singleColumn3() {
+  @Test func `single coloumn 3`() {
 
     let canvas = TestCanvas(width: 1, height: 11)
 

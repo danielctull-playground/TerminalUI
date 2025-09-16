@@ -9,15 +9,13 @@ struct PaddingTests {
   private let view = Color.blue
   private let pixel = Pixel(" ", background: .blue)
 
-  @Test("body: fatal")
-  func body() async {
+  @Test func `body: fatal`() async {
     await #expect(processExitsWith: .failure) {
       _ = Color.black.padding(0).body
     }
   }
 
-  @Test("edge insets")
-  func edgeInsets() {
+  @Test func `edge insets`() {
 
     let canvas = TestCanvas(width: 8, height: 6)
     canvas.render {
@@ -32,8 +30,7 @@ struct PaddingTests {
     ])
   }
 
-  @Test("all")
-  func all() async throws {
+  @Test func `all`() async throws {
 
     canvas.render {
       view.padding(.all, 1)
@@ -44,8 +41,7 @@ struct PaddingTests {
     ])
   }
 
-  @Test("top")
-  func top() async throws {
+  @Test func `top`() async throws {
 
     canvas.render {
       view.padding(.top, 1)
@@ -61,8 +57,7 @@ struct PaddingTests {
     ])
   }
 
-  @Test("leading")
-  func leading() async throws {
+  @Test func `leading`() async throws {
 
     canvas.render {
       view.padding(.leading, 1)
@@ -78,8 +73,7 @@ struct PaddingTests {
     ])
   }
 
-  @Test("bottom")
-  func bottom() async throws {
+  @Test func `bottom`() async throws {
 
     canvas.render {
       view.padding(.bottom, 1)
@@ -95,8 +89,7 @@ struct PaddingTests {
     ])
   }
 
-  @Test("trailing")
-  func trailing() async throws {
+  @Test func `trailing`() async throws {
 
     canvas.render {
       view.padding(.trailing, 1)
@@ -112,8 +105,7 @@ struct PaddingTests {
     ])
   }
 
-  @Test("horizontal")
-  func horizontal() async throws {
+  @Test func `horizontal`() async throws {
 
     canvas.render {
       view.padding(.horizontal, 1)
@@ -126,8 +118,7 @@ struct PaddingTests {
     ])
   }
 
-  @Test("vertical")
-  func vertical() async throws {
+  @Test func `vertical`() async throws {
 
     canvas.render {
       view.padding(.vertical, 1)
@@ -140,8 +131,7 @@ struct PaddingTests {
     ])
   }
 
-  @Test("length")
-  func length() async throws {
+  @Test func `length`() async throws {
 
     canvas.render {
       view.padding(1)
@@ -177,8 +167,7 @@ struct PaddingTests {
   @Suite("Preference Values", .tags(.preferenceValues))
   struct PreferenceValues {
 
-    @Test("default value")
-    func defaultValue() {
+    @Test func `default value`() {
 
       var output = ""
 
@@ -191,8 +180,7 @@ struct PaddingTests {
       #expect(output == PreferenceKey.A.defaultValue)
     }
 
-    @Test("modified value")
-    func modifiedValue() {
+    @Test func `modified value`() {
 
       var output = ""
 

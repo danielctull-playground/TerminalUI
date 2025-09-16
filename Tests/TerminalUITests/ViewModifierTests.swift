@@ -10,8 +10,7 @@ struct ViewModifierTests {
     }
   }
 
-  @Test("Empty view modifier displays original contents")
-  func empty() {
+  @Test func `Empty view modifier displays original contents`() {
 
     let canvas = TextStreamCanvas(output: .memory)
 

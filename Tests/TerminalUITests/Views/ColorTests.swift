@@ -7,8 +7,7 @@ struct ColorTests {
 
   private let canvas = TestCanvas(width: 3, height: 3)
 
-  @Test("body: fatal")
-  func body() async {
+  @Test func `body: fatal`() async {
     await #expect(processExitsWith: .failure) {
       _ = Color.black.body
     }
@@ -34,8 +33,7 @@ struct ColorTests {
     ])
   }
 
-  @Test("height: zero")
-  func zeroHeight() {
+  @Test func `height: zero`() {
     let canvas = TestCanvas(width: 3, height: 0)
     canvas.render {
       Color.red
@@ -43,8 +41,7 @@ struct ColorTests {
     #expect(canvas.pixels.isEmpty)
   }
 
-  @Test("width: zero")
-  func zeroWidth() {
+  @Test func `width: zero`() {
     let canvas = TestCanvas(width: 0, height: 3)
     canvas.render {
       Color.red

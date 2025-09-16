@@ -23,8 +23,7 @@ struct ViewBuilderTests {
     ])
   }
 
-  @Test("first body: fatal")
-  func firstBody() async {
+  @Test func `first body: fatal`() async {
     await #expect(processExitsWith: .failure) {
       _ = ViewBuilder
         .buildPartialBlock(first: Color.black)
@@ -45,8 +44,7 @@ struct ViewBuilderTests {
     ])
   }
 
-  @Test("accumulated body: fatal")
-  func accumulatedBody() async {
+  @Test func `accumulated body: fatal`() async {
     await #expect(processExitsWith: .failure) {
       _ = ViewBuilder
         .buildPartialBlock(accumulated: Color.black, next: Color.blue)
@@ -69,8 +67,7 @@ struct ViewBuilderTests {
     #expect(canvas.pixels == expectation)
   }
 
-  @Test("optional body: fatal")
-  func optionalBody() async {
+  @Test func `optional body: fatal`() async {
     await #expect(processExitsWith: .failure) {
       _ = ViewBuilder
         .buildOptional(Color.black)
@@ -97,8 +94,7 @@ struct ViewBuilderTests {
     ])
   }
 
-  @Test("either body: fatal")
-  func eitherBody() async {
+  @Test func `either body: fatal`() async {
     await #expect(processExitsWith: .failure) {
       let either: Either<Color, Color> = ViewBuilder.buildEither(first: Color.black)
       _ = either.body
@@ -127,8 +123,7 @@ struct ViewBuilderTests {
   }
 #endif
 
-  @Test("limited availability body: fatal")
-  func limitedAvailabilityBody() async {
+  @Test func `limited availability body: fatal`() async {
     await #expect(processExitsWith: .failure) {
       _ = ViewBuilder.buildLimitedAvailability(Color.black).body
     }

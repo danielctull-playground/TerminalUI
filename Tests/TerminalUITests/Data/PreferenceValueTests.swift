@@ -26,8 +26,7 @@ struct PreferenceTests {
 
     private let canvas = TestCanvas(width: 7, height: 1)
 
-    @Test("defaultValue")
-    func defaultValue() {
+    @Test func `defaultValue`() {
 
       struct TestView: View {
         let action: (String) -> Void
@@ -52,8 +51,7 @@ struct PreferenceTests {
 
     private let canvas = TestCanvas(width: 7, height: 1)
 
-    @Test("same preference")
-    func samePreference() {
+    @Test func `same preference`() {
 
       struct TestView: View {
         let action: (String) -> Void
@@ -73,8 +71,7 @@ struct PreferenceTests {
       #expect(output == "new")
     }
 
-    @Test("incorrect order")
-    func incorrectOrder() {
+    @Test func `incorrect order`() {
 
       struct TestView: View {
         let action: (String) -> Void
@@ -94,8 +91,7 @@ struct PreferenceTests {
       #expect(output == A.defaultValue)
     }
 
-    @Test("different preference")
-    func differentPreference() {
+    @Test func `different preference`() {
 
       struct TestView: View {
         let action: (String) -> Void
@@ -121,8 +117,7 @@ struct PreferenceTests {
 
     private let canvas = TestCanvas(width: 7, height: 1)
 
-    @Test("write neither")
-    func writeNeither() {
+    @Test func `write neither`() {
 
       struct TestView: View {
         let action: (String) -> Void
@@ -144,8 +139,7 @@ struct PreferenceTests {
       #expect(output == A.defaultValue)
     }
 
-    @Test("write lhs")
-    func writeLHS() {
+    @Test func `write lhs`() {
 
       struct TestView: View {
         let action: (String) -> Void
@@ -168,8 +162,7 @@ struct PreferenceTests {
       #expect(output == "lhs")
     }
 
-    @Test("write rhs")
-    func writeRHS() {
+    @Test func `write rhs`() {
 
       struct TestView: View {
         let action: (String) -> Void
@@ -192,8 +185,7 @@ struct PreferenceTests {
       #expect(output == "rhs")
     }
 
-    @Test("write both")
-    func writeBoth() {
+    @Test func `write both`() {
 
       struct TestView: View {
         let action: (String) -> Void

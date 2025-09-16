@@ -8,15 +8,13 @@ struct FixedSizeTests {
   private let view = Color.blue
   private let pixel = Pixel(" ", background: .blue)
 
-  @Test("body: fatal")
-  func body() async {
+  @Test func `body: fatal`() async {
     await #expect(processExitsWith: .failure) {
       _ = Color.black.fixedSize().body
     }
   }
 
-  @Test("horizontal")
-  func horizontal() {
+  @Test func `horizontal`() {
 
     let canvas = TestCanvas(width: 1, height: 1)
     canvas.render {
@@ -38,8 +36,7 @@ struct FixedSizeTests {
     ])
   }
 
-  @Test("vertical")
-  func vertical() {
+  @Test func `vertical`() {
 
     let canvas = TestCanvas(width: 1, height: 1)
     canvas.render {
@@ -61,8 +58,7 @@ struct FixedSizeTests {
     ])
   }
 
-  @Test("both")
-  func both() {
+  @Test func `both`() {
 
     let canvas = TestCanvas(width: 1, height: 1)
     canvas.render {
@@ -87,8 +83,7 @@ struct FixedSizeTests {
   @Suite("Preference Values", .tags(.preferenceValues))
   struct PreferenceValues {
 
-    @Test("default value")
-    func defaultValue() {
+    @Test func `default value`() {
 
       var output = ""
 
@@ -101,8 +96,7 @@ struct FixedSizeTests {
       #expect(output == PreferenceKey.A.defaultValue)
     }
 
-    @Test("modified value")
-    func modifiedValue() {
+    @Test func `modified value`() {
 
       var output = ""
 

@@ -5,8 +5,7 @@ import Testing
 @Suite("Canvas")
 struct CanvasTests {
 
-  @Test("Drawing with default values")
-  func defaultValues() {
+  @Test func `Drawing with default values`() {
     let canvas = TextStreamCanvas(output: .memory)
     canvas.draw(Pixel("a"), at: Position(x: 2, y: 1))
     #expect(canvas.output.controlSequences == [
@@ -18,8 +17,7 @@ struct CanvasTests {
     ])
   }
 
-  @Test("Center alignment")
-  func center() {
+  @Test func `Center alignment`() {
     let canvas = TestCanvas(width: 3, height: 3)
     canvas.render {
       Text("A")

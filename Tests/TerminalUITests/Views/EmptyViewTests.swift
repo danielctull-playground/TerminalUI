@@ -5,15 +5,13 @@ import Testing
 @Suite("EmptyView", .tags(.view))
 struct EmptyViewTests {
 
-  @Test("body: fatal")
-  func body() async {
+  @Test func `body: fatal`() async {
     await #expect(processExitsWith: .failure) {
       _ = EmptyView().body
     }
   }
 
-  @Test("Display Items")
-  func displayItems() {
+  @Test func `Display Items`() {
 
     let canvas = TestCanvas(width: 3, height: 3)
     canvas.render {
@@ -26,8 +24,7 @@ struct EmptyViewTests {
   @Suite("Preference Values", .tags(.preferenceValues))
   struct PreferenceValues {
 
-    @Test("default value")
-    func defaultValue() {
+    @Test func `default value`() {
 
       var output = ""
 
@@ -39,8 +36,7 @@ struct EmptyViewTests {
       #expect(output == PreferenceKey.A.defaultValue)
     }
 
-    @Test("modified value")
-    func modifiedValue() {
+    @Test func `modified value`() {
 
       var output = ""
 

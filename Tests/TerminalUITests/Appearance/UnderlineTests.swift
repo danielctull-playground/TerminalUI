@@ -5,8 +5,7 @@ import Testing
 @Suite("Underline", .tags(.modifier))
 struct UnderlineTests {
 
-  @Test("Output: default")
-  func output_default() {
+  @Test func `Output: default`() {
 
     let canvas = TextStreamCanvas(output: .memory)
 

@@ -6,15 +6,13 @@ import Testing
 @Suite("Environment")
 struct EnvironmentTests {
 
-  @Test("read outside of body: fatal")
-  func readOutsideOfBody() async {
+  @Test func `read outside of body: fatal`() async {
     await #expect(processExitsWith: .failure) {
       _ = TestView().value
     }
   }
 
-  @Test("default")
-  func defaultValue() {
+  @Test func `default`() {
 
     let canvas = TestCanvas(width: 7, height: 1)
 
@@ -33,8 +31,7 @@ struct EnvironmentTests {
     ])
   }
 
-  @Test("write")
-  func write() {
+  @Test func `write`() {
 
     let canvas = TestCanvas(width: 7, height: 1)
 
@@ -47,15 +44,13 @@ struct EnvironmentTests {
     ])
   }
 
-  @Test("write body: fatal")
-  func writeBody() async {
+  @Test func `write body: fatal`() async {
     await #expect(processExitsWith: .failure) {
       _ = TestView().environment(\.value, "b").body
     }
   }
 
-  @Test("transform")
-  func modifier() {
+  @Test func `transform`() {
 
     let canvas = TestCanvas(width: 8, height: 1)
 
@@ -75,8 +70,7 @@ struct EnvironmentTests {
     ])
   }
 
-  @Test("transform body: fatal")
-  func transformBody() async {
+  @Test func `transform body: fatal`() async {
     await #expect(processExitsWith: .failure) {
       _ = TestView().transformEnvironment(\.value) { $0.append("a") }.body
     }

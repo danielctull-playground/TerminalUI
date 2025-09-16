@@ -8,15 +8,13 @@ struct OffsetTests {
   private let view = Text("X")
   private let pixel = Pixel("X")
 
-  @Test("body: fatal")
-  func body() async {
+  @Test func `body: fatal`() async {
     await #expect(processExitsWith: .failure) {
       _ = Color.black.offset().body
     }
   }
 
-  @Test("x:")
-  func x() {
+  @Test func `x:`() {
 
     let canvas = TestCanvas(width: 3, height: 5)
     canvas.render {
@@ -28,8 +26,7 @@ struct OffsetTests {
     ])
   }
 
-  @Test("y:")
-  func y() {
+  @Test func `y:`() {
 
     let canvas = TestCanvas(width: 3, height: 5)
     canvas.render {
@@ -41,8 +38,7 @@ struct OffsetTests {
     ])
   }
 
-  @Test("x:y:")
-  func xy() {
+  @Test func `x:y:`() {
 
     let canvas = TestCanvas(width: 3, height: 5)
     canvas.render {
@@ -54,8 +50,7 @@ struct OffsetTests {
     ])
   }
 
-  @Test("size:")
-  func size() {
+  @Test func `size:`() {
 
     let canvas = TestCanvas(width: 3, height: 5)
     canvas.render {
@@ -70,8 +65,7 @@ struct OffsetTests {
   @Suite("Preference Values", .tags(.preferenceValues))
   struct PreferenceValues {
 
-    @Test("default value")
-    func defaultValue() {
+    @Test func `default value`() {
 
       var output = ""
 
@@ -84,8 +78,7 @@ struct OffsetTests {
       #expect(output == PreferenceKey.A.defaultValue)
     }
 
-    @Test("modified value")
-    func modifiedValue() {
+    @Test func `modified value`() {
 
       var output = ""
 

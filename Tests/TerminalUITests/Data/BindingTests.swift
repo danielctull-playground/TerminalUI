@@ -4,8 +4,7 @@ import Testing
 @Suite("Binding")
 struct BindingTests {
 
-  @Test("wrappedValue")
-  func wrappedValue() {
+  @Test func `wrappedValue`() {
 
     var value = "old"
     let binding = Binding { value } set: { value = $0 }
@@ -19,8 +18,7 @@ struct BindingTests {
     #expect(value == "newer")
   }
 
-  @Test("@propertyWrapper")
-  func propertyWrapper() {
+  @Test func `@propertyWrapper`() {
 
     struct Foo {
       @Binding var value: String
@@ -38,8 +36,7 @@ struct BindingTests {
     #expect(foo.value == "newer")
   }
 
-  @Test("projectedValue")
-  func projectedValue() {
+  @Test func `projectedValue`() {
 
     var value = "old"
     let original = Binding { value } set: { value = $0 }
@@ -52,8 +49,7 @@ struct BindingTests {
     #expect(value == "new")
   }
 
-  @Test("init(projectedValue:)")
-  func initProjectedValue() {
+  @Test func `init(projectedValue:)`() {
 
     var value = "old"
     let original = Binding { value } set: { value = $0 }
@@ -66,16 +62,14 @@ struct BindingTests {
     #expect(value == "new")
   }
 
-  @Test("constant")
-  func constant() {
+  @Test func `constant`() {
     let binding = Binding.constant("old")
     #expect(binding.wrappedValue == "old")
     binding.wrappedValue = "new"
     #expect(binding.wrappedValue == "old")
   }
 
-  @Test("@dynamicMemberLookup")
-  func dynamicMemberLookup() {
+  @Test func `@dynamicMemberLookup`() {
 
     struct Foo: Equatable {
       var value: String
@@ -92,8 +86,7 @@ struct BindingTests {
     #expect(foo == Foo(value: "new"))
   }
 
-  @Test("Identifiable")
-  func identifiable() {
+  @Test func `Identifiable`() {
 
     struct Foo: Equatable, Identifiable {
       var id: String
@@ -110,8 +103,7 @@ struct BindingTests {
     #expect(binding.id == "newer")
   }
 
-  @Test("Collection")
-  func collection() {
+  @Test func `Collection`() {
 
     var value = ["0", "1", "2"]
     let binding = Binding { value } set: { value = $0 }
@@ -136,8 +128,7 @@ struct BindingTests {
     #expect(value == ["0abc", "1abc", "2abc"])
   }
 
-  @Test("BidirectionalCollection")
-  func bidirectionalCollection() {
+  @Test func `BidirectionalCollection`() {
 
     var value = ["0", "1", "2"]
     let binding = Binding { value } set: { value = $0 }
@@ -157,8 +148,7 @@ struct BindingTests {
     #expect(value == ["0ab", "1ab", "2ab"])
   }
 
-  @Test("init (to optional value)")
-  func toOptional() {
+  @Test func `init (to optional value)`() {
 
     var value = "old"
     let binding = Binding { value } set: { value = $0 }
@@ -175,8 +165,7 @@ struct BindingTests {
     #expect(value == "new")
   }
 
-  @Test("init (from optional value)")
-  func fromOptional() throws {
+  @Test func `init (from optional value)`() throws {
 
     var value: String? = "old"
     let optional = Binding { value } set: { value = $0 }
@@ -190,15 +179,13 @@ struct BindingTests {
     #expect(value == "newer")
   }
 
-  @Test("init (from optional value) - fails when nil")
-  func fromOptional_failure_nil() {
+  @Test func `init (from optional value) - fails when nil`() {
     var value: String?
     let optional = Binding { value } set: { value = $0 }
     #expect(Binding(optional) == nil)
   }
 
-  @Test("init (from optional value) - fatal error on read of nil")
-  func fromOptional_fatal_nil() async {
+  @Test func `init (from optional value) - fatal error on read of nil`() async {
     await #expect(processExitsWith: .failure) {
       var value: String? = "old"
       let optional = Binding { value } set: { value = $0 }
@@ -208,8 +195,7 @@ struct BindingTests {
     }
   }
 
-  @Test("hashable")
-  func hashable() {
+  @Test func `hashable`() {
 
     var value = "old"
     let hashable = Binding { value } set: { value = $0 }

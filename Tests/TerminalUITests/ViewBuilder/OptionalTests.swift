@@ -5,8 +5,7 @@ import Testing
 @Suite("Optional", .tags(.viewBuilder))
 struct OptionalTests {
 
-  @Test("body: fatal")
-  func body() async {
+  @Test func `body: fatal`() async {
     await #expect(processExitsWith: .failure) {
       _ = Optional<EmptyView>.none.body
       _ = Optional<EmptyView>.some(EmptyView()).body
