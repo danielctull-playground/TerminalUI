@@ -1,4 +1,18 @@
 
+/// Represents a modification to the layout of display items.
+///
+/// This is used for modifiers that only adjust the layout of display items,
+/// rather than add or change the number of display items. This allows
+/// implementing code to be more concise and readable without having to deal
+/// with defining a ``makeView`` function.
+///
+/// Examples:
+///   * ``View/frame(width:height:alignment:)``
+///   * ``View/fixedSize(horizontal:vertical:)``
+///   * ``View/offset(size:)``
+///
+/// > Note: This is different from ``Layout`` as it acts on each individual
+/// display item as opposed to the entire set of items.
 protocol LayoutModifier {
 
   typealias Subview = LayoutModifierSubview
