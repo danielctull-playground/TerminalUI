@@ -15,7 +15,7 @@
 /// display item as opposed to the entire set of items.
 protocol LayoutModifier {
 
-  typealias Subview = LayoutModifierSubview
+  typealias Subview = LayoutSubview
 
   func sizeThatFits(
     proposal: ProposedViewSize,
@@ -83,34 +83,5 @@ private struct LayoutModifierView<Content: View, LayoutModifier: TerminalUI.Layo
           }
       }
     )
-  }
-}
-
-// MARK: - LayoutModifierSubview
-
-public struct LayoutModifierSubview {
-
-  private let _sizeThatFits: (ProposedViewSize) -> Size
-  private let _place: (Position, ProposedViewSize) -> Void
-
-  init(displayItem: DisplayItem) {
-    _sizeThatFits = displayItem.size(for:)
-    _place = { position, proposal in
-      displayItem.render(in: Rect(
-        origin: position,
-        size: displayItem.size(for: proposal)
-      ))
-    }
-  }
-
-  public func sizeThatFits(_ proposal: ProposedViewSize) -> Size {
-    _sizeThatFits(proposal)
-  }
-
-  public func place(
-    at position: Position,
-    proposal: ProposedViewSize
-  ) {
-    _place(position, proposal)
   }
 }
