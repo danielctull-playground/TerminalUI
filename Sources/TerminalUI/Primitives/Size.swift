@@ -1,8 +1,8 @@
 
 public struct Size: Equatable, Hashable, Sendable {
 
-  public let width: Int
-  public let height: Int
+  public internal(set) var width: Int
+  public internal(set) var height: Int
 
   public init(width: Int, height: Int) {
     self.width = width

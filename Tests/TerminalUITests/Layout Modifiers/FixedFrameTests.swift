@@ -11,14 +11,14 @@ struct FixedFrameTests {
 
   @Test func `body: fatal`() async {
     await #expect(processExitsWith: .failure) {
-      _ = Color.black.frame().body
+      _ = Color.black.frame(width: nil, height: nil).body
     }
   }
 
   @Test func `width: nil, height: nil`() {
 
     canvas.render {
-      view.frame()
+      view.frame(width: nil, height: nil)
     }
 
     #expect(canvas.pixels == [
