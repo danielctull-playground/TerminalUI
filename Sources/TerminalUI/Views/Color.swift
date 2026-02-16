@@ -1,13 +1,9 @@
 
-public struct Color: CustomStringConvertible, Equatable, Sendable, View {
+public struct Color: CustomStringConvertible, Equatable, Sendable, PrimitiveView {
 
   public let description: String
   let foreground: GraphicRendition
   let background: GraphicRendition
-
-  public var body: some View {
-    fatalError("Body should never be called.")
-  }
 
   public static func makeView(inputs: ViewInputs<Self>) -> ViewOutputs {
     ViewOutputs(

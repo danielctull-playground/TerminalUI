@@ -1,14 +1,10 @@
 
-public struct Text: View {
+public struct Text: PrimitiveView {
 
   private let string: String
 
   public init(_ string: String) {
     self.string = string
-  }
-
-  public var body: some View {
-    fatalError("Body should never be called.")
   }
 
   public static func makeView(inputs: ViewInputs<Self>) -> ViewOutputs {

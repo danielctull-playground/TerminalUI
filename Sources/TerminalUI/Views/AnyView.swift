@@ -1,5 +1,5 @@
 
-public struct AnyView: View {
+public struct AnyView: PrimitiveView {
 
   private let makeView: (ViewInputs<AnyView>) -> ViewOutputs
 
@@ -8,10 +8,6 @@ public struct AnyView: View {
       let inputs = inputs.mapNode { _ in view }
       return View.makeView(inputs: inputs)
     }
-  }
-
-  public var body: some View {
-    fatalError("Body should never be called.")
   }
 
   public static func makeView(inputs: ViewInputs<Self>) -> ViewOutputs {

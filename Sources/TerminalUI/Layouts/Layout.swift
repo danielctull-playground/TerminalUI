@@ -82,7 +82,7 @@ extension Layout {
   }
 }
 
-private struct LayoutView<Content: View, Layout: TerminalUI.Layout>: View {
+private struct LayoutView<Content: View, Layout: TerminalUI.Layout>: PrimitiveView {
 
   private let layout: Layout
   private let content: Content
@@ -90,10 +90,6 @@ private struct LayoutView<Content: View, Layout: TerminalUI.Layout>: View {
   init(layout: Layout, content: Content) {
     self.layout = layout
     self.content = content
-  }
-
-  var body: some View {
-    fatalError("Body should never be called.")
   }
 
   static func makeView(inputs: ViewInputs<Self>) -> ViewOutputs {

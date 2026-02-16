@@ -1,5 +1,5 @@
 
-public struct Either<First: View, Second: View>: View {
+public struct Either<First: View, Second: View>: PrimitiveView {
 
   private enum Value {
     case first(First)
@@ -14,10 +14,6 @@ public struct Either<First: View, Second: View>: View {
 
   init(_ second: Second) {
     value = .second(second)
-  }
-
-  public var body: some View {
-    fatalError("Body should never be called.")
   }
 
   public static func makeView(inputs: ViewInputs<Self>) -> ViewOutputs {

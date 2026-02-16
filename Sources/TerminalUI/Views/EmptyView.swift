@@ -1,11 +1,7 @@
 
-public struct EmptyView: View {
+public struct EmptyView: PrimitiveView {
 
   public init() {}
-
-  public var body: some View {
-    fatalError("Body should never be called.")
-  }
 
   public static func makeView(inputs: ViewInputs<Self>) -> ViewOutputs {
     ViewOutputs(

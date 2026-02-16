@@ -17,15 +17,11 @@ extension View {
   }
 }
 
-private struct PreferenceWriter<Content: View, Key: PreferenceKey>: View {
+private struct PreferenceWriter<Content: View, Key: PreferenceKey>: PrimitiveView {
 
   let content: Content
   let key: Key.Type
   let value: Key.Value
-
-  var body: some View {
-    fatalError("Body should never be called.")
-  }
 
   public static func makeView(inputs: ViewInputs<Self>) -> ViewOutputs {
     ViewOutputs(
@@ -55,15 +51,11 @@ extension View {
 private struct PreferenceReader<
   Content: View,
   Key: PreferenceKey
->: View where Key.Value: Equatable {
+>: PrimitiveView where Key.Value: Equatable {
 
   let content: Content
   let key: Key.Type
   let action: (Key.Value) -> Void
-
-  var body: some View {
-    fatalError("Body should never be called.")
-  }
 
   public static func makeView(inputs: ViewInputs<Self>) -> ViewOutputs {
     ViewOutputs(

@@ -40,7 +40,7 @@ extension LayoutModifier {
   }
 }
 
-private struct LayoutModifierView<Content: View, LayoutModifier: TerminalUI.LayoutModifier>: View {
+private struct LayoutModifierView<Content: View, LayoutModifier: TerminalUI.LayoutModifier>: PrimitiveView {
 
   private let layoutModifier: LayoutModifier
   private let content: Content
@@ -48,10 +48,6 @@ private struct LayoutModifierView<Content: View, LayoutModifier: TerminalUI.Layo
   init(layoutModifier: LayoutModifier, content: Content) {
     self.layoutModifier = layoutModifier
     self.content = content
-  }
-
-  var body: some View {
-    fatalError("Body should never be called.")
   }
 
   static func makeView(inputs: ViewInputs<Self>) -> ViewOutputs {

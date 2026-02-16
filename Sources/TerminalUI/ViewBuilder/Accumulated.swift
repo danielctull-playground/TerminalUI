@@ -1,5 +1,5 @@
 
-struct Accumulated<A: View, B: View>: View {
+struct Accumulated<A: View, B: View>: PrimitiveView {
 
   private let a: A
   private let b: B
@@ -7,10 +7,6 @@ struct Accumulated<A: View, B: View>: View {
   init(_ a: A, _ b: B) {
     self.a = a
     self.b = b
-  }
-
-  var body: some View {
-    fatalError("Body should never be called.")
   }
 
   static func makeView(inputs: ViewInputs<Self>) -> ViewOutputs {

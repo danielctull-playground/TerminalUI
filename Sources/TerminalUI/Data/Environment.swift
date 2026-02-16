@@ -43,15 +43,11 @@ extension View {
   }
 }
 
-private struct EnvironmentWriter<Content: View, Value>: View {
+private struct EnvironmentWriter<Content: View, Value>: PrimitiveView {
 
   let content: Content
   let keyPath: WritableKeyPath<EnvironmentValues, Value>
   let value: Value
-
-  public var body: some View {
-    fatalError("Body should never be called.")
-  }
 
   public static func makeView(inputs: ViewInputs<Self>) -> ViewOutputs {
     ViewOutputs(

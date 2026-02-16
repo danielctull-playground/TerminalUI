@@ -1,9 +1,7 @@
 
-extension Optional: View where Wrapped: View {
+extension Optional: View where Wrapped: View {}
 
-  public var body: some View {
-    fatalError("Body should never be called.")
-  }
+extension Optional: PrimitiveView where Wrapped: View {
 
   public static func makeView(inputs: ViewInputs<Self>) -> ViewOutputs {
     ViewOutputs(

@@ -22,14 +22,10 @@ public protocol ViewModifier {
   func body(content: Content) -> Body
 }
 
-private struct ModifiedView<Modifier: ViewModifier>: View {
+private struct ModifiedView<Modifier: ViewModifier>: PrimitiveView {
 
   let content: Modifier.Content
   let modifier: Modifier
-
-  var body: some View {
-    fatalError("Body should never be called.")
-  }
 
   static func makeView(inputs: ViewInputs<Self>) -> ViewOutputs {
     ViewOutputs(
