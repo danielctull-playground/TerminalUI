@@ -5,7 +5,10 @@ public struct Color: CustomStringConvertible, Equatable, Sendable, PrimitiveView
   let foreground: GraphicRendition
   let background: GraphicRendition
 
-  public static func makeView(inputs: ViewInputs<Self>) -> ViewOutputs {
+  public static func makeView(
+    view: GraphValue<Self>,
+    inputs: ViewInputs
+  ) -> ViewOutputs {
     ViewOutputs(
       preferenceValues: inputs.graph.attribute("[Color] preference values") {
         .empty
@@ -15,7 +18,7 @@ public struct Color: CustomStringConvertible, Equatable, Sendable, PrimitiveView
           DisplayItem {
             $0.replacingUnspecifiedDimensions()
           } render: { bounds in
-            let pixel = Pixel(" ", background: inputs.node)
+            let pixel = Pixel(" ", background: view.value)
             for x in bounds.minX...bounds.maxX {
               for y in bounds.minY...bounds.maxY {
                 inputs.canvas.draw(pixel, at: Position(x: x, y: y))

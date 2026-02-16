@@ -27,17 +27,26 @@ private struct ModifiedView<Modifier: ViewModifier>: PrimitiveView {
   let content: Modifier.Content
   let modifier: Modifier
 
-  static func makeView(inputs: ViewInputs<Self>) -> ViewOutputs {
+  static func makeView(
+    view: GraphValue<Self>,
+    inputs: ViewInputs
+  ) -> ViewOutputs {
     ViewOutputs(
       preferenceValues: inputs.graph.attribute("[\(Self.self)] preference values") {
-        inputs.dynamicProperties.install(on: inputs.node.modifier)
-        let inputs = inputs.mapNode { $0.modifier.body(content: inputs.node.content) }
-        return Modifier.Body.makeView(inputs: inputs).preferenceValues
+        inputs.dynamicProperties.install(on: view.value.modifier)
+        return Modifier.Body.makeView(
+          view: view.map { $0.modifier.body(content: view.value.content) },
+          inputs: inputs
+        )
+        .preferenceValues
       },
       displayItems: inputs.graph.attribute("[\(Self.self)] display items") {
-        inputs.dynamicProperties.install(on: inputs.node.modifier)
-        let inputs = inputs.mapNode { $0.modifier.body(content: inputs.node.content) }
-        return Modifier.Body.makeView(inputs: inputs).displayItems
+        inputs.dynamicProperties.install(on: view.value.modifier)
+        return Modifier.Body.makeView(
+          view: view.map { $0.modifier.body(content: view.value.content) },
+          inputs: inputs
+        )
+        .displayItems
       }
     )
   }

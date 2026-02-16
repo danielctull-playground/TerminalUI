@@ -24,11 +24,14 @@ package struct Renderer<Content: View, Canvas: TerminalUI.Canvas> {
         graph: graph,
         environment: environment.projectedValue,
         state: graph.input("state", StateValues())
-      ),
-      node: screen)
+      )
+    )
 
     self.canvas = canvas
-    self.outputs = Screen.makeView(inputs: inputs)
+    self.outputs = Screen.makeView(
+      view: GraphValue(value: screen),
+      inputs: inputs
+    )
     self.externalEnvironment = externalEnvironment
     self._environment = environment
   }

@@ -36,8 +36,14 @@ package final class Attribute<Value>: Dependant, Dependency {
   package subscript<Property>(
     dynamicMember keyPath: KeyPath<Value, Property>
   ) -> Attribute<Property> {
-    graph.attribute("\(type(of: Value.self)) -> \(type(of: Property.self))") {
-      self.wrappedValue[keyPath: keyPath]
+    map { $0[keyPath: keyPath] }
+  }
+
+  package func map<New>(
+    _ transform: @escaping (Value) -> New
+  ) -> Attribute<New> {
+    graph.attribute("\(type(of: Value.self)) -> \(type(of: New.self))") {
+      transform(self.wrappedValue)
     }
   }
 }
