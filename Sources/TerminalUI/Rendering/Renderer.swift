@@ -4,7 +4,7 @@ import Foundation
 package struct Renderer<Content: View, Canvas: TerminalUI.Canvas> {
 
   private let canvas: Canvas
-  @Input private var environment: EnvironmentValues
+  @External private var environment: EnvironmentValues
   private let externalEnvironment: ExternalEnvironment
   private let outputs: ViewOutputs
 
@@ -15,7 +15,7 @@ package struct Renderer<Content: View, Canvas: TerminalUI.Canvas> {
   ) {
     let graph = Graph()
     let screen = graph.attribute("screen") { Screen(content: content) }
-    let environment = graph.input("environment", EnvironmentValues())
+    let environment = graph.external("environment", EnvironmentValues())
 
     let inputs = ViewInputs(
       graph: graph,
@@ -23,7 +23,7 @@ package struct Renderer<Content: View, Canvas: TerminalUI.Canvas> {
       dynamicProperties: DynamicProperties(
         graph: graph,
         environment: environment.projectedValue,
-        state: graph.input("state", StateValues())
+        state: graph.external("state", StateValues())
       )
     )
 

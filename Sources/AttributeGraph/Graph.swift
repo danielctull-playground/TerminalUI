@@ -26,18 +26,18 @@ package final class Graph {
   }
 
   func compute<Value>(
-    _ input: Input<Value>,
+    _ external: External<Value>,
     compute: () -> Value
   ) -> Value {
-    setupDependency(input)
+    setupDependency(external)
     return compute()
   }
 
-  package func input<Value>(
-    _ name: Input.Name,
+  package func external<Value>(
+    _ name: External.Name,
     _ value: Value
-  ) -> Input<Value> {
-    Input(graph: self, name: name, value: value)
+  ) -> External<Value> {
+    External(graph: self, name: name, value: value)
   }
 
   package func attribute<Value>(

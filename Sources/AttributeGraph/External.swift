@@ -1,6 +1,6 @@
 
 @propertyWrapper
-package final class Input<Value>: Dependency {
+package final class External<Value>: Dependency {
 
   package let name: Name
   private unowned let graph: Graph
@@ -31,8 +31,8 @@ package final class Input<Value>: Dependency {
   }
 }
 
-// MARK: - Input.Name
+// MARK: - External.Name
 
-extension Input {
+extension External {
   package typealias Name = AttributeName
 }

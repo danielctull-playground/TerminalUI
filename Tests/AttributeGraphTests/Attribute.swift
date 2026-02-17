@@ -14,7 +14,7 @@ struct AttributeTests {
 
   @Test func `update`() {
     let graph = Graph()
-    let x = graph.input("x", 1)
+    let x = graph.external("x", 1)
     let y = graph.attribute("y") { x.wrappedValue * 2 }
     #expect(y.wrappedValue == 2)
     x.wrappedValue = 2
@@ -23,7 +23,7 @@ struct AttributeTests {
 
   @Test func `dirty`() {
     let graph = Graph()
-    let x = graph.input("x", 1)
+    let x = graph.external("x", 1)
     let y = graph.attribute("y") { x.wrappedValue * 2 }
     #expect(y.wrappedValue == 2)
 

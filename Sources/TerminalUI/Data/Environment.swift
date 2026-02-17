@@ -174,7 +174,7 @@ extension DynamicProperties {
         transform(&environment)
         return environment
       },
-      state: graph.input("state", StateValues())
+      state: graph.external("state", StateValues())
     )
   }
 }
