@@ -19,14 +19,15 @@ public protocol App {
 }
 
 extension App {
-
-  public static func main() {
+  @MainActor
+  public static func main() async {
     let renderer = Renderer(
       canvas: TextStreamCanvas(output: .fileHandle(.standardOutput)),
       environment: .windowSize,
       content: Self().body
     )
-    while true {
+
+    for await event in WindowChange.sequence {
       renderer.render()
     }
   }
