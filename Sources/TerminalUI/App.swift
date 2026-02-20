@@ -27,7 +27,7 @@ extension App {
       content: Self().body
     )
 
-    for await event in WindowChange.sequence {
+    for await event in foo() {
       renderer.render()
     }
   }

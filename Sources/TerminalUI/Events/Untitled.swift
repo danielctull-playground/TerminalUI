@@ -1,10 +1,19 @@
 @preconcurrency import Dispatch
+import AsyncAlgorithms
 
 @available(macOS 15.0, *)
 @MainActor
-protocol Event {
-  associatedtype Sequence: AsyncSequence<Self, Never>
+protocol Event: Sendable {
+  associatedtype Sequence: AsyncSequence<Self, Never> & Sendable
   static var sequence: Sequence { get }
+}
+
+@MainActor
+func foo() -> some AsyncSequence<any Event, Never> {
+  let a = WindowChange.sequence.map { $0 as any Event }
+  let b = WindowChange.sequence.map { $0 as any Event }
+  let c = WindowChange.sequence.map { $0 as any Event }
+  return merge(a, b, c)
 }
 
 @available(macOS 15.0, *)
@@ -15,23 +24,20 @@ struct WindowChange: Event {
 @available(macOS 15.0, *)
 extension WindowChange {
 
-  static let sequence: some AsyncSequence<Self, Never> = AsyncStream(
-    DispatchSource.makeSignalSource(signal: SIGWINCH)
-  )
-  .compactMap {
+  static let sequence = AsyncStream(DispatchSource.makeSignalSource(signal: SIGWINCH)) {
     var winsize = winsize()
     let result = ioctl(STDOUT_FILENO, UInt(TIOCGWINSZ), &winsize)
-    guard result == EXIT_SUCCESS else { return nil }
+    guard result == EXIT_SUCCESS else { fatalError() }
     let size = Size(width: Int(winsize.ws_col), height: Int(winsize.ws_row))
     return WindowChange(size: size)
   }
 }
 
-extension AsyncStream<Void> {
-  init(_ source: any DispatchSourceProtocol) {
+extension AsyncStream {
+  init(_ source: any DispatchSourceProtocol, _ make: @escaping () -> Element) {
     self.init { continuation in
       source.setEventHandler {
-        continuation.yield(())
+        continuation.yield(make())
       }
       source.setCancelHandler {
         continuation.finish()
