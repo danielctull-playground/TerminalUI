@@ -27,8 +27,13 @@ extension App {
       content: Self().body
     )
 
-    for await event in foo() {
-      renderer.render()
+    do {
+      for try await event in foo() {
+        print(event)
+        renderer.render()
+      }
+    } catch {
+      exit(1)
     }
   }
 }
