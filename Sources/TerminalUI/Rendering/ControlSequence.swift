@@ -16,6 +16,9 @@ extension ControlSequence: ExpressibleByStringInterpolation {}
 
 extension ControlSequence {
   static let clearScreen: ControlSequence = "2J"
+  static func mouseTracking(_ value: MouseTracking) -> Self {
+    value.control
+  }
 }
 
 extension ControlSequence {
@@ -40,6 +43,12 @@ struct CursorVisibility {
   fileprivate let control: ControlSequence
   static let on = CursorVisibility(control: "?25h")
   static let off = CursorVisibility(control: "?25l")
+}
+
+struct MouseTracking {
+  fileprivate let control: ControlSequence
+  static let on = MouseTracking(control: "?1000;1002;1006h")
+  static let off = MouseTracking(control: "?1000;1002;1006l")
 }
 
 // MARK: - GraphicRendition
