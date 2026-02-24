@@ -5,7 +5,7 @@ public struct Color: CustomStringConvertible, Equatable, Sendable, PrimitiveView
   let foreground: GraphicRendition
   let background: GraphicRendition
 
-  public static func makeView(
+  public static func _makeView(
     view: GraphValue<Self>,
     inputs: ViewInputs
   ) -> ViewOutputs {

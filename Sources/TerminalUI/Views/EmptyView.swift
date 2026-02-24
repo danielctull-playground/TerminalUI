@@ -3,7 +3,7 @@ public struct EmptyView: PrimitiveView {
 
   public init() {}
 
-  public static func makeView(
+  public static func _makeView(
     view: GraphValue<Self>,
     inputs: ViewInputs
   ) -> ViewOutputs {

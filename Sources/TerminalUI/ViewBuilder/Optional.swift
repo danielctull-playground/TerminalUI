@@ -3,7 +3,7 @@ extension Optional: View where Wrapped: View {}
 
 extension Optional: PrimitiveView where Wrapped: View {
 
-  public static func makeView(
+  public static func _makeView(
     view: GraphValue<Self>,
     inputs: ViewInputs
   ) -> ViewOutputs {
@@ -12,14 +12,14 @@ extension Optional: PrimitiveView where Wrapped: View {
         switch view.value {
         case .none: .empty
         case .some(let content):
-          Wrapped.makeView(view: view.map { _ in content }, inputs: inputs).preferenceValues
+          Wrapped._makeView(view: view.map { _ in content }, inputs: inputs).preferenceValues
         }
       },
       displayItems: inputs.graph.attribute("[Optional] display items") {
         switch view.value {
         case .none: []
         case .some(let content):
-          Wrapped.makeView(view: view.map { _ in content }, inputs: inputs).displayItems
+          Wrapped._makeView(view: view.map { _ in content }, inputs: inputs).displayItems
         }
       }
     )

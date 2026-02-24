@@ -50,20 +50,20 @@ private struct LayoutModifierView<Content: View, LayoutModifier: TerminalUI.Layo
     self.content = content
   }
 
-  static func makeView(
+  static func _makeView(
     view: GraphValue<Self>,
     inputs: ViewInputs
   ) -> ViewOutputs {
     ViewOutputs(
       preferenceValues: inputs.graph.attribute("[\(LayoutModifier.self)] preference values") {
-        Content.makeView(view: view.content, inputs: inputs).preferenceValues
+        Content._makeView(view: view.content, inputs: inputs).preferenceValues
       },
       displayItems: inputs.graph.attribute("[\(LayoutModifier.self)] display items") {
 
         let layoutModifier = view.value.layoutModifier
 
         return Content
-          .makeView(view: view.content, inputs: inputs)
+          ._makeView(view: view.content, inputs: inputs)
           .displayItems
           .map { item in
 

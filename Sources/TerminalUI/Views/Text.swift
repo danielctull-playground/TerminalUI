@@ -7,7 +7,7 @@ public struct Text: PrimitiveView {
     self.string = string
   }
 
-  public static func makeView(
+  public static func _makeView(
     view: GraphValue<Self>,
     inputs: ViewInputs
   ) -> ViewOutputs {

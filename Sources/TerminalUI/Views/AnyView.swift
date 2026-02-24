@@ -5,7 +5,7 @@ public struct AnyView: PrimitiveView {
 
   public init<View: TerminalUI.View>(_ view: View) {
     makeView = { inputs in
-      View.makeView(
+      View._makeView(
         view: GraphValue(
           value: inputs.graph.attribute("[AnyView (\(type(of: View.self))]") { view }
         ),
@@ -14,7 +14,7 @@ public struct AnyView: PrimitiveView {
     }
   }
 
-  public static func makeView(
+  public static func _makeView(
     view: GraphValue<Self>,
     inputs: ViewInputs
   ) -> ViewOutputs {

@@ -16,7 +16,7 @@ public struct Either<First: View, Second: View>: PrimitiveView {
     value = .second(second)
   }
 
-  public static func makeView(
+  public static func _makeView(
     view: GraphValue<Self>,
     inputs: ViewInputs
   ) -> ViewOutputs {
@@ -24,17 +24,17 @@ public struct Either<First: View, Second: View>: PrimitiveView {
       preferenceValues: inputs.graph.attribute("[Either] preference values") {
         switch view.value.value {
         case let .first(first):
-          First.makeView(view: view.map { _ in first }, inputs: inputs).preferenceValues
+          First._makeView(view: view.map { _ in first }, inputs: inputs).preferenceValues
         case let .second(second):
-          Second.makeView(view: view.map { _ in second }, inputs: inputs).preferenceValues
+          Second._makeView(view: view.map { _ in second }, inputs: inputs).preferenceValues
         }
       },
       displayItems: inputs.graph.attribute("[Either] display items") {
         switch view.value.value {
         case let .first(first):
-          First.makeView(view: view.map { _ in first }, inputs: inputs).displayItems
+          First._makeView(view: view.map { _ in first }, inputs: inputs).displayItems
         case let .second(second):
-          Second.makeView(view: view.map { _ in second }, inputs: inputs).displayItems
+          Second._makeView(view: view.map { _ in second }, inputs: inputs).displayItems
         }
       }
     )

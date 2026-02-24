@@ -28,7 +28,7 @@ package struct Renderer<Content: View, Canvas: TerminalUI.Canvas> {
     )
 
     self.canvas = canvas
-    self.outputs = Screen.makeView(
+    self.outputs = Screen._makeView(
       view: GraphValue(value: screen),
       inputs: inputs
     )

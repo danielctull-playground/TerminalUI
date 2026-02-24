@@ -92,16 +92,16 @@ private struct LayoutView<Content: View, Layout: TerminalUI.Layout>: PrimitiveVi
     self.content = content
   }
 
-  static func makeView(
+  static func _makeView(
     view: GraphValue<Self>,
     inputs: ViewInputs
   ) -> ViewOutputs {
     ViewOutputs(
       preferenceValues: inputs.graph.attribute("[\(Layout.self)] preference values") {
-        Content.makeView(view: view.content, inputs: inputs).preferenceValues
+        Content._makeView(view: view.content, inputs: inputs).preferenceValues
       },
       displayItems: inputs.graph.attribute("[\(Layout.self)] display items") {
-        let content = Content.makeView(view: view.content, inputs: inputs).displayItems
+        let content = Content._makeView(view: view.content, inputs: inputs).displayItems
 
         let subviews = LayoutSubviews(raw: content.map(LayoutSubview.init))
 

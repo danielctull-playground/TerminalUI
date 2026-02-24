@@ -49,14 +49,14 @@ private struct EnvironmentWriter<Content: View, Value>: PrimitiveView {
   let keyPath: WritableKeyPath<EnvironmentValues, Value>
   let value: Value
 
-  public static func makeView(
+  public static func _makeView(
     view: GraphValue<Self>,
     inputs: ViewInputs
   ) -> ViewOutputs {
     ViewOutputs(
       preferenceValues: inputs.graph.attribute("[EnvironmentWriter] preference values") {
         Content
-          .makeView(
+          ._makeView(
             view: view.content,
             inputs: inputs
               .mapDynamicProperties {
@@ -69,7 +69,7 @@ private struct EnvironmentWriter<Content: View, Value>: PrimitiveView {
       },
       displayItems: inputs.graph.attribute("[EnvironmentWriter] display items") {
         Content
-          .makeView(
+          ._makeView(
             view: view.content,
             inputs: inputs
               .mapDynamicProperties {
