@@ -40,7 +40,7 @@ extension LayoutModifier {
   }
 }
 
-private struct LayoutModifierView<Content: View, LayoutModifier: TerminalUI.LayoutModifier>: View {
+private struct LayoutModifierView<Content: View, LayoutModifier: TerminalUI.LayoutModifier>: PrimitiveView {
 
   private let layoutModifier: LayoutModifier
   private let content: Content
@@ -50,21 +50,20 @@ private struct LayoutModifierView<Content: View, LayoutModifier: TerminalUI.Layo
     self.content = content
   }
 
-  var body: some View {
-    fatalError("Body should never be called.")
-  }
-
-  static func makeView(inputs: ViewInputs<Self>) -> ViewOutputs {
+  static func makeView(
+    view: GraphValue<Self>,
+    inputs: ViewInputs
+  ) -> ViewOutputs {
     ViewOutputs(
       preferenceValues: inputs.graph.attribute("[\(LayoutModifier.self)] preference values") {
-        Content.makeView(inputs: inputs.mapNode(\.content)).preferenceValues
+        Content.makeView(view: view.content, inputs: inputs).preferenceValues
       },
       displayItems: inputs.graph.attribute("[\(LayoutModifier.self)] display items") {
 
-        let layoutModifier = inputs.node.layoutModifier
+        let layoutModifier = view.value.layoutModifier
 
         return Content
-          .makeView(inputs: inputs.mapNode(\.content))
+          .makeView(view: view.content, inputs: inputs)
           .displayItems
           .map { item in
 

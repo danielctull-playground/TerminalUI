@@ -17,24 +17,23 @@ extension View {
   }
 }
 
-private struct PreferenceWriter<Content: View, Key: PreferenceKey>: View {
+private struct PreferenceWriter<Content: View, Key: PreferenceKey>: PrimitiveView {
 
   let content: Content
   let key: Key.Type
   let value: Key.Value
 
-  var body: some View {
-    fatalError("Body should never be called.")
-  }
-
-  public static func makeView(inputs: ViewInputs<Self>) -> ViewOutputs {
+  public static func makeView(
+    view: GraphValue<Self>,
+    inputs: ViewInputs
+  ) -> ViewOutputs {
     ViewOutputs(
       preferenceValues: inputs.graph.attribute("[PreferenceWriter] preference values") {
-        Content.makeView(inputs: inputs.mapNode(\.content)).preferenceValues
-          .setting(inputs.node.value, for: inputs.node.key)
+        Content.makeView(view: view.content, inputs: inputs).preferenceValues
+          .setting(view.value.value, for: view.value.key)
       },
       displayItems: inputs.graph.attribute("[PreferenceWriter] display items") {
-        Content.makeView(inputs: inputs.mapNode(\.content)).displayItems
+        Content.makeView(view: view.content, inputs: inputs).displayItems
       }
     )
   }
@@ -55,25 +54,24 @@ extension View {
 private struct PreferenceReader<
   Content: View,
   Key: PreferenceKey
->: View where Key.Value: Equatable {
+>: PrimitiveView where Key.Value: Equatable {
 
   let content: Content
   let key: Key.Type
   let action: (Key.Value) -> Void
 
-  var body: some View {
-    fatalError("Body should never be called.")
-  }
-
-  public static func makeView(inputs: ViewInputs<Self>) -> ViewOutputs {
+  public static func makeView(
+    view: GraphValue<Self>,
+    inputs: ViewInputs
+  ) -> ViewOutputs {
     ViewOutputs(
       preferenceValues: inputs.graph.attribute("[PreferenceReader] preference values") {
-        let preferenceValues = Content.makeView(inputs: inputs.mapNode(\.content)).preferenceValues
-        inputs.node.action(preferenceValues[Key.self] ?? Key.defaultValue)
+        let preferenceValues = Content.makeView(view: view.content, inputs: inputs).preferenceValues
+        view.value.action(preferenceValues[Key.self] ?? Key.defaultValue)
         return preferenceValues
       },
       displayItems: inputs.graph.attribute("[PreferenceReader] display items") {
-        Content.makeView(inputs: inputs.mapNode(\.content)).displayItems
+        Content.makeView(view: view.content, inputs: inputs).displayItems
       }
     )
   }

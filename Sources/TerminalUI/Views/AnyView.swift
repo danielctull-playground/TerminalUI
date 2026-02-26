@@ -1,26 +1,29 @@
 
-public struct AnyView: View {
+public struct AnyView: PrimitiveView {
 
-  private let makeView: (ViewInputs<AnyView>) -> ViewOutputs
+  private let makeView: (ViewInputs) -> ViewOutputs
 
   public init<View: TerminalUI.View>(_ view: View) {
     makeView = { inputs in
-      let inputs = inputs.mapNode { _ in view }
-      return View.makeView(inputs: inputs)
+      View.makeView(
+        view: GraphValue(
+          value: inputs.graph.attribute("[AnyView (\(type(of: View.self))]") { view }
+        ),
+        inputs: inputs
+      )
     }
   }
 
-  public var body: some View {
-    fatalError("Body should never be called.")
-  }
-
-  public static func makeView(inputs: ViewInputs<Self>) -> ViewOutputs {
+  public static func makeView(
+    view: GraphValue<Self>,
+    inputs: ViewInputs
+  ) -> ViewOutputs {
     ViewOutputs(
       preferenceValues: inputs.graph.attribute("[AnyView] preference values") {
-        inputs.node.makeView(inputs).preferenceValues
+        view.value.makeView(inputs).preferenceValues
       },
       displayItems: inputs.graph.attribute("[AnyView] display items") {
-        inputs.node.makeView(inputs).displayItems
+        view.value.makeView(inputs).displayItems
       }
     )
   }

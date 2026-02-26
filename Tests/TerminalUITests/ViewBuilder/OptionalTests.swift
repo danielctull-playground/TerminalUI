@@ -5,9 +5,14 @@ import Testing
 @Suite("Optional", .tags(.viewBuilder))
 struct OptionalTests {
 
-  @Test func `body: fatal`() async {
+  @Test func `none body: fatal`() async {
     await #expect(processExitsWith: .failure) {
       _ = Optional<EmptyView>.none.body
+    }
+  }
+
+  @Test func `some body: fatal`() async {
+    await #expect(processExitsWith: .failure) {
       _ = Optional<EmptyView>.some(EmptyView()).body
     }
   }

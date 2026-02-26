@@ -1,13 +1,12 @@
 
-public struct EmptyView: View {
+public struct EmptyView: PrimitiveView {
 
   public init() {}
 
-  public var body: some View {
-    fatalError("Body should never be called.")
-  }
-
-  public static func makeView(inputs: ViewInputs<Self>) -> ViewOutputs {
+  public static func makeView(
+    view: GraphValue<Self>,
+    inputs: ViewInputs
+  ) -> ViewOutputs {
     ViewOutputs(
       preferenceValues: inputs.graph.attribute("[EmptyView] preference values") {
         .empty

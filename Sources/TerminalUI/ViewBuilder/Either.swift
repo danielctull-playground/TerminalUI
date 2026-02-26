@@ -1,5 +1,5 @@
 
-public struct Either<First: View, Second: View>: View {
+public struct Either<First: View, Second: View>: PrimitiveView {
 
   private enum Value {
     case first(First)
@@ -16,26 +16,25 @@ public struct Either<First: View, Second: View>: View {
     value = .second(second)
   }
 
-  public var body: some View {
-    fatalError("Body should never be called.")
-  }
-
-  public static func makeView(inputs: ViewInputs<Self>) -> ViewOutputs {
+  public static func makeView(
+    view: GraphValue<Self>,
+    inputs: ViewInputs
+  ) -> ViewOutputs {
     ViewOutputs(
       preferenceValues: inputs.graph.attribute("[Either] preference values") {
-        switch inputs.node.value {
+        switch view.value.value {
         case let .first(first):
-          First.makeView(inputs: inputs.mapNode { _ in first }).preferenceValues
+          First.makeView(view: view.map { _ in first }, inputs: inputs).preferenceValues
         case let .second(second):
-          Second.makeView(inputs: inputs.mapNode { _ in second }).preferenceValues
+          Second.makeView(view: view.map { _ in second }, inputs: inputs).preferenceValues
         }
       },
       displayItems: inputs.graph.attribute("[Either] display items") {
-        switch inputs.node.value {
+        switch view.value.value {
         case let .first(first):
-          First.makeView(inputs: inputs.mapNode { _ in first }).displayItems
+          First.makeView(view: view.map { _ in first }, inputs: inputs).displayItems
         case let .second(second):
-          Second.makeView(inputs: inputs.mapNode { _ in second }).displayItems
+          Second.makeView(view: view.map { _ in second }, inputs: inputs).displayItems
         }
       }
     )

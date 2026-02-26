@@ -43,41 +43,40 @@ extension View {
   }
 }
 
-private struct EnvironmentWriter<Content: View, Value>: View {
+private struct EnvironmentWriter<Content: View, Value>: PrimitiveView {
 
   let content: Content
   let keyPath: WritableKeyPath<EnvironmentValues, Value>
   let value: Value
 
-  public var body: some View {
-    fatalError("Body should never be called.")
-  }
-
-  public static func makeView(inputs: ViewInputs<Self>) -> ViewOutputs {
+  public static func makeView(
+    view: GraphValue<Self>,
+    inputs: ViewInputs
+  ) -> ViewOutputs {
     ViewOutputs(
       preferenceValues: inputs.graph.attribute("[EnvironmentWriter] preference values") {
         Content
           .makeView(
+            view: view.content,
             inputs: inputs
               .mapDynamicProperties {
                 $0.modifyEnvironment {
-                  $0[keyPath: inputs.node.keyPath] = inputs.node.value
+                  $0[keyPath: view.value.keyPath] = view.value.value
                 }
               }
-              .mapNode(\.content)
           )
           .preferenceValues
       },
       displayItems: inputs.graph.attribute("[EnvironmentWriter] display items") {
         Content
           .makeView(
+            view: view.content,
             inputs: inputs
               .mapDynamicProperties {
                 $0.modifyEnvironment {
-                  $0[keyPath: inputs.node.keyPath] = inputs.node.value
+                  $0[keyPath: view.value.keyPath] = view.value.value
                 }
               }
-              .mapNode(\.content)
           )
           .displayItems
       }
@@ -175,7 +174,7 @@ extension DynamicProperties {
         transform(&environment)
         return environment
       },
-      state: graph.input("state", StateValues())
+      state: graph.external("state", StateValues())
     )
   }
 }

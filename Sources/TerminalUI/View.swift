@@ -8,20 +8,23 @@ public protocol View {
   @ViewBuilder
   var body: Body { get }
 
-  static func makeView(inputs: ViewInputs<Self>) -> ViewOutputs
+  static func makeView(view: GraphValue<Self>, inputs: ViewInputs) -> ViewOutputs
 }
 
 extension View {
 
-  public static func makeView(inputs: ViewInputs<Self>) -> ViewOutputs {
+  public static func makeView(
+    view: GraphValue<Self>,
+    inputs: ViewInputs
+  ) -> ViewOutputs {
     ViewOutputs(
       preferenceValues: inputs.graph.attribute("[\(Self.self)] preference values") {
-        inputs.dynamicProperties.install(on: inputs.node)
-        return Body.makeView(inputs: inputs.mapNode(\.body)).preferenceValues
+        inputs.dynamicProperties.install(on: view.value)
+        return Body.makeView(view: view.body, inputs: inputs).preferenceValues
       },
       displayItems: inputs.graph.attribute("[\(Self.self)] display items") {
-        inputs.dynamicProperties.install(on: inputs.node)
-        return Body.makeView(inputs: inputs.mapNode(\.body)).displayItems
+        inputs.dynamicProperties.install(on: view.value)
+        return Body.makeView(view: view.body, inputs: inputs).displayItems
       }
     )
   }

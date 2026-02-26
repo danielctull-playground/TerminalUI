@@ -1,24 +1,25 @@
 
-extension Optional: View where Wrapped: View {
+extension Optional: View where Wrapped: View {}
 
-  public var body: some View {
-    fatalError("Body should never be called.")
-  }
+extension Optional: PrimitiveView where Wrapped: View {
 
-  public static func makeView(inputs: ViewInputs<Self>) -> ViewOutputs {
+  public static func makeView(
+    view: GraphValue<Self>,
+    inputs: ViewInputs
+  ) -> ViewOutputs {
     ViewOutputs(
       preferenceValues: inputs.graph.attribute("[Optional] preference values") {
-        switch inputs.node {
+        switch view.value {
         case .none: .empty
         case .some(let content):
-          Wrapped.makeView(inputs: inputs.mapNode { _ in content }).preferenceValues
+          Wrapped.makeView(view: view.map { _ in content }, inputs: inputs).preferenceValues
         }
       },
       displayItems: inputs.graph.attribute("[Optional] display items") {
-        switch inputs.node {
+        switch view.value {
         case .none: []
         case .some(let content):
-          Wrapped.makeView(inputs: inputs.mapNode { _ in content }).displayItems
+          Wrapped.makeView(view: view.map { _ in content }, inputs: inputs).displayItems
         }
       }
     )

@@ -1,33 +1,19 @@
 import AttributeGraph
 
-public struct ViewInputs<Node> {
+public struct ViewInputs {
 
   let graph: Graph
   let canvas: any Canvas
   let dynamicProperties: DynamicProperties
-  @Attribute var node: Node
 
   init(
     graph: Graph,
     canvas: any Canvas,
-    dynamicProperties: DynamicProperties,
-    node: Attribute<Node>
+    dynamicProperties: DynamicProperties
   ) {
     self.graph = graph
     self.canvas = canvas
     self.dynamicProperties = dynamicProperties
-    _node = node
-  }
-
-  func mapNode<New>(_ transform: @escaping (Node) -> New) -> ViewInputs<New> {
-    ViewInputs<New>(
-      graph: graph,
-      canvas: canvas,
-      dynamicProperties: dynamicProperties,
-      node: graph.attribute("[mapNode] \(Node.self) -> \(New.self)") {
-        transform(node)
-      }
-    )
   }
 
   func mapDynamicProperties(
@@ -36,8 +22,7 @@ public struct ViewInputs<Node> {
     ViewInputs(
       graph: graph,
       canvas: canvas,
-      dynamicProperties: transform(dynamicProperties),
-      node: _node
+      dynamicProperties: transform(dynamicProperties)
     )
   }
 }

@@ -1,5 +1,5 @@
 
-public struct Text: View {
+public struct Text: PrimitiveView {
 
   private let string: String
 
@@ -7,11 +7,10 @@ public struct Text: View {
     self.string = string
   }
 
-  public var body: some View {
-    fatalError("Body should never be called.")
-  }
-
-  public static func makeView(inputs: ViewInputs<Self>) -> ViewOutputs {
+  public static func makeView(
+    view: GraphValue<Self>,
+    inputs: ViewInputs
+  ) -> ViewOutputs {
     ViewOutputs(
       preferenceValues: inputs.graph.attribute("[Text] preference values") {
         .empty
@@ -19,9 +18,9 @@ public struct Text: View {
       displayItems: inputs.graph.attribute("[Text] display items") {
         [
           DisplayItem {
-            size(for: $0, inputs: inputs)
+            size(for: $0, view: view, inputs: inputs)
           } render: {
-            render(in: $0, inputs: inputs)
+            render(in: $0, view: view, inputs: inputs)
           }
         ]
       }
@@ -30,18 +29,23 @@ public struct Text: View {
 
   static private func size(
     for proposal: ProposedViewSize,
-    inputs: ViewInputs<Self>
+    view: GraphValue<Self>,
+    inputs: ViewInputs
   ) -> Size {
     let size = proposal.replacingUnspecifiedDimensions()
-    let lines = inputs.node.string.lines(ofLength: size.width)
+    let lines = view.value.string.lines(ofLength: size.width)
     let height = lines.count
     let width = lines.map(\.count).max() ?? 0
     return Size(width: width, height: height)
   }
 
-  static private func render(in bounds: Rect, inputs: ViewInputs<Self>) {
+  static private func render(
+    in bounds: Rect,
+    view: GraphValue<Self>,
+    inputs: ViewInputs
+  ) {
 
-    let lines = inputs.node.string.lines(ofLength: Int(bounds.size.width))
+    let lines = view.value.string.lines(ofLength: Int(bounds.size.width))
     let environment = inputs.dynamicProperties.environment
 
     for (line, y) in zip(lines, bounds.origin.y...) {
