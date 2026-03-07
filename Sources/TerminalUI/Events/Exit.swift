@@ -1,5 +1,11 @@
 import Dispatch
 
+#if canImport(Darwin)
+import Darwin
+#elseif canImport(Glibc)
+import Glibc
+#endif
+
 struct Exit: Event {}
 
 extension Exit {
