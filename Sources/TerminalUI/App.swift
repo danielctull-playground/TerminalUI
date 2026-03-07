@@ -20,12 +20,12 @@ public protocol App {
 
 extension App {
 
-  public static func main() async throws {
+  public static func main() async {
     let renderer = Renderer(
       canvas: TextStreamCanvas(output: .fileHandle(.standardOutput)),
       content: Self().body
     )
-    for try await event in WindowChange.sequence {
+    for await event in WindowChange.sequence {
       renderer.render(event: event)
     }
   }

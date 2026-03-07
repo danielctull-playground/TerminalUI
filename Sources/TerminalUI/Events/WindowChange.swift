@@ -11,7 +11,7 @@ struct WindowChange {
 
 extension WindowChange: Event {
 
-  static var sequence: some AsyncSequence<WindowChange, any Error> & Sendable {
+  static var sequence: some AsyncSequence<WindowChange, Never> {
     AsyncStream(DispatchSource.makeSignalSource(signal: SIGWINCH)).map { _ in
       var winsize = winsize()
       let result = ioctl(STDOUT_FILENO, UInt(TIOCGWINSZ), &winsize)
