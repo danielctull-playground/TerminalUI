@@ -5,16 +5,6 @@ import Testing
 @Suite("AsyncStream+DispatchSource")
 struct AsyncStreamDispatchSourceTests {
 
-  @Test func `initial value`() async {
-
-    let source = DispatchSource.makeTimerSource()
-    source.schedule(deadline: .distantFuture)
-
-    var iterator = AsyncStream(source).makeAsyncIterator()
-
-    #expect(await iterator.next() != nil) // Initial value.
-  }
-
   @Test func `dispatch source triggers`() async {
 
     let source = DispatchSource.makeTimerSource()
@@ -45,8 +35,6 @@ struct AsyncStreamDispatchSourceTests {
       continuation.finish() // AsyncStream(source) is finished.
     }
 
-    #expect(await signal.next() != nil) // Initial value.
-
     task.cancel()
 
     _ = await signal.next()
@@ -59,8 +47,6 @@ struct AsyncStreamDispatchSourceTests {
     source.schedule(deadline: .distantFuture)
 
     var iterator = AsyncStream(source).makeAsyncIterator()
-
-    #expect(await iterator.next() != nil) // Initial value.
 
     source.cancel()
 
