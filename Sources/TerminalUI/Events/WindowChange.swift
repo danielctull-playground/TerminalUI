@@ -1,4 +1,4 @@
-@preconcurrency import Dispatch
+import Dispatch
 import Foundation
 
 extension EnvironmentValues {
@@ -23,23 +23,5 @@ extension WindowChange: Event {
 
   func updateEnvironment(_ environment: inout EnvironmentValues) {
     environment.windowSize = size
-  }
-}
-
-extension AsyncStream<Void> {
-  fileprivate init(_ source: any DispatchSourceProtocol) {
-    self.init { continuation in
-      source.setEventHandler {
-        continuation.yield(())
-      }
-      source.setCancelHandler {
-        continuation.finish()
-      }
-      continuation.onTermination = { _ in
-        source.cancel()
-      }
-      continuation.yield(()) // Send an initial value.
-      source.resume()
-    }
   }
 }
