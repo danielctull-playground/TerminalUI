@@ -5,12 +5,10 @@ package struct Renderer<Content: View, Canvas: TerminalUI.Canvas> {
 
   private let canvas: Canvas
   @External private var environment: EnvironmentValues
-  private let externalEnvironment: ExternalEnvironment
   private let outputs: ViewOutputs
 
   init(
     canvas: Canvas,
-    environment externalEnvironment: ExternalEnvironment,
     content: Content
   ) {
     let graph = Graph()
@@ -32,13 +30,12 @@ package struct Renderer<Content: View, Canvas: TerminalUI.Canvas> {
       view: GraphValue(value: screen),
       inputs: inputs
     )
-    self.externalEnvironment = externalEnvironment
     self._environment = environment
   }
 
-  package func render() {
+  package func render(event: some Event) {
 
-    externalEnvironment.update(&environment)
+    event.updateEnvironment(&environment)
 
     _ = outputs.preferenceValues // Trigger preference values
 
@@ -54,9 +51,8 @@ extension Renderer {
 
   package init(
     canvas: Canvas,
-    environment: ExternalEnvironment,
     @ViewBuilder content: () -> Content
   ) {
-    self.init(canvas: canvas, environment: environment, content: content())
+    self.init(canvas: canvas, content: content())
   }
 }
