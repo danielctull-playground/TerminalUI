@@ -12,7 +12,6 @@ extension AsyncStream<Void> {
       continuation.onTermination = { _ in
         source.cancel()
       }
-      continuation.yield(()) // Send an initial value.
       source.resume()
     }
   }
