@@ -16,13 +16,20 @@ public protocol App {
   /// provide one. You typically rely on the default initializer for
   /// your app.
   init()
+
+  associatedtype Canvas: TerminalUI.Canvas
+  static var canvas: Canvas { get }
 }
 
 extension App {
 
+  public static var canvas: TextStreamCanvas<FileHandleTextOutputStream> {
+    TextStreamCanvas(output: .fileHandle(.standardOutput))
+  }
+
   public static func main() async throws {
     let renderer = Renderer(
-      canvas: TextStreamCanvas(output: .fileHandle(.standardOutput)),
+      canvas: canvas,
       content: Self().body
     )
     for try await event in WindowChange.sequence {

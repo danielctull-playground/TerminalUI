@@ -1,5 +1,5 @@
 
-package protocol Event: Sendable {
+public protocol Event: Sendable {
   associatedtype Sequence: AsyncSequence<Self, any Error> & Sendable
   static var sequence: Sequence { get }
 

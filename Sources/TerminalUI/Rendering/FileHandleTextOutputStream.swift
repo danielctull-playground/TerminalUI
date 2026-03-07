@@ -8,9 +8,9 @@ extension TextOutputStream where Self == FileHandleTextOutputStream {
   }
 }
 
-struct FileHandleTextOutputStream: TextOutputStream {
+public struct FileHandleTextOutputStream: TextOutputStream {
   fileprivate let fileHandle: FileHandle
-  mutating func write(_ string: String) {
+  public mutating func write(_ string: String) {
     fileHandle.write(Data(string.utf8))
   }
 }
