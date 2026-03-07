@@ -12,14 +12,13 @@ struct WindowChange {
 extension WindowChange: Event {
 
   static var sequence: some AsyncSequence<WindowChange, any Error> & Sendable {
-    AsyncStream(DispatchSource.makeSignalSource(signal: SIGWINCH)) {
+    AsyncStream(DispatchSource.makeSignalSource(signal: SIGWINCH)).map { _ in
       var winsize = winsize()
       let result = ioctl(STDOUT_FILENO, UInt(TIOCGWINSZ), &winsize)
       guard result == EXIT_SUCCESS else { fatalError() }
       let size = Size(width: Int(winsize.ws_col), height: Int(winsize.ws_row))
       return WindowChange(size: size)
     }
-    .map(\.self)
   }
 
   func updateEnvironment(_ environment: inout EnvironmentValues) {
@@ -27,14 +26,11 @@ extension WindowChange: Event {
   }
 }
 
-extension AsyncStream {
-  fileprivate init(
-    _ source: any DispatchSourceProtocol,
-    _ make: @escaping () -> Element
-  ) {
+extension AsyncStream<Void> {
+  fileprivate init(_ source: any DispatchSourceProtocol) {
     self.init { continuation in
       source.setEventHandler {
-        continuation.yield(make())
+        continuation.yield(())
       }
       source.setCancelHandler {
         continuation.finish()
@@ -42,7 +38,7 @@ extension AsyncStream {
       continuation.onTermination = { _ in
         source.cancel()
       }
-      continuation.yield(make()) // Send an initial value.
+      continuation.yield(()) // Send an initial value.
       source.resume()
     }
   }
