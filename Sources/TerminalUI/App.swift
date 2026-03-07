@@ -25,7 +25,14 @@ extension App {
       canvas: TextStreamCanvas(output: .fileHandle(.standardOutput)),
       content: Self().body
     )
-    for await event in WindowChange.sequence {
+
+    @EventStream
+    var events: some AsyncSequence<any Event, Never> {
+      WindowChange.sequence
+      Exit.sequence
+    }
+
+    for await event in events {
       renderer.render(event: event)
     }
   }

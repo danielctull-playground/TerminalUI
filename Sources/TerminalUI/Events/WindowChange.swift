@@ -19,7 +19,7 @@ extension WindowChange: Event {
 
 extension WindowChange {
 
-  static var sequence: some AsyncSequence<WindowChange, Never> {
+  static var sequence: some Sendable & AsyncSequence<WindowChange, Never> {
     chain(
       CollectionOfOne(()).async, // Send initial window size
       AsyncStream(DispatchSource.makeSignalSource(signal: SIGWINCH))
