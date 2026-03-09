@@ -14,8 +14,8 @@ extension Position {
 }
 
 extension Position {
-  var controlSequence: ControlSequence {
-    "\(y);\(x)H"
+  var csi: CSI {
+    CSI([CSI.Parameter(y), CSI.Parameter(x)], "H")
   }
 }
 
