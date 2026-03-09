@@ -1,17 +1,17 @@
 
 struct GraphicRendition: Equatable, Hashable {
-  fileprivate let values: [Int]
+  fileprivate let parameters: CSI.Parameters
 }
 
 extension GraphicRendition: ExpressibleByIntegerLiteral {
   init(integerLiteral value: Int) {
-    self.init(values: [value])
+    self.init(parameters: CSI.Parameters([CSI.Parameter(value)]))
   }
 }
 
 extension GraphicRendition: ExpressibleByArrayLiteral {
   init(arrayLiteral elements: Int...) {
-    self.init(values: elements)
+    self.init(parameters: CSI.Parameters(elements.map(CSI.Parameter.init(_:))))
   }
 }
 
@@ -21,10 +21,10 @@ extension CSI {
     _ rendition: [GraphicRendition]
   ) -> CSI {
 
-    let values = rendition
-      .map { $0.values.map(String.init).joined(separator: ";") }
-      .joined(separator: ";")
+    let parameters = rendition.reduce([] as CSI.Parameters) { a, b in
+      a.appending(b.parameters)
+    }
 
-    return CSI("\(values)m")
+    return CSI(parameters: parameters, command: "m")
   }
 }

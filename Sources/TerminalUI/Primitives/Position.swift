@@ -15,7 +15,10 @@ extension Position {
 
 extension Position {
   var csi: CSI {
-    "\(y);\(x)H"
+    CSI(
+      parameters: [CSI.Parameter(y), CSI.Parameter(x)],
+      command: "H"
+    )
   }
 }
 
