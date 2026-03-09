@@ -7,6 +7,6 @@ extension CSI {
 
 struct CursorVisibility {
   fileprivate let csi: CSI
-  static let on = CursorVisibility(csi: CSI(marker: .questionMark, parameters: 25, command: "h"))
-  static let off = CursorVisibility(csi: CSI(marker: .questionMark, parameters: 25, command: "l"))
+  static let on = CursorVisibility(csi: CSI(.questionMark, 25, "h"))
+  static let off = CursorVisibility(csi: CSI(.questionMark, 25, "l"))
 }
