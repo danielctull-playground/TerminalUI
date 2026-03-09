@@ -11,7 +11,7 @@ package struct TextStreamCanvas<Output: TextOutputStream>: Canvas {
 
   package func draw(_ pixel: Pixel, at position: Position) {
     output.write(.selectGraphicRendition(pixel.graphicRendition))
-    output.write(position.controlSequence)
+    output.write(position.csi)
     output.write(pixel.content)
   }
 }
