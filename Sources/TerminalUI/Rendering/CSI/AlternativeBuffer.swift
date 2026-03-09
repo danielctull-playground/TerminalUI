@@ -7,6 +7,6 @@ extension CSI {
 
 struct AlternativeBuffer {
   fileprivate let csi: CSI
-  static let on = AlternativeBuffer(csi: CSI(marker: .questionMark, parameters: 1049, command: "h"))
-  static let off = AlternativeBuffer(csi: CSI(marker: .questionMark, parameters: 1049, command: "l"))
+  static let on = AlternativeBuffer(csi: CSI(.questionMark, 1049, "h"))
+  static let off = AlternativeBuffer(csi: CSI(.questionMark, 1049, "l"))
 }

@@ -7,11 +7,20 @@ struct CSI: Equatable, Hashable, Sendable {
   fileprivate let command: Command
 
   init(
-    marker: Marker? = nil,
-    parameters: Parameters = .none,
-    command: Command
+    _ marker: Marker,
+    _ parameters: Parameters = .none,
+    _ command: Command
   ) {
     self.marker = marker
+    self.parameters = parameters
+    self.command = command
+  }
+
+  init(
+    _ parameters: Parameters = .none,
+    _ command: Command
+  ) {
+    self.marker = nil
     self.parameters = parameters
     self.command = command
   }

@@ -20,11 +20,6 @@ extension CSI {
   static func selectGraphicRendition(
     _ rendition: [GraphicRendition]
   ) -> CSI {
-
-    let parameters = rendition.reduce([] as CSI.Parameters) { a, b in
-      a.appending(b.parameters)
-    }
-
-    return CSI(parameters: parameters, command: "m")
+    CSI(rendition.map(\.parameters).reduce([]) { $0.appending($1) }, "m")
   }
 }
