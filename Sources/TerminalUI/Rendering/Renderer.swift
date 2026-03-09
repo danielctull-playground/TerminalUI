@@ -39,10 +39,14 @@ package struct Renderer<Content: View, Canvas: TerminalUI.Canvas> {
 
     _ = outputs.preferenceValues // Trigger preference values
 
+    canvas.beginUpdates()
+
     outputs
       .displayItems
       .first!
       .render(in: Rect(origin: .origin, size: environment.windowSize))
+
+    canvas.endUpdates()
   }
 }
 

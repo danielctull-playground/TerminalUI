@@ -9,6 +9,14 @@ package struct TextStreamCanvas<Output: TextOutputStream>: Canvas {
     self.output.write(.cursorVisibility(.off))
   }
 
+  package func beginUpdates() {
+    output.write(CSI(.questionMark, 2026, "h"))
+  }
+
+  package func endUpdates() {
+    output.write(CSI(.questionMark, 2026, "l"))
+  }
+
   package func draw(_ pixel: Pixel, at position: Position) {
     output.write(.selectGraphicRendition(pixel.graphicRendition))
     output.write(position.csi)
