@@ -1,45 +1,46 @@
 
-struct ControlSequence: Equatable, Sendable {
+/// Control Sequence Introducer
+struct CSI: Equatable, Sendable {
   fileprivate let raw: String
   fileprivate init(_ raw: String) {
     self.raw = raw
   }
 }
 
-extension ControlSequence: ExpressibleByStringLiteral {
+extension CSI: ExpressibleByStringLiteral {
   init(stringLiteral raw: String) {
     self.init(raw)
   }
 }
 
-extension ControlSequence: ExpressibleByStringInterpolation {}
+extension CSI: ExpressibleByStringInterpolation {}
 
-extension ControlSequence {
-  static let clearScreen: ControlSequence = "2J"
+extension CSI {
+  static let clearScreen: CSI = "2J"
 }
 
-extension ControlSequence {
+extension CSI {
   static func alternativeBuffer(_ value: AlternativeBuffer) -> Self {
-    value.control
+    value.csi
   }
 }
 
 struct AlternativeBuffer {
-  fileprivate let control: ControlSequence
-  static let on = AlternativeBuffer(control: "?1049h")
-  static let off = AlternativeBuffer(control: "?1049l")
+  fileprivate let csi: CSI
+  static let on = AlternativeBuffer(csi: "?1049h")
+  static let off = AlternativeBuffer(csi: "?1049l")
 }
 
-extension ControlSequence {
+extension CSI {
   static func cursorVisibility(_ value: CursorVisibility) -> Self {
-    value.control
+    value.csi
   }
 }
 
 struct CursorVisibility {
-  fileprivate let control: ControlSequence
-  static let on = CursorVisibility(control: "?25h")
-  static let off = CursorVisibility(control: "?25l")
+  fileprivate let csi: CSI
+  static let on = CursorVisibility(csi: "?25h")
+  static let off = CursorVisibility(csi: "?25l")
 }
 
 // MARK: - GraphicRendition
@@ -60,17 +61,17 @@ extension GraphicRendition: ExpressibleByArrayLiteral {
   }
 }
 
-extension ControlSequence {
+extension CSI {
 
   static func selectGraphicRendition(
     _ rendition: [GraphicRendition]
-  ) -> ControlSequence {
+  ) -> CSI {
 
     let values = rendition
       .map { $0.values.map(String.init).joined(separator: ";") }
       .joined(separator: ";")
 
-    return ControlSequence("\(values)m")
+    return CSI("\(values)m")
   }
 }
 
@@ -78,7 +79,7 @@ extension ControlSequence {
 
 extension TextOutputStream {
 
-  mutating func write(_ controlSequence: ControlSequence) {
-    write("\u{1b}[\(controlSequence.raw)")
+  mutating func write(_ csi: CSI) {
+    write("\u{1b}[\(csi.raw)")
   }
 }
