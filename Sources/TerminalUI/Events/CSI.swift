@@ -10,7 +10,7 @@ struct CSI: Equatable, Hashable, Sendable {
     _ command: Command
   ) {
     self.marker = nil
-    self.parameters = .none
+    self.parameters = []
     self.command = command
   }
 
@@ -19,7 +19,7 @@ struct CSI: Equatable, Hashable, Sendable {
     _ command: Command
   ) {
     self.marker = marker
-    self.parameters = .none
+    self.parameters = []
     self.command = command
   }
 
@@ -69,10 +69,6 @@ extension CSI {
       self.rawValue = parameters
     }
   }
-}
-
-extension CSI.Parameters {
-  static let none: CSI.Parameters = []
 }
 
 extension CSI.Parameters: ExpressibleByArrayLiteral {
