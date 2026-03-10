@@ -7,20 +7,37 @@ struct CSI: Equatable, Hashable, Sendable {
   fileprivate let command: Command
 
   init(
+    _ command: Command
+  ) {
+    self.marker = nil
+    self.parameters = .none
+    self.command = command
+  }
+
+  init(
     _ marker: Marker,
-    _ parameters: Parameters = .none,
     _ command: Command
   ) {
     self.marker = marker
+    self.parameters = .none
+    self.command = command
+  }
+
+  init(
+    _ parameters: Parameters,
+    _ command: Command
+  ) {
+    self.marker = nil
     self.parameters = parameters
     self.command = command
   }
 
   init(
-    _ parameters: Parameters = .none,
+    _ marker: Marker,
+    _ parameters: Parameters,
     _ command: Command
   ) {
-    self.marker = nil
+    self.marker = marker
     self.parameters = parameters
     self.command = command
   }
@@ -89,6 +106,13 @@ extension CSI {
     }
   }
 }
+
+extension CSI.Parameter: ExpressibleByIntegerLiteral {
+  init(integerLiteral value: Int) {
+    self.init(value)
+  }
+}
+
 
 // MARK: - CSI.Command
 
