@@ -48,7 +48,7 @@ struct CSI: Equatable, Hashable, Sendable {
 
   init(
     _ marker: Marker,
-    _ parameters: Parameters,
+    _ parameters: Parameters = [],
     _ command: Command
   ) {
     self.marker = marker
@@ -81,12 +81,36 @@ struct CSI: Equatable, Hashable, Sendable {
   }
 }
 
+extension CSI: CustomStringConvertible {
+
+  var description: String {
+
+    var description = "\u{1b}["
+
+    if let marker = marker {
+      description.append(marker.description)
+    }
+
+    description.append(parameters.description)
+    description.append(intermediates.description)
+    description.append(command.description)
+
+    return description
+  }
+}
+
 // MARK: - CSI.Marker
 
 extension CSI {
 
   struct Marker: Equatable, Hashable, Sendable {
-    fileprivate let byte: Byte
+    private let byte: Byte
+  }
+}
+
+extension CSI.Marker: CustomStringConvertible {
+  var description: String {
+    String(UnicodeScalar(byte.rawValue))
   }
 }
 
@@ -102,10 +126,18 @@ extension CSI.Marker {
 extension CSI {
 
   struct Parameters: Equatable, Hashable, Sendable {
-    fileprivate let rawValue: [Parameter]
+    private let rawValue: [Parameter]
     init(_ parameters: [Parameter]) {
       self.rawValue = parameters
     }
+  }
+}
+
+extension CSI.Parameters: CustomStringConvertible {
+  var description: String {
+    rawValue
+      .map(\.description)
+      .joined(separator: ";")
   }
 }
 
@@ -134,10 +166,16 @@ extension CSI.Parameters {
 extension CSI {
 
   struct Parameter: Equatable, Hashable, Sendable {
-    fileprivate let rawValue: Int
+    private let rawValue: Int
     init(_ value: Int) {
       rawValue = value
     }
+  }
+}
+
+extension CSI.Parameter: CustomStringConvertible {
+  var description: String {
+    String(rawValue)
   }
 }
 
@@ -152,10 +190,18 @@ extension CSI.Parameter: ExpressibleByIntegerLiteral {
 extension CSI {
 
   struct Intermediates: Equatable, Hashable, Sendable {
-    fileprivate let rawValue: [Intermediate]
+    private let rawValue: [Intermediate]
     init(_ intermediates: [Intermediate]) {
       self.rawValue = intermediates
     }
+  }
+}
+
+extension CSI.Intermediates: CustomStringConvertible {
+  var description: String {
+    rawValue
+      .map(\.description)
+      .joined()
   }
 }
 
@@ -170,7 +216,13 @@ extension CSI.Intermediates: ExpressibleByArrayLiteral {
 extension CSI {
 
   struct Intermediate: Equatable, Hashable, Sendable {
-    fileprivate let byte: Byte
+    private let byte: Byte
+  }
+}
+
+extension CSI.Intermediate: CustomStringConvertible {
+  var description: String {
+    String(UnicodeScalar(byte.rawValue))
   }
 }
 
@@ -198,7 +250,13 @@ extension CSI.Intermediate {
 extension CSI {
 
   struct Command: Equatable, Hashable, Sendable {
-    fileprivate let byte: Byte
+    private let byte: Byte
+  }
+}
+
+extension CSI.Command: CustomStringConvertible {
+  var description: String {
+    String(UnicodeScalar(byte.rawValue))
   }
 }
 
@@ -213,31 +271,6 @@ extension CSI.Command: ExpressibleByUnicodeScalarLiteral {
 extension TextOutputStream {
 
   mutating func write(_ csi: CSI) {
-
-    var string = ""
-
-    if let marker = csi.marker {
-      string.append(Character(UnicodeScalar(marker.byte.rawValue)))
-    }
-
-    string.append(
-      csi.parameters.rawValue
-        .map(\.rawValue)
-        .map(String.init)
-        .joined(separator: ";")
-    )
-
-    string.append(
-      csi.intermediates.rawValue
-        .map(\.byte.rawValue)
-        .map(UnicodeScalar.init)
-        .map(Character.init)
-        .map(String.init)
-        .joined()
-    )
-
-    string.append(Character(UnicodeScalar(csi.command.byte.rawValue)))
-
-    write("\u{1b}[\(string)")
+    write(csi.description)
   }
 }
