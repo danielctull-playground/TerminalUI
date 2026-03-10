@@ -8,71 +8,10 @@ struct CSI: Equatable, Hashable, Sendable {
   fileprivate let command: Command
 
   init(
-    _ command: Command
-  ) {
-    self.marker = nil
-    self.parameters = []
-    self.intermediates = []
-    self.command = command
-  }
-
-  init(
-    _ marker: Marker,
-    _ command: Command
-  ) {
-    self.marker = marker
-    self.parameters = []
-    self.intermediates = []
-    self.command = command
-  }
-
-  init(
-    _ parameters: Parameters,
-    _ command: Command
-  ) {
-    self.marker = nil
-    self.parameters = parameters
-    self.intermediates = []
-    self.command = command
-  }
-
-  init(
-    _ intermediates: Intermediates,
-    _ command: Command
-  ) {
-    self.marker = nil
-    self.parameters = []
-    self.intermediates = intermediates
-    self.command = command
-  }
-
-  init(
-    _ marker: Marker,
-    _ parameters: Parameters = [],
-    _ command: Command
-  ) {
-    self.marker = marker
-    self.parameters = parameters
-    self.intermediates = []
-    self.command = command
-  }
-
-  init(
-    _ marker: Marker,
-    _ intermediates: Intermediates,
-    _ command: Command
-  ) {
-    self.marker = marker
-    self.parameters = []
-    self.intermediates = intermediates
-    self.command = command
-  }
-
-  init(
-    _ marker: Marker,
-    _ parameters: Parameters,
-    _ intermediates: Intermediates,
-    _ command: Command
+    marker: Marker? = nil,
+    parameters: Parameters = [],
+    intermediates: Intermediates = [],
+    command: Command
   ) {
     self.marker = marker
     self.parameters = parameters

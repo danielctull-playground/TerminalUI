@@ -12,7 +12,7 @@ struct CSITests {
   ])
   func command(command: CSI.Command, expected: String) {
     var stream = MemoryTextOutputStream.memory
-    stream.write(CSI(command))
+    stream.write(CSI(command: command))
     #expect(stream.output == expected)
   }
 
@@ -21,10 +21,11 @@ struct CSITests {
     (CSI.Marker.greaterThan,  "\u{1b}[>a"),
     (CSI.Marker.lessThan,     "\u{1b}[<a"),
     (CSI.Marker.questionMark, "\u{1b}[?a"),
+    (nil,                     "\u{1b}[a"),
   ])
-  func `marker + command`(marker: CSI.Marker, expected: String) {
+  func `marker + command`(marker: CSI.Marker?, expected: String) {
     var stream = MemoryTextOutputStream.memory
-    stream.write(CSI(marker, "a"))
+    stream.write(CSI(marker: marker, command: "a"))
     #expect(stream.output == expected)
   }
 
@@ -35,7 +36,7 @@ struct CSITests {
   ])
   func `parameters + command`(parameters: CSI.Parameters, expected: String) {
     var stream = MemoryTextOutputStream.memory
-    stream.write(CSI(parameters, "a"))
+    stream.write(CSI(parameters: parameters, command: "a"))
     #expect(stream.output == expected)
   }
 
@@ -65,7 +66,7 @@ struct CSITests {
     expected: String
   ) {
     var stream = MemoryTextOutputStream.memory
-    stream.write(CSI(intermediates, "a"))
+    stream.write(CSI(intermediates: intermediates, command: "a"))
     #expect(stream.output == expected)
   }
 
@@ -81,7 +82,7 @@ struct CSITests {
     expected: String
   ) {
     var stream = MemoryTextOutputStream.memory
-    stream.write(CSI(marker, parameters, "a"))
+    stream.write(CSI(marker: marker, parameters: parameters, command: "a"))
     #expect(stream.output == expected)
   }
 
@@ -112,7 +113,7 @@ struct CSITests {
     expected: String
   ) {
     var stream = MemoryTextOutputStream.memory
-    stream.write(CSI(marker, intermediates, "a"))
+    stream.write(CSI(marker: marker, intermediates: intermediates, command: "a"))
     #expect(stream.output == expected)
   }
 
@@ -144,7 +145,12 @@ struct CSITests {
     expected: String
   ) {
     var stream = MemoryTextOutputStream.memory
-    stream.write(CSI(marker, parameters, intermediates, "a"))
+    stream.write(CSI(
+      marker: marker,
+      parameters: parameters,
+      intermediates: intermediates,
+      command: "a"
+    ))
     #expect(stream.output == expected)
   }
 }
