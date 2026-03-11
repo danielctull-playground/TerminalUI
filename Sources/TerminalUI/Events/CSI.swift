@@ -44,6 +44,10 @@ extension CSI {
 
   struct Marker: Equatable, Hashable, Sendable {
     private let byte: Byte
+    fileprivate init(byte: Byte) {
+      precondition((0x3C...0x3F).contains(byte), "Invalid marker: \(byte)")
+      self.byte = byte
+    }
   }
 }
 
@@ -53,11 +57,10 @@ extension CSI.Marker: CustomStringConvertible {
   }
 }
 
-extension CSI.Marker {
-  static let lessThan = CSI.Marker(byte: 0x3C)
-  static let equals = CSI.Marker(byte: 0x3D)
-  static let greaterThan = CSI.Marker(byte: 0x3E)
-  static let questionMark = CSI.Marker(byte: 0x3F)
+extension CSI.Marker: ExpressibleByUnicodeScalarLiteral {
+  init(unicodeScalarLiteral value: Unicode.Scalar) {
+    self.init(byte: Byte(UInt8(ascii: value)))
+  }
 }
 
 // MARK: - CSI.Parameters
