@@ -153,12 +153,22 @@ extension CSI.Intermediates: ExpressibleByArrayLiteral {
   }
 }
 
+extension CSI.Intermediates: ExpressibleByUnicodeScalarLiteral {
+  init(unicodeScalarLiteral value: Unicode.Scalar) {
+    self.init([CSI.Intermediate(byte: Byte(UInt8(ascii: value)))])
+  }
+}
+
 // MARK: - CSI.Intermediate
 
 extension CSI {
 
   struct Intermediate: Equatable, Hashable, Sendable {
     private let byte: Byte
+    fileprivate init(byte: Byte) {
+      precondition((0x20...0x2F).contains(byte), "Invalid intermediate: \(byte)")
+      self.byte = byte
+    }
   }
 }
 
@@ -168,23 +178,10 @@ extension CSI.Intermediate: CustomStringConvertible {
   }
 }
 
-extension CSI.Intermediate {
-  static let space            = Self(byte: 0x20)
-  static let exclamation      = Self(byte: 0x21) // !
-  static let quote            = Self(byte: 0x22) // "
-  static let hash             = Self(byte: 0x23) // #
-  static let dollar           = Self(byte: 0x24) // $
-  static let percent          = Self(byte: 0x25) // %
-  static let ampersand        = Self(byte: 0x26) // &
-  static let apostrophe       = Self(byte: 0x27) // '
-  static let leftParenthesis  = Self(byte: 0x28) // (
-  static let rightParenthesis = Self(byte: 0x29) // )
-  static let asterisk         = Self(byte: 0x2A) // *
-  static let plus             = Self(byte: 0x2B) // +
-  static let comma            = Self(byte: 0x2C) // ,
-  static let hyphen           = Self(byte: 0x2D) // -
-  static let period           = Self(byte: 0x2E) // .
-  static let slash            = Self(byte: 0x2F) // /
+extension CSI.Intermediate: ExpressibleByUnicodeScalarLiteral {
+  init(unicodeScalarLiteral value: Unicode.Scalar) {
+    self.init(byte: Byte(UInt8(ascii: value)))
+  }
 }
 
 // MARK: - CSI.Command

@@ -25,6 +25,30 @@ struct CSITests {
     }
   }
 
+  @Suite("Intermediate")
+  struct IntermediateTests {
+
+    @Test(arguments: [
+      " ", "!", "\"", "#", "$", "%", "&", "'",
+      "(", ")", "*", "+", ",", "-", ".", "/",
+    ] as [UnicodeScalar])
+    func valid(scalar: UnicodeScalar) {
+      _ = CSI.Intermediate(unicodeScalarLiteral: scalar)
+    }
+
+    @Test func `invalid: <`() async {
+      await #expect(processExitsWith: .failure) {
+        _ = CSI.Intermediate(unicodeScalarLiteral: "<")
+      }
+    }
+
+    @Test func `invalid: 0`() async {
+      await #expect(processExitsWith: .failure) {
+        _ = CSI.Intermediate(unicodeScalarLiteral: "0")
+      }
+    }
+  }
+
   @Suite("Command")
   struct CommandTests {
 
@@ -96,25 +120,25 @@ struct CSITests {
   }
 
   @Test(arguments: [
-    ([.space] as CSI.Intermediates,            "\u{1b}[ a"),
-    ([.exclamation] as CSI.Intermediates,      "\u{1b}[!a"),
-    ([.quote] as CSI.Intermediates,            "\u{1b}[\"a"),
-    ([.hash] as CSI.Intermediates,             "\u{1b}[#a"),
-    ([.dollar] as CSI.Intermediates,           "\u{1b}[$a"),
-    ([.percent] as CSI.Intermediates,          "\u{1b}[%a"),
-    ([.ampersand] as CSI.Intermediates,        "\u{1b}[&a"),
-    ([.apostrophe] as CSI.Intermediates,       "\u{1b}['a"),
-    ([.leftParenthesis] as CSI.Intermediates,  "\u{1b}[(a"),
-    ([.rightParenthesis] as CSI.Intermediates, "\u{1b}[)a"),
-    ([.asterisk] as CSI.Intermediates,         "\u{1b}[*a"),
-    ([.plus] as CSI.Intermediates,             "\u{1b}[+a"),
-    ([.comma] as CSI.Intermediates,            "\u{1b}[,a"),
-    ([.hyphen] as CSI.Intermediates,           "\u{1b}[-a"),
-    ([.period] as CSI.Intermediates,           "\u{1b}[.a"),
-    ([.slash] as CSI.Intermediates,            "\u{1b}[/a"),
+    (" "  as CSI.Intermediates, "\u{1b}[ a"),
+    ("!"  as CSI.Intermediates, "\u{1b}[!a"),
+    ("\"" as CSI.Intermediates, "\u{1b}[\"a"),
+    ("#"  as CSI.Intermediates, "\u{1b}[#a"),
+    ("$"  as CSI.Intermediates, "\u{1b}[$a"),
+    ("%"  as CSI.Intermediates, "\u{1b}[%a"),
+    ("&"  as CSI.Intermediates, "\u{1b}[&a"),
+    ("'"  as CSI.Intermediates, "\u{1b}['a"),
+    ("("  as CSI.Intermediates, "\u{1b}[(a"),
+    (")"  as CSI.Intermediates, "\u{1b}[)a"),
+    ("*"  as CSI.Intermediates, "\u{1b}[*a"),
+    ("+"  as CSI.Intermediates, "\u{1b}[+a"),
+    (","  as CSI.Intermediates, "\u{1b}[,a"),
+    ("-"  as CSI.Intermediates, "\u{1b}[-a"),
+    ("."  as CSI.Intermediates, "\u{1b}[.a"),
+    ("/"  as CSI.Intermediates, "\u{1b}[/a"),
 
-    ([.hash, .plus] as CSI.Intermediates,      "\u{1b}[#+a"),
-    ([.plus, .hyphen] as CSI.Intermediates,    "\u{1b}[+-a"),
+    (["#", "+"] as CSI.Intermediates, "\u{1b}[#+a"),
+    (["+", "-"] as CSI.Intermediates, "\u{1b}[+-a"),
   ])
   func `intermediates + command`(
     intermediates: CSI.Intermediates,
@@ -142,25 +166,25 @@ struct CSITests {
   }
 
   @Test(arguments: [
-    ("=" as CSI.Marker, [.space] as CSI.Intermediates,            "\u{1b}[= a"),
-    (">" as CSI.Marker, [.exclamation] as CSI.Intermediates,      "\u{1b}[>!a"),
-    ("<" as CSI.Marker, [.quote] as CSI.Intermediates,            "\u{1b}[<\"a"),
-    ("?" as CSI.Marker, [.hash] as CSI.Intermediates,             "\u{1b}[?#a"),
-    ("=" as CSI.Marker, [.dollar] as CSI.Intermediates,           "\u{1b}[=$a"),
-    (">" as CSI.Marker, [.percent] as CSI.Intermediates,          "\u{1b}[>%a"),
-    ("<" as CSI.Marker, [.ampersand] as CSI.Intermediates,        "\u{1b}[<&a"),
-    ("?" as CSI.Marker, [.apostrophe] as CSI.Intermediates,       "\u{1b}[?'a"),
-    ("=" as CSI.Marker, [.leftParenthesis] as CSI.Intermediates,  "\u{1b}[=(a"),
-    (">" as CSI.Marker, [.rightParenthesis] as CSI.Intermediates, "\u{1b}[>)a"),
-    ("<" as CSI.Marker, [.asterisk] as CSI.Intermediates,         "\u{1b}[<*a"),
-    ("?" as CSI.Marker, [.plus] as CSI.Intermediates,             "\u{1b}[?+a"),
-    ("=" as CSI.Marker, [.comma] as CSI.Intermediates,            "\u{1b}[=,a"),
-    (">" as CSI.Marker, [.hyphen] as CSI.Intermediates,           "\u{1b}[>-a"),
-    ("<" as CSI.Marker, [.period] as CSI.Intermediates,           "\u{1b}[<.a"),
-    ("?" as CSI.Marker, [.slash] as CSI.Intermediates,            "\u{1b}[?/a"),
+    ("=" as CSI.Marker, " "  as CSI.Intermediates, "\u{1b}[= a"),
+    (">" as CSI.Marker, "!"  as CSI.Intermediates, "\u{1b}[>!a"),
+    ("<" as CSI.Marker, "\"" as CSI.Intermediates, "\u{1b}[<\"a"),
+    ("?" as CSI.Marker, "#"  as CSI.Intermediates, "\u{1b}[?#a"),
+    ("=" as CSI.Marker, "$"  as CSI.Intermediates, "\u{1b}[=$a"),
+    (">" as CSI.Marker, "%"  as CSI.Intermediates, "\u{1b}[>%a"),
+    ("<" as CSI.Marker, "&"  as CSI.Intermediates, "\u{1b}[<&a"),
+    ("?" as CSI.Marker, "'"  as CSI.Intermediates, "\u{1b}[?'a"),
+    ("=" as CSI.Marker, "("  as CSI.Intermediates, "\u{1b}[=(a"),
+    (">" as CSI.Marker, ")"  as CSI.Intermediates, "\u{1b}[>)a"),
+    ("<" as CSI.Marker, "*"  as CSI.Intermediates, "\u{1b}[<*a"),
+    ("?" as CSI.Marker, "+"  as CSI.Intermediates, "\u{1b}[?+a"),
+    ("=" as CSI.Marker, ","  as CSI.Intermediates, "\u{1b}[=,a"),
+    (">" as CSI.Marker, "-"  as CSI.Intermediates, "\u{1b}[>-a"),
+    ("<" as CSI.Marker, "."  as CSI.Intermediates, "\u{1b}[<.a"),
+    ("?" as CSI.Marker, "/"  as CSI.Intermediates, "\u{1b}[?/a"),
 
-    ("=" as CSI.Marker, [.hash, .plus] as CSI.Intermediates,      "\u{1b}[=#+a"),
-    (">" as CSI.Marker, [.plus, .hyphen] as CSI.Intermediates,    "\u{1b}[>+-a"),
+    ("=" as CSI.Marker, ["#", "+"] as CSI.Intermediates, "\u{1b}[=#+a"),
+    (">" as CSI.Marker, ["+", "-"] as CSI.Intermediates, "\u{1b}[>+-a"),
   ])
   func `marker + intermediates + command`(
     marker: CSI.Marker,
@@ -173,25 +197,25 @@ struct CSITests {
   }
 
   @Test(arguments: [
-    ("=" as CSI.Marker, 3               as CSI.Parameters, [.space] as CSI.Intermediates,            "\u{1b}[=3 a"),
-    (">" as CSI.Marker, [3,2]           as CSI.Parameters, [.exclamation] as CSI.Intermediates,      "\u{1b}[>3;2!a"),
-    ("<" as CSI.Marker, [1,2,3]         as CSI.Parameters, [.quote] as CSI.Intermediates,            "\u{1b}[<1;2;3\"a"),
-    ("?" as CSI.Marker, [1,22,333,4444] as CSI.Parameters, [.hash] as CSI.Intermediates,             "\u{1b}[?1;22;333;4444#a"),
-    ("=" as CSI.Marker, 3               as CSI.Parameters, [.dollar] as CSI.Intermediates,           "\u{1b}[=3$a"),
-    (">" as CSI.Marker, [3,2]           as CSI.Parameters, [.percent] as CSI.Intermediates,          "\u{1b}[>3;2%a"),
-    ("<" as CSI.Marker, [1,2,3]         as CSI.Parameters, [.ampersand] as CSI.Intermediates,        "\u{1b}[<1;2;3&a"),
-    ("?" as CSI.Marker, [1,22,333,4444] as CSI.Parameters, [.apostrophe] as CSI.Intermediates,       "\u{1b}[?1;22;333;4444'a"),
-    ("=" as CSI.Marker, 3               as CSI.Parameters, [.leftParenthesis] as CSI.Intermediates,  "\u{1b}[=3(a"),
-    (">" as CSI.Marker, [3,2]           as CSI.Parameters, [.rightParenthesis] as CSI.Intermediates, "\u{1b}[>3;2)a"),
-    ("<" as CSI.Marker, [1,2,3]         as CSI.Parameters, [.asterisk] as CSI.Intermediates,         "\u{1b}[<1;2;3*a"),
-    ("?" as CSI.Marker, [1,22,333,4444] as CSI.Parameters, [.plus] as CSI.Intermediates,             "\u{1b}[?1;22;333;4444+a"),
-    ("=" as CSI.Marker, 3               as CSI.Parameters, [.comma] as CSI.Intermediates,            "\u{1b}[=3,a"),
-    (">" as CSI.Marker, [3,2]           as CSI.Parameters, [.hyphen] as CSI.Intermediates,           "\u{1b}[>3;2-a"),
-    ("<" as CSI.Marker, [1,2,3]         as CSI.Parameters, [.period] as CSI.Intermediates,           "\u{1b}[<1;2;3.a"),
-    ("?" as CSI.Marker, [1,22,333,4444] as CSI.Parameters, [.slash] as CSI.Intermediates,            "\u{1b}[?1;22;333;4444/a"),
+    ("=" as CSI.Marker, 3               as CSI.Parameters, " "  as CSI.Intermediates, "\u{1b}[=3 a"),
+    (">" as CSI.Marker, [3,2]           as CSI.Parameters, "!"  as CSI.Intermediates, "\u{1b}[>3;2!a"),
+    ("<" as CSI.Marker, [1,2,3]         as CSI.Parameters, "\"" as CSI.Intermediates, "\u{1b}[<1;2;3\"a"),
+    ("?" as CSI.Marker, [1,22,333,4444] as CSI.Parameters, "#"  as CSI.Intermediates, "\u{1b}[?1;22;333;4444#a"),
+    ("=" as CSI.Marker, 3               as CSI.Parameters, "$"  as CSI.Intermediates, "\u{1b}[=3$a"),
+    (">" as CSI.Marker, [3,2]           as CSI.Parameters, "%"  as CSI.Intermediates, "\u{1b}[>3;2%a"),
+    ("<" as CSI.Marker, [1,2,3]         as CSI.Parameters, "&"  as CSI.Intermediates, "\u{1b}[<1;2;3&a"),
+    ("?" as CSI.Marker, [1,22,333,4444] as CSI.Parameters, "'"  as CSI.Intermediates, "\u{1b}[?1;22;333;4444'a"),
+    ("=" as CSI.Marker, 3               as CSI.Parameters, "("  as CSI.Intermediates, "\u{1b}[=3(a"),
+    (">" as CSI.Marker, [3,2]           as CSI.Parameters, ")"  as CSI.Intermediates, "\u{1b}[>3;2)a"),
+    ("<" as CSI.Marker, [1,2,3]         as CSI.Parameters, "*"  as CSI.Intermediates, "\u{1b}[<1;2;3*a"),
+    ("?" as CSI.Marker, [1,22,333,4444] as CSI.Parameters, "+"  as CSI.Intermediates, "\u{1b}[?1;22;333;4444+a"),
+    ("=" as CSI.Marker, 3               as CSI.Parameters, ","  as CSI.Intermediates, "\u{1b}[=3,a"),
+    (">" as CSI.Marker, [3,2]           as CSI.Parameters, "-"  as CSI.Intermediates, "\u{1b}[>3;2-a"),
+    ("<" as CSI.Marker, [1,2,3]         as CSI.Parameters, "."  as CSI.Intermediates, "\u{1b}[<1;2;3.a"),
+    ("?" as CSI.Marker, [1,22,333,4444] as CSI.Parameters, "/"  as CSI.Intermediates, "\u{1b}[?1;22;333;4444/a"),
 
-    ("=" as CSI.Marker, 3               as CSI.Parameters, [.hash, .plus] as CSI.Intermediates,      "\u{1b}[=3#+a"),
-    (">" as CSI.Marker, [3,2]           as CSI.Parameters, [.plus, .hyphen] as CSI.Intermediates,    "\u{1b}[>3;2+-a"),
+    ("=" as CSI.Marker, 3               as CSI.Parameters, ["#", "+"] as CSI.Intermediates, "\u{1b}[=3#+a"),
+    (">" as CSI.Marker, [3,2]           as CSI.Parameters, ["+", "-"] as CSI.Intermediates, "\u{1b}[>3;2+-a"),
   ])
   func `marker + parameters + intermediates + command`(
     marker: CSI.Marker,
