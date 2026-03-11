@@ -21,7 +21,7 @@ extension CSI {
     _ rendition: [GraphicRendition]
   ) -> CSI {
     CSI(
-      parameters: rendition.map(\.parameters).reduce([]) { $0.appending($1) },
+      parameters: CSI.Parameters(rendition.flatMap(\.parameters.elements)),
       command: "m"
     )
   }

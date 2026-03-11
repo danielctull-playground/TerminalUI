@@ -71,16 +71,16 @@ extension CSI.Marker: ExpressibleByUnicodeScalarLiteral {
 extension CSI {
 
   struct Parameters: Equatable, Hashable, Sendable {
-    private let rawValue: [Parameter]
+    let elements: [Parameter]
     init(_ parameters: [Parameter]) {
-      self.rawValue = parameters
+      self.elements = parameters
     }
   }
 }
 
 extension CSI.Parameters: CustomStringConvertible {
   var description: String {
-    rawValue
+    elements
       .map(\.description)
       .joined(separator: ";")
   }
@@ -95,14 +95,6 @@ extension CSI.Parameters: ExpressibleByArrayLiteral {
 extension CSI.Parameters: ExpressibleByIntegerLiteral {
   init(integerLiteral value: Int) {
     self.init([CSI.Parameter(value)])
-  }
-}
-
-extension CSI.Parameters {
-  func appending(_ other: CSI.Parameters) -> CSI.Parameters {
-    var parameters = rawValue
-    parameters.append(contentsOf: other.rawValue)
-    return CSI.Parameters(parameters)
   }
 }
 
