@@ -4,11 +4,45 @@ import Testing
 @Suite("CSI")
 struct CSITests {
 
+  @Suite("Command")
+  struct CommandTests {
+
+    @Test(arguments: [
+      "@",
+      "A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L", "M",
+      "N", "O", "P", "Q", "R", "S", "T", "U", "V", "W", "X", "Y", "Z",
+      "[", "\\", "]", "^", "_", "`",
+      "a", "b", "c", "d", "e", "f", "g", "h", "i", "j", "k", "l", "m",
+      "n", "o", "p", "q", "r", "s", "t", "u", "v", "w", "x", "y", "z",
+      "{", "|", "}", "~"
+    ] as [UnicodeScalar])
+    func valid(scalar: UnicodeScalar) {
+      _ = CSI.Command(unicodeScalarLiteral: scalar)
+    }
+
+    @Test func `invalid: :`() async {
+      await #expect(processExitsWith: .failure) {
+        _ = CSI.Command(unicodeScalarLiteral: ":")
+      }
+    }
+
+    @Test func `invalid: ?`() async {
+      await #expect(processExitsWith: .failure) {
+        _ = CSI.Command(unicodeScalarLiteral: "?")
+      }
+    }
+
+    @Test func `invalid: 1`() async {
+      await #expect(processExitsWith: .failure) {
+        _ = CSI.Command(unicodeScalarLiteral: "1")
+      }
+    }
+  }
+
   @Test(arguments: [
     ("a" as CSI.Command, "\u{1b}[a"),
     ("A" as CSI.Command, "\u{1b}[A"),
     ("b" as CSI.Command, "\u{1b}[b"),
-    ("1" as CSI.Command, "\u{1b}[1"),
   ])
   func command(command: CSI.Command, expected: String) {
     var stream = MemoryTextOutputStream.memory

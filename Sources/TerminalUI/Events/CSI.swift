@@ -190,6 +190,10 @@ extension CSI {
 
   struct Command: Equatable, Hashable, Sendable {
     private let byte: Byte
+    fileprivate init(byte: Byte) {
+      precondition((0x40...0x7E).contains(byte), "Invalid command: \(byte)")
+      self.byte = byte
+    }
   }
 }
 
@@ -200,7 +204,7 @@ extension CSI.Command: CustomStringConvertible {
 }
 
 extension CSI.Command: ExpressibleByUnicodeScalarLiteral {
-  public init(unicodeScalarLiteral value: Unicode.Scalar) {
+  init(unicodeScalarLiteral value: Unicode.Scalar) {
     self.init(byte: Byte(UInt8(ascii: value)))
   }
 }
