@@ -38,6 +38,13 @@ extension CSI: CustomStringConvertible {
   }
 }
 
+// MARK: - CSI.Introducer
+
+extension CSI {
+
+  struct Introducer {}
+}
+
 // MARK: - CSI.Marker
 
 extension CSI {
@@ -207,6 +214,113 @@ extension CSI.Command: CustomStringConvertible {
 extension CSI.Command: ExpressibleByUnicodeScalarLiteral {
   init(unicodeScalarLiteral value: Unicode.Scalar) {
     try! self.init(byte: Byte(UInt8(ascii: value)))
+  }
+}
+
+// MARK: - Parsing
+
+extension CSI {
+
+  struct TrailingBytes: Error {
+    let csi: CSI
+    let remainder: ArraySlice<Byte>
+  }
+
+  init(_ string: String) throws {
+    try self.init(string.utf8.map(Byte.init(_:)))
+  }
+
+  init(_ bytes: [Byte]) throws {
+
+    let bytes = Parser(bytes)
+
+    _ = try Introducer(bytes)
+    marker = Marker(bytes)
+    parameters = try Parameters(bytes)
+    intermediates = try Intermediates(bytes)
+    command = try Command(bytes)
+
+    if let remainder = bytes.remaining {
+      throw TrailingBytes(csi: self, remainder: remainder)
+    }
+  }
+}
+
+extension CSI.Introducer {
+
+  struct Missing: Error {}
+  struct Invalid: Error {
+    let bytes: [Byte]
+  }
+  fileprivate init(_ bytes: Parser<[Byte]>) throws {
+
+    guard let a = bytes.advance(), let b = bytes.advance() else {
+      throw Missing()
+    }
+
+    guard a == 0x1B, b == 0x5B else {
+      throw Invalid(bytes: [a, b])
+    }
+  }
+}
+
+extension CSI.Marker {
+
+  fileprivate init?(_ bytes: Parser<[Byte]>) {
+    guard let byte = bytes.peek() else { return nil }
+    guard let marker = try? CSI.Marker(byte: byte) else { return nil }
+    self = marker
+    bytes.advance()
+  }
+}
+
+extension CSI.Parameters {
+
+  fileprivate init(_ bytes: Parser<[Byte]>) throws {
+
+    var value: Int?
+    var parameters: [CSI.Parameter] = []
+
+    loop: while let byte = bytes.peek() {
+
+      switch byte {
+      case (0x30...0x39):
+        bytes.advance()
+        value = (value ?? 0) * 10 + Int(byte.rawValue - 0x30)
+      case 0x3B:
+        bytes.advance()
+        parameters.append(CSI.Parameter(value ?? 0))
+        value = 0
+      default:
+        break loop
+      }
+    }
+
+    if let value {
+      parameters.append(CSI.Parameter(value))
+    }
+
+    self.init(parameters)
+  }
+}
+
+extension CSI.Intermediates {
+
+  fileprivate init(_ bytes: Parser<[Byte]>) throws {
+    var intermediates: [CSI.Intermediate] = []
+    while let byte = bytes.peek(), let intermediate = try? CSI.Intermediate(byte: byte) {
+      intermediates.append(intermediate)
+      bytes.advance()
+    }
+    self.init(intermediates)
+  }
+}
+
+extension CSI.Command {
+  struct Missing: Error {}
+  fileprivate init(_ bytes: Parser<[Byte]>) throws {
+    guard let byte = bytes.advance() else { throw Missing() }
+    try self.init(byte: byte)
   }
 }
 

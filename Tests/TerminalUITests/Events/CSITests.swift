@@ -232,4 +232,104 @@ struct CSITests {
     ))
     #expect(stream.output == expected)
   }
+
+  // MARK: - Parsing
+
+  @Suite("Parsing")
+  struct ParsingTests {
+
+    @Test(arguments: [
+      ("\u{1b}[a",      CSI(command: "a")),
+      ("\u{1b}[?h",     CSI(marker: "?", command: "h")),
+      ("\u{1b}[2J",     CSI(parameters: 2, command: "J")),
+      ("\u{1b}[1;2H",   CSI(parameters: [1, 2], command: "H")),
+      ("\u{1b}[1049m",  CSI(parameters: 1049, command: "m")),
+      ("\u{1b}[;m",     CSI(parameters: [0, 0], command: "m")),
+      ("\u{1b}[;1t",    CSI(parameters: [0, 1], command: "t")),
+      ("\u{1b}[1;v",    CSI(parameters: [1, 0], command: "v")),
+      ("\u{1b}[7;;8v",  CSI(parameters: [7, 0, 8], command: "v")),
+      ("\u{1b}[ a",     CSI(intermediates: " ", command: "a")),
+      ("\u{1b}[+#&$d",  CSI(intermediates: ["+", "#", "&", "$"], command: "d")),
+      ("\u{1b}[?25g",   CSI(marker: "?", parameters: 25, command: "g")),
+      ("\u{1b}[3 a",    CSI(parameters: 3, intermediates: " ", command: "a")),
+      ("\u{1b}[?1;2#a", CSI(marker: "?", parameters: [1, 2], intermediates: "#", command: "a")),
+    ])
+    func parsing(input: String, expected: CSI) throws {
+      #expect(try CSI(input) == expected)
+    }
+
+    @Test(arguments: [
+      CSI(command: "a"),
+      CSI(marker: "?", command: "h"),
+      CSI(parameters: 2, command: "J"),
+      CSI(parameters: [1, 2], command: "H"),
+      CSI(parameters: 1049, command: "m"),
+      CSI(marker: "?", parameters: 25, command: "h"),
+      CSI(intermediates: " ", command: "a"),
+      CSI(intermediates: ["#", "+"], command: "a"),
+      CSI(marker: "?", parameters: [1, 2], intermediates: "#", command: "a"),
+    ])
+    func roundTrip(original: CSI) throws {
+      #expect(try CSI(original.description) == original)
+    }
+
+    @Suite("Errors")
+    struct Errors {
+
+      @Test func empty() {
+        #expect(throws: CSI.Introducer.Missing.self) {
+          try CSI("")
+        }
+      }
+
+      @Test func `introducer: no escape`() {
+        #expect(throws: CSI.Introducer.Missing.self) {
+          try CSI("\u{1b}")
+        }
+      }
+
+      @Test func `introducer: invalid`() {
+        #expect(throws: CSI.Introducer.Invalid.self) {
+          try CSI("\u{1b}]")
+        }
+      }
+
+      @Test func `introducer only`() {
+        #expect(throws: CSI.Command.Missing.self) {
+          try CSI("\u{1b}[")
+        }
+      }
+
+      @Test func `introducer + marker`() {
+        #expect(throws: CSI.Command.Missing.self) {
+          try CSI("\u{1b}[?")
+        }
+      }
+
+      @Test func `introducer + parameter`() {
+        #expect(throws: CSI.Command.Missing.self) {
+          try CSI("\u{1b}[1")
+        }
+      }
+
+      @Test func `introducer + parameters`() {
+        #expect(throws: CSI.Command.Missing.self) {
+          try CSI("\u{1b}[1;2")
+        }
+      }
+
+      @Test func `parameters: colon`() {
+        // This is currently unsupported, although it is technically valid.
+        #expect(throws: CSI.Command.Invalid.self) {
+          try CSI("\u{1b}[4:3m")
+        }
+      }
+
+      @Test func `trailing bytes`() {
+        #expect(throws: CSI.TrailingBytes.self) {
+          try CSI("\u{1b}[aX")
+        }
+      }
+    }
+  }
 }
