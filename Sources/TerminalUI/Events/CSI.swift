@@ -43,9 +43,12 @@ extension CSI: CustomStringConvertible {
 extension CSI {
 
   struct Marker: Equatable, Hashable, Sendable {
+    struct Invalid: Error {
+      let byte: Byte
+    }
     private let byte: Byte
-    fileprivate init(byte: Byte) {
-      precondition((0x3C...0x3F).contains(byte), "Invalid marker: \(byte)")
+    fileprivate init(byte: Byte) throws {
+      guard (0x3C...0x3F).contains(byte) else { throw Invalid(byte: byte) }
       self.byte = byte
     }
   }
@@ -59,7 +62,7 @@ extension CSI.Marker: CustomStringConvertible {
 
 extension CSI.Marker: ExpressibleByUnicodeScalarLiteral {
   init(unicodeScalarLiteral value: Unicode.Scalar) {
-    self.init(byte: Byte(UInt8(ascii: value)))
+    try! self.init(byte: Byte(UInt8(ascii: value)))
   }
 }
 
@@ -155,7 +158,7 @@ extension CSI.Intermediates: ExpressibleByArrayLiteral {
 
 extension CSI.Intermediates: ExpressibleByUnicodeScalarLiteral {
   init(unicodeScalarLiteral value: Unicode.Scalar) {
-    self.init([CSI.Intermediate(byte: Byte(UInt8(ascii: value)))])
+    try! self.init([CSI.Intermediate(byte: Byte(UInt8(ascii: value)))])
   }
 }
 
@@ -164,9 +167,12 @@ extension CSI.Intermediates: ExpressibleByUnicodeScalarLiteral {
 extension CSI {
 
   struct Intermediate: Equatable, Hashable, Sendable {
+    struct Invalid: Error {
+      let byte: Byte
+    }
     private let byte: Byte
-    fileprivate init(byte: Byte) {
-      precondition((0x20...0x2F).contains(byte), "Invalid intermediate: \(byte)")
+    fileprivate init(byte: Byte) throws {
+      guard (0x20...0x2F).contains(byte) else { throw Invalid(byte: byte) }
       self.byte = byte
     }
   }
@@ -180,7 +186,7 @@ extension CSI.Intermediate: CustomStringConvertible {
 
 extension CSI.Intermediate: ExpressibleByUnicodeScalarLiteral {
   init(unicodeScalarLiteral value: Unicode.Scalar) {
-    self.init(byte: Byte(UInt8(ascii: value)))
+    try! self.init(byte: Byte(UInt8(ascii: value)))
   }
 }
 
@@ -189,9 +195,12 @@ extension CSI.Intermediate: ExpressibleByUnicodeScalarLiteral {
 extension CSI {
 
   struct Command: Equatable, Hashable, Sendable {
+    struct Invalid: Error {
+      let byte: Byte
+    }
     private let byte: Byte
-    fileprivate init(byte: Byte) {
-      precondition((0x40...0x7E).contains(byte), "Invalid command: \(byte)")
+    fileprivate init(byte: Byte) throws {
+      guard (0x40...0x7E).contains(byte) else { throw Invalid(byte: byte) }
       self.byte = byte
     }
   }
@@ -205,7 +214,7 @@ extension CSI.Command: CustomStringConvertible {
 
 extension CSI.Command: ExpressibleByUnicodeScalarLiteral {
   init(unicodeScalarLiteral value: Unicode.Scalar) {
-    self.init(byte: Byte(UInt8(ascii: value)))
+    try! self.init(byte: Byte(UInt8(ascii: value)))
   }
 }
 
