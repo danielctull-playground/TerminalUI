@@ -232,13 +232,13 @@ extension CSI {
 
   init(_ bytes: [Byte]) throws {
 
-    let bytes = Parser(bytes)
+    var bytes = Parser(bytes)
 
-    _ = try Introducer(bytes)
-    marker = Marker(bytes)
-    parameters = try Parameters(bytes)
-    intermediates = try Intermediates(bytes)
-    command = try Command(bytes)
+    _ = try Introducer(&bytes)
+    marker = Marker(&bytes)
+    parameters = try Parameters(&bytes)
+    intermediates = try Intermediates(&bytes)
+    command = try Command(&bytes)
 
     if let remainder = bytes.remaining {
       throw TrailingBytes(csi: self, remainder: remainder)
@@ -252,7 +252,7 @@ extension CSI.Introducer {
   struct Invalid: Error {
     let bytes: [Byte]
   }
-  fileprivate init(_ bytes: Parser<[Byte]>) throws {
+  fileprivate init(_ bytes: inout Parser<[Byte]>) throws {
 
     guard let a = bytes.advance(), let b = bytes.advance() else {
       throw Missing()
@@ -266,7 +266,7 @@ extension CSI.Introducer {
 
 extension CSI.Marker {
 
-  fileprivate init?(_ bytes: Parser<[Byte]>) {
+  fileprivate init?(_ bytes: inout Parser<[Byte]>) {
     guard let byte = bytes.peek() else { return nil }
     guard let marker = try? CSI.Marker(byte: byte) else { return nil }
     self = marker
@@ -276,7 +276,7 @@ extension CSI.Marker {
 
 extension CSI.Parameters {
 
-  fileprivate init(_ bytes: Parser<[Byte]>) throws {
+  fileprivate init(_ bytes: inout Parser<[Byte]>) throws {
 
     var value: Int?
     var parameters: [CSI.Parameter] = []
@@ -306,7 +306,7 @@ extension CSI.Parameters {
 
 extension CSI.Intermediates {
 
-  fileprivate init(_ bytes: Parser<[Byte]>) throws {
+  fileprivate init(_ bytes: inout Parser<[Byte]>) throws {
     var intermediates: [CSI.Intermediate] = []
     while let byte = bytes.peek(), let intermediate = try? CSI.Intermediate(byte: byte) {
       intermediates.append(intermediate)
@@ -318,7 +318,7 @@ extension CSI.Intermediates {
 
 extension CSI.Command {
   struct Missing: Error {}
-  fileprivate init(_ bytes: Parser<[Byte]>) throws {
+  fileprivate init(_ bytes: inout Parser<[Byte]>) throws {
     guard let byte = bytes.advance() else { throw Missing() }
     try self.init(byte: byte)
   }

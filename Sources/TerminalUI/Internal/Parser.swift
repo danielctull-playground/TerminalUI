@@ -1,5 +1,5 @@
 
-final class Parser<Collection: RandomAccessCollection> {
+struct Parser<Collection: RandomAccessCollection> {
 
   private let collection: Collection
   private var index: Collection.Index
@@ -15,7 +15,7 @@ final class Parser<Collection: RandomAccessCollection> {
   }
 
   @discardableResult
-  func advance() -> Collection.Element? {
+  mutating func advance() -> Collection.Element? {
     guard index < collection.endIndex else { return nil }
     defer { index = collection.index(after: index) }
     return collection[index]
