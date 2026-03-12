@@ -288,6 +288,13 @@ struct CSITests {
         }
       }
 
+      @Test func `introducer: c1 (unsupported)`() throws {
+        let error = try #require(throws: CSI.Introducer.Invalid.self) {
+          try CSI([0x9B])
+        }
+        #expect(error.description == #"Invalid CSI.Introducer: ["\#u{9b}" (0x9B)]"#)
+      }
+
       @Test func `introducer: invalid`() throws {
         let error = try #require(throws: CSI.Introducer.Invalid.self) {
           try CSI("\u{1b}]")

@@ -2,6 +2,7 @@
 /// Control Sequence Introducer
 struct CSI: Equatable, Hashable, Sendable {
 
+  fileprivate let introducer: Introducer
   fileprivate let marker: Marker?
   fileprivate let parameters: Parameters
   fileprivate let intermediates: Intermediates
@@ -13,6 +14,7 @@ struct CSI: Equatable, Hashable, Sendable {
     intermediates: Intermediates = [],
     command: Command
   ) {
+    self.introducer = .escape
     self.marker = marker
     self.parameters = parameters
     self.intermediates = intermediates
@@ -24,7 +26,9 @@ extension CSI: CustomStringConvertible {
 
   var description: String {
 
-    var description = "\u{1b}["
+    var description = ""
+
+    description.append(introducer.description)
 
     if let marker = marker {
       description.append(marker.description)
@@ -42,7 +46,23 @@ extension CSI: CustomStringConvertible {
 
 extension CSI {
 
-  struct Introducer {}
+  struct Introducer: Equatable, Hashable, Sendable {
+    private let rawValue: [Byte]
+  }
+}
+
+extension CSI.Introducer {
+  fileprivate static let escape = CSI.Introducer(rawValue: [0x1B, 0x5B])
+}
+
+extension CSI.Introducer: CustomStringConvertible {
+  var description: String {
+    rawValue.map(\.rawValue)
+      .map(Unicode.Scalar.init)
+      .map(Character.init)
+      .map(String.init)
+      .joined()
+  }
 }
 
 // MARK: - CSI.Marker
@@ -237,7 +257,7 @@ extension CSI {
 
     var bytes = Parser(bytes)
 
-    _ = try Introducer(&bytes)
+    introducer = try Introducer(&bytes)
     marker = Marker(&bytes)
     parameters = try Parameters(&bytes)
     intermediates = try Intermediates(&bytes)
@@ -258,13 +278,13 @@ extension CSI.Introducer {
   }
   fileprivate init(_ bytes: inout Parser<[Byte]>) throws {
 
-    guard let a = bytes.advance(), let b = bytes.advance() else {
-      throw Missing()
-    }
+    guard let first = bytes.advance() else { throw Missing() }
+    guard first == 0x1B else { throw Invalid(bytes: [first]) }
 
-    guard a == 0x1B, b == 0x5B else {
-      throw Invalid(bytes: [a, b])
-    }
+    guard let second = bytes.advance() else { throw Missing() }
+    guard second == 0x5B else { throw Invalid(bytes: [first, second]) }
+
+    self.init(rawValue: [first, second])
   }
 }
 
