@@ -288,10 +288,11 @@ struct CSITests {
         }
       }
 
-      @Test func `introducer: invalid`() {
-        #expect(throws: CSI.Introducer.Invalid.self) {
+      @Test func `introducer: invalid`() throws {
+        let error = try #require(throws: CSI.Introducer.Invalid.self) {
           try CSI("\u{1b}]")
         }
+        #expect(error.description == #"Invalid CSI.Introducer: ["\#u{1b}" (0x1B), "]" (0x5D)]"#)
       }
 
       @Test func `introducer only`() {
@@ -318,17 +319,21 @@ struct CSITests {
         }
       }
 
-      @Test func `parameters: colon`() {
+      @Test func `parameters: colon`() throws {
         // This is currently unsupported, although it is technically valid.
-        #expect(throws: CSI.Command.Invalid.self) {
+        let error = try #require(throws: CSI.Command.Invalid.self) {
           try CSI("\u{1b}[4:3m")
         }
+        #expect(error.description == #"Invalid CSI.Command: ":" (0x3A)"#)
       }
 
-      @Test func `trailing bytes`() {
-        #expect(throws: CSI.TrailingBytes.self) {
+      @Test func `trailing bytes`() throws {
+        let error = try #require(throws: CSI.TrailingBytes.self) {
           try CSI("\u{1b}[aX")
+
         }
+        #expect(error.csi == CSI(command: "a"))
+        #expect(error.remainder == [Byte(UInt8(ascii: "X"))])
       }
     }
   }

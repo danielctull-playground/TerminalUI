@@ -16,7 +16,8 @@ extension Byte: CustomStringConvertible {
   var description: String {
     let hex = String(rawValue, radix: 16, uppercase: true)
     let leading = String(repeating: "0", count: max(0, 2 - hex.count))
-    return "0x" + leading + hex
+
+    return "\"\(Character(Unicode.Scalar(rawValue)))\" (0x" + leading + hex + ")"
   }
 }
 

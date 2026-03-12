@@ -50,8 +50,9 @@ extension CSI {
 extension CSI {
 
   struct Marker: Equatable, Hashable, Sendable {
-    struct Invalid: Error {
+    struct Invalid: Error, CustomStringConvertible {
       let byte: Byte
+      var description: String { "Invalid CSI.Marker: \(byte)" }
     }
     private let byte: Byte
     fileprivate init(byte: Byte) throws {
@@ -69,7 +70,7 @@ extension CSI.Marker: CustomStringConvertible {
 
 extension CSI.Marker: ExpressibleByUnicodeScalarLiteral {
   init(unicodeScalarLiteral value: Unicode.Scalar) {
-    try! self.init(byte: Byte(UInt8(ascii: value)))
+    self = precondition(try Self(byte: Byte(UInt8(ascii: value))))
   }
 }
 
@@ -157,7 +158,7 @@ extension CSI.Intermediates: ExpressibleByArrayLiteral {
 
 extension CSI.Intermediates: ExpressibleByUnicodeScalarLiteral {
   init(unicodeScalarLiteral value: Unicode.Scalar) {
-    try! self.init([CSI.Intermediate(byte: Byte(UInt8(ascii: value)))])
+    self = [CSI.Intermediate(unicodeScalarLiteral: value)]
   }
 }
 
@@ -166,8 +167,9 @@ extension CSI.Intermediates: ExpressibleByUnicodeScalarLiteral {
 extension CSI {
 
   struct Intermediate: Equatable, Hashable, Sendable {
-    struct Invalid: Error {
+    struct Invalid: Error, CustomStringConvertible {
       let byte: Byte
+      var description: String { "Invalid CSI.Intermediate: \(byte)" }
     }
     private let byte: Byte
     fileprivate init(byte: Byte) throws {
@@ -185,7 +187,7 @@ extension CSI.Intermediate: CustomStringConvertible {
 
 extension CSI.Intermediate: ExpressibleByUnicodeScalarLiteral {
   init(unicodeScalarLiteral value: Unicode.Scalar) {
-    try! self.init(byte: Byte(UInt8(ascii: value)))
+    self = precondition(try Self(byte: Byte(UInt8(ascii: value))))
   }
 }
 
@@ -194,8 +196,9 @@ extension CSI.Intermediate: ExpressibleByUnicodeScalarLiteral {
 extension CSI {
 
   struct Command: Equatable, Hashable, Sendable {
-    struct Invalid: Error {
+    struct Invalid: Error, CustomStringConvertible {
       let byte: Byte
+      var description: String { "Invalid CSI.Command: \(byte)" }
     }
     private let byte: Byte
     fileprivate init(byte: Byte) throws {
@@ -213,7 +216,7 @@ extension CSI.Command: CustomStringConvertible {
 
 extension CSI.Command: ExpressibleByUnicodeScalarLiteral {
   init(unicodeScalarLiteral value: Unicode.Scalar) {
-    try! self.init(byte: Byte(UInt8(ascii: value)))
+    self = precondition(try Self(byte: Byte(UInt8(ascii: value))))
   }
 }
 
@@ -249,8 +252,9 @@ extension CSI {
 extension CSI.Introducer {
 
   struct Missing: Error {}
-  struct Invalid: Error {
+  struct Invalid: Error, CustomStringConvertible {
     let bytes: [Byte]
+    var description: String { "Invalid CSI.Introducer: \(bytes)" }
   }
   fileprivate init(_ bytes: inout Parser<[Byte]>) throws {
 
@@ -330,5 +334,20 @@ extension TextOutputStream {
 
   mutating func write(_ csi: CSI) {
     write(csi.description)
+  }
+}
+
+// MARK: - precondition
+
+/// Checks a necessary condition for making forward progress.
+///
+/// - Parameter expression: Throwing expression that should not actually throw.
+/// - Returns: The result of the expression.
+/// - Precondition: The expression must not throw.
+private func precondition<T>(_ expression: @autoclosure () throws -> T) -> T {
+  do {
+    return try expression()
+  } catch {
+    preconditionFailure("Precondition: \(error)")
   }
 }

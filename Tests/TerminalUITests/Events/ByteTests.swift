@@ -14,9 +14,9 @@ struct ByteTests {
   }
 
   @Test func customStringConvertible() {
-    #expect(Byte(1).description == "0x01")
-    #expect(Byte(8).description == "0x08")
-    #expect(Byte(255).description == "0xFF")
+    #expect(Byte(0x41).description == #""A" (0x41)"#)
+    #expect(Byte(0x5C).description == #""\" (0x5C)"#)
+    #expect(Byte(0xFF).description == #""ÿ" (0xFF)"#)
   }
 
   @Test func equatable() {
