@@ -258,6 +258,14 @@ struct CSITests {
       #expect(try CSI(input) == expected)
     }
 
+    @Test func `introducer: escape`() throws {
+      #expect(try CSI([0x1B, 0x5B, 0x41]) == CSI(introducer: .escape, command: "A"))
+    }
+
+    @Test func `introducer: compact`() throws {
+      #expect(try CSI([0x9B, 0x41]) == CSI(introducer: .compact, command: "A"))
+    }
+
     @Test(arguments: [
       CSI(command: "a"),
       CSI(marker: "?", command: "h"),
@@ -288,14 +296,14 @@ struct CSITests {
         }
       }
 
-      @Test func `introducer: c1 (unsupported)`() throws {
+      @Test func `introducer: invalid first`() throws {
         let error = try #require(throws: CSI.Introducer.Invalid.self) {
-          try CSI([0x9B])
+          try CSI("\u{1a}[")
         }
-        #expect(error.description == #"Invalid CSI.Introducer: ["\#u{9b}" (0x9B)]"#)
+        #expect(error.description == #"Invalid CSI.Introducer: ["\#u{1a}" (0x1A)]"#)
       }
 
-      @Test func `introducer: invalid`() throws {
+      @Test func `introducer: invalid second`() throws {
         let error = try #require(throws: CSI.Introducer.Invalid.self) {
           try CSI("\u{1b}]")
         }

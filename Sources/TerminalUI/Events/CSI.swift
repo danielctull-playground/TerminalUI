@@ -9,12 +9,13 @@ struct CSI: Equatable, Hashable, Sendable {
   fileprivate let command: Command
 
   init(
+    introducer: Introducer = .escape,
     marker: Marker? = nil,
     parameters: Parameters = [],
     intermediates: Intermediates = [],
     command: Command
   ) {
-    self.introducer = .escape
+    self.introducer = introducer
     self.marker = marker
     self.parameters = parameters
     self.intermediates = intermediates
@@ -52,7 +53,12 @@ extension CSI {
 }
 
 extension CSI.Introducer {
-  fileprivate static let escape = CSI.Introducer(rawValue: [0x1B, 0x5B])
+
+  /// The 7-bit escape sequence form: ESC [ (0x1B 0x5B).
+  static let escape = CSI.Introducer(rawValue: [0x1B, 0x5B])
+
+  /// The 8-bit compact form: a single CSI byte (0x9B).
+  static let compact = CSI.Introducer(rawValue: [0x9B])
 }
 
 extension CSI.Introducer: CustomStringConvertible {
@@ -279,12 +285,22 @@ extension CSI.Introducer {
   fileprivate init(_ bytes: inout Parser<[Byte]>) throws {
 
     guard let first = bytes.advance() else { throw Missing() }
-    guard first == 0x1B else { throw Invalid(bytes: [first]) }
+
+    if [first] == CSI.Introducer.compact.rawValue {
+      self = .compact
+      return
+    }
+
+    guard first == CSI.Introducer.escape.rawValue.first else {
+      throw Invalid(bytes: [first])
+    }
 
     guard let second = bytes.advance() else { throw Missing() }
-    guard second == 0x5B else { throw Invalid(bytes: [first, second]) }
+    guard second == CSI.Introducer.escape.rawValue.last else {
+      throw Invalid(bytes: [first, second])
+    }
 
-    self.init(rawValue: [first, second])
+    self = .escape
   }
 }
 
