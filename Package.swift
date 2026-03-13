@@ -16,8 +16,9 @@ let package = Package(
     .library(name: "TerminalUITesting", targets: ["TerminalUITesting"]),
   ],
   dependencies: [
-    .package(url: "https://github.com/apple/swift-syntax.git", from: "602.0.0"),
     .package(url: "https://github.com/apple/swift-async-algorithms.git", from: "1.1.0"),
+    .package(url: "https://github.com/apple/swift-syntax.git", from: "602.0.0"),
+    .package(url: "https://github.com/apple/swift-log.git", from: "1.6.3"),
   ],
   targets: [
 
@@ -36,6 +37,7 @@ let package = Package(
         "AttributeGraph",
         "TerminalUIMacros",
         .product(name: "AsyncAlgorithms", package: "swift-async-algorithms"),
+        .product(name: "Logging", package: "swift-log"),
       ]
     ),
 
