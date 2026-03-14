@@ -15,10 +15,18 @@ let package = Package(
     .library(name: "TerminalUI", targets: ["TerminalUI"]),
     .library(name: "TerminalUITesting", targets: ["TerminalUITesting"]),
   ],
+  traits: [
+    .default(enabledTraits: []),
+    .trait(
+      name: "oslog",
+      description: "Enables oslog on Apple platforms when running the TerminalUI Demo."
+    ),
+  ],
   dependencies: [
     .package(url: "https://github.com/apple/swift-async-algorithms.git", from: "1.1.0"),
     .package(url: "https://github.com/apple/swift-syntax.git", from: "602.0.0"),
     .package(url: "https://github.com/apple/swift-log.git", from: "1.6.3"),
+    .package(url: "https://github.com/danielctull/swift-oslog.git", from: "1.0.0"),
   ],
   targets: [
 
@@ -69,7 +77,13 @@ let package = Package(
 
     .executableTarget(
       name: "TerminalUI Demo",
-      dependencies: ["TerminalUI"]
+      dependencies: [
+        "TerminalUI",
+        .product(name: "OSLogging", package: "swift-oslog", condition: .when(traits: ["oslog"])),
+      ],
+      swiftSettings: [
+        .define("ENABLE_OSLOG", .when(traits: ["oslog"])),
+      ]
     ),
   ]
 )
