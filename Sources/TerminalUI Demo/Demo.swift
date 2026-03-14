@@ -1,20 +1,7 @@
 import TerminalUI
 
-#if ENABLE_OSLOG
-import Logging
-import OSLogging
-#endif
-
 @main
 struct Demo: App {
-
-#if ENABLE_OSLOG
-  init() {
-    LoggingSystem.bootstrap { label in
-      OSLogHandler(subsystem: "uk.co.danieltull.terminalui.demo", category: label)
-    }
-  }
-#endif
 
   var body: some View {
     HStack {
