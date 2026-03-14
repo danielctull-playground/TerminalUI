@@ -1,3 +1,4 @@
+import Logging
 import Foundation
 
 public protocol App {
@@ -21,9 +22,12 @@ public protocol App {
 extension App {
 
   public static func main() async {
+
+    let app = Self()
+
     let renderer = Renderer(
       canvas: TextStreamCanvas(output: .fileHandle(.standardOutput)),
-      content: Self().body
+      content: app.body
     )
 
     @EventStream
@@ -33,6 +37,7 @@ extension App {
     }
 
     for await event in events {
+      Logger(label: "Event").info("\(event)")
       renderer.render(event: event)
     }
   }
