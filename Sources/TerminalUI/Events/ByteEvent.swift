@@ -67,7 +67,9 @@ struct ByteEventParser<Source>: AsyncSequence, Sendable
       loop: while status is InsufficientData {
 
         do {
-          return try parse(buffer)
+          let event = try parse(buffer)
+          buffer = []
+          return event
         } catch {
           status = error
         }
