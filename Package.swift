@@ -27,6 +27,8 @@ let package = Package(
     .package(url: "https://github.com/apple/swift-syntax.git", from: "602.0.0"),
     .package(url: "https://github.com/apple/swift-log.git", from: "1.6.3"),
     .package(url: "https://github.com/danielctull/swift-oslog.git", from: "1.0.0"),
+    .package(url: "https://github.com/pointfreeco/swift-clocks.git", from: "1.0.6"),
+    .package(url: "https://github.com/sideeffect-io/AsyncExtensions.git", from: "0.5.0"),
   ],
   targets: [
 
@@ -73,6 +75,8 @@ let package = Package(
         "TerminalUI",
         "TerminalUIMacros",
         "TerminalUITesting",
+        .product(name: "AsyncExtensions", package: "AsyncExtensions"),
+        .product(name: "Clocks", package: "swift-clocks"),
         .product(name: "SwiftDiagnostics", package: "swift-syntax"),
         .product(name: "SwiftSyntaxMacros", package: "swift-syntax"),
         .product(name: "SwiftSyntaxMacrosTestSupport", package: "swift-syntax"),
