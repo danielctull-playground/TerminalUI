@@ -51,6 +51,7 @@ extension App {
   public static func main() async throws {
 
     let app = Self()
+    let rawMode = RawMode()
 
     let logger = Logger(label: "Event", factory: app.logHandler)
 
@@ -75,5 +76,7 @@ extension App {
       logger.info("\(event)")
       renderer.render(event: event)
     }
+
+    _ = consume rawMode
   }
 }
