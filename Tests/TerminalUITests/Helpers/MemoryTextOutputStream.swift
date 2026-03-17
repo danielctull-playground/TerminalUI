@@ -6,7 +6,7 @@ extension TextOutputStream where Self == MemoryTextOutputStream {
 }
 
 struct MemoryTextOutputStream: TextOutputStream {
-  private var output: String = ""
+  private(set) var output: String = ""
   fileprivate init() {}
   mutating func write(_ string: String) {
     output.append(string)
