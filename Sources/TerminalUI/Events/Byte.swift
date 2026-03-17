@@ -1,5 +1,5 @@
 
-struct Byte: Equatable, Hashable, Sendable {
+struct Byte: Event, Equatable, Hashable, Sendable {
   let rawValue: UInt8
   init(_ rawValue: UInt8) {
     self.rawValue = rawValue

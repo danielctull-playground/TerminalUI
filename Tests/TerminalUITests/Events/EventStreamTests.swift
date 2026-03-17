@@ -11,16 +11,16 @@ struct EventStreamTests {
     }
   }
 
-  @Test func first() async {
+  @Test func first() async throws {
     let expected: [E] = [1, 2, 3]
 
-    @EventStream var stream: some AsyncSequence<any Event, Never> {
+    @EventStream var stream: some AsyncSequence<any Event, any Error> {
       expected.async
     }
 
     var collected: [E] = []
 
-    for await event in stream {
+    for try await event in stream {
       if let e = event as? E {
         collected.append(e)
       }
@@ -29,18 +29,18 @@ struct EventStreamTests {
     #expect(collected == expected)
   }
 
-  @Test func accumulated() async {
+  @Test func accumulated() async throws {
     let first: [E] = [1, 2, 3]
     let second: [E] = [4, 5, 6, 7]
 
-    @EventStream var stream: some AsyncSequence<any Event, Never> {
+    @EventStream var stream: some AsyncSequence<any Event, any Error> {
       first.async
       second.async
     }
 
     var collected: [E] = []
 
-    for await event in stream {
+    for try await event in stream {
       if let e = event as? E {
         collected.append(e)
       }

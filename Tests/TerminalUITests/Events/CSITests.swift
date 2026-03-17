@@ -259,11 +259,11 @@ struct CSITests {
     }
 
     @Test func `introducer: escape`() throws {
-      #expect(try CSI([0x1B, 0x5B, 0x41]) == CSI(introducer: .escape, command: "A"))
+      #expect(try CSI(parsing: [0x1B, 0x5B, 0x41]) == CSI(introducer: .escape, command: "A"))
     }
 
     @Test func `introducer: compact`() throws {
-      #expect(try CSI([0x9B, 0x41]) == CSI(introducer: .compact, command: "A"))
+      #expect(try CSI(parsing: [0x9B, 0x41]) == CSI(introducer: .compact, command: "A"))
     }
 
     @Test(arguments: [
@@ -285,13 +285,13 @@ struct CSITests {
     struct Errors {
 
       @Test func empty() {
-        #expect(throws: CSI.Introducer.Missing.self) {
+        #expect(throws: InsufficientData.self) {
           try CSI("")
         }
       }
 
       @Test func `introducer: no escape`() {
-        #expect(throws: CSI.Introducer.Missing.self) {
+        #expect(throws: InsufficientData.self) {
           try CSI("\u{1b}")
         }
       }
@@ -311,25 +311,25 @@ struct CSITests {
       }
 
       @Test func `introducer only`() {
-        #expect(throws: CSI.Command.Missing.self) {
+        #expect(throws: InsufficientData.self) {
           try CSI("\u{1b}[")
         }
       }
 
       @Test func `introducer + marker`() {
-        #expect(throws: CSI.Command.Missing.self) {
+        #expect(throws: InsufficientData.self) {
           try CSI("\u{1b}[?")
         }
       }
 
       @Test func `introducer + parameter`() {
-        #expect(throws: CSI.Command.Missing.self) {
+        #expect(throws: InsufficientData.self) {
           try CSI("\u{1b}[1")
         }
       }
 
       @Test func `introducer + parameters`() {
-        #expect(throws: CSI.Command.Missing.self) {
+        #expect(throws: InsufficientData.self) {
           try CSI("\u{1b}[1;2")
         }
       }

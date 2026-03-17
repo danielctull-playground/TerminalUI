@@ -48,7 +48,7 @@ extension App {
 
 extension App {
 
-  public static func main() async {
+  public static func main() async throws {
 
     let app = Self()
 
@@ -60,12 +60,18 @@ extension App {
     )
 
     @EventStream
-    var events: some AsyncSequence<any Event, Never> {
+    var events: some AsyncSequence<any Event, any Error> {
+
       WindowChange.sequence
+
       Exit.sequence
+
+      FileHandle.standardInput
+        .bytes.map { Byte($0) }
+        .byteEvents(of: CSI.self)
     }
 
-    for await event in events {
+    for try await event in events {
       logger.info("\(event)")
       renderer.render(event: event)
     }
