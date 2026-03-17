@@ -1,5 +1,6 @@
 import AsyncExtensions
 import Clocks
+import Foundation
 @testable import TerminalUI
 import Testing
 
@@ -7,10 +8,10 @@ import Testing
 struct AsyncIteratorTimeoutTests {
 
   private let clock = TestClock()
-  private let channel = AsyncBufferedChannel<Int>()
 
   @Test func `element arrives before timeout`() async throws {
 
+    let channel = AsyncBufferedChannel<Int>()
     var iterator = channel.makeAsyncIterator()
 
     let task = Task {
@@ -24,6 +25,7 @@ struct AsyncIteratorTimeoutTests {
 
   @Test func `timeout occurs before element arrives`() async throws {
 
+    let channel = AsyncBufferedChannel<Int>()
     var iterator = channel.makeAsyncIterator()
 
     let task = Task {
@@ -38,6 +40,7 @@ struct AsyncIteratorTimeoutTests {
 
   @Test func `timeout doesn't prevent read of next elements`() async throws {
 
+    let channel = AsyncBufferedChannel<Int>()
     var iterator = channel.makeAsyncIterator()
 
     struct Result: Equatable, Sendable {
@@ -61,6 +64,7 @@ struct AsyncIteratorTimeoutTests {
 
   @Test func `source finishes before timeout`() async throws {
 
+    let channel = AsyncBufferedChannel<Int>()
     var iterator = channel.makeAsyncIterator()
 
     channel.finish()
@@ -72,8 +76,29 @@ struct AsyncIteratorTimeoutTests {
     #expect(await task.value == nil)
   }
 
+  @Test func `failure in source iterator is thrown up`() async throws {
+
+    struct Failure: Error, Equatable {
+      let value = UUID().uuidString
+    }
+
+    let channel = AsyncThrowingBufferedChannel<Int, Error>()
+    var iterator = channel.makeAsyncIterator()
+
+    let task = Task {
+      try await iterator.next(timeout: .seconds(5), clock: clock)
+    }
+
+    let failure = Failure()
+    channel.fail(failure)
+
+    let result = try await #require(throws: Failure.self) { try await task.value }
+    #expect(result == failure)
+  }
+
   @Test func `timeout duration resets for each call`() async throws {
 
+    let channel = AsyncBufferedChannel<Int>()
     var iterator = channel.makeAsyncIterator()
 
     channel.send(1)

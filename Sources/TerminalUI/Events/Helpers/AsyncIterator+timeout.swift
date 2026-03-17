@@ -16,31 +16,40 @@ extension AsyncIteratorProtocol where Self: Sendable, Element: Sendable {
     clock: C = .continuous
   ) async throws(Failure) -> Element? {
 
-    let _self = self
+    do {
 
-    let result = await withTaskGroup(of: RaceResult<Self>.self) { group in
+      let _self = self
 
-      group.addTask {
-        var iterator = _self
-        let element = try? await iterator.next()
-        return .element(iterator, element)
+      let result = try await withThrowingTaskGroup(of: RaceResult<Self>.self) { group in
+
+        group.addTask {
+          var iterator = _self
+          let element = try await iterator.next()
+          return .element(iterator, element)
+        }
+
+        group.addTask {
+          try await clock.sleep(for: duration)
+          return .timeout
+        }
+
+        defer { group.cancelAll() }
+        return try await group.next()!
       }
 
-      group.addTask {
-        try? await clock.sleep(for: duration)
-        return .timeout
+      switch result {
+      case .element(let updatedIterator, let element):
+        self = updatedIterator
+        return element
+      case .timeout:
+        return nil
       }
 
-      defer { group.cancelAll() }
-      return await group.next()!
-    }
+    } catch let error as Failure {
+      throw error
 
-    switch result {
-    case .element(let updatedIterator, let element):
-      self = updatedIterator
-      return element
-    case .timeout:
-      return nil
+    } catch {
+      fatalError(error.localizedDescription)
     }
   }
 }
