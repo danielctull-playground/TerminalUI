@@ -248,18 +248,13 @@ extension CSI.Command: ExpressibleByUnicodeScalarLiteral {
 
 // MARK: - Parsing
 
-extension CSI {
-
-  struct TrailingBytes: Error {
-    let csi: CSI
-    let remainder: ArraySlice<Byte>
-  }
+extension CSI: ByteEvent {
 
   init(_ string: String) throws {
-    try self.init(string.utf8.map(Byte.init(_:)))
+    try self.init(parsing: string.utf8.map(Byte.init(_:)))
   }
 
-  init(_ bytes: [Byte]) throws {
+  init(parsing bytes: [Byte]) throws {
 
     var bytes = Parser(bytes)
 
@@ -269,9 +264,7 @@ extension CSI {
     intermediates = try Intermediates(&bytes)
     command = try Command(&bytes)
 
-    if let remainder = bytes.remaining {
-      throw TrailingBytes(csi: self, remainder: remainder)
-    }
+    try checkTrailingBytes(bytes.remaining)
   }
 }
 

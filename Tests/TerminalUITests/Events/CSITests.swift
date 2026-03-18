@@ -259,11 +259,11 @@ struct CSITests {
     }
 
     @Test func `introducer: escape`() throws {
-      #expect(try CSI([0x1B, 0x5B, 0x41]) == CSI(introducer: .escape, command: "A"))
+      #expect(try CSI(parsing: [0x1B, 0x5B, 0x41]) == CSI(introducer: .escape, command: "A"))
     }
 
     @Test func `introducer: compact`() throws {
-      #expect(try CSI([0x9B, 0x41]) == CSI(introducer: .compact, command: "A"))
+      #expect(try CSI(parsing: [0x9B, 0x41]) == CSI(introducer: .compact, command: "A"))
     }
 
     @Test(arguments: [
@@ -343,12 +343,11 @@ struct CSITests {
       }
 
       @Test func `trailing bytes`() throws {
-        let error = try #require(throws: CSI.TrailingBytes.self) {
+        let error = try #require(throws: TrailingBytes.self) {
           try CSI("\u{1b}[aX")
-
         }
-        #expect(error.csi == CSI(command: "a"))
-        #expect(error.remainder == [Byte(UInt8(ascii: "X"))])
+        #expect(error.event as? CSI == CSI(command: "a"))
+        #expect(error.bytes == [Byte(UInt8(ascii: "X"))])
       }
     }
   }
