@@ -6,7 +6,7 @@ extension EnvironmentValues {
   @Entry fileprivate(set) var windowSize = Size.zero
 }
 
-struct WindowChange {
+struct WindowChange: Equatable {
   let size: Size
 }
 
@@ -31,5 +31,6 @@ extension WindowChange {
       let size = Size(width: Int(winsize.ws_col), height: Int(winsize.ws_row))
       return WindowChange(size: size)
     }
+    .removeDuplicates()
   }
 }
