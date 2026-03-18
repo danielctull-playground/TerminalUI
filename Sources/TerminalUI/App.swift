@@ -55,8 +55,10 @@ extension App {
 
     let logger = Logger(label: "Event", factory: app.logHandler)
 
+    var output = FileHandleTextOutputStream.fileHandle(.standardOutput)
+
     let renderer = Renderer(
-      canvas: TextStreamCanvas(output: .fileHandle(.standardOutput)),
+      canvas: TextStreamCanvas(output: output),
       content: app.body
     )
 
@@ -71,6 +73,8 @@ extension App {
         .bytes.map { Byte($0) }
         .byteEvents(of: CSI.self)
     }
+
+    output.write(CSI(marker: "?", parameters: 2026, intermediates: "$", command: "p"))
 
     for try await event in events {
       logger.info("\(event)")
