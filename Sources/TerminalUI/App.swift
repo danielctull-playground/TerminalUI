@@ -65,14 +65,15 @@ extension App {
 
       WindowChange.sequence
 
-      Exit.sequence
-
       StandardInput()
-        .parsing(CSI.self)
+        .parsing(Exit.self, CSI.self)
     }
 
     for await event in events {
       logger.info("\(event)")
+
+      if event is Exit { break }
+
       renderer.render(event: event)
     }
 
