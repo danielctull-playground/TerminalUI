@@ -1,5 +1,5 @@
 import AsyncAlgorithms
-import Dispatch
+@preconcurrency import Dispatch
 
 #if canImport(Darwin)
 import Darwin
@@ -10,9 +10,12 @@ import Musl
 #endif
 
 struct StandardInput: AsyncSequence, Sendable {
-  func makeAsyncIterator() -> AsyncMapSequence<AsyncStream<Void>, [Byte]>.Iterator {
-    AsyncStream(DispatchSource.makeReadSource(fileDescriptor: STDIN_FILENO))
-      .map {
+  func makeAsyncIterator() -> AsyncStream<[Byte]>.Iterator {
+    AsyncStream<[Byte]> { continuation in
+
+      let source = DispatchSource.makeReadSource(fileDescriptor: STDIN_FILENO)
+
+      source.setEventHandler {
 
         var bytes: [Byte] = []
 
@@ -27,8 +30,21 @@ struct StandardInput: AsyncSequence, Sendable {
           bytes.append(contentsOf: buffer.prefix(count))
         } while count == size
 
-        return bytes
+        guard !bytes.isEmpty else { return }
+
+        continuation.yield(bytes)
       }
-      .makeAsyncIterator()
+
+      source.setCancelHandler {
+        continuation.finish()
+      }
+
+      continuation.onTermination = { _ in
+        source.cancel()
+      }
+
+      source.resume()
+    }
+    .makeAsyncIterator()
   }
 }
