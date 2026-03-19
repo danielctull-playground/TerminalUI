@@ -5,11 +5,11 @@ protocol ByteEvent: Event {
 
 // MARK: - Standard Input Parsing
 
-extension AsyncSequence where Element == [Byte] {
+extension AsyncSequence where Self: Sendable, Element == [Byte] {
 
   func parsing<each E: ByteEvent>(
     _ type: repeat (each E).Type
-  ) -> some AsyncSequence<any Event, Failure> {
+  ) -> some Sendable & AsyncSequence<any Event, Failure> {
 
     flatMap { bytes in
 

@@ -12,6 +12,6 @@ extension Exit {
 
   static var sequence: some Sendable & AsyncSequence<Exit, Never> {
     AsyncStream(DispatchSource.makeSignalSource(signal: SIGINT))
-      .map(Exit.init)
+      .map { _ in Exit() }
   }
 }

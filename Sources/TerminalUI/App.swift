@@ -61,8 +61,13 @@ extension App {
 
     @EventStream
     var events: some AsyncSequence<any Event, Never> {
+
       WindowChange.sequence
+
       Exit.sequence
+
+      StandardInput()
+        .parsing(CSI.self)
     }
 
     for await event in events {

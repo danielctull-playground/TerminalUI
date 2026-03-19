@@ -1,10 +1,10 @@
 @preconcurrency import Dispatch
 
-extension AsyncStream<Void> {
+extension AsyncStream<UInt> {
   init(_ source: any DispatchSourceProtocol) {
     self.init { continuation in
       source.setEventHandler {
-        continuation.yield(())
+        continuation.yield(source.data)
       }
       source.setCancelHandler {
         continuation.finish()

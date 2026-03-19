@@ -4,6 +4,12 @@ import AsyncAlgorithms
 enum EventStream {
 
   static func buildExpression<Failure>(
+    _ expression: some Sendable & AsyncSequence<any Event, Failure>
+  ) -> some Sendable & AsyncSequence<any Event, Failure> {
+    expression
+  }
+
+  static func buildExpression<Failure>(
     _ expression: some Sendable & AsyncSequence<some Event, Failure>
   ) -> some Sendable & AsyncSequence<any Event, Failure> {
     expression.map { $0 as any Event }
