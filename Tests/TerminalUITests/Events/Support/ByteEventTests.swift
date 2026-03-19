@@ -143,7 +143,8 @@ struct ByteEventTests {
       self.byte = byte
     }
     init(parser: inout Parser<[Byte]>) throws {
-      guard let byte = parser.advance(), byte < 0x44 else { throw Failure() }
+      let byte = try parser.advance()
+      guard byte < 0x44 else { throw Failure() }
       self.byte = byte
     }
   }
@@ -154,7 +155,7 @@ struct ByteEventTests {
       self.byte = byte
     }
     init(parser: inout Parser<[Byte]>) throws {
-      guard let byte = parser.advance() else { throw Failure() }
+      let byte = try parser.advance()
       self.byte = byte
     }
   }
@@ -165,7 +166,8 @@ struct ByteEventTests {
       self.byte = byte
     }
     init(parser: inout Parser<[Byte]>) throws {
-      guard let byte = parser.advance(), byte > 0x46 else { throw Failure() }
+      let byte = try parser.advance()
+      guard byte > 0x46 else { throw Failure() }
       self.byte = byte
     }
   }

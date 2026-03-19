@@ -35,9 +35,7 @@ extension AsyncSequence where Self: Sendable, Element == [Byte] {
 
         // If the byte can't be parsed, add it to
         // events and try from the following byte.
-        if let byte = parser.advance() {
-          events.append(byte)
-        }
+        events.append(try! parser.advance())
       }
 
       return events.async

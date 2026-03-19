@@ -248,14 +248,13 @@ extension CSI: ByteEvent {
 
 extension CSI.Introducer {
 
-  struct Missing: Error {}
   struct Invalid: Error, CustomStringConvertible {
     let bytes: [Byte]
     var description: String { "Invalid CSI.Introducer: \(bytes)" }
   }
   fileprivate init(_ bytes: inout Parser<[Byte]>) throws {
 
-    guard let first = bytes.advance() else { throw Missing() }
+    let first = try bytes.advance()
 
     if [first] == CSI.Introducer.compact.rawValue {
       self = .compact
@@ -266,7 +265,7 @@ extension CSI.Introducer {
       throw Invalid(bytes: [first])
     }
 
-    guard let second = bytes.advance() else { throw Missing() }
+    let second = try bytes.advance()
     guard second == CSI.Introducer.escape.rawValue.last else {
       throw Invalid(bytes: [first, second])
     }
@@ -281,7 +280,7 @@ extension CSI.Marker {
     guard let byte = bytes.peek() else { return nil }
     guard let marker = try? CSI.Marker(byte: byte) else { return nil }
     self = marker
-    bytes.advance()
+    try! bytes.advance()
   }
 }
 
@@ -296,10 +295,10 @@ extension CSI.Parameters {
 
       switch byte {
       case (0x30...0x39):
-        bytes.advance()
+        try! bytes.advance()
         value = (value ?? 0) * 10 + Int(byte.rawValue - 0x30)
       case 0x3B:
-        bytes.advance()
+        try! bytes.advance()
         parameters.append(CSI.Parameter(value ?? 0))
         value = 0
       default:
@@ -321,16 +320,15 @@ extension CSI.Intermediates {
     var intermediates: [CSI.Intermediate] = []
     while let byte = bytes.peek(), let intermediate = try? CSI.Intermediate(byte: byte) {
       intermediates.append(intermediate)
-      bytes.advance()
+      try! bytes.advance()
     }
     self.init(intermediates)
   }
 }
 
 extension CSI.Command {
-  struct Missing: Error {}
   fileprivate init(_ bytes: inout Parser<[Byte]>) throws {
-    guard let byte = bytes.advance() else { throw Missing() }
+    let byte = try bytes.advance()
     try self.init(byte: byte)
   }
 }
