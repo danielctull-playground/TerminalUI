@@ -284,7 +284,7 @@ struct CSITests {
       CSI(marker: "?", parameters: [1, 2], intermediates: "#", command: "a"),
     ])
     func roundTrip(original: CSI) throws {
-      var parser = Parser(original.description.utf8.map(Byte.init(_:)))
+      var parser = Parser(String(original).utf8.map(Byte.init(_:)))
       #expect(try CSI(parser: &parser) == original)
       #expect(parser.isFinished)
     }

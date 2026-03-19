@@ -26,20 +26,7 @@ struct CSI: Equatable, Hashable, Sendable {
 extension CSI: CustomStringConvertible {
 
   var description: String {
-
-    var description = ""
-
-    description.append(introducer.description)
-
-    if let marker = marker {
-      description.append(marker.description)
-    }
-
-    description.append(parameters.description)
-    description.append(intermediates.description)
-    description.append(command.description)
-
-    return description
+    "CSI \(String(self))"
   }
 }
 
@@ -353,7 +340,27 @@ extension CSI.Command {
 extension TextOutputStream {
 
   mutating func write(_ csi: CSI) {
-    write(csi.description)
+    write(String(csi))
+  }
+}
+
+extension String {
+
+  init(_ csi: CSI) {
+
+    var string = ""
+
+    string.append(csi.introducer.description)
+
+    if let marker = csi.marker {
+      string.append(marker.description)
+    }
+
+    string.append(csi.parameters.description)
+    string.append(csi.intermediates.description)
+    string.append(csi.command.description)
+
+    self = string
   }
 }
 
