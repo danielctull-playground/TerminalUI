@@ -250,21 +250,12 @@ extension CSI.Command: ExpressibleByUnicodeScalarLiteral {
 
 extension CSI: ByteEvent {
 
-  init(_ string: String) throws {
-    try self.init(parsing: string.utf8.map(Byte.init(_:)))
-  }
-
-  init(parsing bytes: [Byte]) throws {
-
-    var bytes = Parser(bytes)
-
-    introducer = try Introducer(&bytes)
-    marker = Marker(&bytes)
-    parameters = try Parameters(&bytes)
-    intermediates = try Intermediates(&bytes)
-    command = try Command(&bytes)
-
-    try checkTrailingBytes(bytes.remaining)
+  init(parser: inout Parser<[Byte]>) throws {
+    introducer = try Introducer(&parser)
+    marker = Marker(&parser)
+    parameters = try Parameters(&parser)
+    intermediates = try Intermediates(&parser)
+    command = try Command(&parser)
   }
 }
 

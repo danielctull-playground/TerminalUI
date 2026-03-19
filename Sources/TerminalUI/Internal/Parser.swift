@@ -2,11 +2,15 @@
 struct Parser<Collection: RandomAccessCollection> {
 
   private let collection: Collection
-  private var index: Collection.Index
+  var index: Collection.Index
 
   init(_ collection: Collection) {
     self.collection = collection
     self.index = collection.startIndex
+  }
+
+  var isFinished: Bool {
+    index == collection.endIndex
   }
 
   func peek() -> Collection.Element? {

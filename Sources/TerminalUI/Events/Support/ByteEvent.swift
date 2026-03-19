@@ -1,20 +1,6 @@
 
 protocol ByteEvent: Event {
-  init(parsing: [Byte]) throws
-}
-
-extension ByteEvent {
-
-  func checkTrailingBytes(_ bytes: Optional<some Collection<Byte>>) throws {
-    if let bytes, !bytes.isEmpty {
-      throw TrailingBytes(event: self, bytes: Array(bytes))
-    }
-  }
-}
-
-struct TrailingBytes: Error {
-  let event: any ByteEvent
-  let bytes: [Byte]
+  init(parser: inout Parser<[Byte]>) throws
 }
 
 // MARK: - Standard Input Parsing
@@ -27,28 +13,31 @@ extension AsyncSequence where Element == [Byte] {
 
     flatMap { bytes in
 
-      var bytes = bytes
+      var parser = Parser(bytes)
       var events: [any Event] = []
 
-      parse: while !bytes.isEmpty {
-
+      parse: while !parser.isFinished {
         for type in repeat (each type) {
-          do {
-            events.append(try type.init(parsing: bytes))
-            bytes.removeAll()
 
-          } catch let trailing as TrailingBytes {
-            events.append(trailing.event)
-            bytes = trailing.bytes
+          // Note the current index to allow the parser to be
+          // reset if parsing the current event type fails.
+          let index = parser.index
+
+          do {
+            let event = try type.init(parser: &parser)
+            events.append(event)
             continue parse
 
           } catch {
-            continue
+            parser.index = index
           }
         }
 
-        events.append(contentsOf: bytes)
-        bytes.removeAll()
+        // If the byte can't be parsed, add it to
+        // events and try from the following byte.
+        if let byte = parser.advance() {
+          events.append(byte)
+        }
       }
 
       return events.async
