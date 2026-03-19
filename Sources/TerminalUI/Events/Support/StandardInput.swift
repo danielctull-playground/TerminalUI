@@ -10,11 +10,11 @@ import Musl
 #endif
 
 struct StandardInput: AsyncSequence, Sendable {
-
-  func makeAsyncIterator() -> AsyncMapSequence<AsyncStream<UInt>, [Byte]>.Iterator {
+  func makeAsyncIterator() -> AsyncMapSequence<AsyncStream<Void>, [Byte]>.Iterator {
     AsyncStream(DispatchSource.makeReadSource(fileDescriptor: STDIN_FILENO))
-      .map { count in
-        var buffer: [UInt8] = Array(repeating: 0, count: Int(count))
+      .map {
+        let size = 64
+        var buffer: [UInt8] = Array(repeating: 0, count: size)
         let readCount = read(STDIN_FILENO, &buffer, buffer.count)
         return buffer
           .prefix(readCount)

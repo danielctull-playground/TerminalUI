@@ -21,10 +21,10 @@ extension WindowChange {
 
   static var sequence: some Sendable & AsyncSequence<WindowChange, Never> {
     chain(
-      CollectionOfOne(0).async, // Send initial window size
+      CollectionOfOne(()).async, // Send initial window size
       AsyncStream(DispatchSource.makeSignalSource(signal: SIGWINCH))
     )
-    .map { _ in
+    .map {
       var winsize = winsize()
       let result = ioctl(STDOUT_FILENO, UInt(TIOCGWINSZ), &winsize)
       guard result == EXIT_SUCCESS else { fatalError() }
