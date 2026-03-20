@@ -17,14 +17,14 @@ struct StandardInput: AsyncSequence, Sendable {
         var bytes: [Byte] = []
 
         let size = 64
-        var buffer: [UInt8] = Array(repeating: 0, count: size)
+        var buffer: [Byte] = Array(repeating: 0, count: size)
         var count: Int
 
         // Repeat if we fill up the buffer, to read all available byes.
         repeat {
           count = read(STDIN_FILENO, &buffer, size)
           guard count > 0 else { break }
-          bytes.append(contentsOf: buffer.prefix(count).map(Byte.init(_:)))
+          bytes.append(contentsOf: buffer.prefix(count))
         } while count == size
 
         return bytes
