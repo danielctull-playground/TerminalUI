@@ -19,14 +19,17 @@ extension WindowChange: Event {
 
 extension WindowChange {
 
-  static var sequence: some Sendable & AsyncSequence<WindowChange, Never> {
+  static func sequence(
+    fileHandle: FileHandle = .standardOutput
+  ) -> some Sendable & AsyncSequence<WindowChange, Never> {
+
     chain(
       CollectionOfOne(()).async, // Send initial window size
       AsyncStream(DispatchSource.makeSignalSource(signal: SIGWINCH))
     )
     .map {
       var winsize = winsize()
-      let result = ioctl(STDOUT_FILENO, UInt(TIOCGWINSZ), &winsize)
+      let result = ioctl(fileHandle.fileDescriptor, UInt(TIOCGWINSZ), &winsize)
       guard result == EXIT_SUCCESS else { fatalError() }
       let size = Size(width: Int(winsize.ws_col), height: Int(winsize.ws_row))
       return WindowChange(size: size)
