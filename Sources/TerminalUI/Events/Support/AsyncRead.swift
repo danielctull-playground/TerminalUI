@@ -1,5 +1,6 @@
 import AsyncAlgorithms
 @preconcurrency import Dispatch
+import Foundation
 
 #if canImport(Darwin)
 import Darwin
@@ -9,11 +10,14 @@ import Glibc
 import Musl
 #endif
 
-struct StandardInput: AsyncSequence, Sendable {
+struct AsyncRead: AsyncSequence, Sendable {
+
+  let fileHandle: FileHandle
+
   func makeAsyncIterator() -> AsyncStream<[Byte]>.Iterator {
     AsyncStream<[Byte]> { continuation in
 
-      let source = DispatchSource.makeReadSource(fileDescriptor: STDIN_FILENO)
+      let source = DispatchSource.makeReadSource(fileDescriptor: fileHandle.fileDescriptor)
 
       source.setEventHandler {
 
@@ -25,7 +29,7 @@ struct StandardInput: AsyncSequence, Sendable {
 
         // Repeat if we fill up the buffer, to read all available byes.
         repeat {
-          count = read(STDIN_FILENO, &buffer, size)
+          count = read(fileHandle.fileDescriptor, &buffer, size)
           guard count > 0 else { break }
           bytes.append(contentsOf: buffer.prefix(count))
         } while count == size

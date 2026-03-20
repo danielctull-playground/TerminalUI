@@ -65,7 +65,7 @@ extension App {
 
       WindowChange.sequence
 
-      StandardInput()
+      AsyncRead(fileHandle: .standardInput)
         .parsing(Exit.self, CSI.self)
     }
 
