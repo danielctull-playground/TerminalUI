@@ -24,7 +24,7 @@ extension WindowChange {
       CollectionOfOne(()).async, // Send initial window size
       AsyncStream(DispatchSource.makeSignalSource(signal: SIGWINCH))
     )
-    .map { _ in
+    .map {
       var winsize = winsize()
       let result = ioctl(STDOUT_FILENO, UInt(TIOCGWINSZ), &winsize)
       guard result == EXIT_SUCCESS else { fatalError() }

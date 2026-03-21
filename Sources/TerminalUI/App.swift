@@ -51,6 +51,7 @@ extension App {
   public static func main() async {
 
     let app = Self()
+    let rawMode = RawMode()
 
     let logger = Logger(label: "Event", factory: app.logHandler)
 
@@ -61,13 +62,21 @@ extension App {
 
     @EventStream
     var events: some AsyncSequence<any Event, Never> {
+
       WindowChange.sequence
-      Exit.sequence
+
+      AsyncRead(fileHandle: .standardInput)
+        .parsing(Exit.self, CSI.self)
     }
 
     for await event in events {
       logger.info("\(event)")
+
+      if event is Exit { break }
+
       renderer.render(event: event)
     }
+
+    _ = consume rawMode
   }
 }

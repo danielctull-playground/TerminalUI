@@ -26,20 +26,7 @@ struct CSI: Equatable, Hashable, Sendable {
 extension CSI: CustomStringConvertible {
 
   var description: String {
-
-    var description = ""
-
-    description.append(introducer.description)
-
-    if let marker = marker {
-      description.append(marker.description)
-    }
-
-    description.append(parameters.description)
-    description.append(intermediates.description)
-    description.append(command.description)
-
-    return description
+    "CSI \(String(self))"
   }
 }
 
@@ -248,43 +235,26 @@ extension CSI.Command: ExpressibleByUnicodeScalarLiteral {
 
 // MARK: - Parsing
 
-extension CSI {
+extension CSI: ByteEvent {
 
-  struct TrailingBytes: Error {
-    let csi: CSI
-    let remainder: ArraySlice<Byte>
-  }
-
-  init(_ string: String) throws {
-    try self.init(string.utf8.map(Byte.init(_:)))
-  }
-
-  init(_ bytes: [Byte]) throws {
-
-    var bytes = Parser(bytes)
-
-    introducer = try Introducer(&bytes)
-    marker = Marker(&bytes)
-    parameters = try Parameters(&bytes)
-    intermediates = try Intermediates(&bytes)
-    command = try Command(&bytes)
-
-    if let remainder = bytes.remaining {
-      throw TrailingBytes(csi: self, remainder: remainder)
-    }
+  init(parser: inout Parser<[Byte]>) throws {
+    introducer = try Introducer(&parser)
+    marker = Marker(&parser)
+    parameters = try Parameters(&parser)
+    intermediates = try Intermediates(&parser)
+    command = try Command(&parser)
   }
 }
 
 extension CSI.Introducer {
 
-  struct Missing: Error {}
   struct Invalid: Error, CustomStringConvertible {
     let bytes: [Byte]
     var description: String { "Invalid CSI.Introducer: \(bytes)" }
   }
   fileprivate init(_ bytes: inout Parser<[Byte]>) throws {
 
-    guard let first = bytes.advance() else { throw Missing() }
+    let first = try bytes.advance()
 
     if [first] == CSI.Introducer.compact.rawValue {
       self = .compact
@@ -295,7 +265,7 @@ extension CSI.Introducer {
       throw Invalid(bytes: [first])
     }
 
-    guard let second = bytes.advance() else { throw Missing() }
+    let second = try bytes.advance()
     guard second == CSI.Introducer.escape.rawValue.last else {
       throw Invalid(bytes: [first, second])
     }
@@ -310,7 +280,7 @@ extension CSI.Marker {
     guard let byte = bytes.peek() else { return nil }
     guard let marker = try? CSI.Marker(byte: byte) else { return nil }
     self = marker
-    bytes.advance()
+    try! bytes.advance()
   }
 }
 
@@ -325,10 +295,10 @@ extension CSI.Parameters {
 
       switch byte {
       case (0x30...0x39):
-        bytes.advance()
+        try! bytes.advance()
         value = (value ?? 0) * 10 + Int(byte.rawValue - 0x30)
       case 0x3B:
-        bytes.advance()
+        try! bytes.advance()
         parameters.append(CSI.Parameter(value ?? 0))
         value = 0
       default:
@@ -350,16 +320,15 @@ extension CSI.Intermediates {
     var intermediates: [CSI.Intermediate] = []
     while let byte = bytes.peek(), let intermediate = try? CSI.Intermediate(byte: byte) {
       intermediates.append(intermediate)
-      bytes.advance()
+      try! bytes.advance()
     }
     self.init(intermediates)
   }
 }
 
 extension CSI.Command {
-  struct Missing: Error {}
   fileprivate init(_ bytes: inout Parser<[Byte]>) throws {
-    guard let byte = bytes.advance() else { throw Missing() }
+    let byte = try bytes.advance()
     try self.init(byte: byte)
   }
 }
@@ -369,7 +338,27 @@ extension CSI.Command {
 extension TextOutputStream {
 
   mutating func write(_ csi: CSI) {
-    write(csi.description)
+    write(String(csi))
+  }
+}
+
+extension String {
+
+  init(_ csi: CSI) {
+
+    var string = ""
+
+    string.append(csi.introducer.description)
+
+    if let marker = csi.marker {
+      string.append(marker.description)
+    }
+
+    string.append(csi.parameters.description)
+    string.append(csi.intermediates.description)
+    string.append(csi.command.description)
+
+    self = string
   }
 }
 

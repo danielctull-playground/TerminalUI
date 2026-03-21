@@ -73,6 +73,7 @@ let package = Package(
         "TerminalUI",
         "TerminalUIMacros",
         "TerminalUITesting",
+        .product(name: "AsyncAlgorithms", package: "swift-async-algorithms"),
         .product(name: "SwiftDiagnostics", package: "swift-syntax"),
         .product(name: "SwiftSyntaxMacros", package: "swift-syntax"),
         .product(name: "SwiftSyntaxMacrosTestSupport", package: "swift-syntax"),

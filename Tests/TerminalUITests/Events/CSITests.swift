@@ -255,15 +255,21 @@ struct CSITests {
       ("\u{1b}[?1;2#a", CSI(marker: "?", parameters: [1, 2], intermediates: "#", command: "a")),
     ])
     func parsing(input: String, expected: CSI) throws {
-      #expect(try CSI(input) == expected)
+      var parser = Parser(input.utf8.map(Byte.init(_:)))
+      #expect(try CSI(parser: &parser) == expected)
+      #expect(parser.isFinished)
     }
 
     @Test func `introducer: escape`() throws {
-      #expect(try CSI([0x1B, 0x5B, 0x41]) == CSI(introducer: .escape, command: "A"))
+      var parser = Parser([0x1B, 0x5B, 0x41] as [Byte])
+      #expect(try CSI(parser: &parser) == CSI(introducer: .escape, command: "A"))
+      #expect(parser.isFinished)
     }
 
     @Test func `introducer: compact`() throws {
-      #expect(try CSI([0x9B, 0x41]) == CSI(introducer: .compact, command: "A"))
+      var parser = Parser([0x9B, 0x41] as [Byte])
+      #expect(try CSI(parser: &parser) == CSI(introducer: .compact, command: "A"))
+      #expect(parser.isFinished)
     }
 
     @Test(arguments: [
@@ -278,20 +284,22 @@ struct CSITests {
       CSI(marker: "?", parameters: [1, 2], intermediates: "#", command: "a"),
     ])
     func roundTrip(original: CSI) throws {
-      #expect(try CSI(original.description) == original)
+      var parser = Parser(String(original).utf8.map(Byte.init(_:)))
+      #expect(try CSI(parser: &parser) == original)
+      #expect(parser.isFinished)
     }
 
     @Suite("Errors")
     struct Errors {
 
       @Test func empty() {
-        #expect(throws: CSI.Introducer.Missing.self) {
+        #expect(throws: OutOfBounds.self) {
           try CSI("")
         }
       }
 
       @Test func `introducer: no escape`() {
-        #expect(throws: CSI.Introducer.Missing.self) {
+        #expect(throws: OutOfBounds.self) {
           try CSI("\u{1b}")
         }
       }
@@ -311,25 +319,25 @@ struct CSITests {
       }
 
       @Test func `introducer only`() {
-        #expect(throws: CSI.Command.Missing.self) {
+        #expect(throws: OutOfBounds.self) {
           try CSI("\u{1b}[")
         }
       }
 
       @Test func `introducer + marker`() {
-        #expect(throws: CSI.Command.Missing.self) {
+        #expect(throws: OutOfBounds.self) {
           try CSI("\u{1b}[?")
         }
       }
 
       @Test func `introducer + parameter`() {
-        #expect(throws: CSI.Command.Missing.self) {
+        #expect(throws: OutOfBounds.self) {
           try CSI("\u{1b}[1")
         }
       }
 
       @Test func `introducer + parameters`() {
-        #expect(throws: CSI.Command.Missing.self) {
+        #expect(throws: OutOfBounds.self) {
           try CSI("\u{1b}[1;2")
         }
       }
@@ -343,12 +351,10 @@ struct CSITests {
       }
 
       @Test func `trailing bytes`() throws {
-        let error = try #require(throws: CSI.TrailingBytes.self) {
-          try CSI("\u{1b}[aX")
-
-        }
-        #expect(error.csi == CSI(command: "a"))
-        #expect(error.remainder == [Byte(UInt8(ascii: "X"))])
+        var parser = Parser("\u{1b}[aX".utf8.map(Byte.init(_:)))
+        #expect(try CSI(parser: &parser) == CSI(command: "a"))
+        #expect(!parser.isFinished)
+        #expect(parser.remaining == [Byte(UInt8(ascii: "X"))])
       }
     }
   }

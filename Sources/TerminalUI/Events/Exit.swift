@@ -6,12 +6,14 @@ import Darwin
 import Glibc
 #endif
 
-struct Exit: Event {}
-
-extension Exit {
-
-  static var sequence: some Sendable & AsyncSequence<Exit, Never> {
-    AsyncStream(DispatchSource.makeSignalSource(signal: SIGINT))
-      .map(Exit.init)
+struct Exit: ByteEvent {
+  struct Invalid: Error {}
+  init(parser: inout Parser<[Byte]>) throws {
+    let byte = try parser.advance()
+    guard byte == 0x03 else { throw Invalid() }
   }
+}
+
+extension Exit: CustomStringConvertible {
+  var description: String { "Exit" }
 }
