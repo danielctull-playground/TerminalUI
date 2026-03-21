@@ -1,5 +1,5 @@
 import AsyncAlgorithms
-import Dispatch
+@preconcurrency import Dispatch
 import Foundation
 
 extension EnvironmentValues {
@@ -19,17 +19,38 @@ extension WindowChange: Event {
 
 extension WindowChange {
 
-  static var sequence: some Sendable & AsyncSequence<WindowChange, Never> {
-    chain(
-      CollectionOfOne(()).async, // Send initial window size
-      AsyncStream(DispatchSource.makeSignalSource(signal: SIGWINCH))
-    )
-    .map {
+  static func sequence(
+    fileHandle: FileHandle = .standardOutput
+  ) -> some Sendable & AsyncSequence<WindowChange, Never> {
+
+    var current: WindowChange {
       var winsize = winsize()
-      let result = ioctl(STDOUT_FILENO, UInt(TIOCGWINSZ), &winsize)
+      let result = ioctl(fileHandle.fileDescriptor, UInt(TIOCGWINSZ), &winsize)
       guard result == EXIT_SUCCESS else { fatalError() }
       let size = Size(width: Int(winsize.ws_col), height: Int(winsize.ws_row))
       return WindowChange(size: size)
+    }
+
+    return AsyncStream { continuation in
+
+      let source = DispatchSource.makeSignalSource(signal: SIGWINCH)
+
+      source.setEventHandler {
+        continuation.yield(current)
+      }
+
+      source.setCancelHandler {
+        continuation.finish()
+      }
+
+      continuation.onTermination = { _ in
+        source.cancel()
+      }
+
+      // Send initial window size.
+      continuation.yield(current)
+
+      source.resume()
     }
     .removeDuplicates()
   }

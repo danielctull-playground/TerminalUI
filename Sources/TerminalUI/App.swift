@@ -63,7 +63,7 @@ extension App {
     @EventStream
     var events: some AsyncSequence<any Event, Never> {
 
-      WindowChange.sequence
+      WindowChange.sequence()
 
       AsyncRead(fileHandle: .standardInput)
         .parsing(Exit.self, CSI.self)
