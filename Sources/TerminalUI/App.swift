@@ -67,6 +67,7 @@ extension App {
 
       AsyncRead(fileHandle: .standardInput)
         .byteEvents(Exit.self, CSI.self)
+        .csiEvents(Mode.Report.self)
     }
 
     for await event in events {
