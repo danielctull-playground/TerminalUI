@@ -7,7 +7,7 @@ protocol ByteEvent: Event {
 
 extension AsyncSequence where Self: Sendable, Element == [Byte] {
 
-  func parsing<each E: ByteEvent>(
+  func byteEvents<each E: ByteEvent>(
     _ type: repeat (each E).Type
   ) -> some Sendable & AsyncSequence<any Event, Failure> {
 

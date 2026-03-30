@@ -4,5 +4,5 @@ package protocol Event: Sendable {
 }
 
 extension Event {
-  func updateEnvironment(_ environment: inout EnvironmentValues) {}
+  package func updateEnvironment(_ environment: inout EnvironmentValues) {}
 }
