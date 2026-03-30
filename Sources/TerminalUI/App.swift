@@ -66,7 +66,7 @@ extension App {
       WindowChange.sequence()
 
       AsyncRead(fileHandle: .standardInput)
-        .parsing(Exit.self, CSI.self)
+        .byteEvents(Exit.self, CSI.self)
     }
 
     for await event in events {

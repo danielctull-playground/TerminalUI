@@ -9,7 +9,7 @@ struct ByteEventTests {
 
     var iterator = ([[0x41, 0x42], [0x43], [0x44, 0x45]] as [[Byte]])
       .async
-      .parsing()
+      .byteEvents()
       .makeAsyncIterator()
 
     #expect(try await iterator.next() as? Byte == 0x41)
@@ -29,7 +29,7 @@ struct ByteEventTests {
 
     var iterator = ([[0x41], [0x42], [0x43], [0x44], [0x45]] as [[Byte]])
       .async
-      .parsing(Foo.self)
+      .byteEvents(Foo.self)
       .makeAsyncIterator()
 
     #expect(try await iterator.next() as? Byte == 0x41)
@@ -43,7 +43,7 @@ struct ByteEventTests {
 
     var iterator = ([[0x41], [0x42], [0x43]] as [[Byte]])
       .async
-      .parsing(Unbound.self)
+      .byteEvents(Unbound.self)
       .makeAsyncIterator()
 
     #expect(try await iterator.next() as? Unbound == Unbound(0x41))
@@ -55,7 +55,7 @@ struct ByteEventTests {
 
     var iterator = ([[0x41, 0x42], [0x43, 0x44, 0x45, 0x46]] as [[Byte]])
       .async
-      .parsing(Unbound.self)
+      .byteEvents(Unbound.self)
       .makeAsyncIterator()
 
     #expect(try await iterator.next() as? Unbound == Unbound(0x41))
@@ -69,7 +69,7 @@ struct ByteEventTests {
   @Test func `failed parsing results in bytes`() async throws {
 
     var iterator = ([[0x41], [0x44], [0x42], [0x45], [0x43], [0x46]] as [[Byte]]).async
-      .parsing(Small.self)
+      .byteEvents(Small.self)
       .makeAsyncIterator()
 
     #expect(try await iterator.next() as? Small == Small(0x41))
@@ -84,7 +84,7 @@ struct ByteEventTests {
 
     var iterator = ([[0x41, 0x44], [0x47, 0x42, 0x45, 0x48], [0x43], [0x46, 0x49]] as [[Byte]])
       .async
-      .parsing(Small.self, Large.self, Unbound.self)
+      .byteEvents(Small.self, Large.self, Unbound.self)
       .makeAsyncIterator()
 
     #expect(try await iterator.next() as? Small == Small(0x41))
@@ -102,7 +102,7 @@ struct ByteEventTests {
 
     var iterator = ([[0x41, 0x44, 0x47, 0x42, 0x45, 0x48, 0x43, 0x46, 0x49]] as [[Byte]])
       .async
-      .parsing(Small.self, Large.self)
+      .byteEvents(Small.self, Large.self)
       .makeAsyncIterator()
 
     #expect(try await iterator.next() as? Small == Small(0x41))
@@ -120,7 +120,7 @@ struct ByteEventTests {
 
     var iterator = ([[0x41], [0x42], [0x43], [0x44], [0x45], [0x46], [0x47], [0x48], [0x49]] as [[Byte]])
       .async
-      .parsing(Unbound.self, Small.self, Large.self)
+      .byteEvents(Unbound.self, Small.self, Large.self)
       .makeAsyncIterator()
 
     #expect(try await iterator.next() as? Unbound == Unbound(0x41))

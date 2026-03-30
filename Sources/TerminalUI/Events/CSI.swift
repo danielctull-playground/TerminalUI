@@ -2,11 +2,11 @@
 /// Control Sequence Introducer
 struct CSI: Equatable, Hashable, Sendable {
 
-  fileprivate let introducer: Introducer
-  fileprivate let marker: Marker?
-  fileprivate let parameters: Parameters
-  fileprivate let intermediates: Intermediates
-  fileprivate let command: Command
+  let introducer: Introducer
+  let marker: Marker?
+  let parameters: Parameters
+  let intermediates: Intermediates
+  let command: Command
 
   init(
     introducer: Introducer = .escape,
