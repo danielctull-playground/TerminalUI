@@ -147,4 +147,15 @@ struct GraphTests {
     #expect(graph[label] == "not positive")
     #expect(computes == 2)
   }
+
+  @Test func `map transforms one attribute into another`() {
+
+    let graph = Graph()
+    let a = graph.input(2)
+    let b = graph.map(a) { $0 * 2 }
+    #expect(graph[b] == 4)
+
+    graph.setValue(of: a, to: 5)
+    #expect(graph[b] == 10)
+  }
 }

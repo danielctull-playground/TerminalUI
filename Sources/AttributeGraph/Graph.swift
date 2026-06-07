@@ -32,6 +32,15 @@ extension Graph {
     attribute(Rule(compute: update))
   }
 
+  /// Adds an attribute whose value is transformed from the value of the given
+  /// input attribute.
+  package func map<Input, Output>(
+    _ input: Attribute<Input>,
+    _ transform: @escaping (Input) -> Output
+  ) -> Attribute<Output> {
+    attribute(Map(input: input, transform: transform))
+  }
+
   /// Adds a source attribute whose value can be changed later with
   /// ``setValue(of:to:)``.
   package func input<Value>(_ value: Value) -> Attribute<Value> {
