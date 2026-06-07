@@ -15,13 +15,30 @@ extension Graph {
   /// - Parameter value: The value to insert.
   /// - Returns: The attribute handle to use for future access.
   package func constant<Value>(_ value: Value) -> Attribute<Value> {
+    rule { _ in value }
+  }
+
+  /// Adds an attribute whose value is computed from other attributes.
+  package func rule<Value>(
+    _ update: @escaping (Graph) -> Value
+  ) -> Attribute<Value> {
     let id = nodes.count
-    nodes.append(Node(value: value))
+    nodes.append(Node(value: nil, update: update))
     return Attribute(id: AttributeID(rawValue: id))
   }
 
   /// Reads the value of an attribute.
   package subscript<Value>(attribute: Attribute<Value>) -> Value {
-    nodes[attribute.id.rawValue].value as! Value
+
+    let index = attribute.id.rawValue
+
+    if let cached = nodes[index].value {
+      return cached as! Value
+    }
+
+    let update = nodes[index].update
+    let computed = update(self)
+    nodes[index].value = computed
+    return computed as! Value
   }
 }
