@@ -11,21 +11,25 @@ package final class Graph {
 
 extension Graph {
 
+  func attribute<Body: AttributeBody>(_ body: Body) -> Attribute<Body.Value> {
+    let index = nodes.count
+    nodes.append(Node(value: nil, update: body.update))
+    return Attribute(id: AttributeID(rawValue: index))
+  }
+
   /// Adds an attribute whose value never changes.
   ///
   /// - Parameter value: The value to insert.
   /// - Returns: The attribute handle to use for future access.
   package func constant<Value>(_ value: Value) -> Attribute<Value> {
-    rule { _ in value }
+    attribute(Constant(value: value))
   }
 
   /// Adds an attribute whose value is computed from other attributes.
   package func rule<Value>(
     _ update: @escaping (Graph) -> Value
   ) -> Attribute<Value> {
-    let id = nodes.count
-    nodes.append(Node(value: nil, update: update))
-    return Attribute(id: AttributeID(rawValue: id))
+    attribute(Rule(compute: update))
   }
 
   /// Adds a source attribute whose value can be changed later with
