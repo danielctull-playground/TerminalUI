@@ -39,51 +39,67 @@ extension Graph {
 
   /// Changes the value of an input, invalidating every attribute computed from
   /// it.
-  package func setValue<Value: Equatable>(
+  package func setValue<Value>(
     of attribute: Attribute<Value>,
     to newValue: Value
   ) {
 
     if
       let oldValue = nodes[attribute.id.rawValue].value as? Value,
-      oldValue == newValue
+      isEqual(oldValue, newValue)
     {
       return
     }
 
     nodes[attribute.id.rawValue].value = newValue
-    invalidateDependents(of: attribute.id)
+    markAsDirty(dependentsOf: attribute.id)
   }
 
-  /// Recursively invalidates the dependencies of the given attribute.
-  private func invalidateDependents(of id: AttributeID) {
-    for dependent in nodes[id.rawValue].outputs where nodes[dependent.rawValue].value != nil {
-      nodes[dependent.rawValue].value = nil
-      invalidateDependents(of: dependent)
+  /// Recursively marks dependencies of the given attribute as dirty.
+  private func markAsDirty(dependentsOf id: AttributeID) {
+    for dependent in nodes[id.rawValue].outputs where !nodes[dependent.rawValue].isDirty {
+      nodes[dependent.rawValue].isDirty = true
+      markAsDirty(dependentsOf: dependent)
     }
   }
 
   /// Reads the value of an attribute.
   package subscript<Value>(attribute: Attribute<Value>) -> Value {
 
-    let index = attribute.id.rawValue
+    let value = evaluate(attribute.id)
 
-    // Whoever is updating right now depends on this attribute.
     if let dependent = currentNode {
-      nodes[index].outputs.insert(dependent)
+      nodes[attribute.id.rawValue].outputs.insert(dependent)
+      nodes[dependent.rawValue].inputs.append(Input(id: attribute.id, value: value))
     }
 
-    if let cached = nodes[index].value {
-      return cached as! Value
+    return value as! Value
+  }
+
+  private func evaluate(_ id: AttributeID) -> Any {
+
+    if !nodes[id.rawValue].isDirty, let cached = nodes[id.rawValue].value {
+      return cached
     }
 
-    let update = nodes[index].update
+    var anyInputChanged = nodes[id.rawValue].value == nil
+    for edge in nodes[id.rawValue].inputs where !isEqual(evaluate(edge.id), edge.value) {
+      anyInputChanged = true
+    }
+    nodes[id.rawValue].isDirty = false
+
+    guard anyInputChanged else {
+      return nodes[id.rawValue].value!
+    }
+
+    let update = nodes[id.rawValue].update
+    nodes[id.rawValue].inputs = []
     let previous = currentNode
-    currentNode = attribute.id
+    currentNode = id
     let value = update(self)
     currentNode = previous
 
-    nodes[index].value = value
-    return value as! Value
+    nodes[id.rawValue].value = value
+    return value
   }
 }

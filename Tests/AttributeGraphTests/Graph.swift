@@ -118,4 +118,33 @@ struct GraphTests {
     #expect(graph[b] == 14)
     #expect(count == 2)
   }
+
+  @Test func `an unchanged recomputation stops propagating to its dependents`() {
+
+    let graph = Graph()
+    let value = graph.input(5)
+    let isPositive = graph.rule { $0[value] > 0 }
+    var computes = 0
+    let label = graph.rule { graph in
+      computes += 1
+      return graph[isPositive] ? "positive" : "not positive"
+    }
+
+    #expect(graph[label] == "positive")
+    #expect(computes == 1)
+
+    // isPositive is reconsidered because value changes but because its value
+    // didn't change, label should not recompute.
+    graph.setValue(of: value, to: 10)
+    #expect(graph[label] == "positive")
+    #expect(computes == 1)
+
+    graph.setValue(of: value, to: -3)
+    #expect(graph[label] == "not positive")
+    #expect(computes == 2)
+
+    graph.setValue(of: value, to: -5)
+    #expect(graph[label] == "not positive")
+    #expect(computes == 2)
+  }
 }
