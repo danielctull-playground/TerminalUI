@@ -39,8 +39,19 @@ extension Graph {
 
   /// Changes the value of an input, invalidating every attribute computed from
   /// it.
-  package func setValue<Value>(of attribute: Attribute<Value>, to value: Value) {
-    nodes[attribute.id.rawValue].value = value
+  package func setValue<Value: Equatable>(
+    of attribute: Attribute<Value>,
+    to newValue: Value
+  ) {
+
+    if
+      let oldValue = nodes[attribute.id.rawValue].value as? Value,
+      oldValue == newValue
+    {
+      return
+    }
+
+    nodes[attribute.id.rawValue].value = newValue
     invalidateDependents(of: attribute.id)
   }
 

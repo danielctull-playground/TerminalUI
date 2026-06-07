@@ -93,4 +93,29 @@ struct GraphTests {
     #expect(graph[b] == 14)
     #expect(count == 2)
   }
+
+  @Test func `setting an input to an equal value invalidates nothing`() {
+
+    let graph = Graph()
+    let a = graph.input(5)
+
+    var count = 0
+    let b = graph.rule { graph in
+      count += 1
+      return graph[a] * 2
+    }
+
+    #expect(graph[b] == 10)
+    #expect(count == 1)
+
+    // Setting the same value changes nothing: no invalidation, no recompute.
+    graph.setValue(of: a, to: 5)
+    #expect(graph[b] == 10)
+    #expect(count == 1)
+
+    // A genuinely different value does invalidate and recompute.
+    graph.setValue(of: a, to: 7)
+    #expect(graph[b] == 14)
+    #expect(count == 2)
+  }
 }
