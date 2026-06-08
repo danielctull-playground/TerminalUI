@@ -33,4 +33,29 @@ struct SubgraphTests {
     #expect(graph.subgraph(of: value) == graph.root)
     #expect(graph.subgraph(of: value) != subgraph)
   }
+
+  @Test func `first subgraph is a child of the root subgraph`() {
+    let graph = Graph()
+    let child = graph.subgraph {}
+    #expect(graph.parent(of: child) == graph.root)
+    #expect(graph.children(of: graph.root) == [child])
+    #expect(graph.parent(of: graph.root) == nil)
+  }
+
+  @Test func `a subgraph is a child of the subgraph it is created within`() {
+
+    let graph = Graph()
+    var inner: Subgraph!
+    let outer = graph.subgraph {
+      inner = graph.subgraph {}
+    }
+
+    #expect(graph.parent(of: graph.root) == nil)
+    #expect(graph.parent(of: outer) == graph.root)
+    #expect(graph.parent(of: inner) == outer)
+
+    #expect(graph.children(of: graph.root) == [outer])
+    #expect(graph.children(of: outer) == [inner])
+    #expect(graph.children(of: inner) == [])
+  }
 }

@@ -9,3 +9,13 @@ struct SubgraphID: Hashable {
   /// The subgraph's number, unique within the graph.
   let rawValue: Int
 }
+
+/// Storage backing a ``Subgraph``.
+struct SubgraphNode {
+
+  /// The subgraph that contains this one.
+  let parent: SubgraphID?
+
+  /// Subgraphs created within this one, in the order they were created.
+  var children: [SubgraphID] = []
+}

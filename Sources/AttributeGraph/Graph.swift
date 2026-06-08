@@ -15,7 +15,11 @@ package final class Graph {
   /// The number to give the next subgraph created.
   private var nextSubgraphID = SubgraphID(rawValue: 1)
 
-  package init() {}
+  private var subgraphs: [SubgraphID: SubgraphNode]
+
+  package init() {
+    subgraphs = [root.id : SubgraphNode(parent: nil)]
+  }
 }
 
 // MARK: - Subgraphs
@@ -23,18 +27,32 @@ package final class Graph {
 extension Graph {
 
   package func subgraph(_ body: () -> Void) -> Subgraph {
+
     let id = nextSubgraphID
     nextSubgraphID = SubgraphID(rawValue: id.rawValue + 1)
-    let previous = currentSubgraph
+
+    let parent = currentSubgraph
+    subgraphs[id] = SubgraphNode(parent: parent)
+    subgraphs[parent]!.children.append(id)
+
     currentSubgraph = id
     body()
-    currentSubgraph = previous
+    currentSubgraph = parent
+
     return Subgraph(id: id)
   }
 
   /// The subgraph that owns an attribute.
   package func subgraph<Value>(of attribute: Attribute<Value>) -> Subgraph {
     Subgraph(id: nodes[attribute.id]!.subgraph)
+  }
+
+  package func parent(of subgraph: Subgraph) -> Subgraph? {
+    subgraphs[subgraph.id]!.parent.map(Subgraph.init)
+  }
+
+  package func children(of subgraph: Subgraph) -> [Subgraph] {
+    subgraphs[subgraph.id]!.children.map(Subgraph.init)
   }
 }
 
