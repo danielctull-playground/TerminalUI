@@ -48,17 +48,33 @@ struct GraphTests {
     #expect(count == 1)
   }
 
-  @Test func `an input reads back its value`() {
+  @Test func `an external has its value supplied from outside`() {
     let graph = Graph()
-    let a = graph.input(5)
-    #expect(graph[a] == 5)
+    let value = graph.external(of: String.self)
+
+    graph.setValue(of: value, to: "a")
+    #expect(graph[value] == "a")
+
+    graph.setValue(of: value, to: "b")
+    #expect(graph[value] == "b")
   }
 
-  @Test func `setting an input updates the attributes computed from it`() {
+  @Test func `an external must have its value set before access`() async {
+    await #expect(processExitsWith: .failure) {
+      let graph = Graph()
+      let value = graph.external(of: String.self)
+      _ = graph[value]
+    }
+  }
+
+  @Test func `setting an external updates the attributes computed from it`() {
     let graph = Graph()
-    let a = graph.input(5)
+    let a = graph.external(of: Int.self)
     let b = graph.rule { $0[a] * 2 }
+
+    graph.setValue(of: a, to: 5)
     #expect(graph[b] == 10)
+
     graph.setValue(of: a, to: 7)
     #expect(graph[b] == 14)
   }
@@ -66,13 +82,15 @@ struct GraphTests {
   @Test func `a computed attribute recomputes only after its input changes`() {
 
     let graph = Graph()
-    let a = graph.input(5)
+    let a = graph.external(of: Int.self)
 
     var count = 0
     let b = graph.rule { graph in
       count += 1
       return graph[a] * 2
     }
+
+    graph.setValue(of: a, to: 5)
 
     // Lazy before any read.
     #expect(count == 0)
@@ -97,13 +115,15 @@ struct GraphTests {
   @Test func `setting an input to an equal value invalidates nothing`() {
 
     let graph = Graph()
-    let a = graph.input(5)
+    let a = graph.external(of: Int.self)
 
     var count = 0
     let b = graph.rule { graph in
       count += 1
       return graph[a] * 2
     }
+
+    graph.setValue(of: a, to: 5)
 
     #expect(graph[b] == 10)
     #expect(count == 1)
@@ -122,13 +142,15 @@ struct GraphTests {
   @Test func `an unchanged recomputation stops propagating to its dependents`() {
 
     let graph = Graph()
-    let value = graph.input(5)
+    let value = graph.external(of: Int.self)
     let isPositive = graph.rule { $0[value] > 0 }
     var computes = 0
     let label = graph.rule { graph in
       computes += 1
       return graph[isPositive] ? "positive" : "not positive"
     }
+
+    graph.setValue(of: value, to: 5)
 
     #expect(graph[label] == "positive")
     #expect(computes == 1)
@@ -151,8 +173,10 @@ struct GraphTests {
   @Test func `map transforms one attribute into another`() {
 
     let graph = Graph()
-    let a = graph.input(2)
+    let a = graph.external(of: Int.self)
     let b = graph.map(a) { $0 * 2 }
+
+    graph.setValue(of: a, to: 2)
     #expect(graph[b] == 4)
 
     graph.setValue(of: a, to: 5)

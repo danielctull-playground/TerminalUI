@@ -40,14 +40,12 @@ extension Graph {
   ) -> Attribute<Output> {
     attribute(Map(input: input, transform: transform))
   }
-
-  /// Adds a source attribute whose value can be changed later with
-  /// ``setValue(of:to:)``.
-  package func input<Value>(_ value: Value) -> Attribute<Value> {
-
-    let index = nodes.count
-    nodes.append(Node(value: value, update: { _ in value }))
-    return Attribute(id: AttributeID(rawValue: index))
+  /// Adds a source attribute whose value is supplied from outside the graph.
+  ///
+  /// This attribute is created with no value, it must be given one with
+  /// ``setValue(of:to:)`` before it is read.
+  package func external<Value>(of type: Value.Type) -> Attribute<Value> {
+    attribute(External())
   }
 
   /// Changes the value of an input, invalidating every attribute computed from
