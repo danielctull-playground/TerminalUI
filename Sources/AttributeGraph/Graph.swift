@@ -5,7 +5,37 @@ package final class Graph {
   private var id = AttributeID(rawValue: 0)
   private var currentNode: AttributeID?
 
+  /// The subgraph that owns attributes created outside the scope of a specific
+  /// subgraph.
+  package let root = Subgraph(id: SubgraphID(rawValue: 0))
+
+  /// The subgraph new attributes are assigned to. Defaults to the root.
+  private var currentSubgraph = SubgraphID(rawValue: 0)
+
+  /// The number to give the next subgraph created.
+  private var nextSubgraphID = SubgraphID(rawValue: 1)
+
   package init() {}
+}
+
+// MARK: - Subgraphs
+
+extension Graph {
+
+  package func subgraph(_ body: () -> Void) -> Subgraph {
+    let id = nextSubgraphID
+    nextSubgraphID = SubgraphID(rawValue: id.rawValue + 1)
+    let previous = currentSubgraph
+    currentSubgraph = id
+    body()
+    currentSubgraph = previous
+    return Subgraph(id: id)
+  }
+
+  /// The subgraph that owns an attribute.
+  package func subgraph<Value>(of attribute: Attribute<Value>) -> Subgraph {
+    Subgraph(id: nodes[attribute.id]!.subgraph)
+  }
 }
 
 // MARK: - Attributes
@@ -14,7 +44,7 @@ extension Graph {
 
   func attribute<Body: AttributeBody>(_ body: Body) -> Attribute<Body.Value> {
     defer { id = AttributeID(rawValue: id.rawValue + 1) }
-    nodes[id] = Node(value: nil, update: body.update)
+    nodes[id] = Node(value: nil, update: body.update, subgraph: currentSubgraph)
     return Attribute(id: id)
   }
 

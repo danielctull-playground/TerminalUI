@@ -8,6 +8,11 @@ struct Node {
   /// Allows the value to be updated or recomputed from other graph values.
   let update: (Graph) -> Any
 
+  /// The subgraph that owns this node.
+  ///
+  /// When the subgraph is torn down, this node is removed.
+  let subgraph: SubgraphID
+
   var inputs: [Input] = []
 
   /// The attributes that read this one while computing.
