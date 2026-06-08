@@ -1,7 +1,8 @@
 /// A graph of attributes and the values flowing between them.
 package final class Graph {
 
-  private var nodes: [Node] = []
+  private var nodes: [AttributeID: Node] = [:]
+  private var id = AttributeID(rawValue: 0)
   private var currentNode: AttributeID?
 
   package init() {}
@@ -12,9 +13,9 @@ package final class Graph {
 extension Graph {
 
   func attribute<Body: AttributeBody>(_ body: Body) -> Attribute<Body.Value> {
-    let index = nodes.count
-    nodes.append(Node(value: nil, update: body.update))
-    return Attribute(id: AttributeID(rawValue: index))
+    defer { id = AttributeID(rawValue: id.rawValue + 1) }
+    nodes[id] = Node(value: nil, update: body.update)
+    return Attribute(id: id)
   }
 
   /// Adds an attribute whose value never changes.
@@ -56,20 +57,20 @@ extension Graph {
   ) {
 
     if
-      let oldValue = nodes[attribute.id.rawValue].value as? Value,
+      let oldValue = nodes[attribute.id]!.value as? Value,
       isEqual(oldValue, newValue)
     {
       return
     }
 
-    nodes[attribute.id.rawValue].value = newValue
+    nodes[attribute.id]!.value = newValue
     markAsDirty(dependentsOf: attribute.id)
   }
 
   /// Recursively marks dependencies of the given attribute as dirty.
   private func markAsDirty(dependentsOf id: AttributeID) {
-    for dependent in nodes[id.rawValue].outputs where !nodes[dependent.rawValue].isDirty {
-      nodes[dependent.rawValue].isDirty = true
+    for dependent in nodes[id]!.outputs where !nodes[dependent]!.isDirty {
+      nodes[dependent]!.isDirty = true
       markAsDirty(dependentsOf: dependent)
     }
   }
@@ -80,8 +81,8 @@ extension Graph {
     let value = evaluate(attribute.id)
 
     if let dependent = currentNode {
-      nodes[attribute.id.rawValue].outputs.insert(dependent)
-      nodes[dependent.rawValue].inputs.append(Input(id: attribute.id, value: value))
+      nodes[attribute.id]!.outputs.insert(dependent)
+      nodes[dependent]!.inputs.append(Input(id: attribute.id, value: value))
     }
 
     return value as! Value
@@ -89,28 +90,28 @@ extension Graph {
 
   private func evaluate(_ id: AttributeID) -> Any {
 
-    if !nodes[id.rawValue].isDirty, let cached = nodes[id.rawValue].value {
+    if !nodes[id]!.isDirty, let cached = nodes[id]!.value {
       return cached
     }
 
-    var anyInputChanged = nodes[id.rawValue].value == nil
-    for edge in nodes[id.rawValue].inputs where !isEqual(evaluate(edge.id), edge.value) {
+    var anyInputChanged = nodes[id]!.value == nil
+    for edge in nodes[id]!.inputs where !isEqual(evaluate(edge.id), edge.value) {
       anyInputChanged = true
     }
-    nodes[id.rawValue].isDirty = false
+    nodes[id]!.isDirty = false
 
     guard anyInputChanged else {
-      return nodes[id.rawValue].value!
+      return nodes[id]!.value!
     }
 
-    let update = nodes[id.rawValue].update
-    nodes[id.rawValue].inputs = []
+    let update = nodes[id]!.update
+    nodes[id]!.inputs = []
     let previous = currentNode
     currentNode = id
     let value = update(self)
     currentNode = previous
 
-    nodes[id.rawValue].value = value
+    nodes[id]!.value = value
     return value
   }
 }
