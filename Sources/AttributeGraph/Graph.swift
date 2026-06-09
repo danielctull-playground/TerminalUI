@@ -56,7 +56,7 @@ extension Graph {
       tearDown(child)
     }
     for attribute in subgraph.attributes {
-      nodes[attribute] = nil
+      remove(attribute)
     }
     subgraphs[id] = nil
   }
@@ -159,6 +159,24 @@ extension Graph {
     }
 
     return value as! Value
+  }
+
+  /// Removes an attribute from the graph.
+  ///
+  /// This severs the link from its inputs to it and its outputs from it.
+  private func remove(_ id: AttributeID) {
+
+    guard let node = nodes[id] else { return }
+
+    for input in node.inputs {
+      nodes[input.id]?.outputs.remove(id)
+    }
+
+    for output in node.outputs {
+      nodes[output]?.inputs.removeAll { $0.id == id }
+    }
+
+    nodes[id] = nil
   }
 
   private func evaluate(_ id: AttributeID) -> Any {

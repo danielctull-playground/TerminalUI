@@ -100,4 +100,27 @@ struct SubgraphTests {
     #expect(graph.contains(inner) == false)
     #expect(graph.children(of: graph.root) == [])
   }
+
+  @Test func `tearing down a subgraph should remove dependencies from remaining attributes`() {
+
+    let graph = Graph()
+    let a = graph.external(of: Int.self)
+    graph.setValue(of: a, to: 1)
+
+    var b: Attribute<Int>!
+    let subgraph = graph.subgraph {
+      b = graph.map(a) { $0 * 2 }
+    }
+
+    #expect(graph[a] == 1)
+    #expect(graph[b] == 2)
+    #expect(graph.edgeCount == 1)
+
+    graph.invalidate(subgraph)
+    #expect(graph.edgeCount == 0)
+
+    // If the edge was still in play, then this would crash:
+    graph.setValue(of: a, to: 5)
+    #expect(graph[a] == 5)
+  }
 }
