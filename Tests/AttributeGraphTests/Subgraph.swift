@@ -58,4 +58,46 @@ struct SubgraphTests {
     #expect(graph.children(of: outer) == [inner])
     #expect(graph.children(of: inner) == [])
   }
+
+  @Test func `invalidating a subgraph removes all its attributes`() {
+
+    let graph = Graph()
+    _ = graph.constant("a")
+    let child = graph.subgraph {
+      _ = graph.constant("")
+    }
+
+    #expect(graph.contains(child))
+    #expect(graph.attributeCount == 2)
+
+    graph.invalidate(child)
+    #expect(graph.attributeCount == 1)
+  }
+
+  @Test func `invalidating a subgraph tears down its descendants`() {
+
+    let graph = Graph()
+    var inner: Subgraph!
+    let outer = graph.subgraph {
+      inner = graph.subgraph {
+        _ = graph.constant(1)
+      }
+      _ = graph.constant(2)
+    }
+
+    #expect(graph.attributeCount == 2)
+    #expect(graph.contains(graph.root) == true)
+    #expect(graph.contains(outer) == true)
+    #expect(graph.contains(inner) == true)
+    #expect(graph.children(of: graph.root) == [outer])
+    #expect(graph.children(of: outer) == [inner])
+
+    graph.invalidate(outer)
+
+    #expect(graph.attributeCount == 0)
+    #expect(graph.contains(graph.root) == true)
+    #expect(graph.contains(outer) == false)
+    #expect(graph.contains(inner) == false)
+    #expect(graph.children(of: graph.root) == [])
+  }
 }

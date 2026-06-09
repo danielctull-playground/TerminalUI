@@ -18,4 +18,7 @@ struct SubgraphNode {
 
   /// Subgraphs created within this one, in the order they were created.
   var children: [SubgraphID] = []
+
+  /// The attributes owned by this subgraph.
+  var attributes: [AttributeID] = []
 }

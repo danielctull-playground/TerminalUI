@@ -42,6 +42,30 @@ extension Graph {
     return Subgraph(id: id)
   }
 
+  /// Removes the subgraph and its attributes from the graph.
+  package func invalidate(_ subgraph: Subgraph) {
+    if let parent = subgraphs[subgraph.id]!.parent {
+      subgraphs[parent]!.children.removeAll { $0 == subgraph.id }
+    }
+    tearDown(subgraph.id)
+  }
+
+  private func tearDown(_ id: SubgraphID) {
+    let subgraph = subgraphs[id]!
+    for child in subgraph.children {
+      tearDown(child)
+    }
+    for attribute in subgraph.attributes {
+      nodes[attribute] = nil
+    }
+    subgraphs[id] = nil
+  }
+
+  /// Whether the subgraph is part of the graph.
+  package func contains(_ subgraph: Subgraph) -> Bool {
+    subgraphs[subgraph.id] != nil
+  }
+
   /// The subgraph that owns an attribute.
   package func subgraph<Value>(of attribute: Attribute<Value>) -> Subgraph {
     Subgraph(id: nodes[attribute.id]!.subgraph)
@@ -60,9 +84,15 @@ extension Graph {
 
 extension Graph {
 
+  /// The number of attributes currently in the graph.
+  package var attributeCount: Int {
+    nodes.count
+  }
+
   func attribute<Body: AttributeBody>(_ body: Body) -> Attribute<Body.Value> {
     defer { id = AttributeID(rawValue: id.rawValue + 1) }
     nodes[id] = Node(value: nil, update: body.update, subgraph: currentSubgraph)
+    subgraphs[currentSubgraph]!.attributes.append(id)
     return Attribute(id: id)
   }
 
