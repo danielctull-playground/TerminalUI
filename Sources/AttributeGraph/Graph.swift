@@ -84,11 +84,6 @@ extension Graph {
 
 extension Graph {
 
-  /// The number of attributes currently in the graph.
-  package var attributeCount: Int {
-    nodes.count
-  }
-
   func attribute<Body: AttributeBody>(_ body: Body) -> Attribute<Body.Value> {
     defer { id = AttributeID(rawValue: id.rawValue + 1) }
     nodes[id] = Node(value: nil, update: body.update, subgraph: currentSubgraph)
@@ -183,6 +178,12 @@ extension Graph {
     }
 
     let update = nodes[id]!.update
+
+    // Prune edges as we will recompute the current set of edges later.
+    for input in nodes[id]!.inputs {
+      nodes[input.id]?.outputs.remove(id)
+    }
+
     nodes[id]!.inputs = []
     let previous = currentNode
     currentNode = id
@@ -191,5 +192,20 @@ extension Graph {
 
     nodes[id]!.value = value
     return value
+  }
+}
+
+// MARK: - Debugging
+
+extension Graph {
+
+  /// The number of attributes currently in the graph.
+  package var attributeCount: Int {
+    nodes.count
+  }
+
+  /// The total number of attribute dependency edges in the graph.
+  package var edgeCount: Int {
+    nodes.values.reduce(0) { $0 + $1.outputs.count }
   }
 }

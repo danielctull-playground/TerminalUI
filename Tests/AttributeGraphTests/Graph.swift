@@ -182,4 +182,43 @@ struct GraphTests {
     graph.setValue(of: a, to: 5)
     #expect(graph[b] == 10)
   }
+
+  @Test func `recomputing prunes edges to inputs no longer read`() {
+
+    let graph = Graph()
+    let useA = graph.external(of: Bool.self)
+    let a = graph.external(of: Int.self)
+    let b = graph.external(of: Int.self)
+
+    graph.setValue(of: useA, to: true)
+    graph.setValue(of: a, to: 1)
+    graph.setValue(of: b, to: 2)
+
+    var computations = 0
+    let picked = graph.rule { graph in
+      computations += 1
+      return graph[useA] ? graph[a] : graph[b]
+    }
+
+    // Reads toggle and a, so two edges feed picked.
+    #expect(graph[picked] == 1)
+    #expect(computations == 1)
+    #expect(graph.edgeCount == 2)
+
+    // Switching to b, the edge from a must be pruned.
+    graph.setValue(of: useA, to: false)
+    #expect(graph[picked] == 2)
+    #expect(computations == 2)
+    #expect(graph.edgeCount == 2)
+
+    // a is no longer used, so changing it must not mark picked as dirty.
+    graph.setValue(of: a, to: 100)
+    #expect(graph[picked] == 2)
+    #expect(computations == 2)
+
+    // b is used, so this causes a computation.
+    graph.setValue(of: b, to: 3)
+    #expect(graph[picked] == 3)
+    #expect(computations == 3)
+  }
 }
