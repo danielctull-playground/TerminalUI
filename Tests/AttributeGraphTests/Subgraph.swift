@@ -148,4 +148,56 @@ struct SubgraphTests {
     graph.setValue(of: a, to: 9)
     #expect(graph[a] == 9)
   }
+
+  @Test func `invalidating a subgraph releases the values its attributes held`() {
+
+    // A class so the value's lifetime can be observed through a weak reference.
+    final class Box {}
+
+    let graph = Graph()
+    weak var held: Box?
+
+    let subgraph = graph.subgraph {
+      let attribute = graph.external(of: Box.self)
+      let box = Box()
+      held = box
+      graph.setValue(of: attribute, to: box)
+    }
+
+    // The graph keeps the value alive.
+    #expect(held != nil)
+
+    graph.invalidate(subgraph)
+    #expect(held == nil)
+  }
+
+  @Test func `invalidating a subgraph releases the values held by its descendants`() {
+
+    final class Box {}
+
+    let graph = Graph()
+    weak var outer: Box?
+    weak var inner: Box?
+
+    let subgraph = graph.subgraph {
+      let a = graph.external(of: Box.self)
+      let box = Box()
+      outer = box
+      graph.setValue(of: a, to: box)
+
+      _ = graph.subgraph {
+        let b = graph.external(of: Box.self)
+        let box = Box()
+        inner = box
+        graph.setValue(of: b, to: box)
+      }
+    }
+
+    #expect(outer != nil)
+    #expect(inner != nil)
+
+    graph.invalidate(subgraph)
+    #expect(outer == nil)
+    #expect(inner == nil)
+  }
 }
