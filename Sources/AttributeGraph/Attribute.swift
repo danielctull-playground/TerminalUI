@@ -36,11 +36,14 @@ struct AttributeNode {
   var isDirty = false
 }
 
-struct Input {
+extension AttributeNode {
 
-  /// The attribute depended upon.
-  let id: AttributeID
+  struct Input {
 
-  /// The input's value at the moment it was read.
-  let value: Any
+    /// The attribute depended upon.
+    let id: AttributeID
+
+    /// The input's value at the moment it was read.
+    let value: Any
+  }
 }

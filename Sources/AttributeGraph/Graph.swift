@@ -155,7 +155,9 @@ extension Graph {
 
     if let dependent = currentNode {
       nodes[attribute.id]!.outputs.insert(dependent)
-      nodes[dependent]!.inputs.append(Input(id: attribute.id, value: value))
+      nodes[dependent]!.inputs.append(
+        AttributeNode.Input(id: attribute.id, value: value)
+      )
     }
 
     return value as! Value
