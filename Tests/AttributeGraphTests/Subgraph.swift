@@ -8,12 +8,12 @@ struct SubgraphTests {
 
     let graph = Graph()
 
-    let a = graph.constant(1)
+    let a = graph.constant("a", 1)
     #expect(graph.subgraph(of: a) == graph.root)
 
     var b: Attribute<Int>!
-    let subgraph = graph.subgraph {
-      b = graph.constant(2)
+    let subgraph = graph.subgraph("subgraph") {
+      b = graph.constant("b", 2)
     }
     #expect(graph.subgraph(of: b) == subgraph)
     #expect(subgraph != graph.root)
@@ -24,19 +24,19 @@ struct SubgraphTests {
 
     let graph = Graph()
 
-    let subgraph = graph.subgraph {
-      _ = graph.constant(1)
+    let subgraph = graph.subgraph("subgraph") {
+      _ = graph.constant("_", 1)
     }
 
     // Once the scope ends, new attributes belong to the root again, not the child.
-    let value = graph.constant(2)
+    let value = graph.constant("value", 2)
     #expect(graph.subgraph(of: value) == graph.root)
     #expect(graph.subgraph(of: value) != subgraph)
   }
 
   @Test func `first subgraph is a child of the root subgraph`() {
     let graph = Graph()
-    let child = graph.subgraph {}
+    let child = graph.subgraph("child") {}
     #expect(graph.parent(of: child) == graph.root)
     #expect(graph.children(of: graph.root) == [child])
     #expect(graph.parent(of: graph.root) == nil)
@@ -46,8 +46,8 @@ struct SubgraphTests {
 
     let graph = Graph()
     var inner: Subgraph!
-    let outer = graph.subgraph {
-      inner = graph.subgraph {}
+    let outer = graph.subgraph("outer") {
+      inner = graph.subgraph("inner") {}
     }
 
     #expect(graph.parent(of: graph.root) == nil)
@@ -62,9 +62,9 @@ struct SubgraphTests {
   @Test func `invalidating a subgraph removes all its attributes`() {
 
     let graph = Graph()
-    _ = graph.constant("a")
-    let child = graph.subgraph {
-      _ = graph.constant("")
+    _ = graph.constant("_", 0)
+    let child = graph.subgraph("child") {
+      _ = graph.constant("_", 0)
     }
 
     #expect(graph.contains(child))
@@ -78,11 +78,11 @@ struct SubgraphTests {
 
     let graph = Graph()
     var inner: Subgraph!
-    let outer = graph.subgraph {
-      inner = graph.subgraph {
-        _ = graph.constant(1)
+    let outer = graph.subgraph("outer") {
+      inner = graph.subgraph("inner") {
+        _ = graph.constant("_", 1)
       }
-      _ = graph.constant(2)
+      _ = graph.constant("_", 2)
     }
 
     #expect(graph.attributeCount == 2)
@@ -104,12 +104,12 @@ struct SubgraphTests {
   @Test func `tearing down a subgraph should remove dependencies from remaining attributes`() {
 
     let graph = Graph()
-    let a = graph.external(of: Int.self)
+    let a = graph.external("a", of: Int.self)
     graph.setValue(of: a, to: 1)
 
     var b: Attribute<Int>!
-    let subgraph = graph.subgraph {
-      b = graph.map(a) { $0 * 2 }
+    let subgraph = graph.subgraph("subgraph") {
+      b = graph.map("b", a) { $0 * 2 }
     }
 
     #expect(graph[a] == 1)
@@ -127,14 +127,14 @@ struct SubgraphTests {
   @Test func `tearing down a subgraph should remove edges whose endpoints are both inside it`() {
 
     let graph = Graph()
-    let a = graph.external(of: Int.self)
+    let a = graph.external("a", of: Int.self)
     graph.setValue(of: a, to: 1)
 
     var d: Attribute<Int>!
-    let subgraph = graph.subgraph {
-      let b = graph.map(a) { $0 + 1 }
-      let c = graph.map(a) { $0 + 2 }
-      d = graph.rule { graph in graph[b] + graph[c] }
+    let subgraph = graph.subgraph("subgraph") {
+      let b = graph.map("b", a) { $0 + 1 }
+      let c = graph.map("c", a) { $0 + 2 }
+      d = graph.rule("d") { graph in graph[b] + graph[c] }
     }
 
     #expect(graph[d] == 5)
@@ -157,8 +157,8 @@ struct SubgraphTests {
     let graph = Graph()
     weak var held: Box?
 
-    let subgraph = graph.subgraph {
-      let attribute = graph.external(of: Box.self)
+    let subgraph = graph.subgraph("subgraph") {
+      let attribute = graph.external("box", of: Box.self)
       let box = Box()
       held = box
       graph.setValue(of: attribute, to: box)
@@ -179,14 +179,14 @@ struct SubgraphTests {
     weak var outer: Box?
     weak var inner: Box?
 
-    let subgraph = graph.subgraph {
-      let a = graph.external(of: Box.self)
+    let subgraph = graph.subgraph("subgraph") {
+      let a = graph.external("a", of: Box.self)
       let box = Box()
       outer = box
       graph.setValue(of: a, to: box)
 
-      _ = graph.subgraph {
-        let b = graph.external(of: Box.self)
+      _ = graph.subgraph("internal") {
+        let b = graph.external("b", of: Box.self)
         let box = Box()
         inner = box
         graph.setValue(of: b, to: box)
@@ -213,10 +213,10 @@ struct SubgraphTests {
       let graph = Graph()
       weakGraph = graph
 
-      let a = graph.external(of: Int.self)
+      let a = graph.external("a", of: Int.self)
       graph.setValue(of: a, to: 1)
-      let b = graph.map(a) { $0 + 1 }
-      let c = graph.rule { $0[b] * 2 }
+      let b = graph.map("b", a) { $0 + 1 }
+      let c = graph.rule("c") { $0[b] * 2 }
       #expect(graph[c] == 4)
     }
 

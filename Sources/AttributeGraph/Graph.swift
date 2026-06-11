@@ -1,20 +1,20 @@
 /// A graph of attributes and the values flowing between them.
 package final class Graph {
 
-  private var attributes = Arena<AttributeID, AttributeNode>()
+  private var attributes = Arena<AttributeID, AttributeName, AttributeNode>()
   private var currentAttribute: AttributeID?
 
   /// The subgraph that owns attributes created outside the scope of a specific
   /// subgraph.
   package let root: Subgraph
 
-  private var subgraphs = Arena<SubgraphID, SubgraphNode>()
+  private var subgraphs = Arena<SubgraphID, SubgraphName, SubgraphNode>()
 
   /// The subgraph new attributes are assigned to. Defaults to the root.
   private var currentSubgraph = SubgraphID(rawValue: 0)
 
   package init() {
-    root = Subgraph(id: subgraphs.insert(SubgraphNode(parent: nil)))
+    root = Subgraph(id: subgraphs.insert("root", SubgraphNode(parent: nil)))
   }
 }
 
@@ -22,10 +22,13 @@ package final class Graph {
 
 extension Graph {
 
-  package func subgraph(_ body: () -> Void) -> Subgraph {
+  package func subgraph(
+    _ name: SubgraphName,
+    _ body: () -> Void
+  ) -> Subgraph {
 
     let parent = currentSubgraph
-    let id = subgraphs.insert(SubgraphNode(parent: currentSubgraph))
+    let id = subgraphs.insert(name, SubgraphNode(parent: currentSubgraph))
     subgraphs[parent].children.append(id)
 
     currentSubgraph = id
@@ -77,7 +80,10 @@ extension Graph {
 
 extension Graph {
 
-  func attribute<Body: AttributeBody>(_ body: Body) -> Attribute<Body.Value> {
+  func attribute<Body: AttributeBody>(
+    named name: AttributeName,
+    body: Body
+  ) -> Attribute<Body.Value> {
 
     let node = AttributeNode(
       value: nil,
@@ -85,7 +91,7 @@ extension Graph {
       subgraph: currentSubgraph
     )
 
-    let id = attributes.insert(node)
+    let id = attributes.insert(name, node)
     subgraphs[currentSubgraph].attributes.append(id)
     return Attribute(id: id)
   }
@@ -94,31 +100,39 @@ extension Graph {
   ///
   /// - Parameter value: The value to insert.
   /// - Returns: The attribute handle to use for future access.
-  package func constant<Value>(_ value: Value) -> Attribute<Value> {
-    attribute(Constant(value: value))
+  package func constant<Value>(
+    _ name: AttributeName,
+    _ value: Value
+  ) -> Attribute<Value> {
+    attribute(named: name, body: Constant(value: value))
   }
 
   /// Adds an attribute whose value is computed from other attributes.
   package func rule<Value>(
+    _ name: AttributeName,
     _ update: @escaping (Graph) -> Value
   ) -> Attribute<Value> {
-    attribute(Rule(compute: update))
+    attribute(named: name, body: Rule(compute: update))
   }
 
   /// Adds an attribute whose value is transformed from the value of the given
   /// input attribute.
   package func map<Input, Output>(
+    _ name: AttributeName,
     _ input: Attribute<Input>,
     _ transform: @escaping (Input) -> Output
   ) -> Attribute<Output> {
-    attribute(Map(input: input, transform: transform))
+    attribute(named: name, body: Map(input: input, transform: transform))
   }
   /// Adds a source attribute whose value is supplied from outside the graph.
   ///
   /// This attribute is created with no value, it must be given one with
   /// ``setValue(of:to:)`` before it is read.
-  package func external<Value>(of type: Value.Type) -> Attribute<Value> {
-    attribute(External())
+  package func external<Value>(
+    _ name: AttributeName,
+    of type: Value.Type
+  ) -> Attribute<Value> {
+    attribute(named: name, body: External())
   }
 
   /// Changes the value of an input, invalidating every attribute computed from
@@ -226,5 +240,9 @@ extension Graph {
   /// The total number of attribute dependency edges in the graph.
   package var edgeCount: Int {
     attributes.values.reduce(0) { $0 + $1.outputs.count }
+  }
+
+  package func name<Value>(of attribute: Attribute<Value>) -> AttributeName {
+    attributes.name(of: attribute.id)
   }
 }

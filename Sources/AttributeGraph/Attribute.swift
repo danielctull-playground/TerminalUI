@@ -11,6 +11,27 @@ struct AttributeID: ArenaID {
   let rawValue: Int
 }
 
+// MARK: - AttributeName
+
+/// The debug description of an attribute.
+///
+/// Note: Not to be used for identity.
+package struct AttributeName: Equatable {
+  private let rawValue: String
+}
+
+extension AttributeName: ExpressibleByStringLiteral {
+  package init(stringLiteral value: StringLiteralType) {
+    self.init(rawValue: value)
+  }
+}
+
+extension AttributeName: ExpressibleByStringInterpolation {}
+
+extension AttributeName: CustomStringConvertible {
+  package var description: String { rawValue }
+}
+
 // MARK: - AttributeNode
 
 /// The storage backing an ``Attribute`` owned by the ``Graph``.

@@ -4,11 +4,36 @@ package struct Subgraph: Equatable {
   let id: SubgraphID
 }
 
+// MARK: - SubgraphID
+
 /// A type-erased identifier for a subgraph in a ``Graph``.
 struct SubgraphID: ArenaID {
   /// The subgraph's number, unique within the graph.
   let rawValue: Int
 }
+
+// MARK: - SubgraphName
+
+/// The debug description of a subgraph.
+///
+/// Note: Not to be used for identity.
+package struct SubgraphName: Equatable {
+  private let rawValue: String
+}
+
+extension SubgraphName: ExpressibleByStringLiteral {
+  package init(stringLiteral value: StringLiteralType) {
+    self.init(rawValue: value)
+  }
+}
+
+extension SubgraphName: ExpressibleByStringInterpolation {}
+
+extension SubgraphName: CustomStringConvertible {
+  package var description: String { rawValue }
+}
+
+// MARK: - SubgraphNode
 
 /// Storage backing a ``Subgraph``.
 struct SubgraphNode {

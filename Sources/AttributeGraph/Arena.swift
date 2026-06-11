@@ -4,8 +4,9 @@ protocol ArenaID: Hashable {
   init(rawValue: Int)
 }
 
-struct Arena<ID: ArenaID, Value> {
+struct Arena<ID: ArenaID, Name, Value> {
   private var _values: [ID: Value] = [:]
+  private var names: [ID: Name] = [:]
   private var next = ID(rawValue: 0)
 }
 
@@ -21,14 +22,20 @@ extension Arena {
     }
   }
 
-  mutating func insert(_ value: Value) -> ID {
+  func name(of id: ID) -> Name {
+    names[id]!
+  }
+
+  mutating func insert(_ name: Name, _ value: Value) -> ID {
     defer { next = ID(rawValue: next.rawValue + 1) }
     _values[next] = value
+    names[next] = name
     return next
   }
 
   mutating func remove(_ id: ID) {
     _values[id] = nil
+    names[id] = nil
   }
 
   func contains(_ id: ID) -> Bool {
