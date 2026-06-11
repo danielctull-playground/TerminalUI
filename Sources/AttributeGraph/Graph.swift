@@ -1,7 +1,7 @@
 /// A graph of attributes and the values flowing between them.
 package final class Graph {
 
-  private var nodes: [AttributeID: Node] = [:]
+  private var nodes: [AttributeID: AttributeNode] = [:]
   private var id = AttributeID(rawValue: 0)
   private var currentNode: AttributeID?
 
@@ -86,7 +86,7 @@ extension Graph {
 
   func attribute<Body: AttributeBody>(_ body: Body) -> Attribute<Body.Value> {
     defer { id = AttributeID(rawValue: id.rawValue + 1) }
-    nodes[id] = Node(value: nil, update: body.update, subgraph: currentSubgraph)
+    nodes[id] = AttributeNode(value: nil, update: body.update, subgraph: currentSubgraph)
     subgraphs[currentSubgraph]!.attributes.append(id)
     return Attribute(id: id)
   }
