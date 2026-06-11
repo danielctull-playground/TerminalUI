@@ -1,24 +1,20 @@
 /// A graph of attributes and the values flowing between them.
 package final class Graph {
 
-  private var nodes: [AttributeID: AttributeNode] = [:]
-  private var id = AttributeID(rawValue: 0)
+  private var nodes = Arena<AttributeID, AttributeNode>()
   private var currentNode: AttributeID?
 
   /// The subgraph that owns attributes created outside the scope of a specific
   /// subgraph.
-  package let root = Subgraph(id: SubgraphID(rawValue: 0))
+  package let root: Subgraph
 
   /// The subgraph new attributes are assigned to. Defaults to the root.
   private var currentSubgraph = SubgraphID(rawValue: 0)
 
-  /// The number to give the next subgraph created.
-  private var nextSubgraphID = SubgraphID(rawValue: 1)
-
-  private var subgraphs: [SubgraphID: SubgraphNode]
+  private var subgraphs = Arena<SubgraphID, SubgraphNode>()
 
   package init() {
-    subgraphs = [root.id : SubgraphNode(parent: nil)]
+    root = Subgraph(id: subgraphs.insert(SubgraphNode(parent: nil)))
   }
 }
 
@@ -28,12 +24,9 @@ extension Graph {
 
   package func subgraph(_ body: () -> Void) -> Subgraph {
 
-    let id = nextSubgraphID
-    nextSubgraphID = SubgraphID(rawValue: id.rawValue + 1)
-
     let parent = currentSubgraph
-    subgraphs[id] = SubgraphNode(parent: parent)
-    subgraphs[parent]!.children.append(id)
+    let id = subgraphs.insert(SubgraphNode(parent: currentSubgraph))
+    subgraphs[parent].children.append(id)
 
     currentSubgraph = id
     body()
@@ -44,39 +37,39 @@ extension Graph {
 
   /// Removes the subgraph and its attributes from the graph.
   package func invalidate(_ subgraph: Subgraph) {
-    if let parent = subgraphs[subgraph.id]!.parent {
-      subgraphs[parent]!.children.removeAll { $0 == subgraph.id }
+    if let parent = subgraphs[subgraph.id].parent {
+      subgraphs[parent].children.removeAll { $0 == subgraph.id }
     }
     tearDown(subgraph.id)
   }
 
   private func tearDown(_ id: SubgraphID) {
-    let subgraph = subgraphs[id]!
+    let subgraph = subgraphs[id]
     for child in subgraph.children {
       tearDown(child)
     }
     for attribute in subgraph.attributes {
       remove(attribute)
     }
-    subgraphs[id] = nil
+    subgraphs.remove(id)
   }
 
   /// Whether the subgraph is part of the graph.
   package func contains(_ subgraph: Subgraph) -> Bool {
-    subgraphs[subgraph.id] != nil
+    subgraphs.contains(subgraph.id)
   }
 
   /// The subgraph that owns an attribute.
   package func subgraph<Value>(of attribute: Attribute<Value>) -> Subgraph {
-    Subgraph(id: nodes[attribute.id]!.subgraph)
+    Subgraph(id: nodes[attribute.id].subgraph)
   }
 
   package func parent(of subgraph: Subgraph) -> Subgraph? {
-    subgraphs[subgraph.id]!.parent.map(Subgraph.init)
+    subgraphs[subgraph.id].parent.map(Subgraph.init)
   }
 
   package func children(of subgraph: Subgraph) -> [Subgraph] {
-    subgraphs[subgraph.id]!.children.map(Subgraph.init)
+    subgraphs[subgraph.id].children.map(Subgraph.init)
   }
 }
 
@@ -85,9 +78,15 @@ extension Graph {
 extension Graph {
 
   func attribute<Body: AttributeBody>(_ body: Body) -> Attribute<Body.Value> {
-    defer { id = AttributeID(rawValue: id.rawValue + 1) }
-    nodes[id] = AttributeNode(value: nil, update: body.update, subgraph: currentSubgraph)
-    subgraphs[currentSubgraph]!.attributes.append(id)
+
+    let node = AttributeNode(
+      value: nil,
+      update: body.update,
+      subgraph: currentSubgraph
+    )
+
+    let id = nodes.insert(node)
+    subgraphs[currentSubgraph].attributes.append(id)
     return Attribute(id: id)
   }
 
@@ -130,20 +129,20 @@ extension Graph {
   ) {
 
     if
-      let oldValue = nodes[attribute.id]!.value as? Value,
+      let oldValue = nodes[attribute.id].value as? Value,
       isEqual(oldValue, newValue)
     {
       return
     }
 
-    nodes[attribute.id]!.value = newValue
+    nodes[attribute.id].value = newValue
     markAsDirty(dependentsOf: attribute.id)
   }
 
   /// Recursively marks dependencies of the given attribute as dirty.
   private func markAsDirty(dependentsOf id: AttributeID) {
-    for dependent in nodes[id]!.outputs where !nodes[dependent]!.isDirty {
-      nodes[dependent]!.isDirty = true
+    for dependent in nodes[id].outputs where !nodes[dependent].isDirty {
+      nodes[dependent].isDirty = true
       markAsDirty(dependentsOf: dependent)
     }
   }
@@ -154,8 +153,8 @@ extension Graph {
     let value = evaluate(attribute.id)
 
     if let dependent = currentNode {
-      nodes[attribute.id]!.outputs.insert(dependent)
-      nodes[dependent]!.inputs.append(
+      nodes[attribute.id].outputs.insert(dependent)
+      nodes[dependent].inputs.append(
         AttributeNode.Input(id: attribute.id, value: value)
       )
     }
@@ -167,50 +166,50 @@ extension Graph {
   ///
   /// This severs the link from its inputs to it and its outputs from it.
   private func remove(_ id: AttributeID) {
-
-    guard let node = nodes[id] else { return }
+    
+    let node = nodes[id]
 
     for input in node.inputs {
-      nodes[input.id]?.outputs.remove(id)
+      nodes[input.id].outputs.remove(id)
     }
 
     for output in node.outputs {
-      nodes[output]?.inputs.removeAll { $0.id == id }
+      nodes[output].inputs.removeAll { $0.id == id }
     }
 
-    nodes[id] = nil
+    nodes.remove(id)
   }
 
   private func evaluate(_ id: AttributeID) -> Any {
 
-    if !nodes[id]!.isDirty, let cached = nodes[id]!.value {
+    if !nodes[id].isDirty, let cached = nodes[id].value {
       return cached
     }
 
-    var anyInputChanged = nodes[id]!.value == nil
-    for edge in nodes[id]!.inputs where !isEqual(evaluate(edge.id), edge.value) {
+    var anyInputChanged = nodes[id].value == nil
+    for edge in nodes[id].inputs where !isEqual(evaluate(edge.id), edge.value) {
       anyInputChanged = true
     }
-    nodes[id]!.isDirty = false
+    nodes[id].isDirty = false
 
     guard anyInputChanged else {
-      return nodes[id]!.value!
+      return nodes[id].value!
     }
 
-    let update = nodes[id]!.update
+    let update = nodes[id].update
 
     // Prune edges as we will recompute the current set of edges later.
-    for input in nodes[id]!.inputs {
-      nodes[input.id]?.outputs.remove(id)
+    for input in nodes[id].inputs {
+      nodes[input.id].outputs.remove(id)
     }
 
-    nodes[id]!.inputs = []
+    nodes[id].inputs = []
     let previous = currentNode
     currentNode = id
     let value = update(self)
     currentNode = previous
 
-    nodes[id]!.value = value
+    nodes[id].value = value
     return value
   }
 }

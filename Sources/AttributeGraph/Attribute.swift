@@ -7,7 +7,7 @@ public struct Attribute<Value> {
 // MARK: - AttributeID
 
 /// A type-erased identifier for a node in a ``Graph``.
-struct AttributeID: Hashable {
+struct AttributeID: ArenaID {
   let rawValue: Int
 }
 

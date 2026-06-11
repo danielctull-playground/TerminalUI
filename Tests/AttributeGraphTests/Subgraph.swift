@@ -123,4 +123,29 @@ struct SubgraphTests {
     graph.setValue(of: a, to: 5)
     #expect(graph[a] == 5)
   }
+
+  @Test func `tearing down a subgraph should remove edges whose endpoints are both inside it`() {
+
+    let graph = Graph()
+    let a = graph.external(of: Int.self)
+    graph.setValue(of: a, to: 1)
+
+    var d: Attribute<Int>!
+    let subgraph = graph.subgraph {
+      let b = graph.map(a) { $0 + 1 }
+      let c = graph.map(a) { $0 + 2 }
+      d = graph.rule { graph in graph[b] + graph[c] }
+    }
+
+    #expect(graph[d] == 5)
+    #expect(graph.edgeCount == 4)   // a->b, a->c, b->d, c->d
+
+    graph.invalidate(subgraph)
+    #expect(graph.edgeCount == 0)
+    #expect(graph.contains(subgraph) == false)
+
+    // If any edge into the removed diamond were still in play, this would crash:
+    graph.setValue(of: a, to: 9)
+    #expect(graph[a] == 9)
+  }
 }

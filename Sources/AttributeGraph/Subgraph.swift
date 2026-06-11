@@ -5,7 +5,7 @@ package struct Subgraph: Equatable {
 }
 
 /// A type-erased identifier for a subgraph in a ``Graph``.
-struct SubgraphID: Hashable {
+struct SubgraphID: ArenaID {
   /// The subgraph's number, unique within the graph.
   let rawValue: Int
 }
