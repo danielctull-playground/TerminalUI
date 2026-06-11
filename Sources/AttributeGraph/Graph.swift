@@ -1,17 +1,17 @@
 /// A graph of attributes and the values flowing between them.
 package final class Graph {
 
-  private var nodes = Arena<AttributeID, AttributeNode>()
-  private var currentNode: AttributeID?
+  private var attributes = Arena<AttributeID, AttributeNode>()
+  private var currentAttribute: AttributeID?
 
   /// The subgraph that owns attributes created outside the scope of a specific
   /// subgraph.
   package let root: Subgraph
 
+  private var subgraphs = Arena<SubgraphID, SubgraphNode>()
+
   /// The subgraph new attributes are assigned to. Defaults to the root.
   private var currentSubgraph = SubgraphID(rawValue: 0)
-
-  private var subgraphs = Arena<SubgraphID, SubgraphNode>()
 
   package init() {
     root = Subgraph(id: subgraphs.insert(SubgraphNode(parent: nil)))
@@ -61,7 +61,7 @@ extension Graph {
 
   /// The subgraph that owns an attribute.
   package func subgraph<Value>(of attribute: Attribute<Value>) -> Subgraph {
-    Subgraph(id: nodes[attribute.id].subgraph)
+    Subgraph(id: attributes[attribute.id].subgraph)
   }
 
   package func parent(of subgraph: Subgraph) -> Subgraph? {
@@ -85,7 +85,7 @@ extension Graph {
       subgraph: currentSubgraph
     )
 
-    let id = nodes.insert(node)
+    let id = attributes.insert(node)
     subgraphs[currentSubgraph].attributes.append(id)
     return Attribute(id: id)
   }
@@ -129,20 +129,20 @@ extension Graph {
   ) {
 
     if
-      let oldValue = nodes[attribute.id].value as? Value,
+      let oldValue = attributes[attribute.id].value as? Value,
       isEqual(oldValue, newValue)
     {
       return
     }
 
-    nodes[attribute.id].value = newValue
+    attributes[attribute.id].value = newValue
     markAsDirty(dependentsOf: attribute.id)
   }
 
   /// Recursively marks dependencies of the given attribute as dirty.
   private func markAsDirty(dependentsOf id: AttributeID) {
-    for dependent in nodes[id].outputs where !nodes[dependent].isDirty {
-      nodes[dependent].isDirty = true
+    for dependent in attributes[id].outputs where !attributes[dependent].isDirty {
+      attributes[dependent].isDirty = true
       markAsDirty(dependentsOf: dependent)
     }
   }
@@ -152,9 +152,9 @@ extension Graph {
 
     let value = evaluate(attribute.id)
 
-    if let dependent = currentNode {
-      nodes[attribute.id].outputs.insert(dependent)
-      nodes[dependent].inputs.append(
+    if let dependent = currentAttribute {
+      attributes[attribute.id].outputs.insert(dependent)
+      attributes[dependent].inputs.append(
         AttributeNode.Input(id: attribute.id, value: value)
       )
     }
@@ -167,49 +167,49 @@ extension Graph {
   /// This severs the link from its inputs to it and its outputs from it.
   private func remove(_ id: AttributeID) {
     
-    let node = nodes[id]
+    let node = attributes[id]
 
     for input in node.inputs {
-      nodes[input.id].outputs.remove(id)
+      attributes[input.id].outputs.remove(id)
     }
 
     for output in node.outputs {
-      nodes[output].inputs.removeAll { $0.id == id }
+      attributes[output].inputs.removeAll { $0.id == id }
     }
 
-    nodes.remove(id)
+    attributes.remove(id)
   }
 
   private func evaluate(_ id: AttributeID) -> Any {
 
-    if !nodes[id].isDirty, let cached = nodes[id].value {
+    if !attributes[id].isDirty, let cached = attributes[id].value {
       return cached
     }
 
-    var anyInputChanged = nodes[id].value == nil
-    for edge in nodes[id].inputs where !isEqual(evaluate(edge.id), edge.value) {
+    var anyInputChanged = attributes[id].value == nil
+    for edge in attributes[id].inputs where !isEqual(evaluate(edge.id), edge.value) {
       anyInputChanged = true
     }
-    nodes[id].isDirty = false
+    attributes[id].isDirty = false
 
     guard anyInputChanged else {
-      return nodes[id].value!
+      return attributes[id].value!
     }
 
-    let update = nodes[id].update
+    let update = attributes[id].update
 
     // Prune edges as we will recompute the current set of edges later.
-    for input in nodes[id].inputs {
-      nodes[input.id].outputs.remove(id)
+    for input in attributes[id].inputs {
+      attributes[input.id].outputs.remove(id)
     }
 
-    nodes[id].inputs = []
-    let previous = currentNode
-    currentNode = id
+    attributes[id].inputs = []
+    let previous = currentAttribute
+    currentAttribute = id
     let value = update(self)
-    currentNode = previous
+    currentAttribute = previous
 
-    nodes[id].value = value
+    attributes[id].value = value
     return value
   }
 }
@@ -220,11 +220,11 @@ extension Graph {
 
   /// The number of attributes currently in the graph.
   package var attributeCount: Int {
-    nodes.count
+    attributes.count
   }
 
   /// The total number of attribute dependency edges in the graph.
   package var edgeCount: Int {
-    nodes.values.reduce(0) { $0 + $1.outputs.count }
+    attributes.values.reduce(0) { $0 + $1.outputs.count }
   }
 }
