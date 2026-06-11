@@ -200,4 +200,26 @@ struct SubgraphTests {
     #expect(outer == nil)
     #expect(inner == nil)
   }
+
+  // Attributes store their update as a closure over the body. If any of those
+  // closures captured the graph, the graph would retain itself through its
+  // nodes and never be freed.
+  @Test func `a graph is released once nothing else references it`() {
+
+    weak var weakGraph: Graph?
+
+    do { // This scoping causes weakGraph to become nilled out by the end.
+
+      let graph = Graph()
+      weakGraph = graph
+
+      let a = graph.external(of: Int.self)
+      graph.setValue(of: a, to: 1)
+      let b = graph.map(a) { $0 + 1 }
+      let c = graph.rule { $0[b] * 2 }
+      #expect(graph[c] == 4)
+    }
+
+    #expect(weakGraph == nil)
+  }
 }
