@@ -1,7 +1,7 @@
 /// A graph of attributes and the values flowing between them.
 package final class Graph {
 
-  private var attributes = Arena<AttributeID, AttributeName, AttributeNode>()
+  private var attributes = Arena<AttributeID, AttributeMetadata, AttributeNode>()
   private var currentAttribute: AttributeID?
 
   /// The subgraph that owns attributes created outside the scope of a specific
@@ -81,7 +81,7 @@ extension Graph {
 extension Graph {
 
   func attribute<Body: AttributeBody>(
-    named name: AttributeName,
+    metadata: AttributeMetadata,
     body: Body
   ) -> Attribute<Body.Value> {
 
@@ -91,7 +91,7 @@ extension Graph {
       subgraph: currentSubgraph
     )
 
-    let id = attributes.insert(name, node)
+    let id = attributes.insert(metadata, node)
     subgraphs[currentSubgraph].attributes.append(id)
     return Attribute(id: id)
   }
@@ -100,39 +100,36 @@ extension Graph {
   ///
   /// - Parameter value: The value to insert.
   /// - Returns: The attribute handle to use for future access.
-  package func constant<Value>(
-    _ name: AttributeName,
-    _ value: Value
-  ) -> Attribute<Value> {
-    attribute(named: name, body: Constant(value: value))
+  package func constant<Value>(_ value: Value) -> Attribute<Value> {
+    attribute(metadata: .constant(of: Value.self), body: Constant(value: value))
   }
 
   /// Adds an attribute whose value is computed from other attributes.
   package func rule<Value>(
-    _ name: AttributeName,
     _ update: @escaping (Graph) -> Value
   ) -> Attribute<Value> {
-    attribute(named: name, body: Rule(compute: update))
+    attribute(metadata: .rule(of: Value.self), body: Rule(compute: update))
   }
 
   /// Adds an attribute whose value is transformed from the value of the given
   /// input attribute.
   package func map<Input, Output>(
-    _ name: AttributeName,
     _ input: Attribute<Input>,
     _ transform: @escaping (Input) -> Output
   ) -> Attribute<Output> {
-    attribute(named: name, body: Map(input: input, transform: transform))
+    attribute(
+      metadata: .map(of: Output.self),
+      body: Map(input: input, transform: transform)
+    )
   }
   /// Adds a source attribute whose value is supplied from outside the graph.
   ///
   /// This attribute is created with no value, it must be given one with
   /// ``setValue(of:to:)`` before it is read.
   package func external<Value>(
-    _ name: AttributeName,
     of type: Value.Type
   ) -> Attribute<Value> {
-    attribute(named: name, body: External())
+    attribute(metadata: .external(of: type), body: External())
   }
 
   /// Changes the value of an input, invalidating every attribute computed from
@@ -242,7 +239,9 @@ extension Graph {
     attributes.values.reduce(0) { $0 + $1.outputs.count }
   }
 
-  package func name<Value>(of attribute: Attribute<Value>) -> AttributeName {
+  package func metadata<Value>(
+    for attribute: Attribute<Value>
+  ) -> AttributeMetadata {
     attributes.name(of: attribute.id)
   }
 }

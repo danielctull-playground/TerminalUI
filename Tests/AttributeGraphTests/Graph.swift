@@ -6,32 +6,32 @@ struct GraphTests {
 
   @Test func `a constant attribute reads back its value`() {
     let graph = Graph()
-    let constant = graph.constant("a", 42)
+    let constant = graph.constant(42)
     #expect(graph[constant] == 42)
   }
 
   @Test func `constants in the same graph are independent`() {
     let graph = Graph()
-    let a = graph.constant("a", "a value")
-    let b = graph.constant("b", "b value")
+    let a = graph.constant("a value")
+    let b = graph.constant("b value")
     #expect(graph[a] == "a value")
     #expect(graph[b] == "b value")
   }
 
   @Test func `a rule computes its value from another attribute`() {
     let graph = Graph()
-    let a = graph.constant("a", 3)
-    let b = graph.rule("b") { $0[a] * 2 }
+    let a = graph.constant(3)
+    let b = graph.rule { $0[a] * 2 }
     #expect(graph[b] == 6)
   }
 
   @Test func `a rule computes once and serves later reads from its cache`() {
 
     let graph = Graph()
-    let a = graph.constant("a", 3)
+    let a = graph.constant(3)
 
     var count = 0
-    let b = graph.rule("b") { graph in
+    let b = graph.rule { graph in
       count += 1
       return graph[a] * 2
     }
@@ -50,7 +50,7 @@ struct GraphTests {
 
   @Test func `an external has its value supplied from outside`() {
     let graph = Graph()
-    let value = graph.external("value", of: String.self)
+    let value = graph.external(of: String.self)
 
     graph.setValue(of: value, to: "a")
     #expect(graph[value] == "a")
@@ -62,15 +62,15 @@ struct GraphTests {
   @Test func `an external must have its value set before access`() async {
     await #expect(processExitsWith: .failure) {
       let graph = Graph()
-      let value = graph.external("value", of: String.self)
+      let value = graph.external(of: String.self)
       _ = graph[value]
     }
   }
 
   @Test func `setting an external updates the attributes computed from it`() {
     let graph = Graph()
-    let a = graph.external("a", of: Int.self)
-    let b = graph.rule("b") { $0[a] * 2 }
+    let a = graph.external(of: Int.self)
+    let b = graph.rule { $0[a] * 2 }
 
     graph.setValue(of: a, to: 5)
     #expect(graph[b] == 10)
@@ -82,10 +82,10 @@ struct GraphTests {
   @Test func `a computed attribute recomputes only after its input changes`() {
 
     let graph = Graph()
-    let a = graph.external("a", of: Int.self)
+    let a = graph.external(of: Int.self)
 
     var count = 0
-    let b = graph.rule("b") { graph in
+    let b = graph.rule { graph in
       count += 1
       return graph[a] * 2
     }
@@ -115,10 +115,10 @@ struct GraphTests {
   @Test func `setting an input to an equal value invalidates nothing`() {
 
     let graph = Graph()
-    let a = graph.external("a", of: Int.self)
+    let a = graph.external(of: Int.self)
 
     var count = 0
-    let b = graph.rule("b") { graph in
+    let b = graph.rule { graph in
       count += 1
       return graph[a] * 2
     }
@@ -142,10 +142,10 @@ struct GraphTests {
   @Test func `an unchanged recomputation stops propagating to its dependents`() {
 
     let graph = Graph()
-    let value = graph.external("value", of: Int.self)
-    let isPositive = graph.rule("isPositive") { $0[value] > 0 }
+    let value = graph.external(of: Int.self)
+    let isPositive = graph.rule { $0[value] > 0 }
     var computes = 0
-    let label = graph.rule("label") { graph in
+    let label = graph.rule { graph in
       computes += 1
       return graph[isPositive] ? "positive" : "not positive"
     }
@@ -173,8 +173,8 @@ struct GraphTests {
   @Test func `map transforms one attribute into another`() {
 
     let graph = Graph()
-    let a = graph.external("a", of: Int.self)
-    let b = graph.map("b", a) { $0 * 2 }
+    let a = graph.external(of: Int.self)
+    let b = graph.map(a) { $0 * 2 }
 
     graph.setValue(of: a, to: 2)
     #expect(graph[b] == 4)
@@ -186,16 +186,16 @@ struct GraphTests {
   @Test func `recomputing prunes edges to inputs no longer read`() {
 
     let graph = Graph()
-    let useA = graph.external("useA", of: Bool.self)
-    let a = graph.external("a", of: Int.self)
-    let b = graph.external("b", of: Int.self)
+    let useA = graph.external(of: Bool.self)
+    let a = graph.external(of: Int.self)
+    let b = graph.external(of: Int.self)
 
     graph.setValue(of: useA, to: true)
     graph.setValue(of: a, to: 1)
     graph.setValue(of: b, to: 2)
 
     var computations = 0
-    let picked = graph.rule("picked") { graph in
+    let picked = graph.rule { graph in
       computations += 1
       return graph[useA] ? graph[a] : graph[b]
     }
@@ -227,27 +227,35 @@ struct GraphTests {
 
     @Test func constant() {
       let graph = Graph()
-      let constant = graph.constant("a", 42)
-      #expect(graph.name(of: constant) == "a")
+      let constant = graph.constant(42)
+      let metadata = graph.metadata(for: constant)
+      #expect(metadata.kind == .constant)
+      #expect(metadata.type == "Int")
     }
 
     @Test func rule() {
       let graph = Graph()
-      let rule = graph.rule("b") { _ in 0 }
-      #expect(graph.name(of: rule) == "b")
+      let rule = graph.rule { _ in 0 }
+      let metadata = graph.metadata(for: rule)
+      #expect(metadata.kind == .rule)
+      #expect(metadata.type == "Int")
     }
 
     @Test func external() {
       let graph = Graph()
-      let external = graph.external("c", of: Int.self)
-      #expect(graph.name(of: external) == "c")
+      let external = graph.external(of: Int.self)
+      let metadata = graph.metadata(for: external)
+      #expect(metadata.kind == .external)
+      #expect(metadata.type == "Int")
     }
 
     @Test func map() {
       let graph = Graph()
-      let a = graph.constant("a", 42)
-      let map = graph.map("d", a) { $0.description }
-      #expect(graph.name(of: map) == "d")
+      let a = graph.constant(42)
+      let map = graph.map(a) { $0.description }
+      let metadata = graph.metadata(for: map)
+      #expect(metadata.kind == .map)
+      #expect(metadata.type == "String")
     }
   }
 }

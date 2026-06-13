@@ -11,24 +11,83 @@ struct AttributeID: ArenaID {
   let rawValue: Int
 }
 
-// MARK: - AttributeName
+// MARK: - AttributeMetadata
 
-/// The debug description of an attribute.
-///
-/// Note: Not to be used for identity.
-package struct AttributeName: Equatable {
-  private let rawValue: String
+/// The debug information of an attribute.
+package struct AttributeMetadata: Equatable {
+  package let kind: Kind
+  package let type: AType
 }
 
-extension AttributeName: ExpressibleByStringLiteral {
+extension AttributeMetadata {
+
+  static func constant<Value>(of type: Value.Type) -> Self {
+    Self(
+      kind: Kind(rawValue: "Constant"),
+      type: AType(rawValue: "\(type)")
+    )
+  }
+
+  static func map<Value>(of type: Value.Type) -> Self {
+    Self(
+      kind: Kind(rawValue: "Map"),
+      type: AType(rawValue: "\(type)")
+    )
+  }
+
+  static func rule<Value>(of type: Value.Type) -> Self {
+    Self(
+      kind: Kind(rawValue: "Rule"),
+      type: AType(rawValue: "\(type)")
+    )
+  }
+
+  static func external<Value>(of type: Value.Type) -> Self {
+    Self(
+      kind: Kind(rawValue: "External"),
+      type: AType(rawValue: "\(type)")
+    )
+  }
+}
+
+// MARK: - AttributeMetadata.Kind
+
+extension AttributeMetadata {
+
+  /// The kind of an attribute.
+  package struct Kind: Equatable, Sendable {
+    fileprivate let rawValue: String
+  }
+}
+
+extension AttributeMetadata.Kind {
+  package static let constant = Self(rawValue: "Constant")
+  package static let external = Self(rawValue: "External")
+  package static let map = Self(rawValue: "Map")
+  package static let rule = Self(rawValue: "Rule")
+}
+
+extension AttributeMetadata.Kind: CustomStringConvertible {
+  package var description: String { rawValue }
+}
+
+// MARK: - AttributeMetadata.AType
+
+extension AttributeMetadata {
+
+  /// The type of an attribute.
+  package struct AType: Equatable {
+    fileprivate let rawValue: String
+  }
+}
+
+extension AttributeMetadata.AType: ExpressibleByStringLiteral {
   package init(stringLiteral value: StringLiteralType) {
     self.init(rawValue: value)
   }
 }
 
-extension AttributeName: ExpressibleByStringInterpolation {}
-
-extension AttributeName: CustomStringConvertible {
+extension AttributeMetadata.AType: CustomStringConvertible {
   package var description: String { rawValue }
 }
 
