@@ -1,38 +1,12 @@
+/// An attribute body whose value is supplied from outside the graph rather
+/// than computed.
+///
+/// It holds no value of its own: an external begins empty and is given one with
+/// ``Graph/setValue(of:to:)``. Reading an external before any value is set is a
+/// programming error.
+struct External<Value>: AttributeBody {
 
-@propertyWrapper
-package final class External<Value>: Dependency {
-
-  package let name: Name
-  private unowned let graph: Graph
-
-  var dependants: [Dependant] = []
-
-  private var _value: Value
-  package var wrappedValue: Value {
-    get {
-      graph.compute(self) { _value }
-    }
-    set {
-      _value = newValue
-      for dependant in dependants {
-        dependant.dirty = true
-      }
-    }
+  func update(in graph: Graph) -> Value {
+    fatalError("An external attribute has no value until one is set.")
   }
-
-  package var projectedValue: Attribute<Value> {
-    graph.attribute(name) { self.wrappedValue }
-  }
-
-  init(graph: Graph, name: Name, value: Value) {
-    self.graph = graph
-    self.name = name
-    _value = value
-  }
-}
-
-// MARK: - External.Name
-
-extension External {
-  package typealias Name = AttributeName
 }

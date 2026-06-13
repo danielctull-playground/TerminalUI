@@ -1,3 +1,4 @@
+import AttributeGraph
 
 extension View {
 
@@ -28,26 +29,15 @@ private struct ModifiedView<Modifier: ViewModifier>: PrimitiveView {
   let modifier: Modifier
 
   static func makeView(
-    view: GraphValue<Self>,
+    view: Attribute<Self>,
     inputs: ViewInputs
   ) -> ViewOutputs {
-    ViewOutputs(
-      preferenceValues: inputs.graph.attribute("[\(Self.self)] preference values") {
-        inputs.dynamicProperties.install(on: view.value.modifier)
-        return Modifier.Body.makeView(
-          view: view.map { $0.modifier.body(content: view.value.content) },
-          inputs: inputs
-        )
-        .preferenceValues
-      },
-      displayItems: inputs.graph.attribute("[\(Self.self)] display items") {
-        inputs.dynamicProperties.install(on: view.value.modifier)
-        return Modifier.Body.makeView(
-          view: view.map { $0.modifier.body(content: view.value.content) },
-          inputs: inputs
-        )
-        .displayItems
-      }
-    )
+
+    let body = inputs.graph.map(view) { view in
+      inputs.dynamicProperties.install(on: view.modifier)
+      return view.modifier.body(content: view.content)
+    }
+
+    return Modifier.Body.makeView(view: body, inputs: inputs)
   }
 }

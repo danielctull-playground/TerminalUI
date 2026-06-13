@@ -1,3 +1,4 @@
+import AttributeGraph
 
 public struct Either<First: View, Second: View>: PrimitiveView {
 
@@ -17,24 +18,24 @@ public struct Either<First: View, Second: View>: PrimitiveView {
   }
 
   public static func makeView(
-    view: GraphValue<Self>,
+    view: Attribute<Self>,
     inputs: ViewInputs
   ) -> ViewOutputs {
     ViewOutputs(
-      preferenceValues: inputs.graph.attribute("[Either] preference values") {
-        switch view.value.value {
+      preferenceValues: inputs.graph.rule { graph in
+        switch graph[view].value {
         case let .first(first):
-          First.makeView(view: view.map { _ in first }, inputs: inputs).preferenceValues
+          graph[First.makeView(view: graph.map(view) { _ in first }, inputs: inputs).preferenceValues]
         case let .second(second):
-          Second.makeView(view: view.map { _ in second }, inputs: inputs).preferenceValues
+          graph[Second.makeView(view: graph.map(view) { _ in second }, inputs: inputs).preferenceValues]
         }
       },
-      displayItems: inputs.graph.attribute("[Either] display items") {
-        switch view.value.value {
+      displayItems: inputs.graph.rule { graph in
+        switch graph[view].value {
         case let .first(first):
-          First.makeView(view: view.map { _ in first }, inputs: inputs).displayItems
+          graph[First.makeView(view: graph.map(view) { _ in first }, inputs: inputs).displayItems]
         case let .second(second):
-          Second.makeView(view: view.map { _ in second }, inputs: inputs).displayItems
+          graph[Second.makeView(view: graph.map(view) { _ in second }, inputs: inputs).displayItems]
         }
       }
     )

@@ -1,25 +1,26 @@
+import AttributeGraph
 
 extension Optional: View where Wrapped: View {}
 
 extension Optional: PrimitiveView where Wrapped: View {
 
   public static func makeView(
-    view: GraphValue<Self>,
+    view: Attribute<Self>,
     inputs: ViewInputs
   ) -> ViewOutputs {
     ViewOutputs(
-      preferenceValues: inputs.graph.attribute("[Optional] preference values") {
-        switch view.value {
+      preferenceValues: inputs.graph.rule { graph in
+        switch graph[view] {
         case .none: .empty
         case .some(let content):
-          Wrapped.makeView(view: view.map { _ in content }, inputs: inputs).preferenceValues
+          graph[Wrapped.makeView(view: graph.map(view) { _ in content }, inputs: inputs).preferenceValues]
         }
       },
-      displayItems: inputs.graph.attribute("[Optional] display items") {
-        switch view.value {
+      displayItems: inputs.graph.rule { graph in
+        switch graph[view] {
         case .none: []
         case .some(let content):
-          Wrapped.makeView(view: view.map { _ in content }, inputs: inputs).displayItems
+          graph[Wrapped.makeView(view: graph.map(view) { _ in content }, inputs: inputs).displayItems]
         }
       }
     )

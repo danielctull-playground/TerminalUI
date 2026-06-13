@@ -1,71 +1,49 @@
 
-@propertyWrapper
-@dynamicMemberLookup
-package final class Attribute<Value>: Dependant, Dependency {
-
-  package let name: Name
-  private let make: () -> Value
-  private var cache: Value?
-  private unowned let graph: Graph
-
-  var dirty = false
-  var dependencies: [Dependency] = []
-  var dependants: [Dependant] = []
-
-  package var wrappedValue: Value {
-    graph.compute(self) {
-      if dirty { cache = nil }
-      if let cache { return cache }
-      let value = make()
-      dirty = false
-      cache = value
-      return value
-    }
-  }
-
-  package var projectedValue: Attribute<Value> {
-    self
-  }
-
-  init(graph: Graph, name: Name, make: @escaping () -> Value) {
-    self.graph = graph
-    self.name = name
-    self.make = make
-  }
-
-  package subscript<Property>(
-    dynamicMember keyPath: KeyPath<Value, Property>
-  ) -> Attribute<Property> {
-    map { $0[keyPath: keyPath] }
-  }
-
-  package func map<New>(
-    _ transform: @escaping (Value) -> New
-  ) -> Attribute<New> {
-    graph.attribute("\(type(of: Value.self)) -> \(type(of: New.self))") {
-      transform(self.wrappedValue)
-    }
-  }
+/// A typed handle to a value held in a ``Graph``.
+public struct Attribute<Value> {
+  let id: AttributeID
 }
 
-// MARK: - Attribute.Name
+// MARK: - AttributeID
 
-extension Attribute {
-  package typealias Name = AttributeName
+/// A type-erased identifier for a node in a ``Graph``.
+struct AttributeID: ArenaID {
+  let rawValue: Int
 }
 
-package struct AttributeName: Equatable {
-  private let raw: String
+// MARK: - AttributeNode
+
+/// The storage backing an ``Attribute`` owned by the ``Graph``.
+struct AttributeNode {
+
+  /// The cached value.
+  var value: Any?
+
+  /// Allows the value to be updated or recomputed from other graph values.
+  let update: (Graph) -> Any
+
+  /// The subgraph that owns this node.
+  ///
+  /// When the subgraph is torn down, this node is removed.
+  let subgraph: SubgraphID
+
+  var inputs: [Input] = []
+
+  /// The attributes that read this one while computing.
+  var outputs: Set<AttributeID> = []
+
+  /// Shows whether an input may have changed.
+  var isDirty = false
 }
 
-extension Attribute.Name: ExpressibleByStringLiteral {
-  package init(stringLiteral value: String) {
-    self.init(raw: value)
+extension AttributeNode {
+
+  struct Input {
+
+    /// The attribute depended upon.
+    let id: AttributeID
+
+    /// The input's value at the moment it was read.
+    let value: Any
   }
-}
-
-extension Attribute.Name: ExpressibleByStringInterpolation {}
-
-extension Attribute.Name: CustomStringConvertible {
-  package var description: String { raw }
 }

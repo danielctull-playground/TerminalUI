@@ -12,6 +12,7 @@ let package = Package(
     .tvOS(.v18),
   ],
   products: [
+    .library(name: "AttributeGraph", targets: ["AttributeGraph"]),
     .library(name: "TerminalUI", targets: ["TerminalUI"]),
     .library(name: "TerminalUITesting", targets: ["TerminalUITesting"]),
   ],
