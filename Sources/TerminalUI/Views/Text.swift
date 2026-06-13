@@ -1,3 +1,4 @@
+import AttributeGraph
 
 public struct Text: PrimitiveView {
 
@@ -8,19 +9,17 @@ public struct Text: PrimitiveView {
   }
 
   public static func makeView(
-    view: GraphValue<Self>,
+    view: Attribute<Self>,
     inputs: ViewInputs
   ) -> ViewOutputs {
     ViewOutputs(
-      preferenceValues: inputs.graph.attribute("[Text] preference values") {
-        .empty
-      },
-      displayItems: inputs.graph.attribute("[Text] display items") {
+      preferenceValues: inputs.graph.constant(.empty),
+      displayItems: inputs.graph.rule { _ in
         [
-          DisplayItem {
-            size(for: $0, view: view, inputs: inputs)
-          } render: {
-            render(in: $0, view: view, inputs: inputs)
+          DisplayItem { proposal in
+            size(for: proposal, view: view, inputs: inputs)
+          } render: { bounds in
+            render(in: bounds, view: view, inputs: inputs)
           }
         ]
       }
@@ -29,11 +28,11 @@ public struct Text: PrimitiveView {
 
   static private func size(
     for proposal: ProposedViewSize,
-    view: GraphValue<Self>,
+    view: Attribute<Self>,
     inputs: ViewInputs
   ) -> Size {
     let size = proposal.replacingUnspecifiedDimensions()
-    let lines = view.value.string.lines(ofLength: size.width)
+    let lines = inputs.graph[view].string.lines(ofLength: size.width)
     let height = lines.count
     let width = lines.map(\.count).max() ?? 0
     return Size(width: width, height: height)
@@ -41,12 +40,12 @@ public struct Text: PrimitiveView {
 
   static private func render(
     in bounds: Rect,
-    view: GraphValue<Self>,
+    view: Attribute<Self>,
     inputs: ViewInputs
   ) {
 
-    let lines = view.value.string.lines(ofLength: Int(bounds.size.width))
-    let environment = inputs.dynamicProperties.environment
+    let lines = inputs.graph[view].string.lines(ofLength: Int(bounds.size.width))
+    let environment = inputs.graph[inputs.dynamicProperties.environment]
 
     for (line, y) in zip(lines, bounds.origin.y...) {
       for (character, x) in zip(line, bounds.origin.x...) {

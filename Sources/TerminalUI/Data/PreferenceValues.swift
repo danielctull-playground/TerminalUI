@@ -1,3 +1,4 @@
+import AttributeGraph
 
 public protocol PreferenceKey {
   associatedtype Value
@@ -24,17 +25,21 @@ private struct PreferenceWriter<Content: View, Key: PreferenceKey>: PrimitiveVie
   let value: Key.Value
 
   public static func makeView(
-    view: GraphValue<Self>,
+    view: Attribute<Self>,
     inputs: ViewInputs
   ) -> ViewOutputs {
-    ViewOutputs(
-      preferenceValues: inputs.graph.attribute("[PreferenceWriter] preference values") {
-        Content.makeView(view: view.content, inputs: inputs).preferenceValues
-          .setting(view.value.value, for: view.value.key)
+
+    let content = Content.makeView(
+      view: inputs.graph.map(view, \.content),
+      inputs: inputs
+    )
+
+    return ViewOutputs(
+      preferenceValues: inputs.graph.rule { graph in
+        graph[content.preferenceValues]
+          .setting(graph[view].value, for: graph[view].key)
       },
-      displayItems: inputs.graph.attribute("[PreferenceWriter] display items") {
-        Content.makeView(view: view.content, inputs: inputs).displayItems
-      }
+      displayItems: content.displayItems
     )
   }
 }
@@ -61,18 +66,17 @@ private struct PreferenceReader<
   let action: (Key.Value) -> Void
 
   public static func makeView(
-    view: GraphValue<Self>,
+    view: Attribute<Self>,
     inputs: ViewInputs
   ) -> ViewOutputs {
-    ViewOutputs(
-      preferenceValues: inputs.graph.attribute("[PreferenceReader] preference values") {
-        let preferenceValues = Content.makeView(view: view.content, inputs: inputs).preferenceValues
-        view.value.action(preferenceValues[Key.self] ?? Key.defaultValue)
+    let content = Content.makeView(view: inputs.graph.map(view, \.content), inputs: inputs)
+    return ViewOutputs(
+      preferenceValues: inputs.graph.rule { graph in
+        let preferenceValues = graph[content.preferenceValues]
+        graph[view].action(preferenceValues[Key.self] ?? Key.defaultValue)
         return preferenceValues
       },
-      displayItems: inputs.graph.attribute("[PreferenceReader] display items") {
-        Content.makeView(view: view.content, inputs: inputs).displayItems
-      }
+      displayItems: content.displayItems
     )
   }
 }

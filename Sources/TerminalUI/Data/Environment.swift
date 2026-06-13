@@ -1,3 +1,4 @@
+import AttributeGraph
 
 // MARK: EnvironmentKey
 
@@ -27,7 +28,7 @@ public struct Environment<Value> {
 extension Environment: DynamicProperty {
 
   func install(_ properties: DynamicProperties, for label: String) {
-    values = properties.environment
+    values = properties.graph[properties.environment]
   }
 }
 
@@ -50,37 +51,22 @@ private struct EnvironmentWriter<Content: View, Value>: PrimitiveView {
   let value: Value
 
   public static func makeView(
-    view: GraphValue<Self>,
+    view: Attribute<Self>,
     inputs: ViewInputs
   ) -> ViewOutputs {
-    ViewOutputs(
-      preferenceValues: inputs.graph.attribute("[EnvironmentWriter] preference values") {
-        Content
-          .makeView(
-            view: view.content,
-            inputs: inputs
-              .mapDynamicProperties {
-                $0.modifyEnvironment {
-                  $0[keyPath: view.value.keyPath] = view.value.value
-                }
-              }
-          )
-          .preferenceValues
-      },
-      displayItems: inputs.graph.attribute("[EnvironmentWriter] display items") {
-        Content
-          .makeView(
-            view: view.content,
-            inputs: inputs
-              .mapDynamicProperties {
-                $0.modifyEnvironment {
-                  $0[keyPath: view.value.keyPath] = view.value.value
-                }
-              }
-          )
-          .displayItems
+
+    let graph = inputs.graph
+    let content = graph.map(view, \.content)
+
+    // Fork the environment once and build the content against it.
+    let inputs = inputs.mapDynamicProperties { properties in
+      properties.modifyEnvironment { environment in
+        let writer = graph[view]
+        environment[keyPath: writer.keyPath] = writer.value
       }
-    )
+    }
+
+    return Content.makeView(view: content, inputs: inputs)
   }
 }
 
@@ -169,12 +155,12 @@ extension DynamicProperties {
   ) -> DynamicProperties {
     DynamicProperties(
       graph: graph,
-      environment: graph.attribute("[modify env]") {
-        var environment = self.environment
+      environment: graph.rule { graph in
+        var environment = graph[self.environment]
         transform(&environment)
         return environment
       },
-      state: graph.external("state", StateValues())
+      state: state
     )
   }
 }

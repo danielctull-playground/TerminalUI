@@ -1,3 +1,4 @@
+import AttributeGraph
 
 public struct AnyView: PrimitiveView {
 
@@ -6,24 +7,22 @@ public struct AnyView: PrimitiveView {
   public init<View: TerminalUI.View>(_ view: View) {
     makeView = { inputs in
       View.makeView(
-        view: GraphValue(
-          value: inputs.graph.attribute("[AnyView (\(type(of: View.self))]") { view }
-        ),
+        view: inputs.graph.constant(view),
         inputs: inputs
       )
     }
   }
 
   public static func makeView(
-    view: GraphValue<Self>,
+    view: Attribute<Self>,
     inputs: ViewInputs
   ) -> ViewOutputs {
-    ViewOutputs(
-      preferenceValues: inputs.graph.attribute("[AnyView] preference values") {
-        view.value.makeView(inputs).preferenceValues
+    return ViewOutputs(
+      preferenceValues: inputs.graph.rule { graph in
+        graph[graph[view].makeView(inputs).preferenceValues]
       },
-      displayItems: inputs.graph.attribute("[AnyView] display items") {
-        view.value.makeView(inputs).displayItems
+      displayItems: inputs.graph.rule { graph in
+        graph[graph[view].makeView(inputs).displayItems]
       }
     )
   }

@@ -1,3 +1,4 @@
+import AttributeGraph
 
 struct Accumulated<A: View, B: View>: PrimitiveView {
 
@@ -10,22 +11,22 @@ struct Accumulated<A: View, B: View>: PrimitiveView {
   }
 
   static func makeView(
-    view: GraphValue<Self>,
+    view: Attribute<Self>,
     inputs: ViewInputs
   ) -> ViewOutputs {
-    ViewOutputs(
-      preferenceValues: inputs.graph.attribute("[Accumulated] preference values") {
+    let a = A.makeView(view: inputs.graph.map(view, \.a), inputs: inputs)
+    let b = B.makeView(view: inputs.graph.map(view, \.b), inputs: inputs)
+    return ViewOutputs(
+      preferenceValues: inputs.graph.rule { graph in
         PreferenceValues { key in
           key.value(
-            lhs: A.makeView(view: view.a, inputs: inputs).preferenceValues,
-            rhs: B.makeView(view: view.b, inputs: inputs).preferenceValues
+            lhs: graph[a.preferenceValues],
+            rhs: graph[b.preferenceValues]
           )
         }
       },
-      displayItems: inputs.graph.attribute("[Accumulated] display items") {
-        let a = A.makeView(view: view.a, inputs: inputs)
-        let b = B.makeView(view: view.b, inputs: inputs)
-        return a.displayItems + b.displayItems
+      displayItems: inputs.graph.rule { graph in
+        graph[a.displayItems] + graph[b.displayItems]
       }
     )
   }

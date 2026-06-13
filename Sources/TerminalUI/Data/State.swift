@@ -30,8 +30,14 @@ public struct State<Value> {
 extension State: DynamicProperty {
 
   func install(_ properties: DynamicProperties, for label: String) {
-    get = { properties.state.values[label] as? Value ?? initialValue }
-    set = { newValue in properties.state.values[label] = newValue }
+    get = {
+      properties.graph[properties.state].values[label] as? Value ?? initialValue
+    }
+    set = { newValue in
+      var values = properties.graph[properties.state]
+      values.values[label] = newValue
+      properties.graph.setValue(of: properties.state, to: values)
+    }
   }
 }
 

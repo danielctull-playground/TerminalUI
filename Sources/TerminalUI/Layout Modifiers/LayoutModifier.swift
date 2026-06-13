@@ -1,3 +1,4 @@
+import AttributeGraph
 
 /// Represents a modification to the layout of display items.
 ///
@@ -51,20 +52,17 @@ private struct LayoutModifierView<Content: View, LayoutModifier: TerminalUI.Layo
   }
 
   static func makeView(
-    view: GraphValue<Self>,
+    view: Attribute<Self>,
     inputs: ViewInputs
   ) -> ViewOutputs {
-    ViewOutputs(
-      preferenceValues: inputs.graph.attribute("[\(LayoutModifier.self)] preference values") {
-        Content.makeView(view: view.content, inputs: inputs).preferenceValues
-      },
-      displayItems: inputs.graph.attribute("[\(LayoutModifier.self)] display items") {
+    let content = Content.makeView(view: inputs.graph.map(view, \.content), inputs: inputs)
+    return ViewOutputs(
+      preferenceValues: content.preferenceValues,
+      displayItems: inputs.graph.rule { graph in
 
-        let layoutModifier = view.value.layoutModifier
+        let layoutModifier = graph[view].layoutModifier
 
-        return Content
-          .makeView(view: view.content, inputs: inputs)
-          .displayItems
+        return graph[content.displayItems]
           .map { item in
 
             let subview = LayoutModifier.Subview(displayItem: item)
@@ -72,12 +70,14 @@ private struct LayoutModifierView<Content: View, LayoutModifier: TerminalUI.Layo
             return DisplayItem { proposal in
               layoutModifier.sizeThatFits(
                 proposal: proposal,
-                subview: subview)
+                subview: subview
+              )
             } render: { bounds in
               layoutModifier.placeSubview(
                 in: bounds,
                 proposal: ProposedViewSize(bounds.size),
-                subview: subview)
+                subview: subview
+              )
             }
           }
       }

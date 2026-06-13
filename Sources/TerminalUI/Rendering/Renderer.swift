@@ -3,8 +3,9 @@ import Foundation
 
 package struct Renderer<Content: View, Canvas: TerminalUI.Canvas> {
 
+  private let graph: Graph
   private let canvas: Canvas
-  @External private var environment: EnvironmentValues
+  private let environment: Attribute<EnvironmentValues>
   private let outputs: ViewOutputs
 
   init(
@@ -12,37 +13,44 @@ package struct Renderer<Content: View, Canvas: TerminalUI.Canvas> {
     content: Content
   ) {
     let graph = Graph()
-    let screen = graph.attribute("screen") { Screen(content: content) }
-    let environment = graph.external("environment", EnvironmentValues())
+    let screen = graph.constant(Screen(content: content))
+
+    let environment = graph.external(of: EnvironmentValues.self)
+    graph.setValue(of: environment, to: EnvironmentValues())
+
+    let state = graph.external(of: StateValues.self)
+    graph.setValue(of: state, to: StateValues())
 
     let inputs = ViewInputs(
       graph: graph,
       canvas: canvas,
       dynamicProperties: DynamicProperties(
         graph: graph,
-        environment: environment.projectedValue,
-        state: graph.external("state", StateValues())
+        environment: environment,
+        state: state
       )
     )
 
+    self.graph = graph
     self.canvas = canvas
+    self.environment = environment
     self.outputs = Screen.makeView(
-      view: GraphValue(value: screen),
+      view: screen,
       inputs: inputs
     )
-    self._environment = environment
   }
 
   package func render(event: some Event) {
 
-    event.updateEnvironment(&environment)
+    var environmentValues = graph[environment]
+    event.updateEnvironment(&environmentValues)
+    graph.setValue(of: environment, to: environmentValues)
 
-    _ = outputs.preferenceValues // Trigger preference values
+    _ = graph[outputs.preferenceValues] // Trigger preference values
 
-    outputs
-      .displayItems
+    graph[outputs.displayItems]
       .first!
-      .render(in: Rect(origin: .origin, size: environment.windowSize))
+      .render(in: Rect(origin: .origin, size: graph[environment].windowSize))
   }
 }
 

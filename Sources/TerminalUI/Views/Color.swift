@@ -1,3 +1,4 @@
+import AttributeGraph
 
 public struct Color: CustomStringConvertible, Equatable, Sendable, PrimitiveView {
 
@@ -6,19 +7,17 @@ public struct Color: CustomStringConvertible, Equatable, Sendable, PrimitiveView
   let background: GraphicRendition
 
   public static func makeView(
-    view: GraphValue<Self>,
+    view: Attribute<Self>,
     inputs: ViewInputs
   ) -> ViewOutputs {
     ViewOutputs(
-      preferenceValues: inputs.graph.attribute("[Color] preference values") {
-        .empty
-      },
-      displayItems: inputs.graph.attribute("[Color] display items") {
+      preferenceValues: inputs.graph.constant(.empty),
+      displayItems: inputs.graph.rule { _ in
         [
           DisplayItem {
             $0.replacingUnspecifiedDimensions()
           } render: { bounds in
-            let pixel = Pixel(" ", background: view.value)
+            let pixel = Pixel(" ", background: inputs.graph[view])
             for x in bounds.minX...bounds.maxX {
               for y in bounds.minY...bounds.maxY {
                 inputs.canvas.draw(pixel, at: Position(x: x, y: y))
