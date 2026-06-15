@@ -222,4 +222,34 @@ struct SubgraphTests {
 
     #expect(weakGraph == nil)
   }
+
+  @Test func `subgraph(in:) parents under the given subgraph, not the current one`() {
+
+    let graph = Graph()
+    let a = graph.subgraph {}
+    let b = graph.subgraph {}
+
+    // Neither a nor b is current here, yet we can still nest under a.
+    var passed: Subgraph!
+    let child = graph.subgraph(in: a) { passed = $0 }
+
+    #expect(child == passed)
+    #expect(graph.parent(of: child) == a)
+    #expect(graph.children(of: a) == [child])
+    #expect(graph.children(of: b) == [])
+  }
+
+  @Test func `subgraph(in:) routes new attributes to the new subgraph then restores the current one`() {
+
+    let graph = Graph()
+    let a = graph.subgraph {}
+
+    var inside: Attribute<Int>!
+    let child = graph.subgraph(in: a) { _ in inside = graph.constant(1) }
+    #expect(graph.subgraph(of: inside) == child)
+
+    // Afterwards the current subgraph is back to the root.
+    let outside = graph.constant(2)
+    #expect(graph.subgraph(of: outside) == graph.root)
+  }
 }
