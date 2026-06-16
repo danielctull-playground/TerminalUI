@@ -205,5 +205,25 @@ struct PreferenceTests {
 
       #expect(output == "12")
     }
+
+    @Test func `each sibling observes its own preference`() {
+
+      var lhs = ""
+      var rhs = ""
+
+      canvas.render {
+        Group {
+          Text("x")
+            .preference(key: A.self, value: "lhs")
+            .onPreferenceChange(A.self) { lhs = $0 }
+          Text("y")
+            .preference(key: B.self, value: "rhs")
+            .onPreferenceChange(B.self) { rhs = $0 }
+        }
+      }
+
+      #expect(lhs == "lhs")
+      #expect(rhs == "rhs")
+    }
   }
 }
