@@ -18,16 +18,12 @@ package struct Renderer<Content: View, Canvas: TerminalUI.Canvas> {
     let environment = graph.external(of: EnvironmentValues.self)
     graph.setValue(of: environment, to: EnvironmentValues())
 
-    let state = graph.external(of: StateValues.self)
-    graph.setValue(of: state, to: StateValues())
-
     let inputs = ViewInputs(
       graph: graph,
       canvas: canvas,
       dynamicProperties: DynamicProperties(
-        graph: graph,
-        environment: environment,
-        state: state
+        subgraph: graph.root,
+        environment: environment
       )
     )
 

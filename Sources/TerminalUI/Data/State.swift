@@ -5,11 +5,11 @@ public struct State<Value> {
 
   let initialValue: Value
 
-  @Mutable private var get: () -> Value = {
+  @Mutable fileprivate var get: () -> Value = {
     fatalError("State value not set.")
   }
 
-  @Mutable private var set: (Value) -> Void = {
+  @Mutable fileprivate var set: (Value) -> Void = {
     _ in fatalError("State value not set.")
   }
 
@@ -29,18 +29,29 @@ public struct State<Value> {
 
 extension State: DynamicProperty {
 
-  func install(_ properties: DynamicProperties, for label: String) {
-    get = {
-      properties.graph[properties.state].values[label] as? Value ?? initialValue
-    }
-    set = { newValue in
-      var values = properties.graph[properties.state]
-      values.values[label] = newValue
-      properties.graph.setValue(of: properties.state, to: values)
-    }
+  func makeProperty(
+    in buffer: inout DynamicPropertyBuffer,
+    field: DynamicPropertyBuffer.Field,
+    graph: Graph,
+    properties: DynamicProperties
+  ) {
+    let attribute = graph.external(of: Value.self)
+    graph.setValue(of: attribute, to: initialValue)
+    buffer.append(StateBox<Value>(attribute: attribute), field: field)
   }
 }
 
-struct StateValues {
-  fileprivate var values: [String: Any] = [:]
+private struct StateBox<Value>: DynamicPropertyBox {
+
+  let attribute: Attribute<Value>
+
+  func update(property: Any, graph: Graph, properties: DynamicProperties) {
+    guard let state = property as? State<Value> else { fatalError() }
+    state.set = { [unowned graph] newValue in
+      graph.setValue(of: attribute, to: newValue)
+    }
+    state.get = { [unowned graph] in
+      graph[attribute]
+    }
+  }
 }

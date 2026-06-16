@@ -118,6 +118,32 @@ struct StateTests {
       Position(x: 4, y: 1): Pixel("w"),
     ])
   }
+
+  @Test func `sibling views with the same @State name keep independent values`() {
+
+    struct Counter: View {
+      let written: String
+      @State var value = "·"
+      var body: some View {
+        Text(value)
+          .preference(key: PreferenceKey.A.self, value: written)
+          .onPreferenceChange(PreferenceKey.A.self) { value = $0 }
+      }
+    }
+
+    let canvas = TestCanvas(width: 1, height: 2)
+    canvas.render {
+      VStack {
+        Counter(written: "a")
+        Counter(written: "b")
+      }
+    }
+
+    #expect(canvas.pixels == [
+      Position(x: 1, y: 1): Pixel("a"),
+      Position(x: 1, y: 2): Pixel("b"),
+    ])
+  }
 }
 
 private struct TestView: View {

@@ -15,14 +15,4 @@ public struct ViewInputs {
     self.canvas = canvas
     self.dynamicProperties = dynamicProperties
   }
-
-  func mapDynamicProperties(
-    _ transform: @escaping (DynamicProperties) -> DynamicProperties
-  ) -> ViewInputs {
-    ViewInputs(
-      graph: graph,
-      canvas: canvas,
-      dynamicProperties: transform(dynamicProperties)
-    )
-  }
 }

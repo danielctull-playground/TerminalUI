@@ -13,7 +13,7 @@ public protocol EnvironmentKey {
 public struct Environment<Value> {
 
   private let keyPath: KeyPath<EnvironmentValues, Value>
-  @Mutable private var values: EnvironmentValues?
+  @Mutable fileprivate var values: EnvironmentValues?
 
   public init(_ keyPath: KeyPath<EnvironmentValues, Value>) {
     self.keyPath = keyPath
@@ -27,8 +27,21 @@ public struct Environment<Value> {
 
 extension Environment: DynamicProperty {
 
-  func install(_ properties: DynamicProperties, for label: String) {
-    values = properties.graph[properties.environment]
+  func makeProperty(
+    in buffer: inout DynamicPropertyBuffer,
+    field: DynamicPropertyBuffer.Field,
+    graph: Graph,
+    properties: DynamicProperties
+  ) {
+    buffer.append(EnvironmentBox<Value>(), field: field)
+  }
+}
+
+private struct EnvironmentBox<Value>: DynamicPropertyBox {
+
+  func update(property: Any, graph: Graph, properties: DynamicProperties) {
+    guard let environment = property as? Environment<Value> else { fatalError() }
+    environment.values = graph[properties.environment]
   }
 }
 
@@ -55,16 +68,22 @@ private struct EnvironmentWriter<Content: View, Value>: PrimitiveView {
     inputs: ViewInputs
   ) -> ViewOutputs {
 
-    let graph = inputs.graph
-    let content = graph.map(view, \.content)
+    let content = inputs.graph.map(view, \.content)
+    let dynamicProperties = inputs.dynamicProperties
 
-    // Fork the environment once and build the content against it.
-    let inputs = inputs.mapDynamicProperties { properties in
-      properties.modifyEnvironment { environment in
-        let writer = graph[view]
-        environment[keyPath: writer.keyPath] = writer.value
-      }
-    }
+    let inputs = ViewInputs(
+      graph: inputs.graph,
+      canvas: inputs.canvas,
+      dynamicProperties: DynamicProperties(
+        subgraph: dynamicProperties.subgraph,
+        environment: inputs.graph.rule { graph in
+          var environment = graph[dynamicProperties.environment]
+          let writer = graph[view]
+          environment[keyPath: writer.keyPath] = writer.value
+          return environment
+        }
+      )
+    )
 
     return Content.makeView(view: content, inputs: inputs)
   }
@@ -143,24 +162,5 @@ extension AnyEnvironmentPropertyKey: Equatable {
 extension AnyEnvironmentPropertyKey: Hashable {
   func hash(into hasher: inout Hasher) {
     hasher.combine(id)
-  }
-}
-
-// MARK: - Helpers
-
-extension DynamicProperties {
-
-  fileprivate func modifyEnvironment(
-    _ transform: @escaping (inout EnvironmentValues) -> Void
-  ) -> DynamicProperties {
-    DynamicProperties(
-      graph: graph,
-      environment: graph.rule { graph in
-        var environment = graph[self.environment]
-        transform(&environment)
-        return environment
-      },
-      state: state
-    )
   }
 }
