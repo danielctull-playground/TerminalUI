@@ -19,18 +19,22 @@ extension View {
     inputs: ViewInputs
   ) -> ViewOutputs {
 
-    let properties = inputs.dynamicProperties
-    let buffer = DynamicPropertyBuffer(
-      graph: inputs.graph,
-      properties: properties,
-      target: inputs.graph[view]
-    )
+    inputs.graph.subgraph {
 
-    let body = inputs.graph.map(view) { [unowned graph = inputs.graph] view in
-      buffer.update(target: view, graph: graph, properties: properties)
-      return view.body
-    }
+      let properties = inputs.dynamicProperties
+      let buffer = DynamicPropertyBuffer(
+        graph: inputs.graph,
+        properties: properties,
+        target: inputs.graph[view]
+      )
 
-    return Body.makeView(view: body, inputs: inputs)
+      let body = inputs.graph.map(view) { [unowned graph = inputs.graph] view in
+        buffer.update(target: view, graph: graph, properties: properties)
+        return view.body
+      }
+
+      return Body.makeView(view: body, inputs: inputs)
+
+    }.1
   }
 }

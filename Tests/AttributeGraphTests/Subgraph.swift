@@ -12,7 +12,7 @@ struct SubgraphTests {
     #expect(graph.subgraph(of: a) == graph.root)
 
     var b: Attribute<Int>!
-    let subgraph = graph.subgraph {
+    let (subgraph, _) = graph.subgraph {
       b = graph.constant(2)
     }
     #expect(graph.subgraph(of: b) == subgraph)
@@ -24,7 +24,7 @@ struct SubgraphTests {
 
     let graph = Graph()
 
-    let subgraph = graph.subgraph {
+    let (subgraph, _) = graph.subgraph {
       _ = graph.constant(1)
     }
 
@@ -36,7 +36,7 @@ struct SubgraphTests {
 
   @Test func `first subgraph is a child of the root subgraph`() {
     let graph = Graph()
-    let child = graph.subgraph {}
+    let (child, _) = graph.subgraph {}
     #expect(graph.parent(of: child) == graph.root)
     #expect(graph.children(of: graph.root) == [child])
     #expect(graph.parent(of: graph.root) == nil)
@@ -46,8 +46,8 @@ struct SubgraphTests {
 
     let graph = Graph()
     var inner: Subgraph!
-    let outer = graph.subgraph {
-      inner = graph.subgraph {}
+    let (outer, _) = graph.subgraph {
+      (inner, _) = graph.subgraph {}
     }
 
     #expect(graph.parent(of: graph.root) == nil)
@@ -63,7 +63,7 @@ struct SubgraphTests {
 
     let graph = Graph()
     _ = graph.constant("a")
-    let child = graph.subgraph {
+    let (child, _) = graph.subgraph {
       _ = graph.constant("")
     }
 
@@ -78,8 +78,8 @@ struct SubgraphTests {
 
     let graph = Graph()
     var inner: Subgraph!
-    let outer = graph.subgraph {
-      inner = graph.subgraph {
+    let (outer, _) = graph.subgraph {
+      (inner, _) = graph.subgraph {
         _ = graph.constant(1)
       }
       _ = graph.constant(2)
@@ -108,7 +108,7 @@ struct SubgraphTests {
     graph.setValue(of: a, to: 1)
 
     var b: Attribute<Int>!
-    let subgraph = graph.subgraph {
+    let (subgraph, _) = graph.subgraph {
       b = graph.map(a) { $0 * 2 }
     }
 
@@ -131,7 +131,7 @@ struct SubgraphTests {
     graph.setValue(of: a, to: 1)
 
     var d: Attribute<Int>!
-    let subgraph = graph.subgraph {
+    let (subgraph, _) = graph.subgraph {
       let b = graph.map(a) { $0 + 1 }
       let c = graph.map(a) { $0 + 2 }
       d = graph.rule { graph in graph[b] + graph[c] }
@@ -157,7 +157,7 @@ struct SubgraphTests {
     let graph = Graph()
     weak var held: Box?
 
-    let subgraph = graph.subgraph {
+    let (subgraph, _) = graph.subgraph {
       let attribute = graph.external(of: Box.self)
       let box = Box()
       held = box
@@ -179,7 +179,7 @@ struct SubgraphTests {
     weak var outer: Box?
     weak var inner: Box?
 
-    let subgraph = graph.subgraph {
+    let (subgraph, _) = graph.subgraph {
       let a = graph.external(of: Box.self)
       let box = Box()
       outer = box
@@ -226,12 +226,12 @@ struct SubgraphTests {
   @Test func `subgraph(in:) parents under the given subgraph, not the current one`() {
 
     let graph = Graph()
-    let a = graph.subgraph {}
-    let b = graph.subgraph {}
+    let (a, _) = graph.subgraph {}
+    let (b, _) = graph.subgraph {}
 
     // Neither a nor b is current here, yet we can still nest under a.
     var passed: Subgraph!
-    let child = graph.subgraph(in: a) { passed = $0 }
+    let (child, _) = graph.subgraph(in: a) { passed = $0 }
 
     #expect(child == passed)
     #expect(graph.parent(of: child) == a)
@@ -242,10 +242,10 @@ struct SubgraphTests {
   @Test func `subgraph(in:) routes new attributes to the new subgraph then restores the current one`() {
 
     let graph = Graph()
-    let a = graph.subgraph {}
+    let (a, _) = graph.subgraph {}
 
     var inside: Attribute<Int>!
-    let child = graph.subgraph(in: a) { _ in inside = graph.constant(1) }
+    let (child, _) = graph.subgraph(in: a) { _ in inside = graph.constant(1) }
     #expect(graph.subgraph(of: inside) == child)
 
     // Afterwards the current subgraph is back to the root.

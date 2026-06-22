@@ -22,21 +22,21 @@ package final class Graph {
 
 extension Graph {
 
-  package func subgraph(_ body: () -> Void) -> Subgraph {
+  package func subgraph<Result>(_ body: () -> Result) -> (Subgraph, Result) {
     subgraph(in: currentSubgraph) { _ in body() }
   }
 
-  package func subgraph(
+  package func subgraph<Result>(
     in parent: Subgraph,
-    body: (Subgraph) -> Void
-  ) -> Subgraph {
+    body: (Subgraph) -> Result
+  ) -> (Subgraph, Result) {
     subgraph(in: parent.id, body)
   }
 
-  private func subgraph(
+  private func subgraph<Result>(
     in parent: SubgraphID,
-    _ body: (Subgraph) -> Void
-  ) -> Subgraph {
+    _ body: (Subgraph) -> Result
+  ) -> (Subgraph, Result) {
 
     let id = subgraphs.insert(SubgraphNode(parent: parent))
     subgraphs[parent].children.append(id)
@@ -44,10 +44,10 @@ extension Graph {
 
     let previous = currentSubgraph
     currentSubgraph = id
-    body(subgraph)
+    let result = body(subgraph)
     currentSubgraph = previous
 
-    return subgraph
+    return (subgraph, result)
   }
 
   /// Removes the subgraph and its attributes from the graph.
