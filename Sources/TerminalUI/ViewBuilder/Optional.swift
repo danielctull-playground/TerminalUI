@@ -8,21 +8,28 @@ extension Optional: PrimitiveView where Wrapped: View {
     view: Attribute<Self>,
     inputs: ViewInputs
   ) -> ViewOutputs {
-    ViewOutputs(
-      preferenceValues: inputs.graph.rule { graph in
-        switch graph[view] {
-        case .none: .empty
-        case .some(let content):
-          graph[Wrapped.makeView(view: graph.map(view) { _ in content }, inputs: inputs).preferenceValues]
+
+    inputs.graph.subgraph {
+
+      
+      ViewOutputs(
+        preferenceValues: inputs.graph.rule { graph in
+          switch graph[view] {
+          case .none: .empty
+          case .some(let content):
+            graph[Wrapped.makeView(view: graph.map(view) { _ in content }, inputs: inputs).preferenceValues]
+          }
+        },
+        displayItems: inputs.graph.rule { graph in
+          switch graph[view] {
+          case .none: []
+          case .some(let content):
+            graph[Wrapped.makeView(view: graph.map(view) { _ in content }, inputs: inputs).displayItems]
+          }
         }
-      },
-      displayItems: inputs.graph.rule { graph in
-        switch graph[view] {
-        case .none: []
-        case .some(let content):
-          graph[Wrapped.makeView(view: graph.map(view) { _ in content }, inputs: inputs).displayItems]
-        }
-      }
-    )
+      )
+    }.1
+
+//    let wrapped = Wrapped.makeView(view: inputs.graph.map(view, \.unsafelyUnwrapped), inputs: inputs)
   }
 }

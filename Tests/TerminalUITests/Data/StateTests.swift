@@ -119,6 +119,72 @@ struct StateTests {
     ])
   }
 
+  @Test func `a stateful view inside an Optional keeps its written value`() {
+
+    struct Counter: View {
+      @State var value = "hello"
+      var body: some View {
+        Text(value)
+          .preference(key: PreferenceKey.A.self, value: "new")
+          .onPreferenceChange(PreferenceKey.A.self) { value = $0 }
+      }
+    }
+
+    struct Wrapper: View {
+      let show: Bool
+      var body: some View {
+        if show {
+          Counter()
+        }
+      }
+    }
+
+    let canvas = TestCanvas(width: 5, height: 1)
+    canvas.render {
+      Wrapper(show: true)
+    }
+
+    #expect(canvas.pixels == [
+      Position(x: 2, y: 1): Pixel("n"),
+      Position(x: 3, y: 1): Pixel("e"),
+      Position(x: 4, y: 1): Pixel("w"),
+    ])
+  }
+
+  @Test func `a stateful view inside an Either keeps its written value`() {
+
+    struct Counter: View {
+      @State var value = "hello"
+      var body: some View {
+        Text(value)
+          .preference(key: PreferenceKey.A.self, value: "new")
+          .onPreferenceChange(PreferenceKey.A.self) { value = $0 }
+      }
+    }
+
+    struct Wrapper: View {
+      let first: Bool
+      var body: some View {
+        if first {
+          Counter()
+        } else {
+          Text("x")
+        }
+      }
+    }
+
+    let canvas = TestCanvas(width: 5, height: 1)
+    canvas.render {
+      Wrapper(first: true)
+    }
+
+    #expect(canvas.pixels == [
+      Position(x: 2, y: 1): Pixel("n"),
+      Position(x: 3, y: 1): Pixel("e"),
+      Position(x: 4, y: 1): Pixel("w"),
+    ])
+  }
+
   @Test func `sibling views with the same @State name keep independent values`() {
 
     struct Counter: View {
