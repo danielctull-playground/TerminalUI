@@ -221,4 +221,33 @@ struct GraphTests {
     #expect(graph[picked] == 3)
     #expect(computations == 3)
   }
+
+  @Test func `writing an external value marks the graph as needing an update`() {
+    let graph = Graph()
+    #expect(graph.needsUpdate == false)
+    let a = graph.external(of: Int.self)
+    #expect(graph.needsUpdate == false)
+    graph.setValue(of: a, to: 1)
+    #expect(graph.needsUpdate == true)
+  }
+
+  @Test func `a constant doesn't mark the graph as needing an update`() {
+    let graph = Graph()
+    _ = graph.constant(1)
+    #expect(graph.needsUpdate == false)
+  }
+
+  @Test func `a rule doesn't mark the graph as needing an update`() {
+    let graph = Graph()
+    let a = graph.constant(1)
+    _ = graph.rule { $0[a] * 2 }
+    #expect(graph.needsUpdate == false)
+  }
+
+  @Test func `a map doesn't mark the graph as needing an update`() {
+    let graph = Graph()
+    let a = graph.constant(1)
+    _ = graph.map(a) { $0 * 2 }
+    #expect(graph.needsUpdate == false)
+  }
 }

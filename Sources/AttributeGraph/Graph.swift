@@ -13,6 +13,9 @@ package final class Graph {
   /// The subgraph new attributes are assigned to. Defaults to the root.
   private var currentSubgraph = SubgraphID(rawValue: 0)
 
+  /// Shows whether the graph has work to do in its next update.
+  package private(set) var needsUpdate = false
+
   package init() {
     root = Subgraph(id: subgraphs.insert(SubgraphNode(parent: nil)))
   }
@@ -137,6 +140,7 @@ extension Graph {
 
     attributes[attribute.id].value = newValue
     markAsDirty(dependentsOf: attribute.id)
+    needsUpdate = true
   }
 
   /// Recursively marks dependencies of the given attribute as dirty.
