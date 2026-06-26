@@ -14,7 +14,7 @@ package final class Graph {
   private var currentSubgraph = SubgraphID(rawValue: 0)
 
   /// Shows whether the graph has work to do in its next update.
-  package private(set) var needsUpdate = false
+  private var needsUpdate = false
 
   package init() {
     root = Subgraph(id: subgraphs.insert(SubgraphNode(parent: nil)))
@@ -222,8 +222,13 @@ extension Graph {
 
 extension Graph {
 
-  package func update() {
+  /// Resolves the graph's pending work.
+  /// 
+  /// - Parameter body: A closure that is run if updates were resolved.
+  package func withUpdate(_ body: () -> Void = {}) {
+    guard needsUpdate else { return }
     needsUpdate = false
+    body()
   }
 }
 
