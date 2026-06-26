@@ -218,6 +218,15 @@ extension Graph {
   }
 }
 
+// MARK: - Updates
+
+extension Graph {
+
+  package func update() {
+    needsUpdate = false
+  }
+}
+
 // MARK: - Debugging
 
 extension Graph {

@@ -222,32 +222,64 @@ struct GraphTests {
     #expect(computations == 3)
   }
 
-  @Test func `writing an external value marks the graph as needing an update`() {
-    let graph = Graph()
-    #expect(graph.needsUpdate == false)
-    let a = graph.external(of: Int.self)
-    #expect(graph.needsUpdate == false)
-    graph.setValue(of: a, to: 1)
-    #expect(graph.needsUpdate == true)
-  }
+  @Suite struct Updates {
 
-  @Test func `a constant doesn't mark the graph as needing an update`() {
-    let graph = Graph()
-    _ = graph.constant(1)
-    #expect(graph.needsUpdate == false)
-  }
+    @Test func `writing an external value marks the graph as needing an update`() {
+      let graph = Graph()
+      #expect(graph.needsUpdate == false)
+      let a = graph.external(of: Int.self)
+      #expect(graph.needsUpdate == false)
+      graph.setValue(of: a, to: 1)
+      #expect(graph.needsUpdate == true)
+    }
 
-  @Test func `a rule doesn't mark the graph as needing an update`() {
-    let graph = Graph()
-    let a = graph.constant(1)
-    _ = graph.rule { $0[a] * 2 }
-    #expect(graph.needsUpdate == false)
-  }
+    @Test func `a constant doesn't mark the graph as needing an update`() {
+      let graph = Graph()
+      _ = graph.constant(1)
+      #expect(graph.needsUpdate == false)
+    }
 
-  @Test func `a map doesn't mark the graph as needing an update`() {
-    let graph = Graph()
-    let a = graph.constant(1)
-    _ = graph.map(a) { $0 * 2 }
-    #expect(graph.needsUpdate == false)
+    @Test func `a rule doesn't mark the graph as needing an update`() {
+      let graph = Graph()
+      let a = graph.constant(1)
+      _ = graph.rule { $0[a] * 2 }
+      #expect(graph.needsUpdate == false)
+    }
+
+    @Test func `a map doesn't mark the graph as needing an update`() {
+      let graph = Graph()
+      let a = graph.constant(1)
+      _ = graph.map(a) { $0 * 2 }
+      #expect(graph.needsUpdate == false)
+    }
+
+    @Test func `the update pass settles the graph after a burst of writes`() {
+      let graph = Graph()
+      let a = graph.external(of: Int.self)
+      graph.setValue(of: a, to: 1)
+      graph.setValue(of: a, to: 2)
+      #expect(graph.needsUpdate == true)
+
+      // However many writes happened, a single update resolves them.
+      graph.update()
+      #expect(graph.needsUpdate == false)
+    }
+
+    @Test func `writing an equal value after resolving needs no update`() {
+      let graph = Graph()
+      let a = graph.external(of: Int.self)
+
+      graph.setValue(of: a, to: 1)
+      #expect(graph.needsUpdate == true)
+
+      graph.update()
+      #expect(graph.needsUpdate == false)
+
+      graph.setValue(of: a, to: 1)
+      #expect(graph.needsUpdate == false)
+
+      graph.setValue(of: a, to: 2)
+      #expect(graph.needsUpdate == true)
+    }
   }
 }
