@@ -118,6 +118,32 @@ struct StateTests {
       Position(x: 4, y: 1): Pixel("w"),
     ])
   }
+
+  @Test func `sibling state is independent`() {
+
+    struct Content: View {
+      @State private var shown = "?"
+      let value: String
+      var body: some View {
+        Text(shown)
+          .preference(key: PreferenceKey.A.self, value: value)
+          .onPreferenceChange(PreferenceKey.A.self) { shown = $0 }
+      }
+    }
+
+    let canvas = TestCanvas(width: 1, height: 2)
+    canvas.render {
+      VStack(spacing: 0) {
+        Content(value: "a")
+        Content(value: "b")
+      }
+    }
+
+    #expect(canvas.pixels == [
+      Position(x: 1, y: 1): Pixel("a"),
+      Position(x: 1, y: 2): Pixel("b"),
+    ])
+  }
 }
 
 private struct TestView: View {

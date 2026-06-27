@@ -19,8 +19,13 @@ extension View {
     inputs: ViewInputs
   ) -> ViewOutputs {
 
+    let dynamicProperties = DynamicProperties(
+      graph: inputs.graph,
+      environment: inputs.dynamicProperties.environment
+    )
+
     let body = inputs.graph.map(view) { view in
-      inputs.dynamicProperties.install(on: view)
+      dynamicProperties.install(on: view)
       return view.body
     }
 

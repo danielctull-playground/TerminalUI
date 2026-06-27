@@ -159,8 +159,7 @@ extension DynamicProperties {
         var environment = graph[self.environment]
         transform(&environment)
         return environment
-      },
-      state: state
+      }
     )
   }
 }

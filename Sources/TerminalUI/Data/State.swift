@@ -5,42 +5,28 @@ public struct State<Value> {
 
   let initialValue: Value
 
-  @Mutable private var get: () -> Value = {
-    fatalError("State value not set.")
-  }
-
-  @Mutable private var set: (Value) -> Void = {
-    _ in fatalError("State value not set.")
-  }
+  @Mutable private var location: StoredLocation<Value>!
 
   public init(wrappedValue: Value) {
     initialValue = wrappedValue
   }
 
   public var wrappedValue: Value {
-    get { get() }
-    nonmutating set { set(newValue) }
+    get { location.value }
+    nonmutating set { location.value = newValue }
   }
 
   public var projectedValue: Binding<Value> {
-    Binding(get: get, set: set)
+    Binding(get: { location.value }, set: { location.value = $0 })
   }
 }
 
 extension State: DynamicProperty {
 
   func install(_ properties: DynamicProperties, for label: String) {
-    get = {
-      properties.graph[properties.state].values[label] as? Value ?? initialValue
-    }
-    set = { newValue in
-      var values = properties.graph[properties.state]
-      values.values[label] = newValue
-      properties.graph.setValue(of: properties.state, to: values)
-    }
+    location = properties.buffer.location(
+      for: label,
+      initialValue: initialValue
+    )
   }
-}
-
-struct StateValues {
-  fileprivate var values: [String: Any] = [:]
 }
