@@ -46,11 +46,14 @@ package struct Renderer<Content: View, Canvas: TerminalUI.Canvas> {
     event.updateEnvironment(&environmentValues)
     graph.setValue(of: environment, to: environmentValues)
 
-    _ = graph[outputs.preferenceValues] // Trigger preference values
+    graph.withUpdate {
 
-    graph[outputs.displayItems]
-      .first!
-      .render(in: Rect(origin: .origin, size: graph[environment].windowSize))
+      _ = graph[outputs.preferenceValues] // Trigger preference values
+      
+      graph[outputs.displayItems]
+        .first!
+        .render(in: Rect(origin: .origin, size: graph[environment].windowSize))
+    }
   }
 }
 
