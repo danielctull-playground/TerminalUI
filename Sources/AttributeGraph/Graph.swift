@@ -13,6 +13,20 @@ package final class Graph {
   /// The subgraph new attributes are assigned to. Defaults to the root.
   private var currentSubgraph = SubgraphID(rawValue: 0)
 
+  /// Shows whether the graph has work to do in its next update.
+  private var needsUpdate = false
+
+  /// The number of ``deferringSubgraphInvalidation(_:)`` scopes that are open.
+  ///
+  /// > Note: Passes nest, where `deferringSubgraphInvalidation` can be inside
+  ///         other `deferringSubgraphInvalidation` scopes, only the outer-most
+  ///         scope performs subgraph invalidation.
+  private var deferringSubgraphInvalidationDepth = 0
+
+  /// Subgraphs that were invalidated while inside a
+  /// ``deferringSubgraphInvalidation(_:)`` scope.
+  private var deferredInvalidatedSubgraphs: [SubgraphID] = []
+
   package init() {
     root = Subgraph(id: subgraphs.insert(SubgraphNode(parent: nil)))
   }
@@ -35,25 +49,6 @@ extension Graph {
     return Subgraph(id: id)
   }
 
-  /// Removes the subgraph and its attributes from the graph.
-  package func invalidate(_ subgraph: Subgraph) {
-    if let parent = subgraphs[subgraph.id].parent {
-      subgraphs[parent].children.removeAll { $0 == subgraph.id }
-    }
-    tearDown(subgraph.id)
-  }
-
-  private func tearDown(_ id: SubgraphID) {
-    let subgraph = subgraphs[id]
-    for child in subgraph.children {
-      tearDown(child)
-    }
-    for attribute in subgraph.attributes {
-      remove(attribute)
-    }
-    subgraphs.remove(id)
-  }
-
   /// Whether the subgraph is part of the graph.
   package func contains(_ subgraph: Subgraph) -> Bool {
     subgraphs.contains(subgraph.id)
@@ -70,6 +65,72 @@ extension Graph {
 
   package func children(of subgraph: Subgraph) -> [Subgraph] {
     subgraphs[subgraph.id].children.map(Subgraph.init)
+  }
+}
+
+// MARK: - Subgraph Invalidation
+
+extension Graph {
+
+  /// Removes the subgraph and its attributes from the graph.
+  package func invalidate(_ subgraph: Subgraph) {
+
+    guard deferringSubgraphInvalidationDepth == 0 else {
+      deferredInvalidatedSubgraphs.append(subgraph.id)
+      return
+    }
+
+    performInvalidation(subgraph.id)
+  }
+
+  /// Runs the given closure deferring subgraph invalidations until the end.
+  ///
+  /// - Parameter body: The work to be actioned.
+  /// - Returns: The result of the closure.
+  private func deferringSubgraphInvalidation<Result>(
+    _ body: () -> Result
+  ) -> Result {
+
+    deferringSubgraphInvalidationDepth += 1
+
+    defer {
+
+      deferringSubgraphInvalidationDepth -= 1
+
+      if deferringSubgraphInvalidationDepth == 0 {
+        let invalidatedSubgraphs = deferredInvalidatedSubgraphs
+        deferredInvalidatedSubgraphs = []
+        for subgraph in invalidatedSubgraphs {
+          performInvalidation(subgraph)
+        }
+      }
+    }
+
+    return body()
+  }
+
+  private func performInvalidation(_ id: SubgraphID) {
+
+    // An earlier teardown in the same batch may have already removed this
+    // subgraph as a descendant, so re-check before touching it.
+    guard subgraphs.contains(id) else { return }
+
+    if let parent = subgraphs[id].parent {
+      subgraphs[parent].children.removeAll { $0 == id }
+    }
+
+    tearDown(id)
+  }
+
+  private func tearDown(_ id: SubgraphID) {
+    let subgraph = subgraphs[id]
+    for child in subgraph.children {
+      tearDown(child)
+    }
+    for attribute in subgraph.attributes {
+      remove(attribute)
+    }
+    subgraphs.remove(id)
   }
 }
 
@@ -137,6 +198,7 @@ extension Graph {
 
     attributes[attribute.id].value = newValue
     markAsDirty(dependentsOf: attribute.id)
+    needsUpdate = true
   }
 
   /// Recursively marks dependencies of the given attribute as dirty.
@@ -211,6 +273,22 @@ extension Graph {
 
     attributes[id].value = value
     return value
+  }
+}
+
+// MARK: - Updates
+
+extension Graph {
+
+  /// Resolves the graph's pending work.
+  /// 
+  /// - Parameter body: A closure that is run if updates were resolved.
+  package func withUpdate(_ body: () -> Void = {}) {
+    guard needsUpdate else { return }
+    needsUpdate = false
+    deferringSubgraphInvalidation {
+      body()
+    }
   }
 }
 

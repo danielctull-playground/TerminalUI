@@ -149,58 +149,6 @@ struct SubgraphTests {
     #expect(graph[a] == 9)
   }
 
-  @Test func `invalidating a subgraph releases the values its attributes held`() {
-
-    // A class so the value's lifetime can be observed through a weak reference.
-    final class Box {}
-
-    let graph = Graph()
-    weak var held: Box?
-
-    let subgraph = graph.subgraph {
-      let attribute = graph.external(of: Box.self)
-      let box = Box()
-      held = box
-      graph.setValue(of: attribute, to: box)
-    }
-
-    // The graph keeps the value alive.
-    #expect(held != nil)
-
-    graph.invalidate(subgraph)
-    #expect(held == nil)
-  }
-
-  @Test func `invalidating a subgraph releases the values held by its descendants`() {
-
-    final class Box {}
-
-    let graph = Graph()
-    weak var outer: Box?
-    weak var inner: Box?
-
-    let subgraph = graph.subgraph {
-      let a = graph.external(of: Box.self)
-      let box = Box()
-      outer = box
-      graph.setValue(of: a, to: box)
-
-      _ = graph.subgraph {
-        let b = graph.external(of: Box.self)
-        let box = Box()
-        inner = box
-        graph.setValue(of: b, to: box)
-      }
-    }
-
-    #expect(outer != nil)
-    #expect(inner != nil)
-
-    graph.invalidate(subgraph)
-    #expect(outer == nil)
-    #expect(inner == nil)
-  }
-
   // Attributes store their update as a closure over the body. If any of those
   // closures captured the graph, the graph would retain itself through its
   // nodes and never be freed.
@@ -221,5 +169,137 @@ struct SubgraphTests {
     }
 
     #expect(weakGraph == nil)
+  }
+
+  @Suite struct Invalidation {
+
+    @Test func `invalidating outside a withUpdate pass tears down immediately`() {
+
+      let graph = Graph()
+      let child = graph.subgraph { _ = graph.constant(1) }
+      #expect(graph.contains(child) == true)
+      #expect(graph.attributeCount == 1)
+
+      graph.invalidate(child)
+      #expect(graph.contains(child) == false)
+      #expect(graph.attributeCount == 0)
+    }
+
+    @Test func `update pass defers invalidation`() {
+      
+      let graph = Graph()
+      let trigger = graph.external(of: Int.self)
+      graph.setValue(of: trigger, to: 1) // gives the pass work to do
+      
+      let child = graph.subgraph { _ = graph.constant(1) }
+      
+      graph.withUpdate {
+        
+        graph.invalidate(child)
+        
+        // withUpdate defers invalidation, so the child isn't removed while the
+        // update is still doing structural work.
+        #expect(graph.contains(child) == true)
+      }
+
+      // Returning from the pass runs the deferred invalidations.
+      #expect(graph.contains(child) == false)
+    }
+
+    @Test func `update pass defers invalidation for multiple invalidations`() {
+
+      let graph = Graph()
+
+      let trigger = graph.external(of: Int.self)
+      graph.setValue(of: trigger, to: 1)
+
+      let a = graph.subgraph { _ = graph.constant(1) }
+      let b = graph.subgraph { _ = graph.constant(2) }
+
+      graph.withUpdate {
+        graph.invalidate(a)
+        graph.invalidate(b)
+
+        #expect(graph.contains(a) == true)
+        #expect(graph.contains(b) == true)
+      }
+
+      #expect(graph.contains(a) == false)
+      #expect(graph.contains(b) == false)
+    }
+
+    @Test func `update pass tears down an ancestor and a descendant safely`() {
+
+      let graph = Graph()
+      let trigger = graph.external(of: Int.self)
+      graph.setValue(of: trigger, to: 1)
+
+      var inner: Subgraph!
+      let outer = graph.subgraph {
+        inner = graph.subgraph { _ = graph.constant(1) }
+      }
+
+      // The batch invalidates both; whichever runs first removes the other as a
+      // descendant, and performInvalidation's contains-check keeps that safe.
+      graph.withUpdate {
+        graph.invalidate(inner)
+        graph.invalidate(outer)
+      }
+
+      #expect(graph.contains(outer) == false)
+      #expect(graph.contains(inner) == false)
+    }
+
+    @Test func `invalidating a subgraph releases the values its attributes held`() {
+
+      // A class so the value's lifetime can be observed through a weak reference.
+      final class Box {}
+
+      let graph = Graph()
+      weak var held: Box?
+
+      let subgraph = graph.subgraph {
+        let attribute = graph.external(of: Box.self)
+        let box = Box()
+        held = box
+        graph.setValue(of: attribute, to: box)
+      }
+
+      // The graph keeps the value alive.
+      #expect(held != nil)
+
+      graph.invalidate(subgraph)
+      #expect(held == nil)
+    }
+
+    @Test func `invalidating a subgraph releases the values held by its descendants`() {
+
+      final class Box {}
+
+      let graph = Graph()
+      weak var outer: Box?
+      weak var inner: Box?
+
+      let subgraph = graph.subgraph {
+        let a = graph.external(of: Box.self)
+        let box = Box()
+        outer = box
+        graph.setValue(of: a, to: box)
+
+        _ = graph.subgraph {
+          let b = graph.external(of: Box.self)
+          let box = Box()
+          inner = box
+          graph.setValue(of: b, to: box)
+        }
+      }
+
+      #expect(outer != nil)
+      #expect(inner != nil)
+
+      graph.invalidate(subgraph)
+      #expect(outer == nil)
+      #expect(inner == nil)
+    }
   }
 }

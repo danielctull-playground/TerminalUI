@@ -221,4 +221,82 @@ struct GraphTests {
     #expect(graph[picked] == 3)
     #expect(computations == 3)
   }
+
+  @Suite struct Updates {
+
+    class Counter {
+      var amount = 0
+      func increment() {
+        amount += 1
+      }
+    }
+
+    let graph = Graph()
+    let updates = Counter()
+
+    @Test func `writing an external value marks the graph as needing an update`() {
+
+      graph.withUpdate(updates.increment)
+      #expect(updates.amount == 0)
+
+      let a = graph.external(of: Int.self)
+      graph.withUpdate(updates.increment)
+      #expect(updates.amount == 0)
+
+      graph.setValue(of: a, to: 1)
+      graph.withUpdate(updates.increment)
+      #expect(updates.amount == 1)
+    }
+
+    @Test func `a constant doesn't mark the graph as needing an update`() {
+      _ = graph.constant(1)
+      graph.withUpdate(updates.increment)
+      #expect(updates.amount == 0)
+    }
+
+    @Test func `a rule doesn't mark the graph as needing an update`() {
+      let a = graph.constant(1)
+      _ = graph.rule { $0[a] * 2 }
+      graph.withUpdate(updates.increment)
+      #expect(updates.amount == 0)
+    }
+
+    @Test func `a map doesn't mark the graph as needing an update`() {
+      let a = graph.constant(1)
+      _ = graph.map(a) { $0 * 2 }
+      graph.withUpdate(updates.increment)
+      #expect(updates.amount == 0)
+    }
+
+    @Test func `the update pass settles the graph after a burst of writes`() {
+
+      let a = graph.external(of: Int.self)
+      graph.setValue(of: a, to: 1)
+      graph.setValue(of: a, to: 2)
+
+      // However many writes happened, a single update resolves them.
+      graph.withUpdate(updates.increment)
+      #expect(updates.amount == 1)
+    }
+
+    @Test func `writing an equal value after resolving needs no update`() {
+
+      let a = graph.external(of: Int.self)
+
+      graph.setValue(of: a, to: 1)
+      graph.withUpdate(updates.increment)
+      #expect(updates.amount == 1)
+
+      graph.withUpdate(updates.increment)
+      #expect(updates.amount == 1)
+
+      graph.setValue(of: a, to: 1)
+      graph.withUpdate(updates.increment)
+      #expect(updates.amount == 1)
+
+      graph.setValue(of: a, to: 2)
+      graph.withUpdate(updates.increment)
+      #expect(updates.amount == 2)
+    }
+  }
 }
