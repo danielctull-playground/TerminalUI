@@ -59,6 +59,19 @@ struct SubgraphTests {
     #expect(graph.children(of: inner) == [])
   }
 
+  @Test func `a subgraph hands back both itself and its body's result`() {
+
+    let graph = Graph()
+
+    let (subgraph, attribute) = graph.subgraph {
+      graph.constant(1)
+    }
+
+    #expect(graph[attribute] == 1)
+    #expect(graph.subgraph(of: attribute) == subgraph)
+    #expect(subgraph != graph.root)
+  }
+
   @Test func `invalidating a subgraph removes all its attributes`() {
 
     let graph = Graph()

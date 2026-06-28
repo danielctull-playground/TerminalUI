@@ -37,16 +37,22 @@ package final class Graph {
 extension Graph {
 
   package func subgraph(_ body: () -> Void) -> Subgraph {
+    subgraph(body).0
+  }
+
+  package func subgraph<Result>(_ body: () -> Result) -> (Subgraph, Result) {
 
     let parent = currentSubgraph
-    let id = subgraphs.insert(SubgraphNode(parent: currentSubgraph))
+    let id = subgraphs.insert(SubgraphNode(parent: parent))
     subgraphs[parent].children.append(id)
 
     currentSubgraph = id
-    body()
-    currentSubgraph = parent
 
-    return Subgraph(id: id)
+    defer {
+      currentSubgraph = parent
+    }
+
+    return (Subgraph(id: id), body())
   }
 
   /// Whether the subgraph is part of the graph.
