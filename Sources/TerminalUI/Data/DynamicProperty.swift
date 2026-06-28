@@ -7,7 +7,7 @@ protocol DynamicProperty {
 // MARK: - DynamicProperties
 
 struct DynamicProperties {
-  let graph: Graph
+  unowned let graph: Graph
   let environment: Attribute<EnvironmentValues>
   let buffer: DynamicPropertyBuffer
 

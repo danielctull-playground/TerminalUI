@@ -38,4 +38,27 @@ struct RendererTests {
       Position(x: 3, y: 1),
     ])
   }
+
+  @Test func `the graph is released once the renderer is gone`() {
+
+    struct Probe<Object: AnyObject>: View {
+      let box: Object
+      var body: some View { Color.red }
+    }
+
+    final class Box {}
+    weak var box: Box?
+
+    do {
+      let strongBox = Box()
+      box = strongBox
+
+      let renderer = Renderer(canvas: TestCanvas(width: 1, height: 1), content: Probe(box: strongBox))
+      renderer.render(event: WindowChange(size: Size(width: 1, height: 1)))
+    }
+
+    // If the graph retained itself, it and the view tree holding the box would
+    // outlive the renderer and box would not be nil here.
+    #expect(box == nil)
+  }
 }
