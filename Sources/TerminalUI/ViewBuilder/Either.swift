@@ -22,33 +22,47 @@ public struct Either<First: View, Second: View>: PrimitiveView {
     inputs: ViewInputs
   ) -> ViewOutputs {
 
-    let (_, first) = inputs.graph.subgraph {
-      First.makeView(
-        view: inputs.graph.map(view, \.value.first.unsafelyUnwrapped),
-        inputs: inputs
-      )
-    }
+    unowned let graph = inputs.graph
 
-    let (_, second) = inputs.graph.subgraph {
-      Second.makeView(
-        view: inputs.graph.map(view, \.value.second.unsafelyUnwrapped),
-        inputs: inputs
-      )
+    var active: (isFirst: Bool, subgraph: Subgraph, outputs: ViewOutputs)?
+
+    let resolved = graph.rule { graph in
+
+      let wantsFirst = switch graph[view].value {
+      case .first: true
+      case .second: false
+      }
+
+      // Tear down if different
+      if active?.isFirst != wantsFirst {
+
+        if let old = active {
+          graph.invalidate(old.subgraph)
+        }
+
+        let (subgraph, outputs) = graph.subgraph {
+          if wantsFirst {
+            First.makeView(
+              view: graph.map(view, \.value.first.unsafelyUnwrapped),
+              inputs: inputs
+            )
+          } else {
+            Second.makeView(
+              view: graph.map(view, \.value.second.unsafelyUnwrapped),
+              inputs: inputs
+            )
+          }
+        }
+
+        active = (wantsFirst, subgraph, outputs)
+      }
+
+      return active!.outputs
     }
 
     return ViewOutputs(
-      preferenceValues: inputs.graph.rule { graph in
-        switch graph[view].value {
-        case .first: graph[first.preferenceValues]
-        case .second: graph[second.preferenceValues]
-        }
-      },
-      displayItems: inputs.graph.rule { graph in
-        switch graph[view].value {
-        case .first: graph[first.displayItems]
-        case .second: graph[second.displayItems]
-        }
-      }
+      preferenceValues: graph.map(resolved) { graph[$0.preferenceValues] },
+      displayItems: graph.map(resolved) { graph[$0.displayItems] }
     )
   }
 }
