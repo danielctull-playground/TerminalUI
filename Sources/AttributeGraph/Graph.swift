@@ -272,16 +272,35 @@ extension Graph {
     }
 
     attributes[id].inputs = []
-    let previousAttribute = currentAttribute
-    let previousSubgraph = currentSubgraph
-    currentAttribute = id
-    currentSubgraph = attributes[id].subgraph
-    let value = update(self)
-    currentAttribute = previousAttribute
-    currentSubgraph = previousSubgraph
+
+    let value = withSubgraph(attributes[id].subgraph) {
+      withAttribute(id) {
+        update(self)
+      }
+    }
 
     attributes[id].value = value
     return value
+  }
+
+  private func withSubgraph<Result>(
+    _ subgraph: SubgraphID,
+    body: () -> Result
+  ) -> Result {
+    let previous = currentSubgraph
+    defer { currentSubgraph = previous }
+    currentSubgraph = subgraph
+    return body()
+  }
+
+  private func withAttribute<Result>(
+    _ attribute: AttributeID,
+    body: () -> Result
+  ) -> Result {
+    let previous = currentAttribute
+    defer { currentAttribute = previous }
+    currentAttribute = attribute
+    return body()
   }
 }
 
