@@ -1,8 +1,8 @@
 import AttributeGraph
 
-public struct Either<First: View, Second: View>: PrimitiveView {
+public struct Either<First: View, Second: View> {
 
-  private enum Value {
+  fileprivate enum Value {
     case first(First)
     case second(Second)
   }
@@ -16,28 +16,60 @@ public struct Either<First: View, Second: View>: PrimitiveView {
   init(_ second: Second) {
     value = .second(second)
   }
+}
 
-  public static func makeView(
+extension Either: DynamicView {
+
+  enum ID {
+    case first
+    case second
+  }
+
+  static func childInfo(
+    graph: Graph,
+    view: Attribute<Self>
+  ) -> ID {
+    switch graph[view].value {
+    case .first: .first
+    case .second: .second
+    }
+  }
+
+  static func makeChildView(
+    graph: Graph,
+    id: ID,
     view: Attribute<Self>,
     inputs: ViewInputs
   ) -> ViewOutputs {
-    ViewOutputs(
-      preferenceValues: inputs.graph.rule { graph in
-        switch graph[view].value {
-        case let .first(first):
-          graph[First.makeView(view: graph.map(view) { _ in first }, inputs: inputs).preferenceValues]
-        case let .second(second):
-          graph[Second.makeView(view: graph.map(view) { _ in second }, inputs: inputs).preferenceValues]
-        }
-      },
-      displayItems: inputs.graph.rule { graph in
-        switch graph[view].value {
-        case let .first(first):
-          graph[First.makeView(view: graph.map(view) { _ in first }, inputs: inputs).displayItems]
-        case let .second(second):
-          graph[Second.makeView(view: graph.map(view) { _ in second }, inputs: inputs).displayItems]
-        }
-      }
-    )
+
+    switch id {
+    case .first:
+      First.makeView(
+        view: graph.map(view, \.value.first.unsafelyUnwrapped),
+        inputs: inputs
+      )
+    case .second:
+      Second.makeView(
+        view: graph.map(view, \.value.second.unsafelyUnwrapped),
+        inputs: inputs
+      )
+    }
+  }
+}
+
+extension Either.Value {
+
+  fileprivate var first: First? {
+    switch self {
+    case .first(let first): first
+    case .second: nil
+    }
+  }
+
+  fileprivate var second: Second? {
+    switch self {
+    case .first: nil
+    case .second(let second): second
+    }
   }
 }

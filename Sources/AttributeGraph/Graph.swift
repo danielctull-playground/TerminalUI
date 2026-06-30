@@ -37,16 +37,22 @@ package final class Graph {
 extension Graph {
 
   package func subgraph(_ body: () -> Void) -> Subgraph {
+    subgraph(body).0
+  }
+
+  package func subgraph<Result>(_ body: () -> Result) -> (Subgraph, Result) {
 
     let parent = currentSubgraph
-    let id = subgraphs.insert(SubgraphNode(parent: currentSubgraph))
+    let id = subgraphs.insert(SubgraphNode(parent: parent))
     subgraphs[parent].children.append(id)
 
     currentSubgraph = id
-    body()
-    currentSubgraph = parent
 
-    return Subgraph(id: id)
+    defer {
+      currentSubgraph = parent
+    }
+
+    return (Subgraph(id: id), body())
   }
 
   /// Whether the subgraph is part of the graph.
@@ -266,13 +272,35 @@ extension Graph {
     }
 
     attributes[id].inputs = []
-    let previous = currentAttribute
-    currentAttribute = id
-    let value = update(self)
-    currentAttribute = previous
+
+    let value = withSubgraph(attributes[id].subgraph) {
+      withAttribute(id) {
+        update(self)
+      }
+    }
 
     attributes[id].value = value
     return value
+  }
+
+  private func withSubgraph<Result>(
+    _ subgraph: SubgraphID,
+    body: () -> Result
+  ) -> Result {
+    let previous = currentSubgraph
+    defer { currentSubgraph = previous }
+    currentSubgraph = subgraph
+    return body()
+  }
+
+  private func withAttribute<Result>(
+    _ attribute: AttributeID,
+    body: () -> Result
+  ) -> Result {
+    let previous = currentAttribute
+    defer { currentAttribute = previous }
+    currentAttribute = attribute
+    return body()
   }
 }
 

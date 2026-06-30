@@ -3,7 +3,7 @@ import TerminalUITesting
 import Testing
 
 @MainActor
-@Suite("State")
+@Suite("State", .tags(.state))
 struct StateTests {
 
   @Test func `read outside of body: fatal`() async {

@@ -2,44 +2,11 @@
 import TerminalUITesting
 import Testing
 
-@Suite("Optional", .tags(.viewBuilder))
-struct OptionalTests {
-
-  @Test func `none body: fatal`() async {
-    await #expect(processExitsWith: .failure) {
-      _ = Optional<EmptyView>.none.body
-    }
-  }
-
-  @Test func `some body: fatal`() async {
-    await #expect(processExitsWith: .failure) {
-      _ = Optional<EmptyView>.some(EmptyView()).body
-    }
-  }
-
-  @Test(arguments: [
-    (false, PreferenceKey.A.defaultValue),
-    (true, "new value"),
-  ])
-  func `Preference Values`(value: Bool, expected: String) {
-
-    var output = ""
-
-    TestCanvas(width: 3, height: 3).render {
-      Group {
-        if value {
-          Text("x")
-            .preference(key: PreferenceKey.A.self, value: "new value")
-        }
-      }
-      .onPreferenceChange(PreferenceKey.A.self) { output = $0 }
-    }
-
-    #expect(output == expected)
-  }
+@Suite("Either", .tags(.viewBuilder))
+struct EitherTests {
 
   @Test(.tags(.state))
-  func `state inside the content reflects a write`() {
+  func `state inside a branch reflects a write`() {
 
     struct Stateful: View {
       @State var value = "old"
@@ -54,6 +21,8 @@ struct OptionalTests {
     canvas.render {
       if true {
         Stateful()
+      } else {
+        EmptyView()
       }
     }
 
@@ -82,11 +51,16 @@ struct OptionalTests {
       var body: some View { Text("\(count.amount)") }
     }
 
+    @MainActor struct Not: @MainActor View {
+      @State var count = Count.next
+      var body: some View { Text("\(count.amount)") }
+    }
+
     @MainActor
     struct Content: @MainActor View {
       @Environment(\.windowSize) var size
       var body: some View {
-        if size.width.isMultiple(of: 3) { MultipleOfThree() }
+        if size.width.isMultiple(of: 3) { MultipleOfThree() } else { Not() }
       }
     }
 
@@ -97,16 +71,13 @@ struct OptionalTests {
     #expect(canvas.pixels[Position(x: 2, y: 1)] == Pixel("0"))
 
     renderer.render(event: WindowChange(size: Size(width: 5, height: 1)))
-    #expect(canvas.pixels[Position(x: 3, y: 1)] == nil)
+    #expect(canvas.pixels[Position(x: 3, y: 1)] == Pixel("1"))
 
     renderer.render(event: WindowChange(size: Size(width: 7, height: 1)))
-    #expect(canvas.pixels[Position(x: 4, y: 1)] == nil)
+    #expect(canvas.pixels[Position(x: 4, y: 1)] == Pixel("1"))
 
     renderer.render(event: WindowChange(size: Size(width: 9, height: 1)))
-    #expect(canvas.pixels[Position(x: 5, y: 1)] == Pixel("1"))
-
-    renderer.render(event: WindowChange(size: Size(width: 15, height: 1)))
-    #expect(canvas.pixels[Position(x: 8, y: 1)] == Pixel("1"))
+    #expect(canvas.pixels[Position(x: 5, y: 1)] == Pixel("3"))
   }
 
   @MainActor
@@ -127,7 +98,7 @@ struct OptionalTests {
     struct Root: View {
       @Environment(\.windowSize) var size
       var body: some View {
-        if size.width.isMultiple(of: 2) { Content() }
+        if size.width.isMultiple(of: 2) { Content() } else { EmptyView() }
       }
     }
 
