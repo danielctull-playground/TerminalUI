@@ -79,4 +79,36 @@ struct EitherTests {
     renderer.render(event: WindowChange(size: Size(width: 9, height: 1)))
     #expect(canvas.pixels[Position(x: 5, y: 1)] == Pixel("3"))
   }
+
+  @MainActor
+  @Test(.tags(.state))
+  func `leaving the content frees its state`() {
+
+    final class Tracked {
+      nonisolated(unsafe) static var live = 0
+      init() { Tracked.live += 1 }
+      deinit { Tracked.live -= 1 }
+    }
+
+    struct Content: View {
+      @State var tracked = Tracked()
+      var body: some View { Text("x") }
+    }
+
+    struct Root: View {
+      @Environment(\.windowSize) var size
+      var body: some View {
+        if size.width.isMultiple(of: 2) { Content() } else { EmptyView() }
+      }
+    }
+
+    Tracked.live = 0
+    let renderer = Renderer(canvas: TestCanvas(width: 1, height: 1), content: Root())
+
+    renderer.render(event: WindowChange(size: Size(width: 2, height: 1)))
+    #expect(Tracked.live == 1)
+
+    renderer.render(event: WindowChange(size: Size(width: 1, height: 1)))
+    #expect(Tracked.live == 0)
+  }
 }

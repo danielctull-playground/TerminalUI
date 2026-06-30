@@ -272,10 +272,13 @@ extension Graph {
     }
 
     attributes[id].inputs = []
-    let previous = currentAttribute
+    let previousAttribute = currentAttribute
+    let previousSubgraph = currentSubgraph
     currentAttribute = id
+    currentSubgraph = attributes[id].subgraph
     let value = update(self)
-    currentAttribute = previous
+    currentAttribute = previousAttribute
+    currentSubgraph = previousSubgraph
 
     attributes[id].value = value
     return value

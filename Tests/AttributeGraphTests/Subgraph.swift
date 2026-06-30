@@ -34,6 +34,27 @@ struct SubgraphTests {
     #expect(graph.subgraph(of: value) != subgraph)
   }
 
+  @Test func `an attribute created while evaluating is part of the evaluating subgraph`() {
+
+    let graph = Graph()
+
+    var created: Attribute<Int>!
+    var rule: Attribute<Int>!
+    let subgraph = graph.subgraph {
+      rule = graph.rule { graph in
+        created = graph.external(of: Int.self)
+        return 1
+      }
+    }
+
+    // Evaluate the rule *after* the build scope has closed (current subgraph is
+    // back at the root), so what the rule creates is created during evaluation.
+    #expect(graph[rule] == 1)
+
+    #expect(graph.subgraph(of: created) == subgraph)
+    #expect(graph.subgraph(of: created) != graph.root)
+  }
+
   @Test func `first subgraph is a child of the root subgraph`() {
     let graph = Graph()
     let child = graph.subgraph {}
@@ -313,6 +334,25 @@ struct SubgraphTests {
       graph.invalidate(subgraph)
       #expect(outer == nil)
       #expect(inner == nil)
+    }
+
+    @Test func `invalidating frees attributes created while evaluating`() {
+
+      let graph = Graph()
+
+      var rule: Attribute<Int>!
+      let subgraph = graph.subgraph {
+        rule = graph.rule { graph in
+          _ = graph.external(of: Int.self)
+          return 1
+        }
+      }
+
+      _ = graph[rule] // creates the external during evaluation
+      #expect(graph.attributeCount == 2) // the rule and the external
+
+      graph.invalidate(subgraph)
+      #expect(graph.attributeCount == 0) // both freed
     }
   }
 }
