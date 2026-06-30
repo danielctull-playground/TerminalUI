@@ -1,6 +1,6 @@
 import AttributeGraph
 
-public struct Either<First: View, Second: View>: PrimitiveView {
+public struct Either<First: View, Second: View> {
 
   fileprivate enum Value {
     case first(First)
@@ -16,54 +16,44 @@ public struct Either<First: View, Second: View>: PrimitiveView {
   init(_ second: Second) {
     value = .second(second)
   }
+}
 
-  public static func makeView(
+extension Either: DynamicView {
+
+  enum ID {
+    case first
+    case second
+  }
+
+  static func childInfo(
+    graph: Graph,
+    view: Attribute<Self>
+  ) -> ID {
+    switch graph[view].value {
+    case .first: .first
+    case .second: .second
+    }
+  }
+
+  static func makeChildView(
+    graph: Graph,
+    id: ID,
     view: Attribute<Self>,
     inputs: ViewInputs
   ) -> ViewOutputs {
 
-    unowned let graph = inputs.graph
-
-    var active: (isFirst: Bool, subgraph: Subgraph, outputs: ViewOutputs)?
-
-    let resolved = graph.rule { graph in
-
-      let wantsFirst = switch graph[view].value {
-      case .first: true
-      case .second: false
-      }
-
-      // Tear down if different
-      if active?.isFirst != wantsFirst {
-
-        if let old = active {
-          graph.invalidate(old.subgraph)
-        }
-
-        let (subgraph, outputs) = graph.subgraph {
-          if wantsFirst {
-            First.makeView(
-              view: graph.map(view, \.value.first.unsafelyUnwrapped),
-              inputs: inputs
-            )
-          } else {
-            Second.makeView(
-              view: graph.map(view, \.value.second.unsafelyUnwrapped),
-              inputs: inputs
-            )
-          }
-        }
-
-        active = (wantsFirst, subgraph, outputs)
-      }
-
-      return active!.outputs
+    switch id {
+    case .first:
+      First.makeView(
+        view: graph.map(view, \.value.first.unsafelyUnwrapped),
+        inputs: inputs
+      )
+    case .second:
+      Second.makeView(
+        view: graph.map(view, \.value.second.unsafelyUnwrapped),
+        inputs: inputs
+      )
     }
-
-    return ViewOutputs(
-      preferenceValues: graph.map(resolved) { graph[$0.preferenceValues] },
-      displayItems: graph.map(resolved) { graph[$0.displayItems] }
-    )
   }
 }
 
