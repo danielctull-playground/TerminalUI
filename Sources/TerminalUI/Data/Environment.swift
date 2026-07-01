@@ -163,7 +163,6 @@ extension ViewInputs {
         transform(&environment)
         return environment
       },
-      dynamicProperties: dynamicProperties
     )
   }
 }
