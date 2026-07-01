@@ -48,16 +48,36 @@ extension App {
 
 extension App {
 
-  public static func main() async {
+  /// Instantiates and runs the app.
+  ///
+  /// > Note: This is marked with `@_disfavoredOverload` to allow conformance to
+  ///         ArgumentParser's `AsyncParsableCommand`. In that case, its main()
+  ///         function will instantiate the app and call ``App/run()`` instead
+  ///         of this one.
+  @_disfavoredOverload
+  public static func main() async throws {
+    try await Self().run()
+  }
+}
 
-    let app = Self()
+extension App {
+
+  /// Runs the app in a loop until an exit event is received.
+  ///
+  /// > Note: This informally implements the `AsyncParsableCommand` protocol so
+  ///         that the user can depend on the swift-argument-parser package and
+  ///         conform their app to both TerminalUI's `App` protocol and
+  ///         ArgumentParser's `AsyncParsableCommand`. In doing so, they will be
+  ///         able to show a TerminalUI ``View`` with parsed launch arguments.
+  public func run() async throws {
+
     let rawMode = RawMode()
 
-    let logger = Logger(label: "Event", factory: app.logHandler)
+    let logger = Logger(label: "Event", factory: logHandler)
 
     let renderer = Renderer(
       canvas: TextStreamCanvas(output: .fileHandle(.standardOutput)),
-      content: app.body
+      content: body
     )
 
     @EventStream
