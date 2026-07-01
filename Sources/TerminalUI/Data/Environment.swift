@@ -59,15 +59,18 @@ private struct EnvironmentWriter<Content: View, Value>: PrimitiveView {
     inputs: ViewInputs
   ) -> ViewOutputs {
 
-    let graph = inputs.graph
-    let content = graph.map(view, \.content)
+    let inputs = ViewInputs(
+      graph: inputs.graph,
+      canvas: inputs.canvas,
+      environment: inputs.graph.rule { graph in
+        var environment = graph[inputs.environment]
+        let writer = graph[view]
+        environment[keyPath: writer.keyPath] = writer.value
+        return environment
+      }
+    )
 
-    // Fork the environment once and build the content against it.
-    let inputs = inputs.modifyEnvironment { environment in
-      let writer = graph[view]
-      environment[keyPath: writer.keyPath] = writer.value
-    }
-
+    let content = inputs.graph.map(view, \.content)
     return Content.makeView(view: content, inputs: inputs)
   }
 }
@@ -145,24 +148,5 @@ extension AnyEnvironmentPropertyKey: Equatable {
 extension AnyEnvironmentPropertyKey: Hashable {
   func hash(into hasher: inout Hasher) {
     hasher.combine(id)
-  }
-}
-
-// MARK: - Helpers
-
-extension ViewInputs {
-
-  fileprivate func modifyEnvironment(
-    _ transform: @escaping (inout EnvironmentValues) -> Void
-  ) -> ViewInputs {
-    ViewInputs(
-      graph: graph,
-      canvas: canvas,
-      environment: graph.rule { graph in
-        var environment = graph[self.environment]
-        transform(&environment)
-        return environment
-      },
-    )
   }
 }
