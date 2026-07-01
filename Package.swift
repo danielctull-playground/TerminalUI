@@ -19,11 +19,16 @@ let package = Package(
   traits: [
     .default(enabledTraits: []),
     .trait(
+      name: "EnableArgumentParser",
+      description: "Allows an app to handle arguments using the argument parser library."
+    ),
+    .trait(
       name: "EnableOSLogging",
       description: "Enables oslog on Apple platforms."
     ),
   ],
   dependencies: [
+    .package(url: "https://github.com/apple/swift-argument-parser.git", from: "1.8.0"),
     .package(url: "https://github.com/apple/swift-async-algorithms.git", from: "1.1.0"),
     .package(url: "https://github.com/apple/swift-log.git", from: "1.14.0"),
     .package(url: "https://github.com/danielctull/swift-oslog.git", from: "1.0.0"),
@@ -45,6 +50,11 @@ let package = Package(
       dependencies: [
         "AttributeGraph",
         "TerminalUIMacros",
+        .product(
+          name: "ArgumentParser",
+          package: "swift-argument-parser",
+          condition: .when(traits: ["EnableArgumentParser"])
+        ),
         .product(
           name: "AsyncAlgorithms",
           package: "swift-async-algorithms"

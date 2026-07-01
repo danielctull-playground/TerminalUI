@@ -1,11 +1,18 @@
 import Logging
 import Foundation
 
+#if EnableArgumentParser
+import ArgumentParser
+public protocol AsyncParsableCommand_IfEnabled: AsyncParsableCommand {}
+#else
+public protocol AsyncParsableCommand_IfEnabled {}
+#endif
+
 #if EnableOSLogging
 import OSLogging
 #endif
 
-public protocol App {
+public protocol App: AsyncParsableCommand_IfEnabled {
 
   /// The type of view representing the body of the app.
   associatedtype Body: View
@@ -46,18 +53,31 @@ extension App {
   }
 }
 
+#if !EnableArgumentParser
+extension App {
+  
+  /// Runs the run function.
+  ///
+  /// When building with argument parser, this function is provided by
+  /// `AsyncParsableCommand`. So without argument parser, we need to include
+  /// a main() function.
+  public static func main() async throws {
+    try await Self().run()
+  }
+}
+#endif
+
 extension App {
 
-  public static func main() async {
+  public func run() async throws {
 
-    let app = Self()
     let rawMode = RawMode()
 
-    let logger = Logger(label: "Event", factory: app.logHandler)
+    let logger = Logger(label: "Event", factory: logHandler)
 
     let renderer = Renderer(
       canvas: TextStreamCanvas(output: .fileHandle(.standardOutput)),
-      content: app.body
+      content: body
     )
 
     @EventStream
