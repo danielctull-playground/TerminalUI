@@ -1,7 +1,7 @@
 import Logging
 import Foundation
 
-#if ENABLE_OSLOG
+#if EnableOSLog
 import OSLogging
 #endif
 
@@ -28,7 +28,7 @@ public protocol App {
   /// `Logger` instances directly using `Logger.init(label:factory:)`.
   ///
   /// > Note: There is a default implementation that returns a no-op handler,
-  ///         unless the oslog trait is passed.
+  ///         unless the "EnableOSLog" trait is used.
   ///
   /// - Parameter label: The label for the handler.
   /// - Returns: A log handler for TerminalUI to use.
@@ -38,7 +38,7 @@ public protocol App {
 extension App {
 
   public func logHandler(for label: String) -> any LogHandler {
-    #if ENABLE_OSLOG
+    #if EnableOSLog
     OSLogHandler(subsystem: "uk.co.danieltull.terminalui", category: label)
     #else
     SwiftLogNoOpLogHandler()

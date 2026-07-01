@@ -19,8 +19,8 @@ let package = Package(
   traits: [
     .default(enabledTraits: []),
     .trait(
-      name: "oslog",
-      description: "Enables oslog on Apple platforms when running the TerminalUI Demo."
+      name: "EnableOSLog",
+      description: "Enables oslog on Apple platforms."
     ),
   ],
   dependencies: [
@@ -47,10 +47,11 @@ let package = Package(
         "TerminalUIMacros",
         .product(name: "AsyncAlgorithms", package: "swift-async-algorithms"),
         .product(name: "Logging", package: "swift-log"),
-        .product(name: "OSLogging", package: "swift-oslog", condition: .when(traits: ["oslog"])),
-      ],
-      swiftSettings: [
-        .define("ENABLE_OSLOG", .when(traits: ["oslog"])),
+        .product(
+          name: "OSLogging",
+          package: "swift-oslog",
+          condition: .when(traits: ["EnableOSLog"])
+        ),
       ]
     ),
 
