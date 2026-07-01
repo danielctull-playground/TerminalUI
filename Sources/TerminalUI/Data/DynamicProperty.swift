@@ -8,16 +8,17 @@ protocol DynamicProperty {
   )
 }
 
-extension DynamicPropertyBuffer {
-
-  func install<Target>(on target: Target, inputs: ViewInputs) {
-    let mirror = Mirror(reflecting: target)
-    for child in mirror.children {
-      if let property = child.value as? DynamicProperty {
-        if let label = child.label {
-          let field = Field(label)
-          property.makeProperty(in: self, field: field, inputs: inputs)
-        }
+func makeProperties<Target>(
+  for target: Target,
+  in buffer: DynamicPropertyBuffer,
+  inputs: ViewInputs
+) {
+  let mirror = Mirror(reflecting: target)
+  for child in mirror.children {
+    if let property = child.value as? DynamicProperty {
+      if let label = child.label {
+        let field = Field(label)
+        property.makeProperty(in: buffer, field: field, inputs: inputs)
       }
     }
   }

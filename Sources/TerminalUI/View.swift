@@ -22,7 +22,7 @@ extension View {
     let buffer = DynamicPropertyBuffer(graph: inputs.graph)
 
     let body = inputs.graph.map(view) { view in
-      buffer.install(on: view, inputs: inputs)
+      makeProperties(for: view, in: buffer, inputs: inputs)
       return view.body
     }
 
