@@ -28,7 +28,7 @@ public struct Environment<Value> {
 extension Environment: DynamicProperty {
 
   func install(
-    _ properties: DynamicProperties,
+    _ buffer: DynamicPropertyBuffer,
     for label: String,
     inputs: ViewInputs
   ) {

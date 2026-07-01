@@ -33,10 +33,10 @@ private struct ModifiedView<Modifier: ViewModifier>: PrimitiveView {
     inputs: ViewInputs
   ) -> ViewOutputs {
 
-    let dynamicProperties = DynamicProperties(graph: inputs.graph)
+    let buffer = DynamicPropertyBuffer(graph: inputs.graph)
 
     let body = inputs.graph.map(view) { view in
-      dynamicProperties.install(on: view.modifier, inputs: inputs)
+      buffer.install(on: view.modifier, inputs: inputs)
       return view.modifier.body(content: view.content)
     }
 

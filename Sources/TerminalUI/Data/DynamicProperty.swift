@@ -2,25 +2,13 @@ import AttributeGraph
 
 protocol DynamicProperty {
   func install(
-    _ properties: DynamicProperties,
+    _ buffer: DynamicPropertyBuffer,
     for label: String,
     inputs: ViewInputs
   )
 }
 
-// MARK: - DynamicProperties
-
-struct DynamicProperties {
-  unowned let graph: Graph
-  let buffer: DynamicPropertyBuffer
-
-  init(graph: Graph) {
-    self.graph = graph
-    self.buffer = DynamicPropertyBuffer(graph: graph)
-  }
-}
-
-extension DynamicProperties {
+extension DynamicPropertyBuffer {
 
   func install<Target>(on target: Target, inputs: ViewInputs) {
     let mirror = Mirror(reflecting: target)

@@ -19,10 +19,10 @@ extension View {
     inputs: ViewInputs
   ) -> ViewOutputs {
 
-    let dynamicProperties = DynamicProperties(graph: inputs.graph)
+    let buffer = DynamicPropertyBuffer(graph: inputs.graph)
 
     let body = inputs.graph.map(view) { view in
-      dynamicProperties.install(on: view, inputs: inputs)
+      buffer.install(on: view, inputs: inputs)
       return view.body
     }
 
