@@ -47,17 +47,29 @@ extension App {
 }
 
 extension App {
+  
+  /// Instantiates and runs the app.
+  ///
+  /// Note: This is marked as a `@_disfavoredOverload` to allow conformace to
+  ///       ArgumentParser's `AsyncParsableCommand`. In that case, the main()
+  ///       function in `AsyncParsableCommand` will call ``App/run()``.
+  @_disfavoredOverload
+  public static func main() async throws {
+    try await Self().run()
+  }
+}
 
-  public static func main() async {
+extension App {
 
-    let app = Self()
+  public func run() async throws {
+
     let rawMode = RawMode()
 
-    let logger = Logger(label: "Event", factory: app.logHandler)
+    let logger = Logger(label: "Event", factory: logHandler)
 
     let renderer = Renderer(
       canvas: TextStreamCanvas(output: .fileHandle(.standardOutput)),
-      content: app.body
+      content: body
     )
 
     @EventStream
