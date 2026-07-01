@@ -1,4 +1,4 @@
-// swift-tools-version: 6.2
+// swift-tools-version: 6.3
 
 import CompilerPluginSupport
 import PackageDescription
@@ -25,9 +25,9 @@ let package = Package(
   ],
   dependencies: [
     .package(url: "https://github.com/apple/swift-async-algorithms.git", from: "1.1.0"),
-    .package(url: "https://github.com/apple/swift-syntax.git", from: "602.0.0"),
-    .package(url: "https://github.com/apple/swift-log.git", from: "1.6.3"),
+    .package(url: "https://github.com/apple/swift-log.git", from: "1.14.0"),
     .package(url: "https://github.com/danielctull/swift-oslog.git", from: "1.0.0"),
+    .package(url: "https://github.com/swiftlang/swift-syntax.git", from: "603.0.0"),
   ],
   targets: [
 
