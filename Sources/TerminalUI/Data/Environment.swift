@@ -27,8 +27,12 @@ public struct Environment<Value> {
 
 extension Environment: DynamicProperty {
 
-  func install(_ properties: DynamicProperties, for label: String) {
-    values = properties.graph[properties.environment]
+  func install(
+    _ properties: DynamicProperties,
+    for label: String,
+    inputs: ViewInputs
+  ) {
+    values = inputs.graph[inputs.environment]
   }
 }
 
@@ -59,11 +63,9 @@ private struct EnvironmentWriter<Content: View, Value>: PrimitiveView {
     let content = graph.map(view, \.content)
 
     // Fork the environment once and build the content against it.
-    let inputs = inputs.mapDynamicProperties { properties in
-      properties.modifyEnvironment { environment in
-        let writer = graph[view]
-        environment[keyPath: writer.keyPath] = writer.value
-      }
+    let inputs = inputs.modifyEnvironment { environment in
+      let writer = graph[view]
+      environment[keyPath: writer.keyPath] = writer.value
     }
 
     return Content.makeView(view: content, inputs: inputs)
@@ -148,18 +150,20 @@ extension AnyEnvironmentPropertyKey: Hashable {
 
 // MARK: - Helpers
 
-extension DynamicProperties {
+extension ViewInputs {
 
   fileprivate func modifyEnvironment(
     _ transform: @escaping (inout EnvironmentValues) -> Void
-  ) -> DynamicProperties {
-    DynamicProperties(
+  ) -> ViewInputs {
+    ViewInputs(
       graph: graph,
+      canvas: canvas,
       environment: graph.rule { graph in
         var environment = graph[self.environment]
         transform(&environment)
         return environment
-      }
+      },
+      dynamicProperties: dynamicProperties
     )
   }
 }
