@@ -1,34 +1,35 @@
 import AttributeGraph
 
 protocol DynamicProperty {
-  func install(_ properties: DynamicProperties, for label: String)
+  func makeProperty(
+    in buffer: DynamicPropertyBuffer,
+    field: Field,
+    inputs: ViewInputs
+  )
 }
 
-// MARK: - DynamicProperties
-
-struct DynamicProperties {
-  unowned let graph: Graph
-  let environment: Attribute<EnvironmentValues>
-  let buffer: DynamicPropertyBuffer
-
-  init(graph: Graph, environment: Attribute<EnvironmentValues>) {
-    self.graph = graph
-    self.environment = environment
-    self.buffer = DynamicPropertyBuffer(graph: graph)
+func makeProperties<Target>(
+  for target: Target,
+  in buffer: DynamicPropertyBuffer,
+  inputs: ViewInputs
+) {
+  let mirror = Mirror(reflecting: target)
+  for child in mirror.children {
+    if let property = child.value as? DynamicProperty {
+      if let label = child.label {
+        let field = Field(label)
+        property.makeProperty(in: buffer, field: field, inputs: inputs)
+      }
+    }
   }
 }
 
-extension DynamicProperties {
+// MARK: - Field
 
-  func install<Target>(on target: Target) {
-    let mirror = Mirror(reflecting: target)
-    for child in mirror.children {
-      if let property = child.value as? DynamicProperty {
-        if let label = child.label {
-          property.install(self, for: label)
-        }
-      }
-    }
+struct Field: Hashable {
+  private let rawValue: String
+  fileprivate init(_ rawValue: String) {
+    self.rawValue = rawValue
   }
 }
 
@@ -38,23 +39,23 @@ extension DynamicProperties {
 final class DynamicPropertyBuffer {
 
   private unowned let graph: Graph
-  private var locations: [String: Any] = [:]
+  private var locations: [Field: Any] = [:]
 
   init(graph: Graph) {
     self.graph = graph
   }
 
   func location<Value>(
-    for label: String,
+    for field: Field,
     initialValue: Value
   ) -> StoredLocation<Value> {
 
-    if let location = locations[label] as? StoredLocation<Value> {
+    if let location = locations[field] as? StoredLocation<Value> {
       return location
     }
 
     let location = StoredLocation(initialValue: initialValue, graph: graph)
-    locations[label] = location
+    locations[field] = location
     return location
   }
 }

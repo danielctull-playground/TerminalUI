@@ -4,25 +4,15 @@ public struct ViewInputs {
 
   unowned let graph: Graph
   let canvas: any Canvas
-  let dynamicProperties: DynamicProperties
+  let environment: Attribute<EnvironmentValues>
 
   init(
     graph: Graph,
     canvas: any Canvas,
-    dynamicProperties: DynamicProperties
+    environment: Attribute<EnvironmentValues>,
   ) {
     self.graph = graph
     self.canvas = canvas
-    self.dynamicProperties = dynamicProperties
-  }
-
-  func mapDynamicProperties(
-    _ transform: @escaping (DynamicProperties) -> DynamicProperties
-  ) -> ViewInputs {
-    ViewInputs(
-      graph: graph,
-      canvas: canvas,
-      dynamicProperties: transform(dynamicProperties)
-    )
+    self.environment = environment
   }
 }

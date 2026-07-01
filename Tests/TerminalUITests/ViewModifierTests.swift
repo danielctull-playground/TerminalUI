@@ -1,4 +1,5 @@
 @testable import TerminalUI
+import TerminalUITesting
 import Testing
 
 @Suite("ViewModifier", .tags(.modifier))
@@ -24,6 +25,33 @@ struct ViewModifierTests {
       "[?25l",   // Cursor visibility off
       "[39;49;22;23;24;25;27;28;29m",
       "[1;1HA",  // Position + content
+    ])
+  }
+
+  @Test(.tags(.state))
+  func `sibling modifier state is independent`() {
+
+    struct Replace<Content: View>: ViewModifier {
+      let value: String
+      @State private var shown = "?"
+      func body(content: Content) -> some View {
+        Text(shown)
+          .preference(key: PreferenceKey.A.self, value: value)
+          .onPreferenceChange(PreferenceKey.A.self) { shown = $0 }
+      }
+    }
+
+    let canvas = TestCanvas(width: 1, height: 2)
+    canvas.render {
+      VStack(spacing: 0) {
+        Color.black.modifier(Replace(value: "a"))
+        Color.black.modifier(Replace(value: "b"))
+      }
+    }
+
+    #expect(canvas.pixels == [
+      Position(x: 1, y: 1): Pixel("a"),
+      Position(x: 1, y: 2): Pixel("b"),
     ])
   }
 

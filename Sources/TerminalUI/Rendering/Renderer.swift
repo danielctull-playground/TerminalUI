@@ -21,10 +21,7 @@ package struct Renderer<Content: View, Canvas: TerminalUI.Canvas> {
     let inputs = ViewInputs(
       graph: graph,
       canvas: canvas,
-      dynamicProperties: DynamicProperties(
-        graph: graph,
-        environment: environment,
-      )
+      environment: environment
     )
 
     self.graph = graph

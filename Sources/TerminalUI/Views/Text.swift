@@ -45,7 +45,7 @@ public struct Text: PrimitiveView {
   ) {
 
     let lines = inputs.graph[view].string.lines(ofLength: Int(bounds.size.width))
-    let environment = inputs.graph[inputs.dynamicProperties.environment]
+    let environment = inputs.graph[inputs.environment]
 
     for (line, y) in zip(lines, bounds.origin.y...) {
       for (character, x) in zip(line, bounds.origin.x...) {

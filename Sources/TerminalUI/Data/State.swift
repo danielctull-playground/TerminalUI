@@ -23,9 +23,13 @@ public struct State<Value> {
 
 extension State: DynamicProperty {
 
-  func install(_ properties: DynamicProperties, for label: String) {
-    location = properties.buffer.location(
-      for: label,
+  func makeProperty(
+    in buffer: DynamicPropertyBuffer,
+    field: Field,
+    inputs: ViewInputs
+  ) {
+    location = buffer.location(
+      for: field,
       initialValue: initialValue
     )
   }
