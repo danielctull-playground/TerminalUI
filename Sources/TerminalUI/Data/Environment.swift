@@ -29,7 +29,7 @@ extension Environment: DynamicProperty {
 
   func install(
     _ buffer: DynamicPropertyBuffer,
-    for label: String,
+    field: Field,
     inputs: ViewInputs
   ) {
     values = inputs.graph[inputs.environment]

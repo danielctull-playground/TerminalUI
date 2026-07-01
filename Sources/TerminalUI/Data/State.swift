@@ -25,11 +25,11 @@ extension State: DynamicProperty {
 
   func install(
     _ buffer: DynamicPropertyBuffer,
-    for label: String,
+    field: Field,
     inputs: ViewInputs
   ) {
     location = buffer.location(
-      for: label,
+      for: field,
       initialValue: initialValue
     )
   }

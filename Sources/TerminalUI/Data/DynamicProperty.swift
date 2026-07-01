@@ -3,7 +3,7 @@ import AttributeGraph
 protocol DynamicProperty {
   func install(
     _ buffer: DynamicPropertyBuffer,
-    for label: String,
+    field: Field,
     inputs: ViewInputs
   )
 }
@@ -15,10 +15,20 @@ extension DynamicPropertyBuffer {
     for child in mirror.children {
       if let property = child.value as? DynamicProperty {
         if let label = child.label {
-          property.install(self, for: label, inputs: inputs)
+          let field = Field(label)
+          property.install(self, field: field, inputs: inputs)
         }
       }
     }
+  }
+}
+
+// MARK: - Field
+
+struct Field: Hashable {
+  private let rawValue: String
+  fileprivate init(_ rawValue: String) {
+    self.rawValue = rawValue
   }
 }
 
@@ -28,23 +38,23 @@ extension DynamicPropertyBuffer {
 final class DynamicPropertyBuffer {
 
   private unowned let graph: Graph
-  private var locations: [String: Any] = [:]
+  private var locations: [Field: Any] = [:]
 
   init(graph: Graph) {
     self.graph = graph
   }
 
   func location<Value>(
-    for label: String,
+    for field: Field,
     initialValue: Value
   ) -> StoredLocation<Value> {
 
-    if let location = locations[label] as? StoredLocation<Value> {
+    if let location = locations[field] as? StoredLocation<Value> {
       return location
     }
 
     let location = StoredLocation(initialValue: initialValue, graph: graph)
-    locations[label] = location
+    locations[field] = location
     return location
   }
 }
