@@ -1,8 +1,8 @@
 import AttributeGraph
 
 protocol DynamicProperty {
-  func install(
-    _ buffer: DynamicPropertyBuffer,
+  func makeProperty(
+    in buffer: DynamicPropertyBuffer,
     field: Field,
     inputs: ViewInputs
   )
@@ -16,7 +16,7 @@ extension DynamicPropertyBuffer {
       if let property = child.value as? DynamicProperty {
         if let label = child.label {
           let field = Field(label)
-          property.install(self, field: field, inputs: inputs)
+          property.makeProperty(in: self, field: field, inputs: inputs)
         }
       }
     }
