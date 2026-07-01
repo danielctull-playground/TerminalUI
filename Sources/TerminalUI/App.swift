@@ -1,7 +1,7 @@
 import Logging
 import Foundation
 
-#if ENABLE_OSLOG
+#if EnableOSLogging
 import OSLogging
 #endif
 
@@ -38,7 +38,7 @@ public protocol App {
 extension App {
 
   public func logHandler(for label: String) -> any LogHandler {
-    #if ENABLE_OSLOG
+    #if EnableOSLogging
     OSLogHandler(subsystem: "uk.co.danieltull.terminalui", category: label)
     #else
     SwiftLogNoOpLogHandler()

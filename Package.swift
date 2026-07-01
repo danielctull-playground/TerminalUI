@@ -19,8 +19,8 @@ let package = Package(
   traits: [
     .default(enabledTraits: []),
     .trait(
-      name: "oslog",
-      description: "Enables oslog on Apple platforms when running the TerminalUI Demo."
+      name: "EnableOSLogging",
+      description: "Enables oslog on Apple platforms."
     ),
   ],
   dependencies: [
@@ -56,11 +56,8 @@ let package = Package(
         .product(
           name: "OSLogging",
           package: "swift-oslog",
-          condition: .when(traits: ["oslog"])
+          condition: .when(traits: ["EnableOSLogging"])
         ),
-      ],
-      swiftSettings: [
-        .define("ENABLE_OSLOG", .when(traits: ["oslog"])),
       ]
     ),
 
