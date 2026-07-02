@@ -25,6 +25,7 @@ let package = Package(
     ),
   ],
   dependencies: [
+    .package(url: "https://github.com/apple/swift-argument-parser.git", from: "1.8.0"),
     .package(url: "https://github.com/apple/swift-async-algorithms.git", from: "1.1.0"),
     .package(url: "https://github.com/apple/swift-log.git", from: "1.14.0"),
     .package(url: "https://github.com/danielctull/swift-oslog.git", from: "1.0.0"),
@@ -85,7 +86,10 @@ let package = Package(
 
     .executableTarget(
       name: "Demo",
-      dependencies: ["TerminalUI"]
+      dependencies: [
+        "TerminalUI",
+        .product(name: "ArgumentParser", package: "swift-argument-parser"),
+      ]
     ),
   ]
 )
