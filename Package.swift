@@ -15,6 +15,7 @@ let package = Package(
     .library(name: "AttributeGraph", targets: ["AttributeGraph"]),
     .library(name: "TerminalUI", targets: ["TerminalUI"]),
     .library(name: "TerminalUITesting", targets: ["TerminalUITesting"]),
+    .executable(name: "demo", targets: ["Demo"]),
   ],
   traits: [
     .default(enabledTraits: []),
@@ -83,7 +84,7 @@ let package = Package(
     ),
 
     .executableTarget(
-      name: "TerminalUI Demo",
+      name: "Demo",
       dependencies: ["TerminalUI"]
     ),
   ]
