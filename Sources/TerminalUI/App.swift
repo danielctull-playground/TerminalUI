@@ -50,9 +50,9 @@ extension App {
   
   /// Instantiates and runs the app.
   ///
-  /// Note: This is marked as a `@_disfavoredOverload` to allow conformace to
-  ///       ArgumentParser's `AsyncParsableCommand`. In that case, the main()
-  ///       function in `AsyncParsableCommand` will call ``App/run()``.
+  /// This is marked with `@_disfavoredOverload` to allow conformace to
+  /// ArgumentParser's `AsyncParsableCommand`. In that case, its main() function
+  /// will instantiate the app and call ``App/run()`` instead of this one.
   @_disfavoredOverload
   public static func main() async throws {
     try await Self().run()
