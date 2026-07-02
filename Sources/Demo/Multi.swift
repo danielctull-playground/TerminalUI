@@ -3,6 +3,10 @@ import TerminalUI
 
 struct Multi: App, AsyncParsableCommand {
 
+  static let configuration = CommandConfiguration(
+    abstract: "Displays a variety of styles."
+  )
+
   var body: some View {
     HStack {
       Color(red: 1, green: 0, blue: 0)

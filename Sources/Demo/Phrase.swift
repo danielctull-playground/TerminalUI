@@ -4,9 +4,7 @@ import TerminalUI
 struct Phrase: App, AsyncParsableCommand {
 
   static let configuration = CommandConfiguration(
-    commandName: "phrase",
-    abstract: "Display a phrase.",
-    discussion: "Shows how App and AsyncParsableCommand can be used together."
+    abstract: "Shows how App and AsyncParsableCommand can be used together."
   )
 
   @Option(help: "How many times to repeat 'phrase'.")
