@@ -1,7 +1,7 @@
+import ArgumentParser
 import TerminalUI
 
-@main
-struct Demo: App {
+struct Multi: App, AsyncParsableCommand {
 
   var body: some View {
     HStack {
