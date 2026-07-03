@@ -18,29 +18,14 @@ struct Accumulated<A: View, B: View>: PrimitiveView {
     let b = B.makeView(view: inputs.graph.map(view, \.b), inputs: inputs)
     return ViewOutputs(
       preferenceValues: inputs.graph.rule { graph in
-        let lhs = graph[a.preferenceValues]
-        let rhs = graph[b.preferenceValues]
-        return PreferenceValues { $0.value(lhs: lhs, rhs: rhs) }
+        PreferenceValues(
+          lhs: graph[a.preferenceValues],
+          rhs: graph[b.preferenceValues]
+        )
       },
       displayItems: inputs.graph.rule { graph in
         graph[a.displayItems] + graph[b.displayItems]
       }
     )
-  }
-}
-
-extension PreferenceKey {
-  fileprivate static func value(
-    lhs: PreferenceValues,
-    rhs: PreferenceValues
-  ) -> Value {
-    switch (lhs[self], rhs[self]) {
-    case (.none, .none): return defaultValue
-    case (.none, .some(let rhs)): return rhs
-    case (.some(let lhs), .none): return lhs
-    case (.some(var lhs), .some(let rhs)):
-      reduce(value: &lhs) { rhs }
-      return lhs
-    }
   }
 }

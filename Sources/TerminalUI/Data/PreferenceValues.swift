@@ -108,3 +108,26 @@ extension PreferenceValues {
     }
   }
 }
+
+extension PreferenceValues {
+  init(lhs: PreferenceValues, rhs: PreferenceValues) {
+    // Calling on PreferenceKey will un-erase it and its generic Value.
+    self.init { $0.value(lhs: lhs, rhs: rhs) }
+  }
+}
+
+extension PreferenceKey {
+  fileprivate static func value(
+    lhs: PreferenceValues,
+    rhs: PreferenceValues
+  ) -> Value {
+    switch (lhs[self], rhs[self]) {
+    case (.none, .none): return defaultValue
+    case (.none, .some(let rhs)): return rhs
+    case (.some(let lhs), .none): return lhs
+    case (.some(var lhs), .some(let rhs)):
+      reduce(value: &lhs) { rhs }
+      return lhs
+    }
+  }
+}
