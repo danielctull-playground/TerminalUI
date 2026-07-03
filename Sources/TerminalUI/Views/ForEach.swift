@@ -47,7 +47,9 @@ extension ForEach: PrimitiveView {
 
         let (subgraph, outputs) = graph.subgraph {
           Content.makeView(
-            view: graph.map(view) { content($0.data[index]) },
+            view: graph.map(view) { view in
+              content(view.data.first { $0[keyPath: view.id] == id }!)
+            },
             inputs: inputs
           )
         }

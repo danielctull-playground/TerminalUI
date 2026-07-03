@@ -103,4 +103,78 @@ struct ForEachTests {
       Position(x: 3, y: 1): Pixel("3"),
     ])
   }
+
+  @Test func `reordering the data reorders the content`() {
+
+    struct Content: View {
+      @State private var items = ["a", "b"]
+      var body: some View {
+        VStack(spacing: 0) {
+          ForEach(items, id: \.self) { Text($0) }
+        }
+        .preference(key: PreferenceKey.A.self, value: "trigger")
+        .onPreferenceChange(PreferenceKey.A.self) { _ in
+          items = items.reversed()
+        }
+      }
+    }
+
+    let canvas = TestCanvas(width: 1, height: 2)
+
+    canvas.render { Content() }
+    #expect(canvas.pixels == [
+      Position(x: 1, y: 1): Pixel("b"),
+      Position(x: 1, y: 2): Pixel("a"),
+    ])
+  }
+
+  @Test(.tags(.state))
+  func `state stays with its item across a reorder`() {
+
+    struct TickKey: PreferenceKey {
+      static var defaultValue: Int { 0 }
+      static func reduce(value: inout Int, nextValue: () -> Int) { value = nextValue() }
+    }
+
+    // Each row appends its own value every frame. A row that keeps identity
+    // accumulates ("aa"); a rebuilt row resets ("a"). So a doubled string
+    // proves BOTH that the reorder happened AND that state survived it.
+    struct Row: View {
+      @Environment(\.windowSize) private var size
+      let value: String
+      @State private var log = ""
+      var body: some View {
+        Text(log)
+          .preference(key: TickKey.self, value: size.width)
+          .onPreferenceChange(TickKey.self) { _ in log += value }
+      }
+    }
+
+    struct Content: View {
+      @Environment(\.windowSize) var size
+      var body: some View {
+        let items = size.width == 1 ? ["a", "b"] : ["b", "a"]
+        VStack(spacing: 0) {
+          ForEach(items, id: \.self) { Row(value: $0) }
+        }
+      }
+    }
+
+    let canvas = TestCanvas(width: 2, height: 2)
+    let renderer = Renderer(canvas: canvas, content: Content())
+
+    // [a,b], each logs once
+    renderer.render(event: WindowChange(size: Size(width: 1, height: 2)))
+    #expect(canvas.pixels == [
+      Position(x: 1, y: 1): Pixel("a"),
+      Position(x: 1, y: 2): Pixel("b"),
+    ])
+
+    // reorder → [b,a], each logs again
+    renderer.render(event: WindowChange(size: Size(width: 2, height: 2)))
+    #expect(canvas.pixels == [
+      Position(x: 1, y: 1): Pixel("b"), Position(x: 2, y: 1): Pixel("b"),
+      Position(x: 1, y: 2): Pixel("a"), Position(x: 2, y: 2): Pixel("a"),
+    ])
+  }
 }
