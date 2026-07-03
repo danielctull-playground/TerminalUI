@@ -69,6 +69,9 @@ extension ForEach: PrimitiveView {
       )
     }
 
-    return graph[children]
+    return ViewOutputs(
+      preferenceValues: graph.map(children) { graph[$0.preferenceValues] },
+      displayItems: graph.map(children) { graph[$0.displayItems] }
+    )
   }
 }
