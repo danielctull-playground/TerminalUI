@@ -25,16 +25,25 @@ extension ForEach: PrimitiveView {
 
     unowned let graph = inputs.graph
 
+    var infos: [ItemInfo<ID>] = []
+
     let children = graph.rule { graph in
 
       let data = graph[view].data
       let id = graph[view].id
       let content = graph[view].content
 
-      var infos: [ItemInfo<ID>] = []
-      infos.reserveCapacity(data.count)
+      var old = infos
+      infos = []
 
       for index in data.indices {
+
+        let id = data[index][keyPath: id]
+
+        if let info = old.first(where: { $0.id == id }) {
+          infos.append(info)
+          continue
+        }
 
         let (subgraph, outputs) = graph.subgraph {
           Content.makeView(
@@ -44,12 +53,18 @@ extension ForEach: PrimitiveView {
         }
 
         let info = ItemInfo(
-          id: data[index][keyPath: id],
+          id: id,
           subgraph: subgraph,
           outputs: outputs
         )
 
         infos.append(info)
+      }
+
+      old.removeAll(where: { old in infos.contains(where: { $0.id == old.id })})
+
+      for item in old {
+        graph.invalidate(item.subgraph)
       }
 
       return ViewOutputs(

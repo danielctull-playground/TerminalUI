@@ -1,4 +1,4 @@
-import TerminalUI
+@testable import TerminalUI
 import TerminalUITesting
 import Testing
 
@@ -51,6 +51,56 @@ struct ForEachTests {
     #expect(canvas.pixels == [
       Position(x: 1, y: 1): Pixel("a"),
       Position(x: 1, y: 2): Pixel("b"),
+    ])
+  }
+
+  @Test(.tags(.state))
+  func `rows maintain state across recomputes`() {
+
+    struct WindowSizeKey: PreferenceKey {
+      static var defaultValue: Size { .zero }
+      static func reduce(value: inout Size, nextValue: () -> Size) {
+        value = nextValue()
+      }
+    }
+
+    struct Row: View {
+      @Environment(\.windowSize) var windowSize
+      @State private var widths = ""
+      var body: some View {
+        Text(widths)
+          .preference(key: WindowSizeKey.self, value: windowSize)
+          .onPreferenceChange(WindowSizeKey.self) { widths += String($0.width) }
+      }
+    }
+
+    struct Content: View {
+      var body: some View {
+        VStack(spacing: 0) {
+          ForEach([0], id: \.self) { _ in Row() }
+        }
+      }
+    }
+
+    let canvas = TestCanvas(width: 3, height: 1)
+    let renderer = Renderer(canvas: canvas, content: Content())
+
+    renderer.render(event: WindowChange(size: Size(width: 1, height: 1)))
+    #expect(canvas.pixels == [
+      Position(x: 1, y: 1): Pixel("1"),
+    ])
+
+    renderer.render(event: WindowChange(size: Size(width: 2, height: 1)))
+    #expect(canvas.pixels == [
+      Position(x: 1, y: 1): Pixel("1"),
+      Position(x: 2, y: 1): Pixel("2"),
+    ])
+
+    renderer.render(event: WindowChange(size: Size(width: 3, height: 1)))
+    #expect(canvas.pixels == [
+      Position(x: 1, y: 1): Pixel("1"),
+      Position(x: 2, y: 1): Pixel("2"),
+      Position(x: 3, y: 1): Pixel("3"),
     ])
   }
 }
