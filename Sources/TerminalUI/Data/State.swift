@@ -23,7 +23,7 @@ public struct State<Value> {
 
 extension State: DynamicProperty {
 
-  func makeProperty(
+  public func makeProperty(
     in buffer: DynamicPropertyBuffer,
     field: Field,
     inputs: ViewInputs

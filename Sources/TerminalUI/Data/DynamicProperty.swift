@@ -1,6 +1,6 @@
 import AttributeGraph
 
-protocol DynamicProperty {
+public protocol DynamicProperty {
   func makeProperty(
     in buffer: DynamicPropertyBuffer,
     field: Field,
@@ -10,7 +10,7 @@ protocol DynamicProperty {
 
 extension DynamicProperty {
 
-  func makeProperty(
+  public func makeProperty(
     in buffer: DynamicPropertyBuffer,
     field: Field,
     inputs: ViewInputs
@@ -41,7 +41,7 @@ func makeProperties<Target>(
 
 // MARK: - Field
 
-struct Field: Hashable {
+public struct Field: Hashable {
   private let rawValue: String
   fileprivate init(_ rawValue: String) {
     self.rawValue = rawValue
@@ -51,7 +51,7 @@ struct Field: Hashable {
 // MARK: - DynamicPropertyBuffer
 
 /// A view's per-instance store of dynamic-property locations.
-final class DynamicPropertyBuffer {
+public final class DynamicPropertyBuffer {
 
   private unowned let graph: Graph
   private var locations: [Field: Any] = [:]
