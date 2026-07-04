@@ -23,9 +23,8 @@ extension ForEach: PrimitiveView {
     inputs: ViewInputs
   ) -> ViewOutputs {
 
+    var container = DynamicContainer<ID>(graph: inputs.graph)
     unowned let graph = inputs.graph
-
-    var infos: [ItemInfo<ID>] = []
 
     let children = graph.rule { graph in
 
@@ -33,43 +32,21 @@ extension ForEach: PrimitiveView {
       let id = graph[view].id
       let content = graph[view].content
 
-      var lookup = Dictionary(infos.map { ($0.id, $0) }, uniquingKeysWith: { first, _ in first })
-      infos = []
+      let ids = data.indices.map { data[$0][keyPath: id] }
 
-      for index in data.indices {
-
-        let id = data[index][keyPath: id]
-
-        if let info = lookup.removeValue(forKey: id) {
-          infos.append(info)
-          continue
-        }
-
-        let (subgraph, outputs) = graph.subgraph {
-          Content.makeView(
-            view: graph.map(view) { view in
-              content(view.data.first { $0[keyPath: view.id] == id }!)
-            },
-            inputs: inputs
-          )
-        }
-
-        let info = ItemInfo(
-          id: id,
-          subgraph: subgraph,
-          outputs: outputs
+      container.update(ids: ids) { id in
+        Content.makeView(
+          view: graph.map(view) { view in
+            content(view.data.first { $0[keyPath: view.id] == id }!)
+          },
+          inputs: inputs
         )
-
-        infos.append(info)
       }
 
-      for info in lookup.values {
-        graph.invalidate(info.subgraph)
-      }
-
+      let items = container.items
       return ViewOutputs(
         preferenceValues: graph.rule { graph in
-          infos.reduce(PreferenceValues { _ in nil }) { result, info in
+          items.reduce(PreferenceValues { _ in nil }) { result, info in
             PreferenceValues(
               lhs: result,
               rhs: graph[info.outputs.preferenceValues]
@@ -77,7 +54,7 @@ extension ForEach: PrimitiveView {
           }
         },
         displayItems: graph.rule { graph in
-          infos.reduce(into: []) { result, info in
+          items.reduce(into: []) { result, info in
             result.append(contentsOf: graph[info.outputs.displayItems])
           }
         }
