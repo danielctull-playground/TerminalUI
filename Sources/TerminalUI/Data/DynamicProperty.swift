@@ -8,6 +8,21 @@ protocol DynamicProperty {
   )
 }
 
+extension DynamicProperty {
+
+  func makeProperty(
+    in buffer: DynamicPropertyBuffer,
+    field: Field,
+    inputs: ViewInputs
+  ) {
+    makeProperties(
+      for: self,
+      in: buffer.buffer(for: field),
+      inputs: inputs
+    )
+  }
+}
+
 func makeProperties<Target>(
   for target: Target,
   in buffer: DynamicPropertyBuffer,
@@ -60,3 +75,19 @@ final class DynamicPropertyBuffer {
   }
 }
 
+extension DynamicPropertyBuffer {
+  
+  /// Creates a new buffer for the given field.
+  ///
+  /// This allows ``DynamicProperty`` to implement
+  ///
+  /// - Parameter field: The field to create the buffer for.
+  /// - Returns: A sub-buffer for the given field.
+  fileprivate func buffer(for field: Field) -> DynamicPropertyBuffer {
+    location(
+      for: field,
+      initialValue: DynamicPropertyBuffer(graph: graph)
+    )
+    .value
+  }
+}

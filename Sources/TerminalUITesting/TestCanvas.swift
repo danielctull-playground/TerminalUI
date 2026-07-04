@@ -17,8 +17,11 @@ public struct TestCanvas: Canvas {
 
 extension TestCanvas {
 
-  public var pixels: [Position: Pixel] { _pixels }
-
+  public var pixels: [Position: Pixel] {
+    get { _pixels }
+    nonmutating set { _pixels = newValue }
+  }
+  
   public func render(@ViewBuilder content: () -> some View) {
     render(size: bounds.size, content: content)
   }

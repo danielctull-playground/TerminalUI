@@ -7,4 +7,5 @@ extension Tag {
   @Tag static var layout: Self
   @Tag static var preferenceValues: Self
   @Tag static var state: Self
+  @Tag static var environment: Self
 }

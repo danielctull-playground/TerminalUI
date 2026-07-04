@@ -1,0 +1,71 @@
+@testable import TerminalUI
+import TerminalUITesting
+import Testing
+
+@Suite("DynamicProperty")
+struct DynamicPropertyTests {
+
+  @Test(.tags(.state))
+  func `dynamic property wrappers should allow use of state`() {
+
+    @propertyWrapper
+    struct StateDynamicProperty: DynamicProperty {
+      @State private var value = ""
+      var wrappedValue: String {
+        get { value }
+        nonmutating set { value = newValue }
+      }
+    }
+
+    struct Content: View {
+      @StateDynamicProperty var value
+      var body: some View {
+        Text(value)
+          .preference(key: PreferenceKey.A.self, value: "new")
+          .onPreferenceChange(PreferenceKey.A.self) { value = $0 }
+      }
+    }
+
+    let canvas = TestCanvas(width: 3, height: 1)
+    canvas.render { Content() }
+
+    #expect(canvas.pixels == [
+      Position(x: 1, y: 1): Pixel("n"),
+      Position(x: 2, y: 1): Pixel("e"),
+      Position(x: 3, y: 1): Pixel("w"),
+    ])
+  }
+
+  @Test(.tags(.environment))
+  func `dynamic property wrappers should allow use of environment`() {
+
+    @propertyWrapper
+    struct EnvironmentDynamicProperty: DynamicProperty {
+      @Environment(\.windowSize) private var windowSize
+      var wrappedValue: String {
+        String(describing: windowSize.width)
+      }
+    }
+
+    struct Content: View {
+      @EnvironmentDynamicProperty var value
+      var body: some View {
+        Text(value)
+      }
+    }
+
+    let canvas = TestCanvas(width: 3, height: 1)
+    let renderer = Renderer(canvas: canvas, content: Content())
+
+    renderer.render(event: WindowChange(size: Size(width: 1, height: 1)))
+    #expect(canvas.pixels == [
+      Position(x: 1, y: 1): Pixel("1")
+    ])
+
+    canvas.pixels = [:]
+    renderer.render(event: WindowChange(size: Size(width: 3, height: 1)))
+    #expect(canvas.pixels == [
+      Position(x: 2, y: 1): Pixel("3")
+    ])
+  }
+}
