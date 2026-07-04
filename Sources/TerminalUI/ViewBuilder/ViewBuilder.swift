@@ -30,14 +30,14 @@ extension ViewBuilder {
 
   public static func buildEither<First: View, Second: View>(
     first: First
-  ) -> Either<First, Second> {
-    Either(first)
+  ) -> ConditionalContent<First, Second> {
+    ConditionalContent(first)
   }
 
   public static func buildEither<First: View, Second: View>(
     second: Second
-  ) -> Either<First, Second> {
-    Either(second)
+  ) -> ConditionalContent<First, Second> {
+    ConditionalContent(second)
   }
 
   public static func buildLimitedAvailability(

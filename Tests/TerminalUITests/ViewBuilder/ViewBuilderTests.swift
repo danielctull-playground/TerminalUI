@@ -96,11 +96,11 @@ struct ViewBuilderTests {
 
   @Test func `either body: fatal`() async {
     await #expect(processExitsWith: .failure) {
-      let either: Either<Color, Color> = ViewBuilder.buildEither(first: Color.black)
+      let either: ConditionalContent<Color, Color> = ViewBuilder.buildEither(first: Color.black)
       _ = either.body
     }
     await #expect(processExitsWith: .failure) {
-      let either: Either<Color, Color> = ViewBuilder.buildEither(second: Color.black)
+      let either: ConditionalContent<Color, Color> = ViewBuilder.buildEither(second: Color.black)
       _ = either.body
     }
   }

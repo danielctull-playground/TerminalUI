@@ -2,8 +2,8 @@
 import TerminalUITesting
 import Testing
 
-@Suite("Either", .tags(.viewBuilder))
-struct EitherTests {
+@Suite("ConditionalContent", .tags(.viewBuilder))
+struct ConditionalContentTests {
 
   @Test(.tags(.state))
   func `state inside a branch reflects a write`() {
