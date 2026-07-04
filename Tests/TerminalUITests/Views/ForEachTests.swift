@@ -177,4 +177,57 @@ struct ForEachTests {
       Position(x: 1, y: 2): Pixel("a"), Position(x: 2, y: 2): Pixel("a"),
     ])
   }
+
+  @Test(.tags(.state))
+  func `leaving the content frees its state`() {
+
+    final class Tracked {
+      nonisolated(unsafe) static var live = 0
+      init() { Tracked.live += 1 }
+      deinit { Tracked.live -= 1 }
+    }
+
+    struct Row: View {
+      @State var tracked = Tracked()
+      let value: Int
+      var body: some View { Text("\(value)") }
+    }
+
+    struct Content: View {
+      @Environment(\.windowSize) var size
+      var body: some View {
+        VStack(spacing: 0) {
+          ForEach(1...size.height, id: \.self) { Row(value: $0) }
+        }
+      }
+    }
+
+    let renderer = Renderer(canvas: TestCanvas(width: 1, height: 1), content: Content())
+    #expect(Tracked.live == 0)
+
+    // Initial render yields 1 Tracked instance.
+    renderer.render(event: WindowChange(size: Size(width: 2, height: 1)))
+    #expect(Tracked.live == 1)
+
+    // A re-render yields 2 instances. This matches SwiftUI's behaviour.
+    renderer.render(event: WindowChange(size: Size(width: 1, height: 1)))
+    #expect(Tracked.live == 2)
+
+    // Adding an item in ForEach adds one.
+    renderer.render(event: WindowChange(size: Size(width: 1, height: 2)))
+    #expect(Tracked.live == 3)
+
+    // A re-render yields 4 Tracked instances (2 for each).
+    // This again matches SwiftUI's behaviour.
+    renderer.render(event: WindowChange(size: Size(width: 2, height: 2)))
+    #expect(Tracked.live == 4)
+
+    // Removing one brings the live count back to 2.
+    renderer.render(event: WindowChange(size: Size(width: 1, height: 1)))
+    #expect(Tracked.live == 2)
+
+    // A re-render remains at 2.
+    renderer.render(event: WindowChange(size: Size(width: 2, height: 1)))
+    #expect(Tracked.live == 2)
+  }
 }
