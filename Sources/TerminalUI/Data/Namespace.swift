@@ -14,7 +14,7 @@ public struct Namespace {
 
 extension Namespace: DynamicProperty {
 
-  func makeProperty(
+  public func makeProperty(
     in buffer: DynamicPropertyBuffer,
     field: Field,
     inputs: ViewInputs
