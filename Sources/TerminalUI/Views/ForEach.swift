@@ -33,14 +33,14 @@ extension ForEach: PrimitiveView {
       let id = graph[view].id
       let content = graph[view].content
 
-      var old = infos
+      var lookup = Dictionary(infos.map { ($0.id, $0) }, uniquingKeysWith: { first, _ in first })
       infos = []
 
       for index in data.indices {
 
         let id = data[index][keyPath: id]
 
-        if let info = old.first(where: { $0.id == id }) {
+        if let info = lookup.removeValue(forKey: id) {
           infos.append(info)
           continue
         }
@@ -63,10 +63,8 @@ extension ForEach: PrimitiveView {
         infos.append(info)
       }
 
-      old.removeAll(where: { old in infos.contains(where: { $0.id == old.id })})
-
-      for item in old {
-        graph.invalidate(item.subgraph)
+      for info in lookup.values {
+        graph.invalidate(info.subgraph)
       }
 
       return ViewOutputs(
