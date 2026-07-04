@@ -1,4 +1,4 @@
-import TerminalUI
+@testable import TerminalUI
 import TerminalUITesting
 import Testing
 
@@ -66,5 +66,33 @@ struct NamespaceTests {
     #expect(canvas.pixels == [
       Position(x: 1, y: 1): Pixel("D")
     ])
+  }
+
+  @Test func `should be consistent across re-evaluation`() {
+
+    struct TickKey: PreferenceKey {
+      static var defaultValue: Int { 0 }
+      static func reduce(value: inout Int, nextValue: () -> Int) { value = nextValue() }
+    }
+
+    struct Content: View {
+      @Environment(\.windowSize) private var size
+      @Namespace private var a
+      var body: some View {
+        Text(a.description)
+          .preference(key: TickKey.self, value: size.height) // Cause a re-draw
+      }
+    }
+
+    let canvas = TestCanvas(width: 1, height: 1)
+    let renderer = Renderer(canvas: canvas, content: Content())
+
+    renderer.render(event: WindowChange(size: Size(width: 1, height: 1)))
+    let first = canvas.pixels[Position(x: 1, y: 1)]
+
+    renderer.render(event: WindowChange(size: Size(width: 1, height: 3)))
+    let second = canvas.pixels[Position(x: 1, y: 2)]
+
+    #expect(first == second)
   }
 }

@@ -3,10 +3,26 @@ import AttributeGraph
 @propertyWrapper
 public struct Namespace {
 
+  @Mutable private var location: StoredLocation<ID>!
+
   public init() {}
   
   public var wrappedValue: ID {
-    ID.next
+    location.value
+  }
+}
+
+extension Namespace: DynamicProperty {
+
+  func makeProperty(
+    in buffer: DynamicPropertyBuffer,
+    field: Field,
+    inputs: ViewInputs
+  ) {
+    location = buffer.location(
+      for: field,
+      initialValue: ID.next
+    )
   }
 }
 
@@ -24,5 +40,11 @@ extension Namespace.ID {
   fileprivate static var next: Self {
     defer { counter += 1 }
     return Namespace.ID(rawValue: counter)
+  }
+}
+
+extension Namespace.ID: CustomStringConvertible {
+  public var description: String {
+    String(describing: rawValue)
   }
 }
