@@ -20,6 +20,10 @@ final class FocusManager {
   }
 
   func handle(_ keyPress: KeyPress) {
+    if keyPress.character == "\t" {
+      next()
+      return
+    }
     let id = graph[current]
     let handler = handlers[id]!
     handler(keyPress)
@@ -93,5 +97,27 @@ extension EnvironmentValues {
   var focusManager: FocusManager {
     get { self[FocusManagerKey.self] }
     set { self[FocusManagerKey.self] = newValue }
+  }
+}
+
+// MARK: - Focusable
+
+private struct Focusable<Content: View>: ViewModifier {
+
+  @Environment(\.focusManager) private var focusManager
+  @State private var focusID: FocusID?
+  let isFocusable: Bool
+
+  func body(content: Content) -> some View {
+
+    if isFocusable {
+      focusID = focusManager.add { _ in
+        
+      }
+    } else if let focusID {
+      focusManager.remove(id: focusID)
+    }
+
+    return content
   }
 }
