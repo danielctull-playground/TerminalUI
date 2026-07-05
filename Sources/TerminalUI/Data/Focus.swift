@@ -80,3 +80,18 @@ extension FocusID: CustomStringConvertible {
     String(describing: rawValue)
   }
 }
+
+// MARK: - EnvironmentKey
+
+private struct FocusManagerKey: EnvironmentKey {
+  static var defaultValue: FocusManager {
+    fatalError("Focus manager needs to be set on launch")
+  }
+}
+
+extension EnvironmentValues {
+  var focusManager: FocusManager {
+    get { self[FocusManagerKey.self] }
+    set { self[FocusManagerKey.self] = newValue }
+  }
+}
