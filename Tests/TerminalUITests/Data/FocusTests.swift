@@ -9,7 +9,7 @@ struct FocusManagerTests {
   @Test func `root handles when there's no other focus ids`() {
 
     let graph = Graph()
-    var root: [Character] = []
+    var root: [KeyPress] = []
     let manager = FocusManager(graph: graph) { root.append($0) }
 
     manager.handle("Y")
@@ -22,10 +22,10 @@ struct FocusManagerTests {
   @Test func `first non-root handler is activated`() {
 
     let graph = Graph()
-    var root: [Character] = []
+    var root: [KeyPress] = []
     let manager = FocusManager(graph: graph) { root.append($0) }
 
-    var a: [Character] = []
+    var a: [KeyPress] = []
     _ = manager.add { a.append($0) }
 
     manager.handle("1")
@@ -40,13 +40,13 @@ struct FocusManagerTests {
   @Test func `subsequent handlers are not activated`() {
 
     let graph = Graph()
-    var root: [Character] = []
+    var root: [KeyPress] = []
     let manager = FocusManager(graph: graph) { root.append($0) }
 
-    var a: [Character] = []
+    var a: [KeyPress] = []
     _ = manager.add { a.append($0) }
 
-    var b: [Character] = []
+    var b: [KeyPress] = []
     _ = manager.add { b.append($0) }
 
     manager.handle("1")
@@ -63,13 +63,13 @@ struct FocusManagerTests {
   @Test func `next toggles through non-root focus ids`() {
 
     let graph = Graph()
-    var root: [Character] = []
+    var root: [KeyPress] = []
     let manager = FocusManager(graph: graph) { root.append($0) }
 
-    var a: [Character] = []
+    var a: [KeyPress] = []
     _ = manager.add { a.append($0) }
 
-    var b: [Character] = []
+    var b: [KeyPress] = []
     _ = manager.add { b.append($0) }
 
     manager.handle("1")
@@ -93,13 +93,13 @@ struct FocusManagerTests {
   @Test func `removing the current focus id moves to next focus`() {
 
     let graph = Graph()
-    var root: [Character] = []
+    var root: [KeyPress] = []
     let manager = FocusManager(graph: graph) { root.append($0) }
 
-    var a: [Character] = []
+    var a: [KeyPress] = []
     let aid = manager.add { a.append($0) }
 
-    var b: [Character] = []
+    var b: [KeyPress] = []
     _ = manager.add { b.append($0) }
 
     manager.handle("1")
@@ -117,16 +117,16 @@ struct FocusManagerTests {
   @Test func `removing non-current focus id doesn't move to next focus`() {
 
     let graph = Graph()
-    var root: [Character] = []
+    var root: [KeyPress] = []
     let manager = FocusManager(graph: graph) { root.append($0) }
 
-    var a: [Character] = []
+    var a: [KeyPress] = []
     _ = manager.add { a.append($0) }
 
-    var b: [Character] = []
+    var b: [KeyPress] = []
     let bid = manager.add { b.append($0) }
 
-    var c: [Character] = []
+    var c: [KeyPress] = []
     _ = manager.add { c.append($0) }
 
     manager.handle("1")
@@ -146,13 +146,13 @@ struct FocusManagerTests {
   @Test func `removing all active focus id moves focus to root`() {
 
     let graph = Graph()
-    var root: [Character] = []
+    var root: [KeyPress] = []
     let manager = FocusManager(graph: graph) { root.append($0) }
 
-    var a: [Character] = []
+    var a: [KeyPress] = []
     let aid = manager.add { a.append($0) }
 
-    var b: [Character] = []
+    var b: [KeyPress] = []
     let bid = manager.add { b.append($0) }
 
     manager.handle("1")
