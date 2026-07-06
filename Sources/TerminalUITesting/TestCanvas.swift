@@ -10,8 +10,9 @@ public struct TestCanvas: Canvas {
     bounds = Rect(origin: .origin, size: Size(width: width, height: height))
   }
 
-  public func beginFrame() {
+  public func drawFrame(_ frame: () -> Void) {
     _pixels = [:]
+    frame()
   }
 
   public func draw(_ pixel: Pixel, at position: Position) {
