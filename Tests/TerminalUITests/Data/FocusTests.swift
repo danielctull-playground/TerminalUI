@@ -26,7 +26,9 @@ struct FocusManagerTests {
     let manager = FocusManager(graph: graph) { root.append($0) }
 
     var a: [KeyPress] = []
-    _ = manager.add { a.append($0) }
+    let aid = manager.add { a.append($0) }
+
+    #expect(manager.isFocused(aid))
 
     manager.handle("1")
     #expect(root == [])
@@ -44,15 +46,21 @@ struct FocusManagerTests {
     let manager = FocusManager(graph: graph) { root.append($0) }
 
     var a: [KeyPress] = []
-    _ = manager.add { a.append($0) }
+    let aid = manager.add { a.append($0) }
 
     var b: [KeyPress] = []
-    _ = manager.add { b.append($0) }
+    let bid = manager.add { b.append($0) }
+
+    #expect(manager.isFocused(aid))
+    #expect(!manager.isFocused(bid))
 
     manager.handle("1")
     #expect(root == [])
     #expect(a == ["1"])
     #expect(b == [])
+
+    #expect(manager.isFocused(aid))
+    #expect(!manager.isFocused(bid))
 
     manager.handle("2")
     #expect(root == [])
@@ -67,10 +75,13 @@ struct FocusManagerTests {
     let manager = FocusManager(graph: graph) { root.append($0) }
 
     var a: [KeyPress] = []
-    _ = manager.add { a.append($0) }
+    let aid = manager.add { a.append($0) }
 
     var b: [KeyPress] = []
-    _ = manager.add { b.append($0) }
+    let bid = manager.add { b.append($0) }
+
+    #expect(manager.isFocused(aid))
+    #expect(!manager.isFocused(bid))
 
     manager.handle("1")
     #expect(root == [])
@@ -78,12 +89,18 @@ struct FocusManagerTests {
     #expect(b == [])
 
     manager.next()
+    #expect(!manager.isFocused(aid))
+    #expect(manager.isFocused(bid))
+
     manager.handle("2")
     #expect(root == [])
     #expect(a == ["1"])
     #expect(b == ["2"])
 
     manager.next()
+    #expect(manager.isFocused(aid))
+    #expect(!manager.isFocused(bid))
+
     manager.handle("3")
     #expect(root == [])
     #expect(a == ["1", "3"])
@@ -100,7 +117,10 @@ struct FocusManagerTests {
     let aid = manager.add { a.append($0) }
 
     var b: [KeyPress] = []
-    _ = manager.add { b.append($0) }
+    let bid = manager.add { b.append($0) }
+
+    #expect(manager.isFocused(aid))
+    #expect(!manager.isFocused(bid))
 
     manager.handle("1")
     #expect(root == [])
@@ -108,6 +128,9 @@ struct FocusManagerTests {
     #expect(b == [])
 
     manager.remove(id: aid)
+    #expect(!manager.isFocused(aid))
+    #expect(manager.isFocused(bid))
+
     manager.handle("2")
     #expect(root == [])
     #expect(a == ["1"])
@@ -121,13 +144,17 @@ struct FocusManagerTests {
     let manager = FocusManager(graph: graph) { root.append($0) }
 
     var a: [KeyPress] = []
-    _ = manager.add { a.append($0) }
+    let aid = manager.add { a.append($0) }
 
     var b: [KeyPress] = []
     let bid = manager.add { b.append($0) }
 
     var c: [KeyPress] = []
-    _ = manager.add { c.append($0) }
+    let cid = manager.add { c.append($0) }
+
+    #expect(manager.isFocused(aid))
+    #expect(!manager.isFocused(bid))
+    #expect(!manager.isFocused(cid))
 
     manager.handle("1")
     #expect(root == [])
@@ -136,6 +163,10 @@ struct FocusManagerTests {
     #expect(c == [])
 
     manager.remove(id: bid)
+    #expect(manager.isFocused(aid))
+    #expect(!manager.isFocused(bid))
+    #expect(!manager.isFocused(cid))
+
     manager.handle("2")
     #expect(root == [])
     #expect(a == ["1", "2"])
@@ -155,18 +186,27 @@ struct FocusManagerTests {
     var b: [KeyPress] = []
     let bid = manager.add { b.append($0) }
 
+    #expect(manager.isFocused(aid))
+    #expect(!manager.isFocused(bid))
+
     manager.handle("1")
     #expect(root == [])
     #expect(a == ["1"])
     #expect(b == [])
 
     manager.remove(id: aid)
+    #expect(!manager.isFocused(aid))
+    #expect(manager.isFocused(bid))
+
     manager.handle("2")
     #expect(root == [])
     #expect(a == ["1"])
     #expect(b == ["2"])
 
     manager.remove(id: bid)
+    #expect(!manager.isFocused(aid))
+    #expect(!manager.isFocused(bid))
+
     manager.handle("3")
     #expect(root == ["3"])
     #expect(a == ["1"])

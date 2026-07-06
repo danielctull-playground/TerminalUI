@@ -19,6 +19,10 @@ final class FocusManager {
     graph.setValue(of: current, to: root)
   }
 
+  func isFocused(_ id: FocusID) -> Bool {
+    graph[current] == id
+  }
+
   func handle(_ keyPress: KeyPress) {
     let id = graph[current]
     let handler = handlers[id]!
@@ -38,7 +42,7 @@ final class FocusManager {
   }
 
   func remove(id: FocusID) {
-    if graph[current] == id, !_next() {
+    if isFocused(id), !_next() {
       graph.setValue(of: current, to: root)
     }
     handlers.removeValue(forKey: id)
