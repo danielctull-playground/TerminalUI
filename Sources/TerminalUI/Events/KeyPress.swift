@@ -1,5 +1,5 @@
 
-struct KeyPress: Equatable {
+struct KeyPress: Equatable, Sendable {
   let character: Character
 }
 
@@ -13,6 +13,10 @@ extension KeyPress: ExpressibleByUnicodeScalarLiteral {
   init(unicodeScalarLiteral value: Character) {
     self.init(character: value)
   }
+}
+
+extension KeyPress {
+  static let tab: KeyPress = "\t"
 }
 
 // MARK: Sequence modifier

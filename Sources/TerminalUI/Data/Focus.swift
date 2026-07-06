@@ -24,6 +24,10 @@ final class FocusManager {
   }
 
   func handle(_ keyPress: KeyPress) {
+    if keyPress == .tab {
+      _ = next()
+      return
+    }
     let id = graph[current]
     let handler = handlers[id]!
     handler(keyPress)
@@ -42,18 +46,14 @@ final class FocusManager {
   }
 
   func remove(id: FocusID) {
-    if isFocused(id), !_next() {
+    if isFocused(id), !next() {
       graph.setValue(of: current, to: root)
     }
     handlers.removeValue(forKey: id)
     order.removeAll { $0 == id }
   }
 
-  func next() {
-    _ = _next()
-  }
-
-  private func _next() -> Bool {
+  private func next() -> Bool {
     guard order.count > 1 else { return false }
     let previous = order.firstIndex(of: graph[current])!
     var next = order.index(after: previous)

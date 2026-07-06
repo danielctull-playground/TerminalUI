@@ -68,7 +68,7 @@ struct FocusManagerTests {
     #expect(b == [])
   }
 
-  @Test func `next toggles through non-root focus ids`() {
+  @Test func `tab toggles through non-root focus ids`() {
 
     let graph = Graph()
     var root: [KeyPress] = []
@@ -88,7 +88,7 @@ struct FocusManagerTests {
     #expect(a == ["1"])
     #expect(b == [])
 
-    manager.next()
+    manager.handle(.tab)
     #expect(!manager.isFocused(aid))
     #expect(manager.isFocused(bid))
 
@@ -97,7 +97,7 @@ struct FocusManagerTests {
     #expect(a == ["1"])
     #expect(b == ["2"])
 
-    manager.next()
+    manager.handle(.tab)
     #expect(manager.isFocused(aid))
     #expect(!manager.isFocused(bid))
 
