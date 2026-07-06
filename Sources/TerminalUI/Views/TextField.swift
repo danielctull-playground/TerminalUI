@@ -20,7 +20,7 @@ extension TextField: PrimitiveView {
 
     let manager = graph[inputs.environment].focusManager
 
-    _ = manager.add { key in
+    let id = manager.add { key in
       graph[view].text.wrappedValue.append(key.character)
     }
 
@@ -28,7 +28,10 @@ extension TextField: PrimitiveView {
       preferenceValues: graph.constant(.empty),
       displayItems: graph.rule { graph in
 
-        let text = graph[view].text.wrappedValue
+        var text = graph[view].text.wrappedValue
+        if manager.isFocused(id) {
+          text.append("_") // Cursor
+        }
         let environment = inputs.graph[inputs.environment]
 
         return [
