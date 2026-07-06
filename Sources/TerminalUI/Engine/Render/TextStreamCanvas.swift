@@ -9,11 +9,15 @@ package struct TextStreamCanvas<Output: TextOutputStream>: Canvas {
     self.output.write(.cursorVisibility(.off))
   }
 
+  package func beginFrame() {}
+
   package func draw(_ pixel: Pixel, at position: Position) {
     output.write(.selectGraphicRendition(pixel.graphicRendition))
     output.write(position.csi)
     output.write(pixel.content)
   }
+
+  package func endFrame() {}
 }
 
 extension TextOutputStream {

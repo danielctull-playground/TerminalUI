@@ -10,17 +10,20 @@ public struct TestCanvas: Canvas {
     bounds = Rect(origin: .origin, size: Size(width: width, height: height))
   }
 
+  public func beginFrame() {
+    _pixels = [:]
+  }
+
   public func draw(_ pixel: Pixel, at position: Position) {
     _pixels[position] = pixel
   }
+
+  public func endFrame() {}
 }
 
 extension TestCanvas {
 
-  public var pixels: [Position: Pixel] {
-    get { _pixels }
-    nonmutating set { _pixels = newValue }
-  }
+  public var pixels: [Position: Pixel] { _pixels }
   
   public func render(@ViewBuilder content: () -> some View) {
     render(size: bounds.size, content: content)

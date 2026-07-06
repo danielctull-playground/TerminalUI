@@ -62,7 +62,6 @@ struct DynamicPropertyTests {
       Position(x: 1, y: 1): Pixel("1")
     ])
 
-    canvas.pixels = [:]
     renderer.render(event: WindowChange(size: Size(width: 3, height: 1)))
     #expect(canvas.pixels == [
       Position(x: 2, y: 1): Pixel("3")

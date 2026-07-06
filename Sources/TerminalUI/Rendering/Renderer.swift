@@ -58,7 +58,9 @@ package struct Renderer<Content: View, Canvas: TerminalUI.Canvas> {
 
       let displayList = graph[outputs.displayList]
 
+      canvas.beginFrame()
       canvas.rasterize(displayList)
+      canvas.endFrame()
     }
   }
 }

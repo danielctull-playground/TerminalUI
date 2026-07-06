@@ -70,8 +70,6 @@ struct TextFieldTests {
       Position(x: 3, y: 1): Pixel("_"),
     ])
 
-    canvas.pixels = [:] // Re-rendering bug.
-
     renderer.render(event: KeyPress("\t")) // tab
     #expect(canvas.pixels == [
       Position(x: 1, y: 1): Pixel("h"),
