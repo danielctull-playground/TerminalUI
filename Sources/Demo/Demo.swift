@@ -10,6 +10,7 @@ struct Demo: AsyncParsableCommand {
     subcommands: [
       Phrase.self,
       Styles.self,
+      Typing.self,
     ]
   )
 }

@@ -15,8 +15,10 @@ package struct Renderer<Content: View, Canvas: TerminalUI.Canvas> {
     let graph = Graph()
     let screen = graph.constant(Screen(content: content))
 
+    var values = EnvironmentValues()
+    values.focusManager = FocusManager(graph: graph)
     let environment = graph.external(of: EnvironmentValues.self)
-    graph.setValue(of: environment, to: EnvironmentValues())
+    graph.setValue(of: environment, to: values)
 
     let inputs = ViewInputs(
       graph: graph,
