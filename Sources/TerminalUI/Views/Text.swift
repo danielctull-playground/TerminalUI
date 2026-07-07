@@ -42,11 +42,12 @@ public struct Text: PrimitiveView {
     in bounds: Rect,
     view: Attribute<Self>,
     inputs: ViewInputs
-  ) {
+  ) -> DisplayList {
 
     let lines = inputs.graph[view].string.lines(ofLength: Int(bounds.size.width))
     let environment = inputs.graph[inputs.environment]
 
+    var items: [DisplayList.Item] = []
     for (line, y) in zip(lines, bounds.origin.y...) {
       for (character, x) in zip(line, bounds.origin.x...) {
         let pixel = Pixel(
@@ -61,9 +62,10 @@ public struct Text: PrimitiveView {
           hidden: environment.hidden,
           strikethrough: environment.strikethrough
         )
-        inputs.canvas.draw(pixel, at: Position(x: x, y: y))
+        items.append(DisplayList.Item(position: Position(x: x, y: y), pixel: pixel))
       }
     }
+    return DisplayList(items: items)
   }
 }
 

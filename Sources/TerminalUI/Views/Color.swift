@@ -18,11 +18,13 @@ public struct Color: CustomStringConvertible, Equatable, Sendable, PrimitiveView
             $0.replacingUnspecifiedDimensions()
           } render: { bounds in
             let pixel = Pixel(" ", background: inputs.graph[view])
+            var items: [DisplayList.Item] = []
             for x in bounds.minX...bounds.maxX {
               for y in bounds.minY...bounds.maxY {
-                inputs.canvas.draw(pixel, at: Position(x: x, y: y))
+                items.append(DisplayList.Item(position: Position(x: x, y: y), pixel: pixel))
               }
             }
+            return DisplayList(items: items)
           }
         ]
       }

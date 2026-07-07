@@ -47,28 +47,43 @@ extension LayoutSubviews: RandomAccessCollection {
 
 public struct LayoutSubview {
 
-  private let _sizeThatFits: (ProposedViewSize) -> Size
-  private let _place: (Position, ProposedViewSize) -> Void
+  private let displayItem: DisplayItem
+
+  /// Placement is recorded as a side effect of `place(at:proposal:)`, mirroring
+  /// SwiftUI's public API (which returns `Void`). The recording is stored by
+  /// reference so it survives the value-type copies handed out by
+  /// `LayoutSubviews`, and is read back internally by the enclosing layout to
+  /// assemble the display list.
+  private final class Placement {
+    var position: Position?
+    var proposal: ProposedViewSize = .unspecified
+  }
+  private let placement = Placement()
 
   init(displayItem: DisplayItem) {
-    _sizeThatFits = displayItem.size(for:)
-    _place = { position, proposal in
-      displayItem.render(in: Rect(
-        origin: position,
-        size: displayItem.size(for: proposal)
-      ))
-    }
+    self.displayItem = displayItem
   }
 
   public func sizeThatFits(_ proposal: ProposedViewSize) -> Size {
-    _sizeThatFits(proposal)
+    displayItem.size(for: proposal)
   }
 
   public func place(
     at position: Position,
     proposal: ProposedViewSize
   ) {
-    _place(position, proposal)
+    placement.position = position
+    placement.proposal = proposal
+  }
+
+  /// The cells produced by rendering this subview at its recorded placement.
+  /// Returns an empty list if the subview was never placed.
+  func placed() -> DisplayList {
+    guard let position = placement.position else { return [] }
+    return displayItem.render(in: Rect(
+      origin: position,
+      size: displayItem.size(for: placement.proposal)
+    ))
   }
 }
 
@@ -125,6 +140,7 @@ private struct LayoutView<Content: View, Layout: TerminalUI.Layout>: PrimitiveVi
             proposal: ProposedViewSize(bounds.size),
             subviews: subviews,
             cache: &cache)
+          return DisplayList(items: subviews.flatMap { $0.placed().items })
         }
 
         return [item]

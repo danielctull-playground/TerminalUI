@@ -33,3 +33,10 @@ extension ProposedViewSize {
     self.init(width: size.width, height: size.height)
   }
 }
+
+extension ProposedViewSize {
+  /// A size proposal that contains no size information in either dimension.
+  public static var unspecified: ProposedViewSize {
+    ProposedViewSize(width: nil, height: nil)
+  }
+}

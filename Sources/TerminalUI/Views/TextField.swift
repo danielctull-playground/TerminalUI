@@ -38,6 +38,7 @@ extension TextField: PrimitiveView {
           DisplayItem { _ in
             Size(width: text.count, height: 1)
           } render: { rect in
+            var items: [DisplayList.Item] = []
             for (character, x) in zip(text, rect.origin.x...) {
               let pixel = Pixel(
                 character,
@@ -51,8 +52,9 @@ extension TextField: PrimitiveView {
                 hidden: environment.hidden,
                 strikethrough: environment.strikethrough
               )
-              inputs.canvas.draw(pixel, at: Position(x: x, y: rect.origin.y))
+              items.append(DisplayList.Item(position: Position(x: x, y: rect.origin.y), pixel: pixel))
             }
+            return DisplayList(items: items)
           }
         ]
       }

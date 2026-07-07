@@ -22,7 +22,6 @@ package struct Renderer<Content: View, Canvas: TerminalUI.Canvas> {
 
     let inputs = ViewInputs(
       graph: graph,
-      canvas: canvas,
       environment: environment
     )
 
@@ -44,10 +43,15 @@ package struct Renderer<Content: View, Canvas: TerminalUI.Canvas> {
     graph.withUpdate {
 
       _ = graph[outputs.preferenceValues] // Trigger preference values
-      
-      graph[outputs.displayItems]
+
+      let displayList = graph[outputs.displayItems]
         .first!
         .render(in: Rect(origin: .origin, size: graph[environment].windowSize))
+
+      // Paint the flat cell list onto the canvas, in order (last wins).
+      for item in displayList.items {
+        canvas.draw(item.pixel, at: item.position)
+      }
     }
   }
 }

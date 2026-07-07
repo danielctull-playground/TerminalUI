@@ -1,11 +1,11 @@
 
 struct DisplayItem {
   private let size: (ProposedViewSize) -> Size
-  private let render: (Rect) -> Void
+  private let render: (Rect) -> DisplayList
 
   init(
     size: @escaping (ProposedViewSize) -> Size,
-    render: @escaping (Rect) -> Void
+    render: @escaping (Rect) -> DisplayList
   ) {
     self.size = size
     self.render = render
@@ -15,9 +15,9 @@ struct DisplayItem {
     size(proposal)
   }
 
-  func render(in bounds: Rect) {
-    guard bounds.size.height > 0 else { return }
-    guard bounds.size.width > 0 else { return }
-    render(bounds)
+  func render(in bounds: Rect) -> DisplayList {
+    guard bounds.size.height > 0 else { return [] }
+    guard bounds.size.width > 0 else { return [] }
+    return render(bounds)
   }
 }
