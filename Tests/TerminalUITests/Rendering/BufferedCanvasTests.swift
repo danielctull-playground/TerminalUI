@@ -10,10 +10,10 @@ struct BufferedCanvasTests {
     let canvas = TestCanvas(width: 0, height: 0)
     let buffered = canvas.buffered()
 
-    buffered.drawFrame {
-      buffered.draw(Pixel("a"), at: Position(x: 1, y: 1))
-      buffered.draw(Pixel("b"), at: Position(x: 2, y: 1))
-      buffered.draw(Pixel("c"), at: Position(x: 3, y: 1))
+    buffered.draw {
+      $0.draw(Pixel("a"), at: Position(x: 1, y: 1))
+      $0.draw(Pixel("b"), at: Position(x: 2, y: 1))
+      $0.draw(Pixel("c"), at: Position(x: 3, y: 1))
     }
 
     #expect(canvas.pixels == [
@@ -22,10 +22,10 @@ struct BufferedCanvasTests {
       Position(x: 3, y: 1): Pixel("c"),
     ])
 
-    buffered.drawFrame {
-      buffered.draw(Pixel("a"), at: Position(x: 1, y: 1))
-      buffered.draw(Pixel("B"), at: Position(x: 2, y: 1))
-      buffered.draw(Pixel("c"), at: Position(x: 3, y: 1))
+    buffered.draw {
+      $0.draw(Pixel("a"), at: Position(x: 1, y: 1))
+      $0.draw(Pixel("B"), at: Position(x: 2, y: 1))
+      $0.draw(Pixel("c"), at: Position(x: 3, y: 1))
     }
 
     #expect(canvas.pixels == [

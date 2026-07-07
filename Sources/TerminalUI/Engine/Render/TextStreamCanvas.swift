@@ -9,14 +9,12 @@ package struct TextStreamCanvas<Output: TextOutputStream>: Canvas {
     self.output.write(.cursorVisibility(.off))
   }
 
-  package func drawFrame(_ frame: () -> Void) {
-    frame()
-  }
-
-  package func draw(_ pixel: Pixel, at position: Position) {
-    output.write(.selectGraphicRendition(pixel.graphicRendition))
-    output.write(position.csi)
-    output.write(pixel.content)
+  package func draw(_ draw: (Frame) -> Void) {
+    draw(Frame { pixel, position in
+      output.write(.selectGraphicRendition(pixel.graphicRendition))
+      output.write(position.csi)
+      output.write(pixel.content)
+    })
   }
 }
 

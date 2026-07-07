@@ -1,5 +1,5 @@
 
-extension Canvas {
+extension Frame {
   
   /// Rasterizes a list of items to the canvas.
   ///

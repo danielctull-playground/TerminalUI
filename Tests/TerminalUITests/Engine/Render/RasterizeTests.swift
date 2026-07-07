@@ -17,7 +17,7 @@ extension CanvasTests {
       ])
 
       let canvas = TestCanvas(width: 0, height: 0)
-      canvas.rasterize(list)
+      canvas.draw { $0.rasterize(list) }
 
       #expect(canvas.pixels == [
         Position(x: 1, y: 1): Pixel(" ", background: .red),
@@ -37,7 +37,7 @@ extension CanvasTests {
       ])
 
       let canvas = TestCanvas(width: 0, height: 0)
-      canvas.rasterize(list)
+      canvas.draw { $0.rasterize(list) }
 
       #expect(canvas.pixels == [
         Position(x: 2, y: 3): Pixel("h"),
@@ -54,7 +54,7 @@ extension CanvasTests {
       ])
 
       let canvas = TestCanvas(width: 0, height: 0)
-      canvas.rasterize(list)
+      canvas.draw { $0.rasterize(list) }
 
       #expect(canvas.pixels == [
         Position(x: 1, y: 1): Pixel(" ", background: .blue),
@@ -70,7 +70,7 @@ extension CanvasTests {
       ])
 
       let canvas = TestCanvas(width: 0, height: 0)
-      canvas.rasterize(list)
+      canvas.draw { $0.rasterize(list) }
 
       #expect(canvas.pixels.isEmpty)
     }

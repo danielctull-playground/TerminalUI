@@ -4,19 +4,19 @@ private struct BufferedCanvas<Base: Canvas>: Canvas {
   let base: Base
   @Mutable private var pixels: [Position: Pixel] = [:]
 
-  func drawFrame(_ frame: () -> Void) {
+  func draw(_ frame: (Frame) -> Void) {
 
     let previous = pixels
 
-    frame()
+    frame(Frame { pixel, position in pixels[position] = pixel })
 
     let changed = pixels.filter { position, pixel in
       previous[position] != pixel
     }
 
-    base.drawFrame {
+    base.draw { frame in
       for (position, pixel) in changed {
-        base.draw(pixel, at: position)
+        frame.draw(pixel, at: position)
       }
     }
   }

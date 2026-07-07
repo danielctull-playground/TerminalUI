@@ -1,25 +1,23 @@
 import TerminalUI
 import Testing
 
-public struct TestCanvas: Canvas {
+public final class TestCanvas: Canvas {
 
-  @Mutable private var _pixels: [Position: Pixel] = [:]
+  private var _pixels: [Position: Pixel] = [:]
   private let bounds: Rect
 
   public init(width: Int, height: Int) {
     bounds = Rect(origin: .origin, size: Size(width: width, height: height))
   }
 
-  public func drawFrame(_ frame: () -> Void) {
-    _pixels = [:]
-    frame()
+  package func draw(_ draw: (Frame) -> Void) {
+    var pixels: [Position: Pixel] = [:]
+    let frame = Frame { pixel, position in
+      pixels[position] = pixel
+    }
+    draw(frame)
+    _pixels = pixels
   }
-
-  public func draw(_ pixel: Pixel, at position: Position) {
-    _pixels[position] = pixel
-  }
-
-  public func endFrame() {}
 }
 
 extension TestCanvas {

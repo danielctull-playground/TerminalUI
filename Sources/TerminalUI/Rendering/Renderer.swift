@@ -58,8 +58,8 @@ package struct Renderer<Content: View, Canvas: TerminalUI.Canvas> {
 
       let displayList = graph[outputs.displayList]
 
-      canvas.drawFrame {
-        canvas.rasterize(displayList)
+      canvas.draw {
+        $0.rasterize(displayList)
       }
     }
   }
