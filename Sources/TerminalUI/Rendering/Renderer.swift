@@ -22,7 +22,10 @@ package struct Renderer<Content: View, Canvas: TerminalUI.Canvas> {
 
     let inputs = ViewInputs(
       graph: graph,
-      environment: environment
+      environment: environment,
+      geometry: graph.map(environment) {
+        ViewGeometry(frame: Rect(origin: .origin, size: $0.windowSize))
+      }
     )
 
     self.graph = graph

@@ -66,7 +66,8 @@ private struct EnvironmentWriter<Content: View, Value>: PrimitiveView {
         let writer = graph[view]
         environment[keyPath: writer.keyPath] = writer.value
         return environment
-      }
+      },
+      geometry: inputs.geometry,
     )
 
     return Content.makeView(
