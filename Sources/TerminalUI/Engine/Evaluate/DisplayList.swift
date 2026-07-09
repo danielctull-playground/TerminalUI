@@ -31,9 +31,3 @@ extension DisplayList.Item {
     case fill(Style)
   }
 }
-
-// MARK: - Style
-
-struct Style: Equatable {
-  var rendition: [GraphicRendition]
-}

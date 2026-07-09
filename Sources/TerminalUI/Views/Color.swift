@@ -17,12 +17,14 @@ public struct Color: CustomStringConvertible, Equatable, Sendable, PrimitiveView
           DisplayItem {
             $0.replacingUnspecifiedDimensions()
           } render: { bounds in
-            let pixel = Pixel(" ", background: inputs.graph[view])
-            for x in bounds.minX...bounds.maxX {
-              for y in bounds.minY...bounds.maxY {
-                inputs.canvas.draw(pixel, at: Position(x: x, y: y))
-              }
-            }
+
+            var environment = inputs.graph[inputs.environment]
+            environment.backgroundColor = inputs.graph[view]
+            let style = environment.style
+
+            return DisplayList(items: [
+              DisplayList.Item(frame: bounds, content: .fill(style))
+            ])
           }
         ]
       }

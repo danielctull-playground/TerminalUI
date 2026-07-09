@@ -22,7 +22,6 @@ package struct Renderer<Content: View, Canvas: TerminalUI.Canvas> {
 
     let inputs = ViewInputs(
       graph: graph,
-      canvas: canvas,
       environment: environment
     )
 
@@ -45,9 +44,11 @@ package struct Renderer<Content: View, Canvas: TerminalUI.Canvas> {
 
       _ = graph[outputs.preferenceValues] // Trigger preference values
       
-      graph[outputs.displayItems]
+      let displayList = graph[outputs.displayItems]
         .first!
         .render(in: Rect(origin: .origin, size: graph[environment].windowSize))
+
+      canvas.rasterize(displayList)
     }
   }
 }

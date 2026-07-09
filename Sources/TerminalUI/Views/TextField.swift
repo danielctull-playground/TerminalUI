@@ -32,27 +32,18 @@ extension TextField: PrimitiveView {
         if manager.isFocused(id) {
           text.append("_") // Cursor
         }
-        let environment = inputs.graph[inputs.environment]
+        let environment = graph[inputs.environment]
 
         return [
           DisplayItem { _ in
             Size(width: text.count, height: 1)
           } render: { rect in
-            for (character, x) in zip(text, rect.origin.x...) {
-              let pixel = Pixel(
-                character,
-                foreground: environment.foregroundColor,
-                background: environment.backgroundColor,
-                bold: environment.bold,
-                italic: environment.italic,
-                underline: environment.underline,
-                blinking: environment.blinking,
-                inverse: environment.inverse,
-                hidden: environment.hidden,
-                strikethrough: environment.strikethrough
+            DisplayList(items: [
+              DisplayList.Item(
+                frame: rect,
+                content: .text(text, environment.style)
               )
-              inputs.canvas.draw(pixel, at: Position(x: x, y: rect.origin.y))
-            }
+            ])
           }
         ]
       }

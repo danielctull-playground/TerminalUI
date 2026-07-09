@@ -19,7 +19,13 @@ public struct Text: PrimitiveView {
           DisplayItem { proposal in
             size(for: proposal, view: view, inputs: inputs)
           } render: { bounds in
-            render(in: bounds, view: view, inputs: inputs)
+
+            let string = inputs.graph[view].string
+            let style = inputs.graph[inputs.environment].style
+
+            return DisplayList(items: [
+              DisplayList.Item(frame: bounds, content: .text(string, style))
+            ])
           }
         ]
       }
@@ -36,33 +42,5 @@ public struct Text: PrimitiveView {
     let height = lines.count
     let width = lines.map(\.count).max() ?? 0
     return Size(width: width, height: height)
-  }
-
-  static private func render(
-    in bounds: Rect,
-    view: Attribute<Self>,
-    inputs: ViewInputs
-  ) {
-
-    let lines = inputs.graph[view].string.lines(ofLength: Int(bounds.size.width))
-    let environment = inputs.graph[inputs.environment]
-
-    for (line, y) in zip(lines, bounds.origin.y...) {
-      for (character, x) in zip(line, bounds.origin.x...) {
-        let pixel = Pixel(
-          character,
-          foreground: environment.foregroundColor,
-          background: environment.backgroundColor,
-          bold: environment.bold,
-          italic: environment.italic,
-          underline: environment.underline,
-          blinking: environment.blinking,
-          inverse: environment.inverse,
-          hidden: environment.hidden,
-          strikethrough: environment.strikethrough
-        )
-        inputs.canvas.draw(pixel, at: Position(x: x, y: y))
-      }
-    }
   }
 }
