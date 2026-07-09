@@ -39,7 +39,7 @@ private struct PreferenceWriter<Content: View, Key: PreferenceKey>: PrimitiveVie
         graph[content.preferenceValues]
           .setting(graph[view].value, for: graph[view].key)
       },
-      displayItems: content.displayItems
+      layoutComputers: content.layoutComputers
     )
   }
 }
@@ -79,7 +79,7 @@ private struct PreferenceReader<
         graph[view].action(preferenceValues[Key.self] ?? Key.defaultValue)
         return preferenceValues
       },
-      displayItems: content.displayItems
+      layoutComputers: content.layoutComputers
     )
   }
 }

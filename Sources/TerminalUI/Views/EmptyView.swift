@@ -10,7 +10,7 @@ public struct EmptyView: PrimitiveView {
   ) -> ViewOutputs {
     ViewOutputs(
       preferenceValues: inputs.graph.constant(.empty),
-      displayItems: inputs.graph.constant([])
+      layoutComputers: inputs.graph.constant([])
     )
   }
 }

@@ -26,7 +26,7 @@ extension TextField: PrimitiveView {
 
     return ViewOutputs(
       preferenceValues: graph.constant(.empty),
-      displayItems: graph.rule { graph in
+      layoutComputers: graph.rule { graph in
 
         var text = graph[view].text.wrappedValue
         if manager.isFocused(id) {
@@ -35,7 +35,7 @@ extension TextField: PrimitiveView {
         let environment = graph[inputs.environment]
 
         return [
-          DisplayItem { _ in
+          LayoutComputer { _ in
             Size(width: text.count, height: 1)
           } render: { rect in
             DisplayList(items: [

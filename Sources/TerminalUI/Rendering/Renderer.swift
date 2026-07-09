@@ -44,7 +44,7 @@ package struct Renderer<Content: View, Canvas: TerminalUI.Canvas> {
 
       _ = graph[outputs.preferenceValues] // Trigger preference values
       
-      let displayList = graph[outputs.displayItems]
+      let displayList = graph[outputs.layoutComputers]
         .first!
         .render(in: Rect(origin: .origin, size: graph[environment].windowSize))
 

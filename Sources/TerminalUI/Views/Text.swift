@@ -14,9 +14,9 @@ public struct Text: PrimitiveView {
   ) -> ViewOutputs {
     ViewOutputs(
       preferenceValues: inputs.graph.constant(.empty),
-      displayItems: inputs.graph.rule { _ in
+      layoutComputers: inputs.graph.rule { _ in
         [
-          DisplayItem { proposal in
+          LayoutComputer { proposal in
             size(for: proposal, view: view, inputs: inputs)
           } render: { bounds in
 

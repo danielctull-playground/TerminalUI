@@ -12,9 +12,9 @@ public struct Color: CustomStringConvertible, Equatable, Sendable, PrimitiveView
   ) -> ViewOutputs {
     ViewOutputs(
       preferenceValues: inputs.graph.constant(.empty),
-      displayItems: inputs.graph.rule { _ in
+      layoutComputers: inputs.graph.rule { _ in
         [
-          DisplayItem {
+          LayoutComputer {
             $0.replacingUnspecifiedDimensions()
           } render: { bounds in
 

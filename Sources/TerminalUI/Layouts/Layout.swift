@@ -47,20 +47,20 @@ extension LayoutSubviews: RandomAccessCollection {
 
 public struct LayoutSubview {
 
-  private let displayItem: DisplayItem
+  private let layoutComputer: LayoutComputer
   @Mutable private(set) var displayList = DisplayList(items: [])
 
-  init(displayItem: DisplayItem) {
-    self.displayItem = displayItem
+  init(layoutComputer: LayoutComputer) {
+    self.layoutComputer = layoutComputer
   }
 
   public func sizeThatFits(_ proposal: ProposedViewSize) -> Size {
-    displayItem.size(for: proposal)
+    layoutComputer.size(for: proposal)
   }
 
   public func place(at position: Position, proposal: ProposedViewSize) {
-    let frame = Rect(origin: position, size: displayItem.size(for: proposal))
-    displayList = displayItem.render(in: frame)
+    let frame = Rect(origin: position, size: layoutComputer.size(for: proposal))
+    displayList = layoutComputer.render(in: frame)
   }
 }
 
@@ -97,16 +97,16 @@ private struct LayoutView<Content: View, Layout: TerminalUI.Layout>: PrimitiveVi
 
     return ViewOutputs(
       preferenceValues: content.preferenceValues,
-      displayItems: inputs.graph.rule { graph in
+      layoutComputers: inputs.graph.rule { graph in
 
         let subviews = LayoutSubviews(
-          raw: graph[content.displayItems].map(LayoutSubview.init)
+          raw: graph[content.layoutComputers].map(LayoutSubview.init)
         )
 
         let layout = graph[view].layout
         var cache = layout.makeCache(subviews: subviews)
 
-        let item = DisplayItem { proposal in
+        let item = LayoutComputer { proposal in
           layout.sizeThatFits(
             proposal: proposal,
             subviews: subviews,

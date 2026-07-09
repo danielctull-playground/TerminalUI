@@ -21,8 +21,8 @@ public struct AnyView: PrimitiveView {
       preferenceValues: inputs.graph.rule { graph in
         graph[graph[view].makeView(inputs).preferenceValues]
       },
-      displayItems: inputs.graph.rule { graph in
-        graph[graph[view].makeView(inputs).displayItems]
+      layoutComputers: inputs.graph.rule { graph in
+        graph[graph[view].makeView(inputs).layoutComputers]
       }
     )
   }

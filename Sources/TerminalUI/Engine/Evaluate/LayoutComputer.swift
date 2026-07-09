@@ -1,5 +1,5 @@
 
-struct DisplayItem {
+struct LayoutComputer {
   private let size: (ProposedViewSize) -> Size
   private let render: (Rect) -> DisplayList
 
