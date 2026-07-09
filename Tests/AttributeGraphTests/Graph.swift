@@ -183,6 +183,47 @@ struct GraphTests {
     #expect(graph[b] == 10)
   }
 
+  @Test func `map transforms two attributes into another`() {
+
+    let graph = Graph()
+    let a = graph.external(of: Int.self)
+    let b = graph.external(of: Int.self)
+    let c = graph.map(a, b) { $0 * $1 }
+
+    graph.setValue(of: a, to: 2)
+    graph.setValue(of: b, to: 2)
+    #expect(graph[c] == 4)
+
+    graph.setValue(of: a, to: 5)
+    #expect(graph[c] == 10)
+
+    graph.setValue(of: b, to: 5)
+    #expect(graph[c] == 25)
+  }
+
+  @Test func `map transforms three attributes into another`() {
+
+    let graph = Graph()
+    let a = graph.external(of: Int.self)
+    let b = graph.external(of: Int.self)
+    let c = graph.external(of: Int.self)
+    let d = graph.map(a, b, c) { $0 * $1 * $2 }
+
+    graph.setValue(of: a, to: 2)
+    graph.setValue(of: b, to: 2)
+    graph.setValue(of: c, to: 2)
+    #expect(graph[d] == 8)
+
+    graph.setValue(of: a, to: 5)
+    #expect(graph[d] == 20)
+
+    graph.setValue(of: b, to: 5)
+    #expect(graph[d] == 50)
+
+    graph.setValue(of: c, to: 5)
+    #expect(graph[d] == 125)
+  }
+
   @Test func `recomputing prunes edges to inputs no longer read`() {
 
     let graph = Graph()

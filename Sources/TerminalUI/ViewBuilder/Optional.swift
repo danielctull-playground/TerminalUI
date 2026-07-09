@@ -31,7 +31,7 @@ extension Optional: DynamicView where Wrapped: View {
     switch id {
     case .some:
       Wrapped.makeView(
-        view: graph.map(view, \.unsafelyUnwrapped),
+        view: graph.map(view) { $0.unsafelyUnwrapped },
         inputs: inputs
       )
     case .none:

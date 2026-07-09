@@ -70,8 +70,10 @@ private struct EnvironmentWriter<Content: View, Value>: PrimitiveView {
       }
     )
 
-    let content = inputs.graph.map(view, \.content)
-    return Content.makeView(view: content, inputs: inputs)
+    return Content.makeView(
+      view: inputs.graph.map(view) { $0.content },
+      inputs: inputs
+    )
   }
 }
 

@@ -99,7 +99,7 @@ private struct LayoutView<Content: View, Layout: TerminalUI.Layout>: PrimitiveVi
   ) -> ViewOutputs {
 
     let content = Content.makeView(
-      view: inputs.graph.map(view, \.content),
+      view: inputs.graph.map(view) { $0.content },
       inputs: inputs
     )
 

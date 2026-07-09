@@ -14,8 +14,8 @@ struct Accumulated<A: View, B: View>: PrimitiveView {
     view: Attribute<Self>,
     inputs: ViewInputs
   ) -> ViewOutputs {
-    let a = A.makeView(view: inputs.graph.map(view, \.a), inputs: inputs)
-    let b = B.makeView(view: inputs.graph.map(view, \.b), inputs: inputs)
+    let a = A.makeView(view: inputs.graph.map(view) { $0.a }, inputs: inputs)
+    let b = B.makeView(view: inputs.graph.map(view) { $0.b }, inputs: inputs)
     return ViewOutputs(
       preferenceValues: inputs.graph.rule { graph in
         PreferenceValues(

@@ -45,12 +45,12 @@ extension Either: DynamicView {
     switch id {
     case .first:
       First.makeView(
-        view: graph.map(view, \.value.first.unsafelyUnwrapped),
+        view: graph.map(view) { $0.value.first.unsafelyUnwrapped },
         inputs: inputs
       )
     case .second:
       Second.makeView(
-        view: graph.map(view, \.value.second.unsafelyUnwrapped),
+        view: graph.map(view) { $0.value.second.unsafelyUnwrapped },
         inputs: inputs
       )
     }

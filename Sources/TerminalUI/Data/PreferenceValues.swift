@@ -30,7 +30,7 @@ private struct PreferenceWriter<Content: View, Key: PreferenceKey>: PrimitiveVie
   ) -> ViewOutputs {
 
     let content = Content.makeView(
-      view: inputs.graph.map(view, \.content),
+      view: inputs.graph.map(view) { $0.content },
       inputs: inputs
     )
 
@@ -69,7 +69,10 @@ private struct PreferenceReader<
     view: Attribute<Self>,
     inputs: ViewInputs
   ) -> ViewOutputs {
-    let content = Content.makeView(view: inputs.graph.map(view, \.content), inputs: inputs)
+    let content = Content.makeView(
+      view: inputs.graph.map(view) { $0.content },
+      inputs: inputs
+    )
     return ViewOutputs(
       preferenceValues: inputs.graph.rule { graph in
         let preferenceValues = graph[content.preferenceValues]

@@ -174,12 +174,13 @@ extension Graph {
 
   /// Adds an attribute whose value is transformed from the value of the given
   /// input attribute.
-  package func map<Input, Output>(
-    _ input: Attribute<Input>,
-    _ transform: @escaping (Input) -> Output
+  package func map<each Input, Output>(
+    _ input: repeat Attribute<each Input>,
+    transform: @escaping (repeat each Input) -> Output
   ) -> Attribute<Output> {
-    attribute(Map(input: input, transform: transform))
+    attribute(Map(input: (repeat each input), transform: transform))
   }
+
   /// Adds a source attribute whose value is supplied from outside the graph.
   ///
   /// This attribute is created with no value, it must be given one with

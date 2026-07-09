@@ -55,7 +55,10 @@ private struct LayoutModifierView<Content: View, LayoutModifier: TerminalUI.Layo
     view: Attribute<Self>,
     inputs: ViewInputs
   ) -> ViewOutputs {
-    let content = Content.makeView(view: inputs.graph.map(view, \.content), inputs: inputs)
+    let content = Content.makeView(
+      view: inputs.graph.map(view) { $0.content },
+      inputs: inputs
+    )
     return ViewOutputs(
       preferenceValues: content.preferenceValues,
       displayItems: inputs.graph.rule { graph in
