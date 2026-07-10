@@ -74,21 +74,24 @@ private struct LayoutModifierView<Content: View, LayoutModifier: TerminalUI.Layo
 
             let subview = LayoutModifier.Subview(layoutProxy: layoutProxy)
 
-            return LayoutProxy { proposal in
-              layoutModifier.sizeThatFits(
-                proposal: proposal,
-                subview: subview
-              )
-            } place: { frame in
+            return LayoutProxy(
+              layoutComputer: LayoutComputer { proposal in
+                layoutModifier.sizeThatFits(
+                  proposal: proposal,
+                  subview: subview
+                )
+              },
+              place: { frame in
 
-              // Because a layout modifier doesn't own its own geometry,
-              // placing it just places the subview.
-              layoutModifier.placeSubview(
-                in: frame,
-                proposal: ProposedViewSize(frame.size),
-                subview: subview
-              )
-            }
+                // Because a layout modifier doesn't own its own geometry,
+                // placing it just places the subview.
+                layoutModifier.placeSubview(
+                  in: frame,
+                  proposal: ProposedViewSize(frame.size),
+                  subview: subview
+                )
+              }
+            )
           }
       },
       displayList: content.displayList

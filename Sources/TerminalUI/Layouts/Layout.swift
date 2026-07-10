@@ -111,15 +111,17 @@ private struct LayoutView<Content: View, Layout: TerminalUI.Layout>: PrimitiveVi
         let layout = graph[view].layout
         var cache = layout.makeCache(subviews: subviews)
 
-        let item = LayoutProxy { proposal in
-          layout.sizeThatFits(
-            proposal: proposal,
-            subviews: subviews,
-            cache: &cache)
-        } place: { frame in
-          graph.setValue(of: geometry, to: ViewGeometry(frame: frame))
-
-        }
+        let item = LayoutProxy(
+          layoutComputer: LayoutComputer { proposal in
+            layout.sizeThatFits(
+              proposal: proposal,
+              subviews: subviews,
+              cache: &cache)
+          },
+          place: { frame in
+            graph.setValue(of: geometry, to: ViewGeometry(frame: frame))
+          }
+        )
 
         return [item]
       },

@@ -21,11 +21,14 @@ public struct Text: PrimitiveView {
       preferenceValues: inputs.graph.constant(.empty),
       layoutProxies: inputs.graph.rule { _ in
         [
-          LayoutProxy { proposal in
-            size(for: proposal, view: view, inputs: inputs)
-          } place: { frame in
-            graph.setValue(of: geometry, to: ViewGeometry(frame: frame))
-          }
+          LayoutProxy(
+            layoutComputer: LayoutComputer { proposal in
+              size(for: proposal, view: view, inputs: inputs)
+            },
+            place: { frame in
+              graph.setValue(of: geometry, to: ViewGeometry(frame: frame))
+            }
+          )
         ]
       },
       displayList: inputs.graph.rule { _ in

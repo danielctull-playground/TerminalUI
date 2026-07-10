@@ -19,11 +19,14 @@ public struct Color: CustomStringConvertible, Equatable, Sendable, PrimitiveView
       preferenceValues: inputs.graph.constant(.empty),
       layoutProxies: inputs.graph.rule { _ in
         [
-          LayoutProxy {
-            $0.replacingUnspecifiedDimensions()
-          } place: { frame in
-            graph.setValue(of: geometry, to: ViewGeometry(frame: frame))
-          }
+          LayoutProxy(
+            layoutComputer: LayoutComputer {
+              $0.replacingUnspecifiedDimensions()
+            },
+            place: { frame in
+              graph.setValue(of: geometry, to: ViewGeometry(frame: frame))
+            }
+          )
         ]
       },
       displayList: inputs.graph.rule { _ in

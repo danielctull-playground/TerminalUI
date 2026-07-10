@@ -36,11 +36,14 @@ extension TextField: PrimitiveView {
         }
 
         return [
-          LayoutProxy { _ in
-            Size(width: text.count, height: 1)
-          } place: { frame in
-            graph.setValue(of: geometry, to: ViewGeometry(frame: frame))
-          }
+          LayoutProxy(
+            layoutComputer: LayoutComputer { _ in
+              Size(width: text.count, height: 1)
+            },
+            place: { frame in
+              graph.setValue(of: geometry, to: ViewGeometry(frame: frame))
+            }
+          )
         ]
       },
       displayList: graph.rule { _ in

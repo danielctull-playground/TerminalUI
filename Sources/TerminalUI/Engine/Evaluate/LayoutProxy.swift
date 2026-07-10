@@ -1,19 +1,19 @@
 
 struct LayoutProxy {
 
-  private let size: (ProposedViewSize) -> Size
+  private let layoutComputer: LayoutComputer
   private let place: (Rect) -> Void
 
   init(
-    size: @escaping (ProposedViewSize) -> Size,
+    layoutComputer: LayoutComputer,
     place: @escaping (Rect) -> Void,
   ) {
-    self.size = size
+    self.layoutComputer = layoutComputer
     self.place = place
   }
 
   func size(for proposal: ProposedViewSize) -> Size {
-    size(proposal)
+    layoutComputer.size(for: proposal)
   }
 
   func place(in frame: Rect) {
