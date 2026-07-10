@@ -13,6 +13,7 @@ public struct Color: CustomStringConvertible, Equatable, Sendable, PrimitiveView
 
     unowned let graph = inputs.graph
     let geometry = graph.external(of: ViewGeometry.self)
+    graph.setValue(of: geometry, to: .zero)
 
     return ViewOutputs(
       preferenceValues: inputs.graph.constant(.empty),
@@ -36,7 +37,16 @@ public struct Color: CustomStringConvertible, Equatable, Sendable, PrimitiveView
         ]
       },
       displayList: inputs.graph.rule { _ in
-        DisplayList(items: [])
+
+        let frame = graph[geometry].frame
+
+        var environment = graph[inputs.environment]
+        environment.backgroundColor = graph[view]
+        let style = environment.style
+
+        return DisplayList(items: [
+          DisplayList.Item(frame: frame, content: .fill(style))
+        ])
       }
     )
   }

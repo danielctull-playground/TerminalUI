@@ -17,10 +17,12 @@ extension TextField: PrimitiveView {
   ) -> ViewOutputs {
 
     unowned let graph = inputs.graph
-    let geometry = graph.external(of: ViewGeometry.self)
-    let manager = graph[inputs.environment].focusManager
 
-    let id = manager.add { key in
+    let geometry = graph.external(of: ViewGeometry.self)
+    graph.setValue(of: geometry, to: .zero)
+
+    let focusManager = graph[inputs.environment].focusManager
+    let id = focusManager.add { key in
       graph[view].text.wrappedValue.append(key.character)
     }
 
@@ -29,7 +31,7 @@ extension TextField: PrimitiveView {
       layoutComputers: graph.rule { _ in
 
         var text = graph[view].text.wrappedValue
-        if manager.isFocused(id) {
+        if focusManager.isFocused(id) {
           text.append("_") // Cursor
         }
         let environment = graph[inputs.environment]
@@ -49,8 +51,22 @@ extension TextField: PrimitiveView {
           }
         ]
       },
-      displayList: graph.rule { graph in
-        DisplayList(items: [])
+      displayList: graph.rule { _ in
+
+        let frame = graph[geometry].frame
+        let environment = graph[inputs.environment]
+
+        var text = graph[view].text.wrappedValue
+        if focusManager.isFocused(id) {
+          text.append("_") // Cursor
+        }
+
+        return DisplayList(items: [
+          DisplayList.Item(
+            frame: frame,
+            content: .text(text, environment.style)
+          )
+        ])
       }
     )
   }

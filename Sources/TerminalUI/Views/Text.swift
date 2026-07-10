@@ -15,6 +15,7 @@ public struct Text: PrimitiveView {
 
     unowned let graph = inputs.graph
     let geometry = graph.external(of: ViewGeometry.self)
+    graph.setValue(of: geometry, to: .zero)
 
     return ViewOutputs(
       preferenceValues: inputs.graph.constant(.empty),
@@ -37,7 +38,14 @@ public struct Text: PrimitiveView {
         ]
       },
       displayList: inputs.graph.rule { _ in
-        DisplayList(items: [])
+
+        let frame = graph[geometry].frame
+        let string = graph[view].string
+        let style = graph[inputs.environment].style
+
+        return DisplayList(items: [
+          DisplayList.Item(frame: frame, content: .text(string, style))
+        ])
       }
     )
   }
