@@ -3,16 +3,16 @@ import AttributeGraph
 public struct ViewInputs {
 
   unowned let graph: Graph
-  let canvas: any Canvas
   let environment: Attribute<EnvironmentValues>
+  let geometry: Attribute<ViewGeometry>
 
   init(
     graph: Graph,
-    canvas: any Canvas,
     environment: Attribute<EnvironmentValues>,
+    geometry: Attribute<ViewGeometry>,
   ) {
     self.graph = graph
-    self.canvas = canvas
     self.environment = environment
+    self.geometry = geometry
   }
 }

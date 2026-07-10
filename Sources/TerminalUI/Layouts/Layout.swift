@@ -47,28 +47,20 @@ extension LayoutSubviews: RandomAccessCollection {
 
 public struct LayoutSubview {
 
-  private let _sizeThatFits: (ProposedViewSize) -> Size
-  private let _place: (Position, ProposedViewSize) -> Void
+  private let layoutComputer: LayoutComputer
 
-  init(displayItem: DisplayItem) {
-    _sizeThatFits = displayItem.size(for:)
-    _place = { position, proposal in
-      displayItem.render(in: Rect(
-        origin: position,
-        size: displayItem.size(for: proposal)
-      ))
-    }
+  init(layoutComputer: LayoutComputer) {
+    self.layoutComputer = layoutComputer
   }
 
   public func sizeThatFits(_ proposal: ProposedViewSize) -> Size {
-    _sizeThatFits(proposal)
+    layoutComputer.size(for: proposal)
   }
 
-  public func place(
-    at position: Position,
-    proposal: ProposedViewSize
-  ) {
-    _place(position, proposal)
+  public func place(at position: Position, proposal: ProposedViewSize) {
+    let frame = Rect(origin: position, size: layoutComputer.size(for: proposal))
+    guard frame.size.width > 0, frame.size.height > 0 else { return }
+    layoutComputer.place(in: frame)
   }
 }
 
@@ -98,36 +90,68 @@ private struct LayoutView<Content: View, Layout: TerminalUI.Layout>: PrimitiveVi
     inputs: ViewInputs
   ) -> ViewOutputs {
 
+    unowned let graph = inputs.graph
+
+    let geometry = graph.external(of: ViewGeometry.self)
+    graph.setValue(of: geometry, to: .zero)
+
     let content = Content.makeView(
-      view: inputs.graph.map(view) { $0.content },
+      view: graph.map(view) { $0.content },
       inputs: inputs
     )
 
     return ViewOutputs(
       preferenceValues: content.preferenceValues,
-      displayItems: inputs.graph.rule { graph in
+      layoutComputers: inputs.graph.rule { _ in
 
         let subviews = LayoutSubviews(
-          raw: graph[content.displayItems].map(LayoutSubview.init)
+          raw: graph[content.layoutComputers].map(LayoutSubview.init)
         )
 
         let layout = graph[view].layout
         var cache = layout.makeCache(subviews: subviews)
 
-        let item = DisplayItem { proposal in
+        let item = LayoutComputer { proposal in
           layout.sizeThatFits(
             proposal: proposal,
             subviews: subviews,
             cache: &cache)
-        } render: { bounds in
-          layout.placeSubviews(
-            in: bounds,
-            proposal: ProposedViewSize(bounds.size),
-            subviews: subviews,
-            cache: &cache)
+        } place: { frame in
+          graph.setValue(of: geometry, to: ViewGeometry(frame: frame))
+
         }
 
         return [item]
+      },
+      displayList: inputs.graph.rule { _ in
+
+        let frame = graph[geometry].frame
+        guard frame.size.width > 0, frame.size.height > 0 else { return .empty }
+
+        let subviews = LayoutSubviews(
+          raw: graph[content.layoutComputers].map(LayoutSubview.init)
+        )
+
+        let layout = graph[view].layout
+        var cache = layout.makeCache(subviews: subviews)
+
+        // Fill the cache before placing, the layout contract.
+        _ = layout.sizeThatFits(
+          proposal: ProposedViewSize(frame.size),
+          subviews: subviews,
+          cache: &cache
+        )
+
+        // Placing the subviews writes each child's geometry external. Reading
+        // `content.displayList` then recomputes.
+        layout.placeSubviews(
+          in: frame,
+          proposal: ProposedViewSize(frame.size),
+          subviews: subviews,
+          cache: &cache
+        )
+
+        return graph[content.displayList]
       }
     )
   }

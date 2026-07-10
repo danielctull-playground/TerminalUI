@@ -53,9 +53,14 @@ extension ForEach: PrimitiveView {
             )
           }
         },
-        displayItems: graph.rule { graph in
+        layoutComputers: graph.rule { graph in
           items.reduce(into: []) { result, info in
-            result.append(contentsOf: graph[info.outputs.displayItems])
+            result.append(contentsOf: graph[info.outputs.layoutComputers])
+          }
+        },
+        displayList: inputs.graph.rule { _ in
+          items.reduce(.empty) { result, info in
+            DisplayList(items: result.items + graph[info.outputs.displayList].items)
           }
         }
       )
@@ -63,7 +68,8 @@ extension ForEach: PrimitiveView {
 
     return ViewOutputs(
       preferenceValues: graph.map(children) { graph[$0.preferenceValues] },
-      displayItems: graph.map(children) { graph[$0.displayItems] }
+      layoutComputers: graph.map(children) { graph[$0.layoutComputers] },
+      displayList: graph.map(children) { graph[$0.displayList] }
     )
   }
 }

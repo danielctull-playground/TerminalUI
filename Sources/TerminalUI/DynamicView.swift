@@ -62,7 +62,8 @@ extension DynamicView {
 
     return ViewOutputs(
       preferenceValues: graph.map(child) { graph[$0.preferenceValues] },
-      displayItems: graph.map(child) { graph[$0.displayItems] }
+      layoutComputers: graph.map(child) { graph[$0.layoutComputers] },
+      displayList: graph.map(child) { graph[$0.displayList] }
     )
   }
 }

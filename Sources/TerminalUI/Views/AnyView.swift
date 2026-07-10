@@ -17,13 +17,16 @@ public struct AnyView: PrimitiveView {
     view: Attribute<Self>,
     inputs: ViewInputs
   ) -> ViewOutputs {
+
+    unowned let graph = inputs.graph
+
+    // Build the erased view's subgraph together, just once.
+    let content = graph.map(view) { $0.makeView(inputs) }
+
     return ViewOutputs(
-      preferenceValues: inputs.graph.rule { graph in
-        graph[graph[view].makeView(inputs).preferenceValues]
-      },
-      displayItems: inputs.graph.rule { graph in
-        graph[graph[view].makeView(inputs).displayItems]
-      }
+      preferenceValues: graph.map(content) { graph[$0.preferenceValues] },
+      layoutComputers: graph.map(content) { graph[$0.layoutComputers] },
+      displayList: graph.map(content) { graph[$0.displayList] },
     )
   }
 }

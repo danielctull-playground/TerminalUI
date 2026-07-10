@@ -55,35 +55,43 @@ private struct LayoutModifierView<Content: View, LayoutModifier: TerminalUI.Layo
     view: Attribute<Self>,
     inputs: ViewInputs
   ) -> ViewOutputs {
+
+    unowned let graph = inputs.graph
+
     let content = Content.makeView(
-      view: inputs.graph.map(view) { $0.content },
+      view: graph.map(view) { $0.content },
       inputs: inputs
     )
+
     return ViewOutputs(
       preferenceValues: content.preferenceValues,
-      displayItems: inputs.graph.rule { graph in
+      layoutComputers: inputs.graph.rule { _ in
 
         let layoutModifier = graph[view].layoutModifier
 
-        return graph[content.displayItems]
-          .map { item in
+        return graph[content.layoutComputers]
+          .map { layoutComputer in
 
-            let subview = LayoutModifier.Subview(displayItem: item)
+            let subview = LayoutModifier.Subview(layoutComputer: layoutComputer)
 
-            return DisplayItem { proposal in
+            return LayoutComputer { proposal in
               layoutModifier.sizeThatFits(
                 proposal: proposal,
                 subview: subview
               )
-            } render: { bounds in
+            } place: { frame in
+
+              // Because a layout modifier doesn't own its own geometry,
+              // placing it just places the subview.
               layoutModifier.placeSubview(
-                in: bounds,
-                proposal: ProposedViewSize(bounds.size),
+                in: frame,
+                proposal: ProposedViewSize(frame.size),
                 subview: subview
               )
             }
           }
-      }
+      },
+      displayList: content.displayList
     )
   }
 }

@@ -4,6 +4,14 @@ public struct Pixel: Equatable, Sendable {
   package let content: Character
   let graphicRendition: [GraphicRendition]
 
+  init(
+    content: Character,
+    graphicRendition: [GraphicRendition]
+  ) {
+    self.content = content
+    self.graphicRendition = graphicRendition
+  }
+
   public init(
     _ content: Character,
     foreground: Color = .default,

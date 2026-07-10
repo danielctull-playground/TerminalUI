@@ -10,21 +10,33 @@ public struct Color: CustomStringConvertible, Equatable, Sendable, PrimitiveView
     view: Attribute<Self>,
     inputs: ViewInputs
   ) -> ViewOutputs {
-    ViewOutputs(
+
+    unowned let graph = inputs.graph
+    let geometry = graph.external(of: ViewGeometry.self)
+    graph.setValue(of: geometry, to: .zero)
+
+    return ViewOutputs(
       preferenceValues: inputs.graph.constant(.empty),
-      displayItems: inputs.graph.rule { _ in
+      layoutComputers: inputs.graph.rule { _ in
         [
-          DisplayItem {
+          LayoutComputer {
             $0.replacingUnspecifiedDimensions()
-          } render: { bounds in
-            let pixel = Pixel(" ", background: inputs.graph[view])
-            for x in bounds.minX...bounds.maxX {
-              for y in bounds.minY...bounds.maxY {
-                inputs.canvas.draw(pixel, at: Position(x: x, y: y))
-              }
-            }
+          } place: { frame in
+            graph.setValue(of: geometry, to: ViewGeometry(frame: frame))
           }
         ]
+      },
+      displayList: inputs.graph.rule { _ in
+
+        let frame = graph[geometry].frame
+
+        var environment = graph[inputs.environment]
+        environment.backgroundColor = graph[view]
+        let style = environment.style
+
+        return DisplayList(items: [
+          DisplayList.Item(frame: frame, content: .fill(style))
+        ])
       }
     )
   }

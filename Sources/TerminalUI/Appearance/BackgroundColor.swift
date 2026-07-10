@@ -7,5 +7,5 @@ extension View {
 }
 
 extension EnvironmentValues {
-  @Entry fileprivate(set) var backgroundColor = Color.default
+  @Entry var backgroundColor = Color.default
 }

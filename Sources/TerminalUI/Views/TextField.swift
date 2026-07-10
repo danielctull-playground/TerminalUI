@@ -18,43 +18,47 @@ extension TextField: PrimitiveView {
 
     unowned let graph = inputs.graph
 
-    let manager = graph[inputs.environment].focusManager
+    let geometry = graph.external(of: ViewGeometry.self)
+    graph.setValue(of: geometry, to: .zero)
 
-    let id = manager.add { key in
+    let focusManager = graph[inputs.environment].focusManager
+    let id = focusManager.add { key in
       graph[view].text.wrappedValue.append(key.character)
     }
 
     return ViewOutputs(
       preferenceValues: graph.constant(.empty),
-      displayItems: graph.rule { graph in
+      layoutComputers: graph.rule { _ in
 
         var text = graph[view].text.wrappedValue
-        if manager.isFocused(id) {
+        if focusManager.isFocused(id) {
           text.append("_") // Cursor
         }
-        let environment = inputs.graph[inputs.environment]
 
         return [
-          DisplayItem { _ in
+          LayoutComputer { _ in
             Size(width: text.count, height: 1)
-          } render: { rect in
-            for (character, x) in zip(text, rect.origin.x...) {
-              let pixel = Pixel(
-                character,
-                foreground: environment.foregroundColor,
-                background: environment.backgroundColor,
-                bold: environment.bold,
-                italic: environment.italic,
-                underline: environment.underline,
-                blinking: environment.blinking,
-                inverse: environment.inverse,
-                hidden: environment.hidden,
-                strikethrough: environment.strikethrough
-              )
-              inputs.canvas.draw(pixel, at: Position(x: x, y: rect.origin.y))
-            }
+          } place: { frame in
+            graph.setValue(of: geometry, to: ViewGeometry(frame: frame))
           }
         ]
+      },
+      displayList: graph.rule { _ in
+
+        let frame = graph[geometry].frame
+        let environment = graph[inputs.environment]
+
+        var text = graph[view].text.wrappedValue
+        if focusManager.isFocused(id) {
+          text.append("_") // Cursor
+        }
+
+        return DisplayList(items: [
+          DisplayList.Item(
+            frame: frame,
+            content: .text(text, environment.style)
+          )
+        ])
       }
     )
   }
