@@ -33,12 +33,3 @@ struct LayoutComputer {
     return content(frame)
   }
 }
-
-extension LayoutComputer {
-
-  // Temporary shim.
-  func render(in bounds: Rect) -> DisplayList {
-    place(in: bounds)
-    return render()
-  }
-}

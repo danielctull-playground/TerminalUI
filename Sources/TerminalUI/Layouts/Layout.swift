@@ -60,7 +60,8 @@ public struct LayoutSubview {
 
   public func place(at position: Position, proposal: ProposedViewSize) {
     let frame = Rect(origin: position, size: layoutComputer.size(for: proposal))
-    displayList = layoutComputer.render(in: frame)
+    layoutComputer.place(in: frame)
+    displayList = layoutComputer.render()
   }
 }
 
