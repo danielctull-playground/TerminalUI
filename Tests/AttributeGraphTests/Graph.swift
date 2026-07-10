@@ -340,4 +340,50 @@ struct GraphTests {
       #expect(updates.amount == 2)
     }
   }
+
+  @Suite("Write during evaluation")
+  struct WriteDuringEvaluationTests {
+
+    @Test func `a value written mid-rule is seen by a dependent read in the same rule`() {
+
+      let graph = Graph()
+
+      let value = graph.external(of: Int.self)
+      let child = graph.map(value) { $0 * 10 }
+
+      // The parent, during its own evaluation, writes the value and then reads
+      // the child's output — expecting the value it just wrote.
+      let parent = graph.rule { graph in
+        graph.setValue(of: value, to: 5)
+        return graph[child]
+      }
+
+      #expect(graph[parent] == 50)
+    }
+
+    @Test func `re-running a rule rewrites its value and the dependent recomputes`() {
+
+      let graph = Graph()
+
+      let input = graph.external(of: Int.self)
+      graph.setValue(of: input, to: 5)
+
+      let value = graph.external(of: Int.self)   // written by the parent, mid-evaluation
+      let child = graph.map(value) { $0 * 10 }
+
+      let parent = graph.rule { graph in
+        let latest = graph[input]                // the parent depends on `input`
+        graph.setValue(of: value, to: latest)    // writes `value` mid-evaluation
+        return graph[child]                      // reads the dependent
+      }
+
+      // First settle: input 5 → value 5 → child 50.
+      #expect(graph[parent] == 50)
+
+      // Change the input; the parent re-runs, rewrites `value`, and `child`
+      // must recompute to reflect it rather than serving its first-run cache.
+      graph.setValue(of: input, to: 7)
+      #expect(graph[parent] == 70)
+    }
+  }
 }
