@@ -34,20 +34,12 @@ extension TextField: PrimitiveView {
         if focusManager.isFocused(id) {
           text.append("_") // Cursor
         }
-        let environment = graph[inputs.environment]
 
         return [
           LayoutComputer { _ in
             Size(width: text.count, height: 1)
           } place: { frame in
             graph.setValue(of: geometry, to: ViewGeometry(frame: frame))
-          } render: {
-            DisplayList(items: [
-              DisplayList.Item(
-                frame: graph[geometry].frame,
-                content: .text(text, environment.style)
-              )
-            ])
           }
         ]
       },

@@ -88,8 +88,6 @@ private struct LayoutModifierView<Content: View, LayoutModifier: TerminalUI.Layo
                 proposal: ProposedViewSize(frame.size),
                 subview: subview
               )
-            } render: {
-              subview.displayList
             }
           }
       },

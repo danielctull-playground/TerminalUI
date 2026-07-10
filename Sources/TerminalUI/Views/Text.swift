@@ -25,15 +25,6 @@ public struct Text: PrimitiveView {
             size(for: proposal, view: view, inputs: inputs)
           } place: { frame in
             graph.setValue(of: geometry, to: ViewGeometry(frame: frame))
-          } render: {
-
-            let frame = graph[geometry].frame
-            let string = graph[view].string
-            let style = graph[inputs.environment].style
-
-            return DisplayList(items: [
-              DisplayList.Item(frame: frame, content: .text(string, style))
-            ])
           }
         ]
       },

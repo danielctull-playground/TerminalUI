@@ -23,16 +23,6 @@ public struct Color: CustomStringConvertible, Equatable, Sendable, PrimitiveView
             $0.replacingUnspecifiedDimensions()
           } place: { frame in
             graph.setValue(of: geometry, to: ViewGeometry(frame: frame))
-          } render: {
-
-            let frame = graph[geometry].frame
-            var environment = graph[inputs.environment]
-            environment.backgroundColor = graph[view]
-            let style = environment.style
-
-            return DisplayList(items: [
-              DisplayList.Item(frame: frame, content: .fill(style))
-            ])
           }
         ]
       },

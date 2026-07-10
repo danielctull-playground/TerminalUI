@@ -48,7 +48,6 @@ extension LayoutSubviews: RandomAccessCollection {
 public struct LayoutSubview {
 
   private let layoutComputer: LayoutComputer
-  @Mutable private(set) var displayList = DisplayList(items: [])
 
   init(layoutComputer: LayoutComputer) {
     self.layoutComputer = layoutComputer
@@ -60,12 +59,8 @@ public struct LayoutSubview {
 
   public func place(at position: Position, proposal: ProposedViewSize) {
     let frame = Rect(origin: position, size: layoutComputer.size(for: proposal))
-    guard frame.size.width > 0, frame.size.height > 0 else {
-      displayList = DisplayList(items: [])
-      return 
-    }
+    guard frame.size.width > 0, frame.size.height > 0 else { return }
     layoutComputer.place(in: frame)
-    displayList = layoutComputer.render()
   }
 }
 
@@ -124,16 +119,6 @@ private struct LayoutView<Content: View, Layout: TerminalUI.Layout>: PrimitiveVi
         } place: { frame in
           graph.setValue(of: geometry, to: ViewGeometry(frame: frame))
 
-        } render: {
-          let frame = graph[geometry].frame
-          layout.placeSubviews(
-            in: frame,
-            proposal: ProposedViewSize(frame.size),
-            subviews: subviews,
-            cache: &cache
-          )
-
-          return DisplayList(items: subviews.flatMap(\.displayList.items))
         }
 
         return [item]
