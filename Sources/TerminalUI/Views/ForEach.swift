@@ -57,13 +57,19 @@ extension ForEach: PrimitiveView {
           items.reduce(into: []) { result, info in
             result.append(contentsOf: graph[info.outputs.layoutComputers])
           }
+        },
+        displayList: inputs.graph.rule { _ in
+          items.reduce(DisplayList(items: [])) { result, info in
+            DisplayList(items: result.items + graph[info.outputs.displayList].items)
+          }
         }
       )
     }
 
     return ViewOutputs(
       preferenceValues: graph.map(children) { graph[$0.preferenceValues] },
-      layoutComputers: graph.map(children) { graph[$0.layoutComputers] }
+      layoutComputers: graph.map(children) { graph[$0.layoutComputers] },
+      displayList: graph.map(children) { graph[$0.displayList] }
     )
   }
 }

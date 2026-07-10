@@ -48,6 +48,9 @@ extension TextField: PrimitiveView {
             ])
           }
         ]
+      },
+      displayList: graph.rule { graph in
+        DisplayList(items: [])
       }
     )
   }

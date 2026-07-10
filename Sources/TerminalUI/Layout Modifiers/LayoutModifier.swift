@@ -95,6 +95,9 @@ private struct LayoutModifierView<Content: View, LayoutModifier: TerminalUI.Layo
               return subview.displayList
             }
           }
+      },
+      displayList: inputs.graph.rule { graph in
+        DisplayList(items: [])
       }
     )
   }

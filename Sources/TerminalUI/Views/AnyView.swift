@@ -23,6 +23,9 @@ public struct AnyView: PrimitiveView {
       },
       layoutComputers: inputs.graph.rule { graph in
         graph[graph[view].makeView(inputs).layoutComputers]
+      },
+      displayList: inputs.graph.rule { graph in
+        graph[graph[view].makeView(inputs).displayList]
       }
     )
   }

@@ -34,6 +34,9 @@ public struct Color: CustomStringConvertible, Equatable, Sendable, PrimitiveView
             ])
           }
         ]
+      },
+      displayList: inputs.graph.rule { _ in
+        DisplayList(items: [])
       }
     )
   }

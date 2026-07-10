@@ -25,6 +25,9 @@ struct Accumulated<A: View, B: View>: PrimitiveView {
       },
       layoutComputers: inputs.graph.rule { graph in
         graph[a.layoutComputers] + graph[b.layoutComputers]
+      },
+      displayList: inputs.graph.rule { graph in
+        DisplayList(items: graph[a.displayList].items + graph[b.displayList].items)
       }
     )
   }

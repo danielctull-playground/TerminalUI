@@ -35,6 +35,9 @@ public struct Text: PrimitiveView {
             ])
           }
         ]
+      },
+      displayList: inputs.graph.rule { _ in
+        DisplayList(items: [])
       }
     )
   }

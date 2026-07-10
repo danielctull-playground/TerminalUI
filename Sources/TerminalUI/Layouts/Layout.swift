@@ -134,6 +134,9 @@ private struct LayoutView<Content: View, Layout: TerminalUI.Layout>: PrimitiveVi
         }
 
         return [item]
+      },
+      displayList: inputs.graph.rule { _ in
+        DisplayList(items: [])
       }
     )
   }
