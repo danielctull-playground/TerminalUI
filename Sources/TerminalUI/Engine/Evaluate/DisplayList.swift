@@ -3,6 +3,12 @@ struct DisplayList: Equatable {
   let items: [Item]
 }
 
+extension DisplayList {
+
+  // A display list with no items.
+  static let empty = DisplayList(items: [])
+}
+
 // MARK: - DisplayList.Item
 
 extension DisplayList {

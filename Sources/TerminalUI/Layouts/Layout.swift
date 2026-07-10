@@ -96,7 +96,10 @@ private struct LayoutView<Content: View, Layout: TerminalUI.Layout>: PrimitiveVi
   ) -> ViewOutputs {
 
     unowned let graph = inputs.graph
+
     let geometry = graph.external(of: ViewGeometry.self)
+    graph.setValue(of: geometry, to: .zero)
+
     let content = Content.makeView(
       view: graph.map(view) { $0.content },
       inputs: inputs
@@ -136,7 +139,34 @@ private struct LayoutView<Content: View, Layout: TerminalUI.Layout>: PrimitiveVi
         return [item]
       },
       displayList: inputs.graph.rule { _ in
-        DisplayList(items: [])
+
+        let frame = graph[geometry].frame
+        guard frame.size.width > 0, frame.size.height > 0 else { return .empty }
+
+        let subviews = LayoutSubviews(
+          raw: graph[content.layoutComputers].map(LayoutSubview.init)
+        )
+
+        let layout = graph[view].layout
+        var cache = layout.makeCache(subviews: subviews)
+
+        // Fill the cache before placing, the layout contract.
+        _ = layout.sizeThatFits(
+          proposal: ProposedViewSize(frame.size),
+          subviews: subviews,
+          cache: &cache
+        )
+
+        // Placing the subviews writes each child's geometry external. Reading
+        // `content.displayList` then recomputes.
+        layout.placeSubviews(
+          in: frame,
+          proposal: ProposedViewSize(frame.size),
+          subviews: subviews,
+          cache: &cache
+        )
+
+        return graph[content.displayList]
       }
     )
   }
