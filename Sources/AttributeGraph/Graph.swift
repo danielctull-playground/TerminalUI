@@ -82,6 +82,12 @@ extension Graph {
   package func invalidate(_ subgraph: Subgraph) {
 
     guard deferringSubgraphInvalidationDepth == 0 else {
+
+      // Sever the inputs/outputs of the invalidated subgraph's attributes.
+      // Otherwise change-detection in `evaluate` will re-run a removed
+      // attribute's rule against stale inputs.
+      disconnectAttributes(of: subgraph.id)
+
       deferredInvalidatedSubgraphs.append(subgraph.id)
       return
     }
@@ -137,6 +143,26 @@ extension Graph {
       remove(attribute)
     }
     subgraphs.remove(id)
+  }
+  
+  /// Severs the inputs and outputs of every attribute in the given subgraph.
+  ///
+  /// This also disconnects attributes of all the subgraph's children.
+  ///
+  /// - Parameter id: The subgraph whose attributes should be disconnected.
+  private func disconnectAttributes(of id: SubgraphID) {
+
+    guard subgraphs.contains(id) else { return }
+
+    let subgraph = subgraphs[id]
+
+    for child in subgraph.children {
+      disconnectAttributes(of: child)
+    }
+
+    for attribute in subgraph.attributes {
+      disconnect(attribute)
+    }
   }
 }
 
@@ -232,10 +258,18 @@ extension Graph {
   }
 
   /// Removes an attribute from the graph.
-  ///
-  /// This severs the link from its inputs to it and its outputs from it.
   private func remove(_ id: AttributeID) {
-    
+    disconnect(id)
+    attributes.remove(id)
+  }
+
+  /// Severs an attribute from its inputs and outputs.
+  ///
+  /// This keeps the node in the arena while an update pass is still running.
+  ///
+  /// - Parameter id: The id of the attribute being removed.
+  private func disconnect(_ id: AttributeID) {
+
     let node = attributes[id]
 
     for input in node.inputs {
@@ -246,7 +280,8 @@ extension Graph {
       attributes[output].inputs.removeAll { $0.id == id }
     }
 
-    attributes.remove(id)
+    attributes[id].inputs = []
+    attributes[id].outputs = []
   }
 
   private func evaluate(_ id: AttributeID) -> Any {
