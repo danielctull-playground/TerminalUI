@@ -12,19 +12,26 @@ public struct Text: PrimitiveView {
     view: Attribute<Self>,
     inputs: ViewInputs
   ) -> ViewOutputs {
-    ViewOutputs(
+
+    unowned let graph = inputs.graph
+    let geometry = graph.external(of: ViewGeometry.self)
+
+    return ViewOutputs(
       preferenceValues: inputs.graph.constant(.empty),
       layoutComputers: inputs.graph.rule { _ in
         [
           LayoutComputer { proposal in
             size(for: proposal, view: view, inputs: inputs)
-          } render: { bounds in
+          } place: { frame in
+            graph.setValue(of: geometry, to: ViewGeometry(frame: frame))
+          } render: {
 
-            let string = inputs.graph[view].string
-            let style = inputs.graph[inputs.environment].style
+            let frame = graph[geometry].frame
+            let string = graph[view].string
+            let style = graph[inputs.environment].style
 
             return DisplayList(items: [
-              DisplayList.Item(frame: bounds, content: .text(string, style))
+              DisplayList.Item(frame: frame, content: .text(string, style))
             ])
           }
         ]

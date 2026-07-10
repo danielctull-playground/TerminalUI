@@ -17,7 +17,7 @@ extension TextField: PrimitiveView {
   ) -> ViewOutputs {
 
     unowned let graph = inputs.graph
-
+    let geometry = graph.external(of: ViewGeometry.self)
     let manager = graph[inputs.environment].focusManager
 
     let id = manager.add { key in
@@ -26,7 +26,7 @@ extension TextField: PrimitiveView {
 
     return ViewOutputs(
       preferenceValues: graph.constant(.empty),
-      layoutComputers: graph.rule { graph in
+      layoutComputers: graph.rule { _ in
 
         var text = graph[view].text.wrappedValue
         if manager.isFocused(id) {
@@ -37,10 +37,12 @@ extension TextField: PrimitiveView {
         return [
           LayoutComputer { _ in
             Size(width: text.count, height: 1)
-          } render: { rect in
+          } place: { frame in
+            graph.setValue(of: geometry, to: ViewGeometry(frame: frame))
+          } render: {
             DisplayList(items: [
               DisplayList.Item(
-                frame: rect,
+                frame: graph[geometry].frame,
                 content: .text(text, environment.style)
               )
             ])

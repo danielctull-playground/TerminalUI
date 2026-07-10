@@ -60,6 +60,10 @@ public struct LayoutSubview {
 
   public func place(at position: Position, proposal: ProposedViewSize) {
     let frame = Rect(origin: position, size: layoutComputer.size(for: proposal))
+    guard frame.size.width > 0, frame.size.height > 0 else {
+      displayList = DisplayList(items: [])
+      return 
+    }
     layoutComputer.place(in: frame)
     displayList = layoutComputer.render()
   }
@@ -91,14 +95,16 @@ private struct LayoutView<Content: View, Layout: TerminalUI.Layout>: PrimitiveVi
     inputs: ViewInputs
   ) -> ViewOutputs {
 
+    unowned let graph = inputs.graph
+    let geometry = graph.external(of: ViewGeometry.self)
     let content = Content.makeView(
-      view: inputs.graph.map(view) { $0.content },
+      view: graph.map(view) { $0.content },
       inputs: inputs
     )
 
     return ViewOutputs(
       preferenceValues: content.preferenceValues,
-      layoutComputers: inputs.graph.rule { graph in
+      layoutComputers: inputs.graph.rule { _ in
 
         let subviews = LayoutSubviews(
           raw: graph[content.layoutComputers].map(LayoutSubview.init)
@@ -112,10 +118,14 @@ private struct LayoutView<Content: View, Layout: TerminalUI.Layout>: PrimitiveVi
             proposal: proposal,
             subviews: subviews,
             cache: &cache)
-        } render: { bounds in
+        } place: { frame in
+          graph.setValue(of: geometry, to: ViewGeometry(frame: frame))
+
+        } render: {
+          let frame = graph[geometry].frame
           layout.placeSubviews(
-            in: bounds,
-            proposal: ProposedViewSize(bounds.size),
+            in: frame,
+            proposal: ProposedViewSize(frame.size),
             subviews: subviews,
             cache: &cache
           )

@@ -55,13 +55,18 @@ private struct LayoutModifierView<Content: View, LayoutModifier: TerminalUI.Layo
     view: Attribute<Self>,
     inputs: ViewInputs
   ) -> ViewOutputs {
+
+    unowned let graph = inputs.graph
+    let geometry = graph.external(of: ViewGeometry.self)
+
     let content = Content.makeView(
-      view: inputs.graph.map(view) { $0.content },
+      view: graph.map(view) { $0.content },
       inputs: inputs
     )
+
     return ViewOutputs(
       preferenceValues: content.preferenceValues,
-      layoutComputers: inputs.graph.rule { graph in
+      layoutComputers: inputs.graph.rule { _ in
 
         let layoutModifier = graph[view].layoutModifier
 
@@ -75,10 +80,15 @@ private struct LayoutModifierView<Content: View, LayoutModifier: TerminalUI.Layo
                 proposal: proposal,
                 subview: subview
               )
-            } render: { bounds in
+            } place: { frame in
+              graph.setValue(of: geometry, to: ViewGeometry(frame: frame))
+            } render: {
+
+              let frame = graph[geometry].frame
+
               layoutModifier.placeSubview(
-                in: bounds,
-                proposal: ProposedViewSize(bounds.size),
+                in: frame,
+                proposal: ProposedViewSize(frame.size),
                 subview: subview
               )
 
