@@ -65,16 +65,16 @@ private struct LayoutModifierView<Content: View, LayoutModifier: TerminalUI.Layo
 
     return ViewOutputs(
       preferenceValues: content.preferenceValues,
-      layoutComputers: inputs.graph.rule { _ in
+      layoutProxies: inputs.graph.rule { _ in
 
         let layoutModifier = graph[view].layoutModifier
 
-        return graph[content.layoutComputers]
-          .map { layoutComputer in
+        return graph[content.layoutProxies]
+          .map { layoutProxy in
 
-            let subview = LayoutModifier.Subview(layoutComputer: layoutComputer)
+            let subview = LayoutModifier.Subview(layoutProxy: layoutProxy)
 
-            return LayoutComputer { proposal in
+            return LayoutProxy { proposal in
               layoutModifier.sizeThatFits(
                 proposal: proposal,
                 subview: subview

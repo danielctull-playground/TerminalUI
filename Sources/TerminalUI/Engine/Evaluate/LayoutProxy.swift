@@ -1,5 +1,5 @@
 
-struct LayoutComputer {
+struct LayoutProxy {
 
   private let size: (ProposedViewSize) -> Size
   private let place: (Rect) -> Void

@@ -50,7 +50,7 @@ package struct Renderer<Content: View, Canvas: TerminalUI.Canvas> {
 
       _ = graph[outputs.preferenceValues] // Trigger preference values
       
-      let root = graph[outputs.layoutComputers].first!
+      let root = graph[outputs.layoutProxies].first!
       let frame = graph[geometry].frame
       if frame.size.width > 0, frame.size.height > 0 {
         root.place(in: frame)

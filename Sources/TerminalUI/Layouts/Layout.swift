@@ -47,20 +47,20 @@ extension LayoutSubviews: RandomAccessCollection {
 
 public struct LayoutSubview {
 
-  private let layoutComputer: LayoutComputer
+  private let proxy: LayoutProxy
 
-  init(layoutComputer: LayoutComputer) {
-    self.layoutComputer = layoutComputer
+  init(layoutProxy: LayoutProxy) {
+    self.proxy = layoutProxy
   }
 
   public func sizeThatFits(_ proposal: ProposedViewSize) -> Size {
-    layoutComputer.size(for: proposal)
+    proxy.size(for: proposal)
   }
 
   public func place(at position: Position, proposal: ProposedViewSize) {
-    let frame = Rect(origin: position, size: layoutComputer.size(for: proposal))
+    let frame = Rect(origin: position, size: proxy.size(for: proposal))
     guard frame.size.width > 0, frame.size.height > 0 else { return }
-    layoutComputer.place(in: frame)
+    proxy.place(in: frame)
   }
 }
 
@@ -102,16 +102,16 @@ private struct LayoutView<Content: View, Layout: TerminalUI.Layout>: PrimitiveVi
 
     return ViewOutputs(
       preferenceValues: content.preferenceValues,
-      layoutComputers: inputs.graph.rule { _ in
+      layoutProxies: inputs.graph.rule { _ in
 
         let subviews = LayoutSubviews(
-          raw: graph[content.layoutComputers].map(LayoutSubview.init)
+          raw: graph[content.layoutProxies].map(LayoutSubview.init)
         )
 
         let layout = graph[view].layout
         var cache = layout.makeCache(subviews: subviews)
 
-        let item = LayoutComputer { proposal in
+        let item = LayoutProxy { proposal in
           layout.sizeThatFits(
             proposal: proposal,
             subviews: subviews,
@@ -129,7 +129,7 @@ private struct LayoutView<Content: View, Layout: TerminalUI.Layout>: PrimitiveVi
         guard frame.size.width > 0, frame.size.height > 0 else { return .empty }
 
         let subviews = LayoutSubviews(
-          raw: graph[content.layoutComputers].map(LayoutSubview.init)
+          raw: graph[content.layoutProxies].map(LayoutSubview.init)
         )
 
         let layout = graph[view].layout

@@ -19,9 +19,9 @@ public struct Text: PrimitiveView {
 
     return ViewOutputs(
       preferenceValues: inputs.graph.constant(.empty),
-      layoutComputers: inputs.graph.rule { _ in
+      layoutProxies: inputs.graph.rule { _ in
         [
-          LayoutComputer { proposal in
+          LayoutProxy { proposal in
             size(for: proposal, view: view, inputs: inputs)
           } place: { frame in
             graph.setValue(of: geometry, to: ViewGeometry(frame: frame))

@@ -25,7 +25,7 @@ public struct AnyView: PrimitiveView {
 
     return ViewOutputs(
       preferenceValues: graph.map(content) { graph[$0.preferenceValues] },
-      layoutComputers: graph.map(content) { graph[$0.layoutComputers] },
+      layoutProxies: graph.map(content) { graph[$0.layoutProxies] },
       displayList: graph.map(content) { graph[$0.displayList] },
     )
   }

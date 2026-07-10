@@ -28,7 +28,7 @@ extension TextField: PrimitiveView {
 
     return ViewOutputs(
       preferenceValues: graph.constant(.empty),
-      layoutComputers: graph.rule { _ in
+      layoutProxies: graph.rule { _ in
 
         var text = graph[view].text.wrappedValue
         if focusManager.isFocused(id) {
@@ -36,7 +36,7 @@ extension TextField: PrimitiveView {
         }
 
         return [
-          LayoutComputer { _ in
+          LayoutProxy { _ in
             Size(width: text.count, height: 1)
           } place: { frame in
             graph.setValue(of: geometry, to: ViewGeometry(frame: frame))

@@ -53,9 +53,9 @@ extension ForEach: PrimitiveView {
             )
           }
         },
-        layoutComputers: graph.rule { graph in
+        layoutProxies: graph.rule { graph in
           items.reduce(into: []) { result, info in
-            result.append(contentsOf: graph[info.outputs.layoutComputers])
+            result.append(contentsOf: graph[info.outputs.layoutProxies])
           }
         },
         displayList: inputs.graph.rule { _ in
@@ -68,7 +68,7 @@ extension ForEach: PrimitiveView {
 
     return ViewOutputs(
       preferenceValues: graph.map(children) { graph[$0.preferenceValues] },
-      layoutComputers: graph.map(children) { graph[$0.layoutComputers] },
+      layoutProxies: graph.map(children) { graph[$0.layoutProxies] },
       displayList: graph.map(children) { graph[$0.displayList] }
     )
   }
