@@ -52,19 +52,16 @@ package struct Renderer<Content: View, Canvas: TerminalUI.Canvas> {
       
       let root = graph[outputs.layoutComputers].first!
       let frame = graph[geometry].frame
-      root.place(in: frame)
-      let displayList: DisplayList
       if frame.size.width > 0, frame.size.height > 0 {
-        displayList = root.render()
-      } else {
-        displayList = DisplayList(items: [])
+        root.place(in: frame)
       }
+
+      let displayList = graph[outputs.displayList]
 
       canvas.rasterize(displayList)
     }
   }
 }
-
 
 extension Renderer {
 
