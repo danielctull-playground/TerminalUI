@@ -59,7 +59,7 @@ extension ForEach: PrimitiveView {
           }
         },
         displayList: inputs.graph.rule { _ in
-          items.reduce(DisplayList(items: [])) { result, info in
+          items.reduce(.empty) { result, info in
             DisplayList(items: result.items + graph[info.outputs.displayList].items)
           }
         }

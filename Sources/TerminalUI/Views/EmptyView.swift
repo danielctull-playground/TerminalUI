@@ -11,7 +11,7 @@ public struct EmptyView: PrimitiveView {
     ViewOutputs(
       preferenceValues: inputs.graph.constant(.empty),
       layoutComputers: inputs.graph.constant([]),
-      displayList: inputs.graph.constant(DisplayList(items: []))
+      displayList: inputs.graph.constant(.empty)
     )
   }
 }
