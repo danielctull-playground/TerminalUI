@@ -354,5 +354,54 @@ struct SubgraphTests {
       graph.invalidate(subgraph)
       #expect(graph.attributeCount == 0) // both freed
     }
+
+    @Test func `change-detection does not re-evaluate an invalidated subgraph`() {
+
+      let graph = Graph()
+
+      let mode = graph.external(of: Bool.self)
+      graph.setValue(of: mode, to: true)   // does the parent read the child?
+
+      let input = graph.external(of: Int.self)
+      graph.setValue(of: input, to: 1)
+
+      // `child` lives in its own subgraph and is only valid while input == 1
+      // (models a ForEach row / Optional `.some` branch about to be removed).
+      var child: Attribute<Int>!
+      let sub = graph.subgraph {
+        child = graph.rule { graph in
+          precondition(graph[input] == 1, "dead read")
+          return graph[input]
+        }
+      }
+
+      // The parent reads the child only while `mode` is true.
+      let parent = graph.rule { graph in
+        graph[mode] ? graph[child] : -1
+      }
+
+      // Establishes dependencies: mode->parent, child->parent, input->child.
+      #expect(graph[parent] == 1)
+
+      // The pass that removes `child`: stop reading it (mode false), change
+      // `input` so a stale re-evaluation of the child would trap, and invalidate
+      // its subgraph.
+      graph.setValue(of: mode, to: false)
+      graph.setValue(of: input, to: 2)
+
+      graph.withUpdate {
+
+        // Invalidation is deferred to the end of the pass, so `child` still
+        // exists here. Reading `parent` change-checks its inputs — and today
+        // that re-evaluates the doomed `child` against the new `input`, trapping
+        // in the precondition (a "dead read").
+        graph.invalidate(sub)
+        #expect(graph[parent] == -1)
+      }
+
+      // Once the pass ends the doomed subgraph is gone; nothing leaked.
+      #expect(graph.contains(sub) == false)
+      #expect(graph.attributeCount == 3) // mode, input, parent
+    }
   }
 }
