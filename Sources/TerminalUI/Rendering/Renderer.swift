@@ -6,6 +6,7 @@ package struct Renderer<Content: View, Canvas: TerminalUI.Canvas> {
   private let graph: Graph
   private let canvas: Canvas
   private let environment: Attribute<EnvironmentValues>
+  private let geometry: Attribute<ViewGeometry>
   private let outputs: ViewOutputs
 
   init(
@@ -20,12 +21,14 @@ package struct Renderer<Content: View, Canvas: TerminalUI.Canvas> {
     let environment = graph.external(of: EnvironmentValues.self)
     graph.setValue(of: environment, to: values)
 
+    geometry = graph.map(environment) {
+      ViewGeometry(frame: Rect(origin: .origin, size: $0.windowSize))
+    }
+
     let inputs = ViewInputs(
       graph: graph,
       environment: environment,
-      geometry: graph.map(environment) {
-        ViewGeometry(frame: Rect(origin: .origin, size: $0.windowSize))
-      }
+      geometry: geometry
     )
 
     self.graph = graph
@@ -48,7 +51,7 @@ package struct Renderer<Content: View, Canvas: TerminalUI.Canvas> {
       _ = graph[outputs.preferenceValues] // Trigger preference values
       
       let root = graph[outputs.layoutComputers].first!
-      root.place(in: Rect(origin: .origin, size: graph[environment].windowSize))
+      root.place(in: graph[geometry].frame)
       let displayList = root.render()
 
       canvas.rasterize(displayList)
