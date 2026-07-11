@@ -58,6 +58,9 @@ private struct LayoutModifierView<Content: View, LayoutModifier: TerminalUI.Layo
 
     unowned let graph = inputs.graph
 
+    let geometry = graph.external(of: ViewGeometry.self)
+    graph.setValue(of: geometry, to: .zero)
+
     let content = Content.makeView(
       view: graph.map(view) { $0.content },
       inputs: inputs
@@ -83,6 +86,8 @@ private struct LayoutModifierView<Content: View, LayoutModifier: TerminalUI.Layo
               },
               place: { frame in
 
+                graph.setValue(of: geometry, to: ViewGeometry(frame: frame))
+
                 // Because a layout modifier doesn't own its own geometry,
                 // placing it just places the subview.
                 layoutModifier.placeSubview(
@@ -94,7 +99,19 @@ private struct LayoutModifierView<Content: View, LayoutModifier: TerminalUI.Layo
             )
           }
       },
-      displayList: content.displayList
+      displayList: graph.map(
+        geometry,
+        inputs.environment,
+        content.displayList,
+      ) { geometry, environment, content in
+
+        let empty = DisplayList.Item(
+          frame: geometry.frame,
+          content: .fill(environment.style)
+        )
+
+        return DisplayList(items: [empty] + content.items)
+      }
     )
   }
 }

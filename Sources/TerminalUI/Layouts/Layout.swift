@@ -154,6 +154,16 @@ private struct LayoutView<Content: View, Layout: TerminalUI.Layout>: PrimitiveVi
         )
 
         return graph[content.displayList]
+
+        let content = graph[content.displayList]
+        let environment = graph[inputs.environment]
+        let style = Style(rendition: [Color.magenta.background])
+        let empty = DisplayList.Item(
+          frame: frame,
+          content: .fill(style)
+        )
+
+        return DisplayList(items: [empty] + content.items)
       }
     )
   }
