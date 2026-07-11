@@ -65,30 +65,33 @@ private struct LayoutModifierView<Content: View, LayoutModifier: TerminalUI.Layo
 
     return ViewOutputs(
       preferenceValues: content.preferenceValues,
-      layoutComputers: inputs.graph.rule { _ in
+      layoutProxies: inputs.graph.rule { _ in
 
         let layoutModifier = graph[view].layoutModifier
 
-        return graph[content.layoutComputers]
-          .map { layoutComputer in
+        return graph[content.layoutProxies]
+          .map { layoutProxy in
 
-            let subview = LayoutModifier.Subview(layoutComputer: layoutComputer)
+            let subview = LayoutModifier.Subview(layoutProxy: layoutProxy)
 
-            return LayoutComputer { proposal in
-              layoutModifier.sizeThatFits(
-                proposal: proposal,
-                subview: subview
-              )
-            } place: { frame in
+            return LayoutProxy(
+              layoutComputer: LayoutComputer { proposal in
+                layoutModifier.sizeThatFits(
+                  proposal: proposal,
+                  subview: subview
+                )
+              },
+              place: { frame in
 
-              // Because a layout modifier doesn't own its own geometry,
-              // placing it just places the subview.
-              layoutModifier.placeSubview(
-                in: frame,
-                proposal: ProposedViewSize(frame.size),
-                subview: subview
-              )
-            }
+                // Because a layout modifier doesn't own its own geometry,
+                // placing it just places the subview.
+                layoutModifier.placeSubview(
+                  in: frame,
+                  proposal: ProposedViewSize(frame.size),
+                  subview: subview
+                )
+              }
+            )
           }
       },
       displayList: content.displayList

@@ -17,13 +17,16 @@ public struct Color: CustomStringConvertible, Equatable, Sendable, PrimitiveView
 
     return ViewOutputs(
       preferenceValues: inputs.graph.constant(.empty),
-      layoutComputers: inputs.graph.rule { _ in
+      layoutProxies: inputs.graph.rule { _ in
         [
-          LayoutComputer {
-            $0.replacingUnspecifiedDimensions()
-          } place: { frame in
-            graph.setValue(of: geometry, to: ViewGeometry(frame: frame))
-          }
+          LayoutProxy(
+            layoutComputer: LayoutComputer {
+              $0.replacingUnspecifiedDimensions()
+            },
+            place: { frame in
+              graph.setValue(of: geometry, to: ViewGeometry(frame: frame))
+            }
+          )
         ]
       },
       displayList: inputs.graph.rule { _ in
