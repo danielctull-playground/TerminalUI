@@ -7,6 +7,6 @@ extension Canvas {
       canvas: self,
       content: content
     )
-    renderer.render(event: WindowChange(size: size))
+    renderer.render(event: WindowSize(size: size))
   }
 }

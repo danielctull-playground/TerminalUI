@@ -16,7 +16,7 @@ struct TextFieldTests {
 
     let canvas = TestCanvas(width: 3, height: 1)
     let renderer = Renderer(canvas: canvas, content: Content())
-    renderer.render(event: WindowChange(size: Size(width: 3, height: 1)))
+    renderer.render(event: WindowSize(size: Size(width: 3, height: 1)))
 
     #expect(canvas.cells == [
       Position(x: 2, y: 1): Cell("_"),
@@ -51,7 +51,7 @@ struct TextFieldTests {
 
     let canvas = TestCanvas(width: 3, height: 2)
     let renderer = Renderer(canvas: canvas, content: Content())
-    renderer.render(event: WindowChange(size: Size(width: 3, height: 2)))
+    renderer.render(event: WindowSize(size: Size(width: 3, height: 2)))
 
     #expect(canvas.cells == [
       Position(x: 2, y: 1): Cell("_"),

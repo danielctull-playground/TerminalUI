@@ -6,29 +6,29 @@ extension EnvironmentValues {
   @Entry fileprivate(set) var windowSize = Size.zero
 }
 
-struct WindowChange: Equatable {
+struct WindowSize: Equatable {
   let size: Size
 }
 
-extension WindowChange: Event {
+extension WindowSize: Event {
 
   func updateEnvironment(_ environment: inout EnvironmentValues) {
     environment.windowSize = size
   }
 }
 
-extension WindowChange {
+extension WindowSize {
 
   static func sequence(
     fileHandle: FileHandle = .standardOutput
-  ) -> some Sendable & AsyncSequence<WindowChange, Never> {
+  ) -> some Sendable & AsyncSequence<WindowSize, Never> {
 
-    var current: WindowChange {
+    var current: WindowSize {
       var winsize = winsize()
       let result = ioctl(fileHandle.fileDescriptor, UInt(TIOCGWINSZ), &winsize)
       guard result == EXIT_SUCCESS else { fatalError() }
       let size = Size(width: Int(winsize.ws_col), height: Int(winsize.ws_row))
-      return WindowChange(size: size)
+      return WindowSize(size: size)
     }
 
     return AsyncStream { continuation in

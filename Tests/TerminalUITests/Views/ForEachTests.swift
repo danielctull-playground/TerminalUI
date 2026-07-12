@@ -85,18 +85,18 @@ struct ForEachTests {
     let canvas = TestCanvas(width: 3, height: 1)
     let renderer = Renderer(canvas: canvas, content: Content())
 
-    renderer.render(event: WindowChange(size: Size(width: 1, height: 1)))
+    renderer.render(event: WindowSize(size: Size(width: 1, height: 1)))
     #expect(canvas.cells == [
       Position(x: 1, y: 1): Cell("1"),
     ])
 
-    renderer.render(event: WindowChange(size: Size(width: 2, height: 1)))
+    renderer.render(event: WindowSize(size: Size(width: 2, height: 1)))
     #expect(canvas.cells == [
       Position(x: 1, y: 1): Cell("1"),
       Position(x: 2, y: 1): Cell("2"),
     ])
 
-    renderer.render(event: WindowChange(size: Size(width: 3, height: 1)))
+    renderer.render(event: WindowSize(size: Size(width: 3, height: 1)))
     #expect(canvas.cells == [
       Position(x: 1, y: 1): Cell("1"),
       Position(x: 2, y: 1): Cell("2"),
@@ -164,14 +164,14 @@ struct ForEachTests {
     let renderer = Renderer(canvas: canvas, content: Content())
 
     // [a,b], each logs once
-    renderer.render(event: WindowChange(size: Size(width: 1, height: 2)))
+    renderer.render(event: WindowSize(size: Size(width: 1, height: 2)))
     #expect(canvas.cells == [
       Position(x: 1, y: 1): Cell("a"),
       Position(x: 1, y: 2): Cell("b"),
     ])
 
     // reorder → [b,a], each logs again
-    renderer.render(event: WindowChange(size: Size(width: 2, height: 2)))
+    renderer.render(event: WindowSize(size: Size(width: 2, height: 2)))
     #expect(canvas.cells == [
       Position(x: 1, y: 1): Cell("b"), Position(x: 2, y: 1): Cell("b"),
       Position(x: 1, y: 2): Cell("a"), Position(x: 2, y: 2): Cell("a"),
@@ -206,28 +206,28 @@ struct ForEachTests {
     #expect(Tracked.live == 0)
 
     // Initial render yields 1 Tracked instance.
-    renderer.render(event: WindowChange(size: Size(width: 2, height: 1)))
+    renderer.render(event: WindowSize(size: Size(width: 2, height: 1)))
     #expect(Tracked.live == 1)
 
     // A re-render yields 2 instances. This matches SwiftUI's behaviour.
-    renderer.render(event: WindowChange(size: Size(width: 1, height: 1)))
+    renderer.render(event: WindowSize(size: Size(width: 1, height: 1)))
     #expect(Tracked.live == 2)
 
     // Adding an item in ForEach adds one.
-    renderer.render(event: WindowChange(size: Size(width: 1, height: 2)))
+    renderer.render(event: WindowSize(size: Size(width: 1, height: 2)))
     #expect(Tracked.live == 3)
 
     // A re-render yields 4 Tracked instances (2 for each).
     // This again matches SwiftUI's behaviour.
-    renderer.render(event: WindowChange(size: Size(width: 2, height: 2)))
+    renderer.render(event: WindowSize(size: Size(width: 2, height: 2)))
     #expect(Tracked.live == 4)
 
     // Removing one brings the live count back to 2.
-    renderer.render(event: WindowChange(size: Size(width: 1, height: 1)))
+    renderer.render(event: WindowSize(size: Size(width: 1, height: 1)))
     #expect(Tracked.live == 2)
 
     // A re-render remains at 2.
-    renderer.render(event: WindowChange(size: Size(width: 2, height: 1)))
+    renderer.render(event: WindowSize(size: Size(width: 2, height: 1)))
     #expect(Tracked.live == 2)
   }
 }

@@ -26,12 +26,12 @@ struct RendererTests {
     let canvas = TestCanvas(width: 0, height: 0)
     let renderer = Renderer(canvas: canvas, content: Color.red)
 
-    renderer.render(event: WindowChange(size: Size(width: 1, height: 1)))
+    renderer.render(event: WindowSize(size: Size(width: 1, height: 1)))
     #expect(Set(canvas.cells.keys) == [
       Position(x: 1, y: 1)
     ])
 
-    renderer.render(event: WindowChange(size: Size(width: 3, height: 1)))
+    renderer.render(event: WindowSize(size: Size(width: 3, height: 1)))
     #expect(Set(canvas.cells.keys) == [
       Position(x: 1, y: 1),
       Position(x: 2, y: 1),
@@ -54,7 +54,7 @@ struct RendererTests {
       box = strongBox
 
       let renderer = Renderer(canvas: TestCanvas(width: 1, height: 1), content: Probe(box: strongBox))
-      renderer.render(event: WindowChange(size: Size(width: 1, height: 1)))
+      renderer.render(event: WindowSize(size: Size(width: 1, height: 1)))
     }
 
     // If the graph retained itself, it and the view tree holding the box would

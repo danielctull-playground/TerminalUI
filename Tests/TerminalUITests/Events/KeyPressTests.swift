@@ -17,10 +17,10 @@ struct KeyPressTests {
 
   @Test func `non-byte events pass through unchanged`() async throws {
     let size = Size(width: 3, height: 4)
-    let events: [any Event] = [CSI(command: "a"), WindowChange(size: size)]
+    let events: [any Event] = [CSI(command: "a"), WindowSize(size: size)]
     var iterator = events.async.keyPressEvents.makeAsyncIterator()
     #expect(try await iterator.next() as? CSI == CSI(command: "a"))
-    #expect(try await iterator.next() as? WindowChange == WindowChange(size: size))
+    #expect(try await iterator.next() as? WindowSize == WindowSize(size: size))
   }
 
   @Test func `only bytes are converted in a mixed stream`() async throws {
