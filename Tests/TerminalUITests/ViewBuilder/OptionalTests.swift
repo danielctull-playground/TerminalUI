@@ -84,28 +84,28 @@ struct OptionalTests {
 
     @MainActor
     struct Content: @MainActor View {
-      @Environment(\.windowSize) var size
+      @Environment(\.windowSize) var windowSize
       var body: some View {
-        if size.width.isMultiple(of: 3) { MultipleOfThree() }
+        if windowSize.size.width.isMultiple(of: 3) { MultipleOfThree() }
       }
     }
 
     let canvas = TestCanvas(width: 1, height: 1)
     let renderer = Renderer(canvas: canvas, content: Content())
 
-    renderer.render(event: WindowChange(size: Size(width: 3, height: 1)))
+    renderer.render(event: WindowSize(size: Size(width: 3, height: 1)))
     #expect(canvas.cells[Position(x: 2, y: 1)] == Cell("0"))
 
-    renderer.render(event: WindowChange(size: Size(width: 5, height: 1)))
+    renderer.render(event: WindowSize(size: Size(width: 5, height: 1)))
     #expect(canvas.cells[Position(x: 3, y: 1)] == nil)
 
-    renderer.render(event: WindowChange(size: Size(width: 7, height: 1)))
+    renderer.render(event: WindowSize(size: Size(width: 7, height: 1)))
     #expect(canvas.cells[Position(x: 4, y: 1)] == nil)
 
-    renderer.render(event: WindowChange(size: Size(width: 9, height: 1)))
+    renderer.render(event: WindowSize(size: Size(width: 9, height: 1)))
     #expect(canvas.cells[Position(x: 5, y: 1)] == Cell("1"))
 
-    renderer.render(event: WindowChange(size: Size(width: 15, height: 1)))
+    renderer.render(event: WindowSize(size: Size(width: 15, height: 1)))
     #expect(canvas.cells[Position(x: 8, y: 1)] == Cell("1"))
   }
 
@@ -125,19 +125,19 @@ struct OptionalTests {
     }
 
     struct Root: View {
-      @Environment(\.windowSize) var size
+      @Environment(\.windowSize) var windowSize
       var body: some View {
-        if size.width.isMultiple(of: 2) { Content() }
+        if windowSize.size.width.isMultiple(of: 2) { Content() }
       }
     }
 
     Tracked.live = 0
     let renderer = Renderer(canvas: TestCanvas(width: 1, height: 1), content: Root())
 
-    renderer.render(event: WindowChange(size: Size(width: 2, height: 1)))
+    renderer.render(event: WindowSize(size: Size(width: 2, height: 1)))
     #expect(Tracked.live == 1)
 
-    renderer.render(event: WindowChange(size: Size(width: 1, height: 1)))
+    renderer.render(event: WindowSize(size: Size(width: 1, height: 1)))
     #expect(Tracked.live == 0)
   }
 }

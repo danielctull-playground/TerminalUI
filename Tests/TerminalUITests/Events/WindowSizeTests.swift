@@ -10,8 +10,8 @@ import Glibc
 import Musl
 #endif
 
-@Suite("WindowChange")
-struct WindowChangeTests {
+@Suite("WindowSize")
+struct WindowSizeTests {
 
   @Test func initialValue() {
     #expect(EnvironmentValues().windowSize == .zero)
@@ -21,18 +21,18 @@ struct WindowChangeTests {
     let a = Int.random
     let b = Int.random
     let c = Int.random
-    #expect(WindowChange(size: Size(width: a, height: b)) == WindowChange(size: Size(width: a, height: b)))
-    #expect(WindowChange(size: Size(width: a, height: b)) != WindowChange(size: Size(width: a, height: c)))
-    #expect(WindowChange(size: Size(width: a, height: b)) != WindowChange(size: Size(width: c, height: b)))
+    #expect(WindowSize(size: Size(width: a, height: b)) == WindowSize(size: Size(width: a, height: b)))
+    #expect(WindowSize(size: Size(width: a, height: b)) != WindowSize(size: Size(width: a, height: c)))
+    #expect(WindowSize(size: Size(width: a, height: b)) != WindowSize(size: Size(width: c, height: b)))
   }
 
   @Test
   func updateEnvironment() {
     let size = Size(width: .random(in: 0...1000), height: .random(in: 0...1000))
-    let change = WindowChange(size: size)
+    let windowSize = WindowSize(size: size)
     var environment = EnvironmentValues()
-    change.updateEnvironment(&environment)
-    #expect(environment.windowSize == size)
+    windowSize.updateEnvironment(&environment)
+    #expect(environment.windowSize == windowSize)
   }
 
   @Suite("Sequence", .serialized)
@@ -66,30 +66,30 @@ struct WindowChangeTests {
     }
 
     @Test func initial() async throws {
-      var iterator = WindowChange.sequence(fileHandle: fileHandle)
+      var iterator = WindowSize.sequence(fileHandle: fileHandle)
         .makeAsyncIterator()
       let change = try await iterator.next()
-      #expect(change == WindowChange(size: Size(width: 80, height: 24)))
+      #expect(change == WindowSize(size: Size(width: 80, height: 24)))
     }
 
     @Test func resize() async throws {
-      var iterator = WindowChange.sequence(fileHandle: fileHandle)
+      var iterator = WindowSize.sequence(fileHandle: fileHandle)
         .makeAsyncIterator()
 
       let initial = try await iterator.next()
-      #expect(initial == WindowChange(size: Size(width: 80, height: 24)))
+      #expect(initial == WindowSize(size: Size(width: 80, height: 24)))
 
       setWindowSize(width: 120, height: 40)
       let change = try await iterator.next()
-      #expect(change == WindowChange(size: Size(width: 120, height: 40)))
+      #expect(change == WindowSize(size: Size(width: 120, height: 40)))
     }
 
     @Test func filtersDuplicates() async throws {
-      var iterator = WindowChange.sequence(fileHandle: fileHandle)
+      var iterator = WindowSize.sequence(fileHandle: fileHandle)
         .makeAsyncIterator()
 
       let initial = try await iterator.next()
-      #expect(initial == WindowChange(size: Size(width: 80, height: 24)))
+      #expect(initial == WindowSize(size: Size(width: 80, height: 24)))
 
       // Send SIGWINCH without changing size — removeDuplicates should suppress
       kill(getpid(), SIGWINCH)
@@ -98,13 +98,13 @@ struct WindowChangeTests {
       // duplicate 80x24 and receive 120x40
       setWindowSize(width: 120, height: 40)
       let change = try await iterator.next()
-      #expect(change == WindowChange(size: Size(width: 120, height: 40)))
+      #expect(change == WindowSize(size: Size(width: 120, height: 40)))
     }
 
     @Test func `requires terminal`() async throws {
       await #expect(processExitsWith: .failure) {
         let pipe = Pipe()
-        var iterator = WindowChange.sequence(fileHandle: pipe.fileHandleForReading)
+        var iterator = WindowSize.sequence(fileHandle: pipe.fileHandleForReading)
           .makeAsyncIterator()
         _ = try await iterator.next()
       }

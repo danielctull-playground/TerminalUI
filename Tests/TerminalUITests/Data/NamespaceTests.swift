@@ -76,21 +76,21 @@ struct NamespaceTests {
     }
 
     struct Content: View {
-      @Environment(\.windowSize) private var size
+      @Environment(\.windowSize) private var windowSize
       @Namespace private var a
       var body: some View {
         Text(a.description)
-          .preference(key: TickKey.self, value: size.height) // Cause a re-draw
+          .preference(key: TickKey.self, value: windowSize.size.height) // Redraw
       }
     }
 
     let canvas = TestCanvas(width: 1, height: 1)
     let renderer = Renderer(canvas: canvas, content: Content())
 
-    renderer.render(event: WindowChange(size: Size(width: 1, height: 1)))
+    renderer.render(event: WindowSize(size: Size(width: 1, height: 1)))
     let first = canvas.cells[Position(x: 1, y: 1)]
 
-    renderer.render(event: WindowChange(size: Size(width: 1, height: 3)))
+    renderer.render(event: WindowSize(size: Size(width: 1, height: 3)))
     let second = canvas.cells[Position(x: 1, y: 2)]
 
     #expect(first == second)

@@ -83,7 +83,7 @@ extension App {
     @EventStream
     var events: some AsyncSequence<any Event, Never> {
 
-      WindowChange.sequence()
+      WindowSize.sequence()
 
       AsyncRead(fileHandle: .standardInput)
         .byteEvents(Exit.self, CSI.self)

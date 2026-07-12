@@ -58,8 +58,8 @@ struct ForEachTests {
   func `rows maintain state across recomputes`() {
 
     struct WindowSizeKey: PreferenceKey {
-      static var defaultValue: Size { .zero }
-      static func reduce(value: inout Size, nextValue: () -> Size) {
+      static var defaultValue: WindowSize { .zero }
+      static func reduce(value: inout WindowSize, nextValue: () -> WindowSize) {
         value = nextValue()
       }
     }
@@ -70,7 +70,7 @@ struct ForEachTests {
       var body: some View {
         Text(widths)
           .preference(key: WindowSizeKey.self, value: windowSize)
-          .onPreferenceChange(WindowSizeKey.self) { widths += String($0.width) }
+          .onPreferenceChange(WindowSizeKey.self) { widths += String($0.size.width) }
       }
     }
 
@@ -85,18 +85,18 @@ struct ForEachTests {
     let canvas = TestCanvas(width: 3, height: 1)
     let renderer = Renderer(canvas: canvas, content: Content())
 
-    renderer.render(event: WindowChange(size: Size(width: 1, height: 1)))
+    renderer.render(event: WindowSize(size: Size(width: 1, height: 1)))
     #expect(canvas.cells == [
       Position(x: 1, y: 1): Cell("1"),
     ])
 
-    renderer.render(event: WindowChange(size: Size(width: 2, height: 1)))
+    renderer.render(event: WindowSize(size: Size(width: 2, height: 1)))
     #expect(canvas.cells == [
       Position(x: 1, y: 1): Cell("1"),
       Position(x: 2, y: 1): Cell("2"),
     ])
 
-    renderer.render(event: WindowChange(size: Size(width: 3, height: 1)))
+    renderer.render(event: WindowSize(size: Size(width: 3, height: 1)))
     #expect(canvas.cells == [
       Position(x: 1, y: 1): Cell("1"),
       Position(x: 2, y: 1): Cell("2"),
@@ -140,20 +140,20 @@ struct ForEachTests {
     // accumulates ("aa"); a rebuilt row resets ("a"). So a doubled string
     // proves BOTH that the reorder happened AND that state survived it.
     struct Row: View {
-      @Environment(\.windowSize) private var size
+      @Environment(\.windowSize) private var windowSize
       let value: String
       @State private var log = ""
       var body: some View {
         Text(log)
-          .preference(key: TickKey.self, value: size.width)
+          .preference(key: TickKey.self, value: windowSize.size.width)
           .onPreferenceChange(TickKey.self) { _ in log += value }
       }
     }
 
     struct Content: View {
-      @Environment(\.windowSize) var size
+      @Environment(\.windowSize) var windowSize
       var body: some View {
-        let items = size.width == 1 ? ["a", "b"] : ["b", "a"]
+        let items = windowSize.size.width == 1 ? ["a", "b"] : ["b", "a"]
         VStack(spacing: 0) {
           ForEach(items, id: \.self) { Row(value: $0) }
         }
@@ -164,14 +164,14 @@ struct ForEachTests {
     let renderer = Renderer(canvas: canvas, content: Content())
 
     // [a,b], each logs once
-    renderer.render(event: WindowChange(size: Size(width: 1, height: 2)))
+    renderer.render(event: WindowSize(size: Size(width: 1, height: 2)))
     #expect(canvas.cells == [
       Position(x: 1, y: 1): Cell("a"),
       Position(x: 1, y: 2): Cell("b"),
     ])
 
     // reorder → [b,a], each logs again
-    renderer.render(event: WindowChange(size: Size(width: 2, height: 2)))
+    renderer.render(event: WindowSize(size: Size(width: 2, height: 2)))
     #expect(canvas.cells == [
       Position(x: 1, y: 1): Cell("b"), Position(x: 2, y: 1): Cell("b"),
       Position(x: 1, y: 2): Cell("a"), Position(x: 2, y: 2): Cell("a"),
@@ -194,10 +194,10 @@ struct ForEachTests {
     }
 
     struct Content: View {
-      @Environment(\.windowSize) var size
+      @Environment(\.windowSize) var windowSize
       var body: some View {
         VStack(spacing: 0) {
-          ForEach(1...size.height, id: \.self) { Row(value: $0) }
+          ForEach(1...windowSize.size.height, id: \.self) { Row(value: $0) }
         }
       }
     }
@@ -206,28 +206,28 @@ struct ForEachTests {
     #expect(Tracked.live == 0)
 
     // Initial render yields 1 Tracked instance.
-    renderer.render(event: WindowChange(size: Size(width: 2, height: 1)))
+    renderer.render(event: WindowSize(size: Size(width: 2, height: 1)))
     #expect(Tracked.live == 1)
 
     // A re-render yields 2 instances. This matches SwiftUI's behaviour.
-    renderer.render(event: WindowChange(size: Size(width: 1, height: 1)))
+    renderer.render(event: WindowSize(size: Size(width: 1, height: 1)))
     #expect(Tracked.live == 2)
 
     // Adding an item in ForEach adds one.
-    renderer.render(event: WindowChange(size: Size(width: 1, height: 2)))
+    renderer.render(event: WindowSize(size: Size(width: 1, height: 2)))
     #expect(Tracked.live == 3)
 
     // A re-render yields 4 Tracked instances (2 for each).
     // This again matches SwiftUI's behaviour.
-    renderer.render(event: WindowChange(size: Size(width: 2, height: 2)))
+    renderer.render(event: WindowSize(size: Size(width: 2, height: 2)))
     #expect(Tracked.live == 4)
 
     // Removing one brings the live count back to 2.
-    renderer.render(event: WindowChange(size: Size(width: 1, height: 1)))
+    renderer.render(event: WindowSize(size: Size(width: 1, height: 1)))
     #expect(Tracked.live == 2)
 
     // A re-render remains at 2.
-    renderer.render(event: WindowChange(size: Size(width: 2, height: 1)))
+    renderer.render(event: WindowSize(size: Size(width: 2, height: 1)))
     #expect(Tracked.live == 2)
   }
 }

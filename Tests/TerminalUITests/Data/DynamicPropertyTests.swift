@@ -43,7 +43,7 @@ struct DynamicPropertyTests {
     struct EnvironmentDynamicProperty: DynamicProperty {
       @Environment(\.windowSize) private var windowSize
       var wrappedValue: String {
-        String(describing: windowSize.width)
+        String(describing: windowSize.size.width)
       }
     }
 
@@ -57,13 +57,13 @@ struct DynamicPropertyTests {
     let canvas = TestCanvas(width: 3, height: 1)
     let renderer = Renderer(canvas: canvas, content: Content())
 
-    renderer.render(event: WindowChange(size: Size(width: 1, height: 1)))
+    renderer.render(event: WindowSize(size: Size(width: 1, height: 1)))
     #expect(canvas.cells == [
       Position(x: 1, y: 1): Cell("1")
     ])
 
     canvas.cells = [:]
-    renderer.render(event: WindowChange(size: Size(width: 3, height: 1)))
+    renderer.render(event: WindowSize(size: Size(width: 3, height: 1)))
     #expect(canvas.cells == [
       Position(x: 2, y: 1): Cell("3")
     ])
