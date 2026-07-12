@@ -3,14 +3,9 @@ public struct Cell: Equatable, Sendable {
 
   package let content: Character
   let style: Style
+}
 
-  init(
-    content: Character,
-    graphicRendition: [GraphicRendition]
-  ) {
-    self.content = content
-    self.style = Style(graphicRendition: graphicRendition)
-  }
+extension Cell {
 
   public init(
     _ content: Character,
@@ -43,17 +38,17 @@ public struct Cell: Equatable, Sendable {
     strikethrough: Strikethrough
   ) {
     self.content = content
-    self.style = Style(graphicRendition: [
-      foreground.foreground,
-      background.background,
-      bold.graphicRendition,
-      italic.graphicRendition,
-      underline.graphicRendition,
-      blinking.graphicRendition,
-      inverse.graphicRendition,
-      hidden.graphicRendition,
-      strikethrough.graphicRendition,
-    ])
+    self.style = Style(
+      foregroundColor: foreground,
+      backgroundColor: background,
+      bold: bold,
+      italic: italic,
+      underline: underline,
+      blinking: blinking,
+      inverse: inverse,
+      hidden: hidden,
+      strikethrough: strikethrough,
+    )
   }
 }
 
