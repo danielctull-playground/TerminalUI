@@ -1,4 +1,4 @@
-import TerminalUI
+@testable import TerminalUI
 import TerminalUITesting
 import Testing
 
@@ -9,7 +9,7 @@ struct ViewBuilderTests {
 
   @Test func empty() {
     canvas.render {}
-    #expect(canvas.pixels == [:])
+    #expect(canvas.cells == [:])
   }
 
   @Test func first() {
@@ -18,8 +18,8 @@ struct ViewBuilderTests {
       Text("a")
     }
 
-    #expect(canvas.pixels == [
-      Position(x: 6, y: 6): Pixel("a"),
+    #expect(canvas.cells == [
+      Position(x: 6, y: 6): Cell("a"),
     ])
   }
 
@@ -38,9 +38,9 @@ struct ViewBuilderTests {
       Text("b")
     }
 
-    #expect(canvas.pixels == [
-      Position(x: 6, y: 5): Pixel("a"),
-      Position(x: 6, y: 6): Pixel("b"),
+    #expect(canvas.cells == [
+      Position(x: 6, y: 5): Cell("a"),
+      Position(x: 6, y: 6): Cell("b"),
     ])
   }
 
@@ -53,10 +53,10 @@ struct ViewBuilderTests {
   }
 
   @Test(arguments: [
-    (true, [Position(x: 6, y: 6): Pixel("a")]),
+    (true, [Position(x: 6, y: 6): Cell("a")]),
     (false, [:])
   ])
-  func optional(value: Bool, expectation: [Position: Pixel]) {
+  func optional(value: Bool, expectation: [Position: Cell]) {
 
     canvas.render {
       if value {
@@ -64,7 +64,7 @@ struct ViewBuilderTests {
       }
     }
 
-    #expect(canvas.pixels == expectation)
+    #expect(canvas.cells == expectation)
   }
 
   @Test func `optional body: fatal`() async {
@@ -89,8 +89,8 @@ struct ViewBuilderTests {
       }
     }
 
-    #expect(canvas.pixels == [
-      Position(x: 6, y: 6): Pixel(character),
+    #expect(canvas.cells == [
+      Position(x: 6, y: 6): Cell(character),
     ])
   }
 
@@ -117,8 +117,8 @@ struct ViewBuilderTests {
       }
     }
 
-    #expect(canvas.pixels == [
-      Position(x: 6, y: 6): Pixel("b"),
+    #expect(canvas.cells == [
+      Position(x: 6, y: 6): Cell("b"),
     ])
   }
 #endif

@@ -10,7 +10,7 @@ struct RendererTests {
     canvas.render {
       Color.red
     }
-    #expect(canvas.pixels.isEmpty)
+    #expect(canvas.cells.isEmpty)
   }
 
   @Test func `width: zero`() {
@@ -18,7 +18,7 @@ struct RendererTests {
     canvas.render {
       Color.red
     }
-    #expect(canvas.pixels.isEmpty)
+    #expect(canvas.cells.isEmpty)
   }
 
   @Test func `one renderer draws across multiple frames`() {
@@ -27,12 +27,12 @@ struct RendererTests {
     let renderer = Renderer(canvas: canvas, content: Color.red)
 
     renderer.render(event: WindowChange(size: Size(width: 1, height: 1)))
-    #expect(Set(canvas.pixels.keys) == [
+    #expect(Set(canvas.cells.keys) == [
       Position(x: 1, y: 1)
     ])
 
     renderer.render(event: WindowChange(size: Size(width: 3, height: 1)))
-    #expect(Set(canvas.pixels.keys) == [
+    #expect(Set(canvas.cells.keys) == [
       Position(x: 1, y: 1),
       Position(x: 2, y: 1),
       Position(x: 3, y: 1),

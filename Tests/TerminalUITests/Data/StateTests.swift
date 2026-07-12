@@ -25,12 +25,12 @@ struct StateTests {
       TestView()
     }
 
-    #expect(canvas.pixels == [
-      Position(x: 1, y: 2): Pixel("h"),
-      Position(x: 2, y: 2): Pixel("e"),
-      Position(x: 3, y: 2): Pixel("l"),
-      Position(x: 4, y: 2): Pixel("l"),
-      Position(x: 5, y: 2): Pixel("o"),
+    #expect(canvas.cells == [
+      Position(x: 1, y: 2): Cell("h"),
+      Position(x: 2, y: 2): Cell("e"),
+      Position(x: 3, y: 2): Cell("l"),
+      Position(x: 4, y: 2): Cell("l"),
+      Position(x: 5, y: 2): Cell("o"),
     ])
   }
 
@@ -50,10 +50,10 @@ struct StateTests {
       TestView()
     }
 
-    #expect(canvas.pixels == [
-      Position(x: 2, y: 1): Pixel("n"),
-      Position(x: 3, y: 1): Pixel("e"),
-      Position(x: 4, y: 1): Pixel("w"),
+    #expect(canvas.cells == [
+      Position(x: 2, y: 1): Cell("n"),
+      Position(x: 3, y: 1): Cell("e"),
+      Position(x: 4, y: 1): Cell("w"),
     ])
   }
 
@@ -82,10 +82,10 @@ struct StateTests {
       Outer()
     }
 
-    #expect(canvas.pixels == [
-      Position(x: 2, y: 1): Pixel("n"),
-      Position(x: 3, y: 1): Pixel("e"),
-      Position(x: 4, y: 1): Pixel("w"),
+    #expect(canvas.cells == [
+      Position(x: 2, y: 1): Cell("n"),
+      Position(x: 3, y: 1): Cell("e"),
+      Position(x: 4, y: 1): Cell("w"),
     ])
   }
 
@@ -112,10 +112,10 @@ struct StateTests {
       Outer()
     }
 
-    #expect(canvas.pixels == [
-      Position(x: 2, y: 1): Pixel("n"),
-      Position(x: 3, y: 1): Pixel("e"),
-      Position(x: 4, y: 1): Pixel("w"),
+    #expect(canvas.cells == [
+      Position(x: 2, y: 1): Cell("n"),
+      Position(x: 3, y: 1): Cell("e"),
+      Position(x: 4, y: 1): Cell("w"),
     ])
   }
 
@@ -139,9 +139,9 @@ struct StateTests {
       }
     }
 
-    #expect(canvas.pixels == [
-      Position(x: 1, y: 1): Pixel("a"),
-      Position(x: 1, y: 2): Pixel("b"),
+    #expect(canvas.cells == [
+      Position(x: 1, y: 1): Cell("a"),
+      Position(x: 1, y: 2): Cell("b"),
     ])
   }
 }

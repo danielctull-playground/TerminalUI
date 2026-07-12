@@ -20,16 +20,16 @@ struct ColorTests {
       color
     }
 
-    #expect(canvas.pixels == [
-      Position(x: 1, y: 1): Pixel(" ", background: color),
-      Position(x: 2, y: 1): Pixel(" ", background: color),
-      Position(x: 3, y: 1): Pixel(" ", background: color),
-      Position(x: 1, y: 2): Pixel(" ", background: color),
-      Position(x: 2, y: 2): Pixel(" ", background: color),
-      Position(x: 3, y: 2): Pixel(" ", background: color),
-      Position(x: 1, y: 3): Pixel(" ", background: color),
-      Position(x: 2, y: 3): Pixel(" ", background: color),
-      Position(x: 3, y: 3): Pixel(" ", background: color),
+    #expect(canvas.cells == [
+      Position(x: 1, y: 1): Cell(" ", background: color),
+      Position(x: 2, y: 1): Cell(" ", background: color),
+      Position(x: 3, y: 1): Cell(" ", background: color),
+      Position(x: 1, y: 2): Cell(" ", background: color),
+      Position(x: 2, y: 2): Cell(" ", background: color),
+      Position(x: 3, y: 2): Cell(" ", background: color),
+      Position(x: 1, y: 3): Cell(" ", background: color),
+      Position(x: 2, y: 3): Cell(" ", background: color),
+      Position(x: 3, y: 3): Cell(" ", background: color),
     ])
   }
 
@@ -38,7 +38,7 @@ struct ColorTests {
     canvas.render {
       Color.red
     }
-    #expect(canvas.pixels.isEmpty)
+    #expect(canvas.cells.isEmpty)
   }
 
   @Test func `width: zero`() {
@@ -46,7 +46,7 @@ struct ColorTests {
     canvas.render {
       Color.red
     }
-    #expect(canvas.pixels.isEmpty)
+    #expect(canvas.cells.isEmpty)
   }
 
 //  @Test("size", arguments: Color.testCases)

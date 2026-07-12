@@ -16,10 +16,10 @@ struct ForEachTests {
       }
     }
 
-    #expect(canvas.pixels == [
-      Position(x: 1, y: 1): Pixel("a"),
-      Position(x: 1, y: 2): Pixel("b"),
-      Position(x: 1, y: 3): Pixel("c"),
+    #expect(canvas.cells == [
+      Position(x: 1, y: 1): Cell("a"),
+      Position(x: 1, y: 2): Cell("b"),
+      Position(x: 1, y: 3): Cell("c"),
     ])
   }
 
@@ -48,9 +48,9 @@ struct ForEachTests {
 
     let canvas = TestCanvas(width: 1, height: 2)
     canvas.render { Content() }
-    #expect(canvas.pixels == [
-      Position(x: 1, y: 1): Pixel("a"),
-      Position(x: 1, y: 2): Pixel("b"),
+    #expect(canvas.cells == [
+      Position(x: 1, y: 1): Cell("a"),
+      Position(x: 1, y: 2): Cell("b"),
     ])
   }
 
@@ -86,21 +86,21 @@ struct ForEachTests {
     let renderer = Renderer(canvas: canvas, content: Content())
 
     renderer.render(event: WindowChange(size: Size(width: 1, height: 1)))
-    #expect(canvas.pixels == [
-      Position(x: 1, y: 1): Pixel("1"),
+    #expect(canvas.cells == [
+      Position(x: 1, y: 1): Cell("1"),
     ])
 
     renderer.render(event: WindowChange(size: Size(width: 2, height: 1)))
-    #expect(canvas.pixels == [
-      Position(x: 1, y: 1): Pixel("1"),
-      Position(x: 2, y: 1): Pixel("2"),
+    #expect(canvas.cells == [
+      Position(x: 1, y: 1): Cell("1"),
+      Position(x: 2, y: 1): Cell("2"),
     ])
 
     renderer.render(event: WindowChange(size: Size(width: 3, height: 1)))
-    #expect(canvas.pixels == [
-      Position(x: 1, y: 1): Pixel("1"),
-      Position(x: 2, y: 1): Pixel("2"),
-      Position(x: 3, y: 1): Pixel("3"),
+    #expect(canvas.cells == [
+      Position(x: 1, y: 1): Cell("1"),
+      Position(x: 2, y: 1): Cell("2"),
+      Position(x: 3, y: 1): Cell("3"),
     ])
   }
 
@@ -122,9 +122,9 @@ struct ForEachTests {
     let canvas = TestCanvas(width: 1, height: 2)
 
     canvas.render { Content() }
-    #expect(canvas.pixels == [
-      Position(x: 1, y: 1): Pixel("b"),
-      Position(x: 1, y: 2): Pixel("a"),
+    #expect(canvas.cells == [
+      Position(x: 1, y: 1): Cell("b"),
+      Position(x: 1, y: 2): Cell("a"),
     ])
   }
 
@@ -165,16 +165,16 @@ struct ForEachTests {
 
     // [a,b], each logs once
     renderer.render(event: WindowChange(size: Size(width: 1, height: 2)))
-    #expect(canvas.pixels == [
-      Position(x: 1, y: 1): Pixel("a"),
-      Position(x: 1, y: 2): Pixel("b"),
+    #expect(canvas.cells == [
+      Position(x: 1, y: 1): Cell("a"),
+      Position(x: 1, y: 2): Cell("b"),
     ])
 
     // reorder → [b,a], each logs again
     renderer.render(event: WindowChange(size: Size(width: 2, height: 2)))
-    #expect(canvas.pixels == [
-      Position(x: 1, y: 1): Pixel("b"), Position(x: 2, y: 1): Pixel("b"),
-      Position(x: 1, y: 2): Pixel("a"), Position(x: 2, y: 2): Pixel("a"),
+    #expect(canvas.cells == [
+      Position(x: 1, y: 1): Cell("b"), Position(x: 2, y: 1): Cell("b"),
+      Position(x: 1, y: 2): Cell("a"), Position(x: 2, y: 2): Cell("a"),
     ])
   }
 

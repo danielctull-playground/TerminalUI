@@ -17,9 +17,9 @@ struct GroupTests {
       .padding(1)
     }
 
-    #expect(canvas.pixels == [
-      Position(x: 6, y: 4): Pixel("a"),
-      Position(x: 6, y: 7): Pixel("b"),
+    #expect(canvas.cells == [
+      Position(x: 6, y: 4): Cell("a"),
+      Position(x: 6, y: 7): Cell("b"),
     ])
   }
 

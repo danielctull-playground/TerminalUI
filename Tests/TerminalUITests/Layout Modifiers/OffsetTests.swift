@@ -6,7 +6,7 @@ import Testing
 struct OffsetTests {
 
   private let view = Text("X")
-  private let pixel = Pixel("X")
+  private let cell = Cell("X")
 
   @Test func `body: fatal`() async {
     await #expect(processExitsWith: .failure) {
@@ -21,8 +21,8 @@ struct OffsetTests {
       view.offset(x: 2)
     }
 
-    #expect(canvas.pixels == [
-      Position(x: 4, y: 3): pixel,
+    #expect(canvas.cells == [
+      Position(x: 4, y: 3): cell,
     ])
   }
 
@@ -33,8 +33,8 @@ struct OffsetTests {
       view.offset(y: 2)
     }
 
-    #expect(canvas.pixels == [
-      Position(x: 2, y: 5): pixel,
+    #expect(canvas.cells == [
+      Position(x: 2, y: 5): cell,
     ])
   }
 
@@ -45,8 +45,8 @@ struct OffsetTests {
       view.offset(x: 1, y: 3)
     }
 
-    #expect(canvas.pixels == [
-      Position(x: 3, y: 6): pixel,
+    #expect(canvas.cells == [
+      Position(x: 3, y: 6): cell,
     ])
   }
 
@@ -57,8 +57,8 @@ struct OffsetTests {
       view.offset(size: Size(width: 1, height: 3))
     }
 
-    #expect(canvas.pixels == [
-      Position(x: 3, y: 6): pixel,
+    #expect(canvas.cells == [
+      Position(x: 3, y: 6): cell,
     ])
   }
 

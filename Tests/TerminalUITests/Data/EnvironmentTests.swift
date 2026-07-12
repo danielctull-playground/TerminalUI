@@ -20,14 +20,14 @@ struct EnvironmentTests {
       TestView()
     }
 
-    #expect(canvas.pixels == [
-      Position(x: 1, y: 1): Pixel("d"),
-      Position(x: 2, y: 1): Pixel("e"),
-      Position(x: 3, y: 1): Pixel("f"),
-      Position(x: 4, y: 1): Pixel("a"),
-      Position(x: 5, y: 1): Pixel("u"),
-      Position(x: 6, y: 1): Pixel("l"),
-      Position(x: 7, y: 1): Pixel("t"),
+    #expect(canvas.cells == [
+      Position(x: 1, y: 1): Cell("d"),
+      Position(x: 2, y: 1): Cell("e"),
+      Position(x: 3, y: 1): Cell("f"),
+      Position(x: 4, y: 1): Cell("a"),
+      Position(x: 5, y: 1): Cell("u"),
+      Position(x: 6, y: 1): Cell("l"),
+      Position(x: 7, y: 1): Cell("t"),
     ])
   }
 
@@ -39,8 +39,8 @@ struct EnvironmentTests {
       TestView().environment(\.value, "b")
     }
 
-    #expect(canvas.pixels == [
-      Position(x: 4, y: 1): Pixel("b"),
+    #expect(canvas.cells == [
+      Position(x: 4, y: 1): Cell("b"),
     ])
   }
 
@@ -58,15 +58,15 @@ struct EnvironmentTests {
       TestView().transformEnvironment(\.value) { $0.append("a") }
     }
 
-    #expect(canvas.pixels == [
-      Position(x: 1, y: 1): Pixel("d"),
-      Position(x: 2, y: 1): Pixel("e"),
-      Position(x: 3, y: 1): Pixel("f"),
-      Position(x: 4, y: 1): Pixel("a"),
-      Position(x: 5, y: 1): Pixel("u"),
-      Position(x: 6, y: 1): Pixel("l"),
-      Position(x: 7, y: 1): Pixel("t"),
-      Position(x: 8, y: 1): Pixel("a"),
+    #expect(canvas.cells == [
+      Position(x: 1, y: 1): Cell("d"),
+      Position(x: 2, y: 1): Cell("e"),
+      Position(x: 3, y: 1): Cell("f"),
+      Position(x: 4, y: 1): Cell("a"),
+      Position(x: 5, y: 1): Cell("u"),
+      Position(x: 6, y: 1): Cell("l"),
+      Position(x: 7, y: 1): Cell("t"),
+      Position(x: 8, y: 1): Cell("a"),
     ])
   }
 

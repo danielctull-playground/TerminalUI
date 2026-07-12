@@ -26,10 +26,10 @@ struct EitherTests {
       }
     }
 
-    #expect(canvas.pixels == [
-      Position(x: 1, y: 1): Pixel("n"),
-      Position(x: 2, y: 1): Pixel("e"),
-      Position(x: 3, y: 1): Pixel("w"),
+    #expect(canvas.cells == [
+      Position(x: 1, y: 1): Cell("n"),
+      Position(x: 2, y: 1): Cell("e"),
+      Position(x: 3, y: 1): Cell("w"),
     ])
   }
 
@@ -68,16 +68,16 @@ struct EitherTests {
     let renderer = Renderer(canvas: canvas, content: Content())
 
     renderer.render(event: WindowChange(size: Size(width: 3, height: 1)))
-    #expect(canvas.pixels[Position(x: 2, y: 1)] == Pixel("0"))
+    #expect(canvas.cells[Position(x: 2, y: 1)] == Cell("0"))
 
     renderer.render(event: WindowChange(size: Size(width: 5, height: 1)))
-    #expect(canvas.pixels[Position(x: 3, y: 1)] == Pixel("1"))
+    #expect(canvas.cells[Position(x: 3, y: 1)] == Cell("1"))
 
     renderer.render(event: WindowChange(size: Size(width: 7, height: 1)))
-    #expect(canvas.pixels[Position(x: 4, y: 1)] == Pixel("1"))
+    #expect(canvas.cells[Position(x: 4, y: 1)] == Cell("1"))
 
     renderer.render(event: WindowChange(size: Size(width: 9, height: 1)))
-    #expect(canvas.pixels[Position(x: 5, y: 1)] == Pixel("3"))
+    #expect(canvas.cells[Position(x: 5, y: 1)] == Cell("3"))
   }
 
   @MainActor
