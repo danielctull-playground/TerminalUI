@@ -10,7 +10,7 @@ package struct TextStreamCanvas<Output: TextOutputStream>: Canvas {
   }
 
   package func draw(_ cell: Cell, at position: Position) {
-    output.write(.selectGraphicRendition(cell.graphicRendition))
+    output.write(.selectGraphicRendition(cell.style.graphicRendition))
     output.write(position.csi)
     output.write(cell.content)
   }

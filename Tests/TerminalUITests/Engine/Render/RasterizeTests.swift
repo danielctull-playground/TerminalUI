@@ -9,7 +9,7 @@ extension CanvasTests {
 
     @Test func `fill covers every cell of its frame`() {
 
-      let style = Style(rendition: Cell(" ", background: .red).graphicRendition)
+      let style = Cell(" ", background: .red).style
       let list = DisplayList(items: [
         DisplayList.Item(
           frame: Rect(x: 1, y: 1, width: 2, height: 2),
@@ -29,7 +29,7 @@ extension CanvasTests {
 
     @Test func `text lays characters left to right`() {
 
-      let style = Style(rendition: Cell(" ").graphicRendition)
+      let style = Cell(" ").style
       let list = DisplayList(items: [
         DisplayList.Item(
           frame: Rect(x: 2, y: 3, width: 3, height: 1),
@@ -46,8 +46,8 @@ extension CanvasTests {
     }
 
     @Test func `later items win on overlap`() {
-      let red = Style(rendition: Cell(" ", background: .red).graphicRendition)
-      let blue = Style(rendition: Cell(" ", background: .blue).graphicRendition)
+      let red = Cell(" ", background: .red).style
+      let blue = Cell(" ", background: .blue).style
       let list = DisplayList(items: [
         DisplayList.Item(frame: Rect(x: 1, y: 1, width: 1, height: 1), content: .fill(red)),
         DisplayList.Item(frame: Rect(x: 1, y: 1, width: 1, height: 1), content: .fill(blue)),
@@ -63,7 +63,7 @@ extension CanvasTests {
 
     @Test func `empty frames produce no cells`() {
 
-      let style = Style(rendition: Cell(" ").graphicRendition)
+      let style = Cell(" ").style
       let list = DisplayList(items: [
         DisplayList.Item(frame: Rect(x: 1, y: 1, width: 0, height: 5), content: .fill(style)),
         DisplayList.Item(frame: Rect(x: 1, y: 1, width: 5, height: 0), content: .text("hi", style)),

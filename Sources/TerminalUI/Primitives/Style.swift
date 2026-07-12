@@ -1,12 +1,12 @@
 
 struct Style: Equatable {
-  var rendition: [GraphicRendition]
+  var graphicRendition: [GraphicRendition]
 }
 
 extension EnvironmentValues {
 
   var style: Style {
-    Style(rendition: [
+    Style(graphicRendition: [
       foregroundColor.foreground,
       backgroundColor.background,
       bold.graphicRendition,
