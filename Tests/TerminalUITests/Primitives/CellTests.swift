@@ -1,4 +1,4 @@
-import TerminalUI
+@testable import TerminalUI
 import Testing
 
 @Suite("Cell")

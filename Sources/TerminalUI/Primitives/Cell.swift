@@ -1,41 +1,22 @@
 
 public struct Cell: Equatable, Sendable {
-
   package let content: Character
   let style: Style
 }
 
 extension Cell {
 
-  public init(
-    _ content: Character,
-    foreground: Color = .default,
-    background: Color = .default
-  ) {
-    self.init(
-      content,
-      foreground: foreground,
-      background: background,
-      bold: .off,
-      italic: .off,
-      underline: .off,
-      blinking: .off,
-      inverse: .off,
-      hidden: .off,
-      strikethrough: .off)
-  }
-
   init(
     _ content: Character,
     foreground: Color = .default,
     background: Color = .default,
-    bold: Bold,
-    italic: Italic,
-    underline: UnderlineStyle,
-    blinking: Blinking,
-    inverse: Inverse,
-    hidden: Hidden,
-    strikethrough: Strikethrough
+    bold: Bold = .off,
+    italic: Italic = .off,
+    underline: UnderlineStyle = .off,
+    blinking: Blinking = .off,
+    inverse: Inverse = .off,
+    hidden: Hidden = .off,
+    strikethrough: Strikethrough = .off
   ) {
     self.content = content
     self.style = Style(
