@@ -22,7 +22,7 @@ package struct Renderer<Content: View, Canvas: TerminalUI.Canvas> {
     graph.setValue(of: environment, to: values)
 
     geometry = graph.map(environment) {
-      ViewGeometry(frame: Rect(origin: .origin, size: $0.windowSize))
+      ViewGeometry(frame: Rect(origin: .origin, size: $0.windowSize.size))
     }
 
     let inputs = ViewInputs(

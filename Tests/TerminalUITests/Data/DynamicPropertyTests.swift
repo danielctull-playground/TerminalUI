@@ -43,7 +43,7 @@ struct DynamicPropertyTests {
     struct EnvironmentDynamicProperty: DynamicProperty {
       @Environment(\.windowSize) private var windowSize
       var wrappedValue: String {
-        String(describing: windowSize.width)
+        String(describing: windowSize.size.width)
       }
     }
 

@@ -58,8 +58,8 @@ struct ForEachTests {
   func `rows maintain state across recomputes`() {
 
     struct WindowSizeKey: PreferenceKey {
-      static var defaultValue: Size { .zero }
-      static func reduce(value: inout Size, nextValue: () -> Size) {
+      static var defaultValue: WindowSize { .zero }
+      static func reduce(value: inout WindowSize, nextValue: () -> WindowSize) {
         value = nextValue()
       }
     }
@@ -70,7 +70,7 @@ struct ForEachTests {
       var body: some View {
         Text(widths)
           .preference(key: WindowSizeKey.self, value: windowSize)
-          .onPreferenceChange(WindowSizeKey.self) { widths += String($0.width) }
+          .onPreferenceChange(WindowSizeKey.self) { widths += String($0.size.width) }
       }
     }
 
@@ -140,20 +140,20 @@ struct ForEachTests {
     // accumulates ("aa"); a rebuilt row resets ("a"). So a doubled string
     // proves BOTH that the reorder happened AND that state survived it.
     struct Row: View {
-      @Environment(\.windowSize) private var size
+      @Environment(\.windowSize) private var windowSize
       let value: String
       @State private var log = ""
       var body: some View {
         Text(log)
-          .preference(key: TickKey.self, value: size.width)
+          .preference(key: TickKey.self, value: windowSize.size.width)
           .onPreferenceChange(TickKey.self) { _ in log += value }
       }
     }
 
     struct Content: View {
-      @Environment(\.windowSize) var size
+      @Environment(\.windowSize) var windowSize
       var body: some View {
-        let items = size.width == 1 ? ["a", "b"] : ["b", "a"]
+        let items = windowSize.size.width == 1 ? ["a", "b"] : ["b", "a"]
         VStack(spacing: 0) {
           ForEach(items, id: \.self) { Row(value: $0) }
         }
@@ -194,10 +194,10 @@ struct ForEachTests {
     }
 
     struct Content: View {
-      @Environment(\.windowSize) var size
+      @Environment(\.windowSize) var windowSize
       var body: some View {
         VStack(spacing: 0) {
-          ForEach(1...size.height, id: \.self) { Row(value: $0) }
+          ForEach(1...windowSize.size.height, id: \.self) { Row(value: $0) }
         }
       }
     }

@@ -3,17 +3,21 @@ import AsyncAlgorithms
 import Foundation
 
 extension EnvironmentValues {
-  @Entry fileprivate(set) var windowSize = Size.zero
+  @Entry fileprivate(set) var windowSize = WindowSize.zero
 }
 
 struct WindowSize: Equatable {
   let size: Size
 }
 
+extension WindowSize {
+  static let zero = WindowSize(size: .zero)
+}
+
 extension WindowSize: Event {
 
   func updateEnvironment(_ environment: inout EnvironmentValues) {
-    environment.windowSize = size
+    environment.windowSize = self
   }
 }
 

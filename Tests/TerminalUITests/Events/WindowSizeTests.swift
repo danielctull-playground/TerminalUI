@@ -29,10 +29,10 @@ struct WindowSizeTests {
   @Test
   func updateEnvironment() {
     let size = Size(width: .random(in: 0...1000), height: .random(in: 0...1000))
-    let change = WindowSize(size: size)
+    let windowSize = WindowSize(size: size)
     var environment = EnvironmentValues()
-    change.updateEnvironment(&environment)
-    #expect(environment.windowSize == size)
+    windowSize.updateEnvironment(&environment)
+    #expect(environment.windowSize == windowSize)
   }
 
   @Suite("Sequence", .serialized)

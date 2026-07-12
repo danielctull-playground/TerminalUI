@@ -58,9 +58,9 @@ struct EitherTests {
 
     @MainActor
     struct Content: @MainActor View {
-      @Environment(\.windowSize) var size
+      @Environment(\.windowSize) var windowSize
       var body: some View {
-        if size.width.isMultiple(of: 3) { MultipleOfThree() } else { Not() }
+        if windowSize.size.width.isMultiple(of: 3) { MultipleOfThree() } else { Not() }
       }
     }
 
@@ -96,9 +96,9 @@ struct EitherTests {
     }
 
     struct Root: View {
-      @Environment(\.windowSize) var size
+      @Environment(\.windowSize) var windowSize
       var body: some View {
-        if size.width.isMultiple(of: 2) { Content() } else { EmptyView() }
+        if windowSize.size.width.isMultiple(of: 2) { Content() } else { EmptyView() }
       }
     }
 

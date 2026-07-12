@@ -84,9 +84,9 @@ struct OptionalTests {
 
     @MainActor
     struct Content: @MainActor View {
-      @Environment(\.windowSize) var size
+      @Environment(\.windowSize) var windowSize
       var body: some View {
-        if size.width.isMultiple(of: 3) { MultipleOfThree() }
+        if windowSize.size.width.isMultiple(of: 3) { MultipleOfThree() }
       }
     }
 
@@ -125,9 +125,9 @@ struct OptionalTests {
     }
 
     struct Root: View {
-      @Environment(\.windowSize) var size
+      @Environment(\.windowSize) var windowSize
       var body: some View {
-        if size.width.isMultiple(of: 2) { Content() }
+        if windowSize.size.width.isMultiple(of: 2) { Content() }
       }
     }
 

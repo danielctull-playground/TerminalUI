@@ -8,6 +8,6 @@ struct Screen<Content: View>: View {
     VStack {
       content
     }
-    .frame(width: windowSize.width, height: windowSize.height)
+    .frame(width: windowSize.size.width, height: windowSize.size.height)
   }
 }

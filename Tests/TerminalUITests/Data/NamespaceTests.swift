@@ -76,11 +76,11 @@ struct NamespaceTests {
     }
 
     struct Content: View {
-      @Environment(\.windowSize) private var size
+      @Environment(\.windowSize) private var windowSize
       @Namespace private var a
       var body: some View {
         Text(a.description)
-          .preference(key: TickKey.self, value: size.height) // Cause a re-draw
+          .preference(key: TickKey.self, value: windowSize.size.height) // Redraw
       }
     }
 
