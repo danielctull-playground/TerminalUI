@@ -20,8 +20,8 @@ struct NamespaceTests {
       Content()
     }
 
-    #expect(canvas.pixels == [
-      Position(x: 1, y: 1): Pixel("D")
+    #expect(canvas.cells == [
+      Position(x: 1, y: 1): Cell("D")
     ])
   }
 
@@ -63,8 +63,8 @@ struct NamespaceTests {
       Content()
     }
 
-    #expect(canvas.pixels == [
-      Position(x: 1, y: 1): Pixel("D")
+    #expect(canvas.cells == [
+      Position(x: 1, y: 1): Cell("D")
     ])
   }
 
@@ -88,10 +88,10 @@ struct NamespaceTests {
     let renderer = Renderer(canvas: canvas, content: Content())
 
     renderer.render(event: WindowChange(size: Size(width: 1, height: 1)))
-    let first = canvas.pixels[Position(x: 1, y: 1)]
+    let first = canvas.cells[Position(x: 1, y: 1)]
 
     renderer.render(event: WindowChange(size: Size(width: 1, height: 3)))
-    let second = canvas.pixels[Position(x: 1, y: 2)]
+    let second = canvas.cells[Position(x: 1, y: 2)]
 
     #expect(first == second)
   }

@@ -7,7 +7,7 @@ struct CanvasTests {
 
   @Test func `Drawing with default values`() {
     let canvas = TextStreamCanvas(output: .memory)
-    canvas.draw(Pixel("a"), at: Position(x: 2, y: 1))
+    canvas.draw(Cell("a"), at: Position(x: 2, y: 1))
     #expect(canvas.output.controlSequences == [
       "[2J",     // Clear screen
       "[?1049h", // Alternative buffer on
@@ -22,8 +22,8 @@ struct CanvasTests {
     canvas.render {
       Text("A")
     }
-    #expect(canvas.pixels == [
-      Position(x: 2, y: 2): Pixel("A")
+    #expect(canvas.cells == [
+      Position(x: 2, y: 2): Cell("A")
     ])
   }
 }

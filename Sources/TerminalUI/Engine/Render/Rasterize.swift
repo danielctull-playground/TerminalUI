@@ -17,7 +17,7 @@ extension Canvas {
     guard frame.size.width > 0, frame.size.height > 0 else { return }
     for x in frame.minX...frame.maxX {
       for y in frame.minY...frame.maxY {
-        draw(Pixel(content: " ", graphicRendition: style.rendition), at: Position(x: x, y: y))
+        draw(Cell(content: " ", graphicRendition: style.rendition), at: Position(x: x, y: y))
       }
     }
   }
@@ -27,8 +27,8 @@ extension Canvas {
     let lines = text.lines(ofLength: frame.size.width)
     for (line, y) in zip(lines, frame.origin.y...) {
       for (character, x) in zip(line, frame.origin.x...) {
-        let pixel = Pixel(content: character, graphicRendition: style.rendition)
-        draw(pixel, at: Position(x: x, y: y))
+        let cell = Cell(content: character, graphicRendition: style.rendition)
+        draw(cell, at: Position(x: x, y: y))
       }
     }
   }

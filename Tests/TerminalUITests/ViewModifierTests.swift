@@ -49,9 +49,9 @@ struct ViewModifierTests {
       }
     }
 
-    #expect(canvas.pixels == [
-      Position(x: 1, y: 1): Pixel("a"),
-      Position(x: 1, y: 2): Pixel("b"),
+    #expect(canvas.cells == [
+      Position(x: 1, y: 1): Cell("a"),
+      Position(x: 1, y: 2): Cell("b"),
     ])
   }
 

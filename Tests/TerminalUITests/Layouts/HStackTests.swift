@@ -19,7 +19,7 @@ struct HStackTests {
       HStack {}
     }
 
-    #expect(canvas.pixels == [:])
+    #expect(canvas.cells == [:])
   }
 
   @Test func `single line`() {
@@ -34,10 +34,10 @@ struct HStackTests {
       }
     }
 
-    #expect(canvas.pixels == [
-      Position(x: 1, y: 1): Pixel("1"),
-      Position(x: 2, y: 1): Pixel("2"),
-      Position(x: 3, y: 1): Pixel("3"),
+    #expect(canvas.cells == [
+      Position(x: 1, y: 1): Cell("1"),
+      Position(x: 2, y: 1): Cell("2"),
+      Position(x: 3, y: 1): Cell("3"),
     ])
   }
 
@@ -53,12 +53,12 @@ struct HStackTests {
       }
     }
 
-    #expect(canvas.pixels == [
-      Position(x: 1,  y: 1): Pixel(" ", background: .blue),
-      Position(x: 2,  y: 1): Pixel(" ", background: .blue),
-      Position(x: 3,  y: 1): Pixel("A"),
-      Position(x: 4,  y: 1): Pixel(" ", background: .yellow),
-      Position(x: 5,  y: 1): Pixel(" ", background: .yellow),
+    #expect(canvas.cells == [
+      Position(x: 1,  y: 1): Cell(" ", background: .blue),
+      Position(x: 2,  y: 1): Cell(" ", background: .blue),
+      Position(x: 3,  y: 1): Cell("A"),
+      Position(x: 4,  y: 1): Cell(" ", background: .yellow),
+      Position(x: 5,  y: 1): Cell(" ", background: .yellow),
     ])
   }
 
@@ -76,18 +76,18 @@ struct HStackTests {
       }
     }
 
-    #expect(canvas.pixels == [
-      Position(x:  1, y: 1): Pixel(" ", background: .blue),
-      Position(x:  2, y: 1): Pixel(" ", background: .blue),
-      Position(x:  3, y: 1): Pixel(" ", background: .blue),
-      Position(x:  4, y: 1): Pixel("A"),
-      Position(x:  5, y: 1): Pixel(" ", background: .yellow),
-      Position(x:  6, y: 1): Pixel(" ", background: .yellow),
-      Position(x:  7, y: 1): Pixel(" ", background: .yellow),
-      Position(x:  8, y: 1): Pixel("B"),
-      Position(x:  9, y: 1): Pixel(" ", background: .red),
-      Position(x: 10, y: 1): Pixel(" ", background: .red),
-      Position(x: 11, y: 1): Pixel(" ", background: .red),
+    #expect(canvas.cells == [
+      Position(x:  1, y: 1): Cell(" ", background: .blue),
+      Position(x:  2, y: 1): Cell(" ", background: .blue),
+      Position(x:  3, y: 1): Cell(" ", background: .blue),
+      Position(x:  4, y: 1): Cell("A"),
+      Position(x:  5, y: 1): Cell(" ", background: .yellow),
+      Position(x:  6, y: 1): Cell(" ", background: .yellow),
+      Position(x:  7, y: 1): Cell(" ", background: .yellow),
+      Position(x:  8, y: 1): Cell("B"),
+      Position(x:  9, y: 1): Cell(" ", background: .red),
+      Position(x: 10, y: 1): Cell(" ", background: .red),
+      Position(x: 11, y: 1): Cell(" ", background: .red),
     ])
   }
 
@@ -108,12 +108,12 @@ struct HStackTests {
       }
     }
 
-    #expect(canvas.pixels == [
-      Position(x:  2, y: y): Pixel("A"),
-      Position(x:  4, y: y): Pixel("B"),
-      Position(x:  3, y: 1): Pixel(" ", background: .black),
-      Position(x:  3, y: 2): Pixel(" ", background: .black),
-      Position(x:  3, y: 3): Pixel(" ", background: .black),
+    #expect(canvas.cells == [
+      Position(x:  2, y: y): Cell("A"),
+      Position(x:  4, y: y): Cell("B"),
+      Position(x:  3, y: 1): Cell(" ", background: .black),
+      Position(x:  3, y: 2): Cell(" ", background: .black),
+      Position(x:  3, y: 3): Cell(" ", background: .black),
     ])
   }
 
@@ -135,10 +135,10 @@ struct HStackTests {
       }
     }
 
-    #expect(canvas.pixels == [
-      Position(x: a, y: 1): Pixel("A"),
-      Position(x: b, y: 1): Pixel("B"),
-      Position(x: c, y: 1): Pixel("C"),
+    #expect(canvas.cells == [
+      Position(x: a, y: 1): Cell("A"),
+      Position(x: b, y: 1): Cell("B"),
+      Position(x: c, y: 1): Cell("C"),
     ])
   }
 }

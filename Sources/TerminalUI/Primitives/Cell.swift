@@ -1,5 +1,5 @@
 
-public struct Pixel: Equatable, Sendable {
+public struct Cell: Equatable, Sendable {
 
   package let content: Character
   let graphicRendition: [GraphicRendition]
@@ -57,8 +57,8 @@ public struct Pixel: Equatable, Sendable {
   }
 }
 
-extension Pixel: CustomStringConvertible {
+extension Cell: CustomStringConvertible {
   public var description: String {
-    "Pixel(\"\(content)\")"
+    "Cell(\"\(content)\")"
   }
 }

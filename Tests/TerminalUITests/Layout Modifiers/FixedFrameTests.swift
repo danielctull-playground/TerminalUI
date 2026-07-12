@@ -7,7 +7,7 @@ struct FixedFrameTests {
 
   private let canvas = TestCanvas(width: 3, height: 3)
   private let view = Color.blue
-  private let pixel = Pixel(" ", background: .blue)
+  private let cell = Cell(" ", background: .blue)
 
   @Test func `body: fatal`() async {
     await #expect(processExitsWith: .failure) {
@@ -21,16 +21,16 @@ struct FixedFrameTests {
       view.frame()
     }
 
-    #expect(canvas.pixels == [
-      Position(x: 1, y: 1): pixel,
-      Position(x: 2, y: 1): pixel,
-      Position(x: 3, y: 1): pixel,
-      Position(x: 1, y: 2): pixel,
-      Position(x: 2, y: 2): pixel,
-      Position(x: 3, y: 2): pixel,
-      Position(x: 1, y: 3): pixel,
-      Position(x: 2, y: 3): pixel,
-      Position(x: 3, y: 3): pixel,
+    #expect(canvas.cells == [
+      Position(x: 1, y: 1): cell,
+      Position(x: 2, y: 1): cell,
+      Position(x: 3, y: 1): cell,
+      Position(x: 1, y: 2): cell,
+      Position(x: 2, y: 2): cell,
+      Position(x: 3, y: 2): cell,
+      Position(x: 1, y: 3): cell,
+      Position(x: 2, y: 3): cell,
+      Position(x: 3, y: 3): cell,
     ])
   }
 
@@ -40,10 +40,10 @@ struct FixedFrameTests {
       view.frame(width: 1)
     }
 
-    #expect(canvas.pixels == [
-      Position(x: 2, y: 1): pixel,
-      Position(x: 2, y: 2): pixel,
-      Position(x: 2, y: 3): pixel,
+    #expect(canvas.cells == [
+      Position(x: 2, y: 1): cell,
+      Position(x: 2, y: 2): cell,
+      Position(x: 2, y: 3): cell,
     ])
   }
 
@@ -53,13 +53,13 @@ struct FixedFrameTests {
       view.frame(width: 2)
     }
 
-    #expect(canvas.pixels == [
-      Position(x: 1, y: 1): pixel,
-      Position(x: 1, y: 2): pixel,
-      Position(x: 1, y: 3): pixel,
-      Position(x: 2, y: 1): pixel,
-      Position(x: 2, y: 2): pixel,
-      Position(x: 2, y: 3): pixel,
+    #expect(canvas.cells == [
+      Position(x: 1, y: 1): cell,
+      Position(x: 1, y: 2): cell,
+      Position(x: 1, y: 3): cell,
+      Position(x: 2, y: 1): cell,
+      Position(x: 2, y: 2): cell,
+      Position(x: 2, y: 3): cell,
     ])
   }
 
@@ -69,10 +69,10 @@ struct FixedFrameTests {
       view.frame(height: 1)
     }
 
-    #expect(canvas.pixels == [
-      Position(x: 1, y: 2): pixel,
-      Position(x: 2, y: 2): pixel,
-      Position(x: 3, y: 2): pixel,
+    #expect(canvas.cells == [
+      Position(x: 1, y: 2): cell,
+      Position(x: 2, y: 2): cell,
+      Position(x: 3, y: 2): cell,
     ])
   }
 
@@ -82,13 +82,13 @@ struct FixedFrameTests {
       view.frame(height: 2)
     }
 
-    #expect(canvas.pixels == [
-      Position(x: 1, y: 1): pixel,
-      Position(x: 2, y: 1): pixel,
-      Position(x: 3, y: 1): pixel,
-      Position(x: 1, y: 2): pixel,
-      Position(x: 2, y: 2): pixel,
-      Position(x: 3, y: 2): pixel,
+    #expect(canvas.cells == [
+      Position(x: 1, y: 1): cell,
+      Position(x: 2, y: 1): cell,
+      Position(x: 3, y: 1): cell,
+      Position(x: 1, y: 2): cell,
+      Position(x: 2, y: 2): cell,
+      Position(x: 3, y: 2): cell,
     ])
   }
 
@@ -98,8 +98,8 @@ struct FixedFrameTests {
       view.frame(width: 1, height: 1)
     }
 
-    #expect(canvas.pixels == [
-      Position(x: 2, y: 2): pixel,
+    #expect(canvas.cells == [
+      Position(x: 2, y: 2): cell,
     ])
   }
 
@@ -109,11 +109,11 @@ struct FixedFrameTests {
       view.frame(width: 2, height: 2)
     }
 
-    #expect(canvas.pixels == [
-      Position(x: 1, y: 1): pixel,
-      Position(x: 2, y: 1): pixel,
-      Position(x: 1, y: 2): pixel,
-      Position(x: 2, y: 2): pixel,
+    #expect(canvas.cells == [
+      Position(x: 1, y: 1): cell,
+      Position(x: 2, y: 1): cell,
+      Position(x: 1, y: 2): cell,
+      Position(x: 2, y: 2): cell,
     ])
   }
 
@@ -125,8 +125,8 @@ struct FixedFrameTests {
         .frame(width: 3, height: 3)
     }
 
-    #expect(canvas.pixels == [
-      Position(x: 2, y: 2): pixel,
+    #expect(canvas.cells == [
+      Position(x: 2, y: 2): cell,
     ])
   }
 
@@ -149,7 +149,7 @@ struct FixedFrameTests {
         .frame(width: 3, height: 3, alignment: alignment)
     }
 
-    #expect(canvas.pixels == [position: pixel])
+    #expect(canvas.cells == [position: cell])
   }
 
   @Suite(.tags(.preferenceValues))

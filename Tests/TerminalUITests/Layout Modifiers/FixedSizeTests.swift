@@ -6,7 +6,7 @@ import Testing
 struct FixedSizeTests {
 
   private let view = Color.blue
-  private let pixel = Pixel(" ", background: .blue)
+  private let cell = Cell(" ", background: .blue)
 
   @Test func `body: fatal`() async {
     await #expect(processExitsWith: .failure) {
@@ -22,17 +22,17 @@ struct FixedSizeTests {
     }
 
     // The default length for a nil length in a proposed size is 10.
-    #expect(canvas.pixels == [
-      Position(x: -4, y: 1): pixel,
-      Position(x: -3, y: 1): pixel,
-      Position(x: -2, y: 1): pixel,
-      Position(x: -1, y: 1): pixel,
-      Position(x:  0, y: 1): pixel,
-      Position(x:  1, y: 1): pixel,
-      Position(x:  2, y: 1): pixel,
-      Position(x:  3, y: 1): pixel,
-      Position(x:  4, y: 1): pixel,
-      Position(x:  5, y: 1): pixel,
+    #expect(canvas.cells == [
+      Position(x: -4, y: 1): cell,
+      Position(x: -3, y: 1): cell,
+      Position(x: -2, y: 1): cell,
+      Position(x: -1, y: 1): cell,
+      Position(x:  0, y: 1): cell,
+      Position(x:  1, y: 1): cell,
+      Position(x:  2, y: 1): cell,
+      Position(x:  3, y: 1): cell,
+      Position(x:  4, y: 1): cell,
+      Position(x:  5, y: 1): cell,
     ])
   }
 
@@ -44,17 +44,17 @@ struct FixedSizeTests {
     }
 
     // The default length for a nil length in a proposed size is 10.
-    #expect(canvas.pixels == [
-      Position(x: 1, y: -4): pixel,
-      Position(x: 1, y: -3): pixel,
-      Position(x: 1, y: -2): pixel,
-      Position(x: 1, y: -1): pixel,
-      Position(x: 1, y:  0): pixel,
-      Position(x: 1, y:  1): pixel,
-      Position(x: 1, y:  2): pixel,
-      Position(x: 1, y:  3): pixel,
-      Position(x: 1, y:  4): pixel,
-      Position(x: 1, y:  5): pixel,
+    #expect(canvas.cells == [
+      Position(x: 1, y: -4): cell,
+      Position(x: 1, y: -3): cell,
+      Position(x: 1, y: -2): cell,
+      Position(x: 1, y: -1): cell,
+      Position(x: 1, y:  0): cell,
+      Position(x: 1, y:  1): cell,
+      Position(x: 1, y:  2): cell,
+      Position(x: 1, y:  3): cell,
+      Position(x: 1, y:  4): cell,
+      Position(x: 1, y:  5): cell,
     ])
   }
 
@@ -66,7 +66,7 @@ struct FixedSizeTests {
     }
 
     // The default length for a nil length in a proposed size is 10.
-    #expect(canvas.pixels.count == 100)
+    #expect(canvas.cells.count == 100)
 
     let xs = -4...5
     let ys = -4...5
@@ -76,8 +76,8 @@ struct FixedSizeTests {
       }
     }
 
-    let expected = Dictionary(uniqueKeysWithValues: positions.map { ($0, pixel) })
-    #expect(canvas.pixels == expected)
+    let expected = Dictionary(uniqueKeysWithValues: positions.map { ($0, cell) })
+    #expect(canvas.cells == expected)
   }
 
   @Suite(.tags(.preferenceValues))

@@ -18,7 +18,7 @@ struct EmptyViewTests {
       EmptyView()
     }
 
-    #expect(canvas.pixels.isEmpty)
+    #expect(canvas.cells.isEmpty)
   }
 
   @Suite(.tags(.preferenceValues))

@@ -18,21 +18,21 @@ struct TextFieldTests {
     let renderer = Renderer(canvas: canvas, content: Content())
     renderer.render(event: WindowChange(size: Size(width: 3, height: 1)))
 
-    #expect(canvas.pixels == [
-      Position(x: 2, y: 1): Pixel("_"),
+    #expect(canvas.cells == [
+      Position(x: 2, y: 1): Cell("_"),
     ])
 
     renderer.render(event: KeyPress("h"))
-    #expect(canvas.pixels == [
-      Position(x: 1, y: 1): Pixel("h"),
-      Position(x: 2, y: 1): Pixel("_"),
+    #expect(canvas.cells == [
+      Position(x: 1, y: 1): Cell("h"),
+      Position(x: 2, y: 1): Cell("_"),
     ])
 
     renderer.render(event: KeyPress("i"))
-    #expect(canvas.pixels == [
-      Position(x: 1, y: 1): Pixel("h"),
-      Position(x: 2, y: 1): Pixel("i"),
-      Position(x: 3, y: 1): Pixel("_"),
+    #expect(canvas.cells == [
+      Position(x: 1, y: 1): Cell("h"),
+      Position(x: 2, y: 1): Cell("i"),
+      Position(x: 3, y: 1): Cell("_"),
     ])
   }
 
@@ -53,39 +53,39 @@ struct TextFieldTests {
     let renderer = Renderer(canvas: canvas, content: Content())
     renderer.render(event: WindowChange(size: Size(width: 3, height: 2)))
 
-    #expect(canvas.pixels == [
-      Position(x: 2, y: 1): Pixel("_"),
+    #expect(canvas.cells == [
+      Position(x: 2, y: 1): Cell("_"),
     ])
 
     renderer.render(event: KeyPress("h"))
-    #expect(canvas.pixels == [
-      Position(x: 1, y: 1): Pixel("h"),
-      Position(x: 2, y: 1): Pixel("_"),
+    #expect(canvas.cells == [
+      Position(x: 1, y: 1): Cell("h"),
+      Position(x: 2, y: 1): Cell("_"),
     ])
 
     renderer.render(event: KeyPress("i"))
-    #expect(canvas.pixels == [
-      Position(x: 1, y: 1): Pixel("h"),
-      Position(x: 2, y: 1): Pixel("i"),
-      Position(x: 3, y: 1): Pixel("_"),
+    #expect(canvas.cells == [
+      Position(x: 1, y: 1): Cell("h"),
+      Position(x: 2, y: 1): Cell("i"),
+      Position(x: 3, y: 1): Cell("_"),
     ])
 
-    canvas.pixels = [:] // Re-rendering bug.
+    canvas.cells = [:] // Re-rendering bug.
 
     renderer.render(event: KeyPress("\t")) // tab
-    #expect(canvas.pixels == [
-      Position(x: 1, y: 1): Pixel("h"),
-      Position(x: 2, y: 1): Pixel("i"),
-      Position(x: 2, y: 2): Pixel("_"),
+    #expect(canvas.cells == [
+      Position(x: 1, y: 1): Cell("h"),
+      Position(x: 2, y: 1): Cell("i"),
+      Position(x: 2, y: 2): Cell("_"),
     ])
 
-//    canvas.pixels = [:]
+//    canvas.cells = [:]
     renderer.render(event: KeyPress("x"))
-    #expect(canvas.pixels == [
-      Position(x: 1, y: 1): Pixel("h"),
-      Position(x: 2, y: 1): Pixel("i"),
-      Position(x: 1, y: 2): Pixel("x"),
-      Position(x: 2, y: 2): Pixel("_"),
+    #expect(canvas.cells == [
+      Position(x: 1, y: 1): Cell("h"),
+      Position(x: 2, y: 1): Cell("i"),
+      Position(x: 1, y: 2): Cell("x"),
+      Position(x: 2, y: 2): Cell("_"),
     ])
   }
 }

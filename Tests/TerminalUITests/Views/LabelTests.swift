@@ -18,17 +18,17 @@ struct LabelTests {
         }
       }
 
-      #expect(canvas.pixels == [
-        Position(x:  1, y: 1): Pixel("i"),
-        Position(x:  2, y: 1): Pixel("c"),
-        Position(x:  3, y: 1): Pixel("o"),
-        Position(x:  4, y: 1): Pixel("n"),
+      #expect(canvas.cells == [
+        Position(x:  1, y: 1): Cell("i"),
+        Position(x:  2, y: 1): Cell("c"),
+        Position(x:  3, y: 1): Cell("o"),
+        Position(x:  4, y: 1): Cell("n"),
 
-        Position(x:  6, y: 1): Pixel("t"),
-        Position(x:  7, y: 1): Pixel("i"),
-        Position(x:  8, y: 1): Pixel("t"),
-        Position(x:  9, y: 1): Pixel("l"),
-        Position(x: 10, y: 1): Pixel("e"),
+        Position(x:  6, y: 1): Cell("t"),
+        Position(x:  7, y: 1): Cell("i"),
+        Position(x:  8, y: 1): Cell("t"),
+        Position(x:  9, y: 1): Cell("l"),
+        Position(x: 10, y: 1): Cell("e"),
       ])
     }
 
@@ -44,17 +44,17 @@ struct LabelTests {
         .labelStyle(.titleAndIcon)
       }
 
-      #expect(canvas.pixels == [
-        Position(x:  1, y: 1): Pixel("i"),
-        Position(x:  2, y: 1): Pixel("c"),
-        Position(x:  3, y: 1): Pixel("o"),
-        Position(x:  4, y: 1): Pixel("n"),
+      #expect(canvas.cells == [
+        Position(x:  1, y: 1): Cell("i"),
+        Position(x:  2, y: 1): Cell("c"),
+        Position(x:  3, y: 1): Cell("o"),
+        Position(x:  4, y: 1): Cell("n"),
 
-        Position(x:  6, y: 1): Pixel("t"),
-        Position(x:  7, y: 1): Pixel("i"),
-        Position(x:  8, y: 1): Pixel("t"),
-        Position(x:  9, y: 1): Pixel("l"),
-        Position(x: 10, y: 1): Pixel("e"),
+        Position(x:  6, y: 1): Cell("t"),
+        Position(x:  7, y: 1): Cell("i"),
+        Position(x:  8, y: 1): Cell("t"),
+        Position(x:  9, y: 1): Cell("l"),
+        Position(x: 10, y: 1): Cell("e"),
       ])
     }
 
@@ -70,12 +70,12 @@ struct LabelTests {
         .labelStyle(.titleOnly)
       }
 
-      #expect(canvas.pixels == [
-        Position(x: 4, y: 1): Pixel("t"),
-        Position(x: 5, y: 1): Pixel("i"),
-        Position(x: 6, y: 1): Pixel("t"),
-        Position(x: 7, y: 1): Pixel("l"),
-        Position(x: 8, y: 1): Pixel("e"),
+      #expect(canvas.cells == [
+        Position(x: 4, y: 1): Cell("t"),
+        Position(x: 5, y: 1): Cell("i"),
+        Position(x: 6, y: 1): Cell("t"),
+        Position(x: 7, y: 1): Cell("l"),
+        Position(x: 8, y: 1): Cell("e"),
       ])
     }
 
@@ -91,11 +91,11 @@ struct LabelTests {
         .labelStyle(.iconOnly)
       }
 
-      #expect(canvas.pixels == [
-        Position(x: 4, y: 1): Pixel("i"),
-        Position(x: 5, y: 1): Pixel("c"),
-        Position(x: 6, y: 1): Pixel("o"),
-        Position(x: 7, y: 1): Pixel("n"),
+      #expect(canvas.cells == [
+        Position(x: 4, y: 1): Cell("i"),
+        Position(x: 5, y: 1): Cell("c"),
+        Position(x: 6, y: 1): Cell("o"),
+        Position(x: 7, y: 1): Cell("n"),
       ])
     }
 
@@ -122,17 +122,17 @@ struct LabelTests {
         .labelStyle(Custom())
       }
 
-      #expect(canvas.pixels == [
-        Position(x: 1, y: 1): Pixel("i"),
-        Position(x: 2, y: 1): Pixel("c"),
-        Position(x: 3, y: 1): Pixel("o"),
-        Position(x: 4, y: 1): Pixel("n"),
+      #expect(canvas.cells == [
+        Position(x: 1, y: 1): Cell("i"),
+        Position(x: 2, y: 1): Cell("c"),
+        Position(x: 3, y: 1): Cell("o"),
+        Position(x: 4, y: 1): Cell("n"),
 
-        Position(x: 1, y: 3): Pixel("t"),
-        Position(x: 2, y: 3): Pixel("i"),
-        Position(x: 3, y: 3): Pixel("t"),
-        Position(x: 4, y: 3): Pixel("l"),
-        Position(x: 5, y: 3): Pixel("e"),
+        Position(x: 1, y: 3): Cell("t"),
+        Position(x: 2, y: 3): Cell("i"),
+        Position(x: 3, y: 3): Cell("t"),
+        Position(x: 4, y: 3): Cell("l"),
+        Position(x: 5, y: 3): Cell("e"),
       ])
     }
   }

@@ -19,7 +19,7 @@ struct VStackTests {
       VStack {}
     }
 
-    #expect(canvas.pixels == [:])
+    #expect(canvas.cells == [:])
   }
 
   @Test func `single column`() {
@@ -34,10 +34,10 @@ struct VStackTests {
       }
     }
 
-    #expect(canvas.pixels == [
-      Position(x: 1, y: 1): Pixel("1"),
-      Position(x: 1, y: 2): Pixel("2"),
-      Position(x: 1, y: 3): Pixel("3"),
+    #expect(canvas.cells == [
+      Position(x: 1, y: 1): Cell("1"),
+      Position(x: 1, y: 2): Cell("2"),
+      Position(x: 1, y: 3): Cell("3"),
     ])
   }
 
@@ -53,12 +53,12 @@ struct VStackTests {
       }
     }
 
-    #expect(canvas.pixels == [
-      Position(x: 1,  y: 1): Pixel(" ", background: .blue),
-      Position(x: 1,  y: 2): Pixel(" ", background: .blue),
-      Position(x: 1,  y: 3): Pixel("A"),
-      Position(x: 1,  y: 4): Pixel(" ", background: .yellow),
-      Position(x: 1,  y: 5): Pixel(" ", background: .yellow),
+    #expect(canvas.cells == [
+      Position(x: 1,  y: 1): Cell(" ", background: .blue),
+      Position(x: 1,  y: 2): Cell(" ", background: .blue),
+      Position(x: 1,  y: 3): Cell("A"),
+      Position(x: 1,  y: 4): Cell(" ", background: .yellow),
+      Position(x: 1,  y: 5): Cell(" ", background: .yellow),
     ])
   }
 
@@ -76,18 +76,18 @@ struct VStackTests {
       }
     }
 
-    #expect(canvas.pixels == [
-      Position(x: 1, y:  1): Pixel(" ", background: .blue),
-      Position(x: 1, y:  2): Pixel(" ", background: .blue),
-      Position(x: 1, y:  3): Pixel(" ", background: .blue),
-      Position(x: 1, y:  4): Pixel("A"),
-      Position(x: 1, y:  5): Pixel(" ", background: .yellow),
-      Position(x: 1, y:  6): Pixel(" ", background: .yellow),
-      Position(x: 1, y:  7): Pixel(" ", background: .yellow),
-      Position(x: 1, y:  8): Pixel("B"),
-      Position(x: 1, y:  9): Pixel(" ", background: .red),
-      Position(x: 1, y: 10): Pixel(" ", background: .red),
-      Position(x: 1, y: 11): Pixel(" ", background: .red),
+    #expect(canvas.cells == [
+      Position(x: 1, y:  1): Cell(" ", background: .blue),
+      Position(x: 1, y:  2): Cell(" ", background: .blue),
+      Position(x: 1, y:  3): Cell(" ", background: .blue),
+      Position(x: 1, y:  4): Cell("A"),
+      Position(x: 1, y:  5): Cell(" ", background: .yellow),
+      Position(x: 1, y:  6): Cell(" ", background: .yellow),
+      Position(x: 1, y:  7): Cell(" ", background: .yellow),
+      Position(x: 1, y:  8): Cell("B"),
+      Position(x: 1, y:  9): Cell(" ", background: .red),
+      Position(x: 1, y: 10): Cell(" ", background: .red),
+      Position(x: 1, y: 11): Cell(" ", background: .red),
     ])
   }
 
@@ -108,12 +108,12 @@ struct VStackTests {
       }
     }
 
-    #expect(canvas.pixels == [
-      Position(x:  x, y: 2): Pixel("A"),
-      Position(x:  x, y: 4): Pixel("B"),
-      Position(x:  1, y: 3): Pixel(" ", background: .black),
-      Position(x:  2, y: 3): Pixel(" ", background: .black),
-      Position(x:  3, y: 3): Pixel(" ", background: .black),
+    #expect(canvas.cells == [
+      Position(x:  x, y: 2): Cell("A"),
+      Position(x:  x, y: 4): Cell("B"),
+      Position(x:  1, y: 3): Cell(" ", background: .black),
+      Position(x:  2, y: 3): Cell(" ", background: .black),
+      Position(x:  3, y: 3): Cell(" ", background: .black),
     ])
   }
 
@@ -135,10 +135,10 @@ struct VStackTests {
       }
     }
 
-    #expect(canvas.pixels == [
-      Position(x: 1, y: a): Pixel("A"),
-      Position(x: 1, y: b): Pixel("B"),
-      Position(x: 1, y: c): Pixel("C"),
+    #expect(canvas.cells == [
+      Position(x: 1, y: a): Cell("A"),
+      Position(x: 1, y: b): Cell("B"),
+      Position(x: 1, y: c): Cell("C"),
     ])
   }
 }

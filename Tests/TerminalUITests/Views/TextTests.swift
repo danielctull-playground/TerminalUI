@@ -19,12 +19,12 @@ struct TextTests {
       Text("Hello")
     }
 
-    #expect(canvas.pixels == [
-      Position(x: 1, y: 2): Pixel("H"),
-      Position(x: 2, y: 2): Pixel("e"),
-      Position(x: 3, y: 2): Pixel("l"),
-      Position(x: 4, y: 2): Pixel("l"),
-      Position(x: 5, y: 2): Pixel("o"),
+    #expect(canvas.cells == [
+      Position(x: 1, y: 2): Cell("H"),
+      Position(x: 2, y: 2): Cell("e"),
+      Position(x: 3, y: 2): Cell("l"),
+      Position(x: 4, y: 2): Cell("l"),
+      Position(x: 5, y: 2): Cell("o"),
     ])
   }
 
@@ -34,14 +34,14 @@ struct TextTests {
       Text("Hi there")
     }
 
-    #expect(canvas.pixels == [
-      Position(x: 1, y: 1): Pixel("H"),
-      Position(x: 2, y: 1): Pixel("i"),
-      Position(x: 1, y: 2): Pixel("t"),
-      Position(x: 2, y: 2): Pixel("h"),
-      Position(x: 3, y: 2): Pixel("e"),
-      Position(x: 4, y: 2): Pixel("r"),
-      Position(x: 5, y: 2): Pixel("e"),
+    #expect(canvas.cells == [
+      Position(x: 1, y: 1): Cell("H"),
+      Position(x: 2, y: 1): Cell("i"),
+      Position(x: 1, y: 2): Cell("t"),
+      Position(x: 2, y: 2): Cell("h"),
+      Position(x: 3, y: 2): Cell("e"),
+      Position(x: 4, y: 2): Cell("r"),
+      Position(x: 5, y: 2): Cell("e"),
     ])
   }
 
@@ -51,17 +51,17 @@ struct TextTests {
       Text("Hello there")
     }
 
-    #expect(canvas.pixels == [
-      Position(x: 1, y: 1): Pixel("H"),
-      Position(x: 2, y: 1): Pixel("e"),
-      Position(x: 3, y: 1): Pixel("l"),
-      Position(x: 4, y: 1): Pixel("l"),
-      Position(x: 5, y: 1): Pixel("o"),
-      Position(x: 1, y: 2): Pixel("t"),
-      Position(x: 2, y: 2): Pixel("h"),
-      Position(x: 3, y: 2): Pixel("e"),
-      Position(x: 4, y: 2): Pixel("r"),
-      Position(x: 5, y: 2): Pixel("e"),
+    #expect(canvas.cells == [
+      Position(x: 1, y: 1): Cell("H"),
+      Position(x: 2, y: 1): Cell("e"),
+      Position(x: 3, y: 1): Cell("l"),
+      Position(x: 4, y: 1): Cell("l"),
+      Position(x: 5, y: 1): Cell("o"),
+      Position(x: 1, y: 2): Cell("t"),
+      Position(x: 2, y: 2): Cell("h"),
+      Position(x: 3, y: 2): Cell("e"),
+      Position(x: 4, y: 2): Cell("r"),
+      Position(x: 5, y: 2): Cell("e"),
     ])
   }
 
@@ -122,7 +122,7 @@ struct TextTests {
     canvas.render {
       Text("A")
     }
-    #expect(canvas.pixels.isEmpty)
+    #expect(canvas.cells.isEmpty)
   }
 
   @Test func `width: zero`() {
@@ -130,6 +130,6 @@ struct TextTests {
     canvas.render {
       Text("A")
     }
-    #expect(canvas.pixels.isEmpty)
+    #expect(canvas.cells.isEmpty)
   }
 }

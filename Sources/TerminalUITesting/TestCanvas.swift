@@ -3,23 +3,23 @@ import Testing
 
 public struct TestCanvas: Canvas {
 
-  @Mutable private var _pixels: [Position: Pixel] = [:]
+  @Mutable private var _cells: [Position: Cell] = [:]
   private let bounds: Rect
 
   public init(width: Int, height: Int) {
     bounds = Rect(origin: .origin, size: Size(width: width, height: height))
   }
 
-  public func draw(_ pixel: Pixel, at position: Position) {
-    _pixels[position] = pixel
+  public func draw(_ cell: Cell, at position: Position) {
+    _cells[position] = cell
   }
 }
 
 extension TestCanvas {
 
-  public var pixels: [Position: Pixel] {
-    get { _pixels }
-    nonmutating set { _pixels = newValue }
+  public var cells: [Position: Cell] {
+    get { _cells }
+    nonmutating set { _cells = newValue }
   }
   
   public func render(@ViewBuilder content: () -> some View) {
@@ -36,11 +36,11 @@ extension TestCanvas: CustomStringConvertible {
 
     var characters: [[Character]] = ys.map { _ in xs.map { _ in " " } }
 
-    for (position, pixel) in pixels {
+    for (position, cell) in cells {
       guard ys.contains(position.y) && xs.contains(position.x) else { continue }
       let y = bounds.origin.y.distance(to: position.y)
       let x = bounds.origin.x.distance(to: position.x)
-      characters[y][x] = pixel.content
+      characters[y][x] = cell.content
     }
 
     return characters
