@@ -1,8 +1,11 @@
 
-struct Screen<Content: View>: View {
+struct FullScreen<Content: View>: View {
 
   @Environment(\.windowSize) private var windowSize
-  let content: Content
+  private let content: Content
+  init(_ content: Content) {
+    self.content = content
+  }
 
   var body: some View {
     VStack {

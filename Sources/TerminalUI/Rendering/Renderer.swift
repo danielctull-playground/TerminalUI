@@ -14,7 +14,7 @@ package struct Renderer<Content: View, Canvas: TerminalUI.Canvas> {
     content: Content
   ) {
     let graph = Graph()
-    let screen = graph.constant(Screen(content: content))
+    let screen = graph.constant(FullScreen(content))
 
     var values = EnvironmentValues()
     values.focusManager = FocusManager(graph: graph)
@@ -34,7 +34,7 @@ package struct Renderer<Content: View, Canvas: TerminalUI.Canvas> {
     self.graph = graph
     self.canvas = canvas
     self.environment = environment
-    self.outputs = Screen.makeView(
+    self.outputs = FullScreen.makeView(
       view: screen,
       inputs: inputs
     )
