@@ -3,15 +3,15 @@ import Testing
 
 public struct TestCanvas: Canvas {
 
-  @Mutable private var _cells: [Position: Cell] = [:]
+  @Mutable private(set) var _cells: [Position: Cell] = [:]
   private let bounds: Rect
 
   public init(width: Int, height: Int) {
     bounds = Rect(origin: .origin, size: Size(width: width, height: height))
   }
 
-  public func draw(_ cell: Cell, at position: Position) {
-    _cells[position] = cell
+  public func draw(_ cells: [Position: Cell]) {
+    _cells = cells
   }
 }
 

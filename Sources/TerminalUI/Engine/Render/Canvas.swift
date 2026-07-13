@@ -1,5 +1,5 @@
 import AttributeGraph
 
 package protocol Canvas {
-  func draw(_ cell: Cell, at position: Position)
+  func draw(_ cells: [Position: Cell])
 }
