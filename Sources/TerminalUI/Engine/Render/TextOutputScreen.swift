@@ -24,7 +24,14 @@ extension TextOutputScreen: Screen {
   }
 }
 
+// MARK: - TextOutputStream
+
 extension TextOutputStream {
+
+  fileprivate mutating func write(_ csi: CSI) {
+    write(String(csi))
+  }
+
   fileprivate mutating func write(_ character: Character) {
     write(String(character))
   }

@@ -335,13 +335,6 @@ extension CSI.Command {
 
 // MARK: - Output
 
-extension TextOutputStream {
-
-  mutating func write(_ csi: CSI) {
-    write(String(csi))
-  }
-}
-
 extension String {
 
   init(_ csi: CSI) {
