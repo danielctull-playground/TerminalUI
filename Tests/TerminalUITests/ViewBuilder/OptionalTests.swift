@@ -25,7 +25,7 @@ struct OptionalTests {
 
     var output = ""
 
-    TestCanvas(width: 3, height: 3).render {
+    TestScreen(width: 3, height: 3).render {
       Group {
         if value {
           Text("x")
@@ -50,14 +50,14 @@ struct OptionalTests {
       }
     }
 
-    let canvas = TestCanvas(width: 3, height: 1)
-    canvas.render {
+    let screen = TestScreen(width: 3, height: 1)
+    screen.render {
       if true {
         Stateful()
       }
     }
 
-    #expect(canvas.cells == [
+    #expect(screen.cells == [
       Position(x: 1, y: 1): Cell("n"),
       Position(x: 2, y: 1): Cell("e"),
       Position(x: 3, y: 1): Cell("w"),
@@ -90,23 +90,23 @@ struct OptionalTests {
       }
     }
 
-    let canvas = TestCanvas(width: 1, height: 1)
-    let renderer = Renderer(canvas: canvas, content: Content())
+    let screen = TestScreen(width: 1, height: 1)
+    let renderer = Renderer(screen: screen, content: Content())
 
     renderer.render(event: WindowSize(size: Size(width: 3, height: 1)))
-    #expect(canvas.cells[Position(x: 2, y: 1)] == Cell("0"))
+    #expect(screen.cells[Position(x: 2, y: 1)] == Cell("0"))
 
     renderer.render(event: WindowSize(size: Size(width: 5, height: 1)))
-    #expect(canvas.cells[Position(x: 3, y: 1)] == nil)
+    #expect(screen.cells[Position(x: 3, y: 1)] == nil)
 
     renderer.render(event: WindowSize(size: Size(width: 7, height: 1)))
-    #expect(canvas.cells[Position(x: 4, y: 1)] == nil)
+    #expect(screen.cells[Position(x: 4, y: 1)] == nil)
 
     renderer.render(event: WindowSize(size: Size(width: 9, height: 1)))
-    #expect(canvas.cells[Position(x: 5, y: 1)] == Cell("1"))
+    #expect(screen.cells[Position(x: 5, y: 1)] == Cell("1"))
 
     renderer.render(event: WindowSize(size: Size(width: 15, height: 1)))
-    #expect(canvas.cells[Position(x: 8, y: 1)] == Cell("1"))
+    #expect(screen.cells[Position(x: 8, y: 1)] == Cell("1"))
   }
 
   @MainActor
@@ -132,7 +132,7 @@ struct OptionalTests {
     }
 
     Tracked.live = 0
-    let renderer = Renderer(canvas: TestCanvas(width: 1, height: 1), content: Root())
+    let renderer = Renderer(screen: TestScreen(width: 1, height: 1), content: Root())
 
     renderer.render(event: WindowSize(size: Size(width: 2, height: 1)))
     #expect(Tracked.live == 1)

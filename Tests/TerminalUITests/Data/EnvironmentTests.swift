@@ -14,13 +14,13 @@ struct EnvironmentTests {
 
   @Test func `default`() {
 
-    let canvas = TestCanvas(width: 7, height: 1)
+    let screen = TestScreen(width: 7, height: 1)
 
-    canvas.render {
+    screen.render {
       TestView()
     }
 
-    #expect(canvas.cells == [
+    #expect(screen.cells == [
       Position(x: 1, y: 1): Cell("d"),
       Position(x: 2, y: 1): Cell("e"),
       Position(x: 3, y: 1): Cell("f"),
@@ -33,13 +33,13 @@ struct EnvironmentTests {
 
   @Test func `write`() {
 
-    let canvas = TestCanvas(width: 7, height: 1)
+    let screen = TestScreen(width: 7, height: 1)
 
-    canvas.render {
+    screen.render {
       TestView().environment(\.value, "b")
     }
 
-    #expect(canvas.cells == [
+    #expect(screen.cells == [
       Position(x: 4, y: 1): Cell("b"),
     ])
   }
@@ -52,13 +52,13 @@ struct EnvironmentTests {
 
   @Test func `transform`() {
 
-    let canvas = TestCanvas(width: 8, height: 1)
+    let screen = TestScreen(width: 8, height: 1)
 
-    canvas.render {
+    screen.render {
       TestView().transformEnvironment(\.value) { $0.append("a") }
     }
 
-    #expect(canvas.cells == [
+    #expect(screen.cells == [
       Position(x: 1, y: 1): Cell("d"),
       Position(x: 2, y: 1): Cell("e"),
       Position(x: 3, y: 1): Cell("f"),
@@ -92,7 +92,7 @@ struct EnvironmentTests {
 //  ) throws {
 //    let proposed = ProposedViewSize(width: proposedWidth, height: proposedHeight)
 //    let view = TestView().environment(\.value, input)
-//    let inputs = ViewInputs(canvas: TextStreamCanvas(output: .memory))
+//    let inputs = ViewInputs(screen: TextStreamScreen(output: .memory))
 //    let items = view.makeView(inputs: inputs).displayItems
 //    try #require(items.count == 1)
 //    let size = items[0].size(for: proposed)

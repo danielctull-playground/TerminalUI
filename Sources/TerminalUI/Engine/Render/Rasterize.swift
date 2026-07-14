@@ -1,7 +1,7 @@
 
-extension Canvas {
+extension Screen {
   
-  /// Rasterizes a list of items to the canvas.
+  /// Rasterizes a list of items to the screen.
   ///
   /// - Parameter displayList: The list of items to rasterize.
   func rasterize(_ displayList: DisplayList) {

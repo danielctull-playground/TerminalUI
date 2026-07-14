@@ -1,20 +1,20 @@
 import AttributeGraph
 import Foundation
 
-package struct Renderer<Content: View, Canvas: TerminalUI.Canvas> {
+package struct Renderer<Content: View, Screen: TerminalUI.Screen> {
 
   private let graph: Graph
-  private let canvas: Canvas
+  private let screen: Screen
   private let environment: Attribute<EnvironmentValues>
   private let geometry: Attribute<ViewGeometry>
   private let outputs: ViewOutputs
 
   init(
-    canvas: Canvas,
+    screen: Screen,
     content: Content
   ) {
     let graph = Graph()
-    let screen = graph.constant(FullScreen(content))
+    let content = graph.constant(FullScreen(content))
 
     var values = EnvironmentValues()
     values.focusManager = FocusManager(graph: graph)
@@ -32,10 +32,10 @@ package struct Renderer<Content: View, Canvas: TerminalUI.Canvas> {
     )
 
     self.graph = graph
-    self.canvas = canvas
+    self.screen = screen
     self.environment = environment
     self.outputs = FullScreen.makeView(
-      view: screen,
+      view: content,
       inputs: inputs
     )
   }
@@ -58,7 +58,7 @@ package struct Renderer<Content: View, Canvas: TerminalUI.Canvas> {
 
       let displayList = graph[outputs.displayList]
 
-      canvas.rasterize(displayList)
+      screen.rasterize(displayList)
     }
   }
 }
@@ -66,9 +66,9 @@ package struct Renderer<Content: View, Canvas: TerminalUI.Canvas> {
 extension Renderer {
 
   package init(
-    canvas: Canvas,
+    screen: Screen,
     @ViewBuilder content: () -> Content
   ) {
-    self.init(canvas: canvas, content: content())
+    self.init(screen: screen, content: content())
   }
 }

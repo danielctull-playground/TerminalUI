@@ -1,7 +1,7 @@
 import TerminalUI
 import Testing
 
-public struct TestCanvas: Canvas {
+public struct TestScreen: Screen {
 
   @Mutable private var _cells: [Position: Cell] = [:]
   private let bounds: Rect
@@ -15,7 +15,7 @@ public struct TestCanvas: Canvas {
   }
 }
 
-extension TestCanvas {
+extension TestScreen {
 
   public var cells: [Position: Cell] {
     get { _cells }
@@ -27,7 +27,7 @@ extension TestCanvas {
   }
 }
 
-extension TestCanvas: CustomStringConvertible {
+extension TestScreen: CustomStringConvertible {
 
   public var description: String {
 

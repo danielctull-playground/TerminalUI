@@ -6,33 +6,33 @@ import Testing
 struct RendererTests {
 
   @Test func `height: zero`() {
-    let canvas = TestCanvas(width: 3, height: 0)
-    canvas.render {
+    let screen = TestScreen(width: 3, height: 0)
+    screen.render {
       Color.red
     }
-    #expect(canvas.cells.isEmpty)
+    #expect(screen.cells.isEmpty)
   }
 
   @Test func `width: zero`() {
-    let canvas = TestCanvas(width: 0, height: 3)
-    canvas.render {
+    let screen = TestScreen(width: 0, height: 3)
+    screen.render {
       Color.red
     }
-    #expect(canvas.cells.isEmpty)
+    #expect(screen.cells.isEmpty)
   }
 
   @Test func `one renderer draws across multiple frames`() {
 
-    let canvas = TestCanvas(width: 0, height: 0)
-    let renderer = Renderer(canvas: canvas, content: Color.red)
+    let screen = TestScreen(width: 0, height: 0)
+    let renderer = Renderer(screen: screen, content: Color.red)
 
     renderer.render(event: WindowSize(size: Size(width: 1, height: 1)))
-    #expect(Set(canvas.cells.keys) == [
+    #expect(Set(screen.cells.keys) == [
       Position(x: 1, y: 1)
     ])
 
     renderer.render(event: WindowSize(size: Size(width: 3, height: 1)))
-    #expect(Set(canvas.cells.keys) == [
+    #expect(Set(screen.cells.keys) == [
       Position(x: 1, y: 1),
       Position(x: 2, y: 1),
       Position(x: 3, y: 1),
@@ -53,7 +53,7 @@ struct RendererTests {
       let strongBox = Box()
       box = strongBox
 
-      let renderer = Renderer(canvas: TestCanvas(width: 1, height: 1), content: Probe(box: strongBox))
+      let renderer = Renderer(screen: TestScreen(width: 1, height: 1), content: Probe(box: strongBox))
       renderer.render(event: WindowSize(size: Size(width: 1, height: 1)))
     }
 

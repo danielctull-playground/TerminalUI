@@ -15,12 +15,12 @@ struct NamespaceTests {
       }
     }
 
-    let canvas = TestCanvas(width: 1, height: 1)
-    canvas.render {
+    let screen = TestScreen(width: 1, height: 1)
+    screen.render {
       Content()
     }
 
-    #expect(canvas.cells == [
+    #expect(screen.cells == [
       Position(x: 1, y: 1): Cell("D")
     ])
   }
@@ -58,12 +58,12 @@ struct NamespaceTests {
       }
     }
 
-    let canvas = TestCanvas(width: 1, height: 1)
-    canvas.render {
+    let screen = TestScreen(width: 1, height: 1)
+    screen.render {
       Content()
     }
 
-    #expect(canvas.cells == [
+    #expect(screen.cells == [
       Position(x: 1, y: 1): Cell("D")
     ])
   }
@@ -84,14 +84,14 @@ struct NamespaceTests {
       }
     }
 
-    let canvas = TestCanvas(width: 1, height: 1)
-    let renderer = Renderer(canvas: canvas, content: Content())
+    let screen = TestScreen(width: 1, height: 1)
+    let renderer = Renderer(screen: screen, content: Content())
 
     renderer.render(event: WindowSize(size: Size(width: 1, height: 1)))
-    let first = canvas.cells[Position(x: 1, y: 1)]
+    let first = screen.cells[Position(x: 1, y: 1)]
 
     renderer.render(event: WindowSize(size: Size(width: 1, height: 3)))
-    let second = canvas.cells[Position(x: 1, y: 2)]
+    let second = screen.cells[Position(x: 1, y: 2)]
 
     #expect(first == second)
   }

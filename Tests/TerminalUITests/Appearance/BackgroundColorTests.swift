@@ -18,13 +18,13 @@ struct BackgroundColorTests {
   ])
   func `Text Output`(backgroundColor: Color, expected: String) {
 
-    let canvas = TextStreamCanvas(output: .memory)
+    let screen = TextStreamScreen(output: .memory)
 
-    canvas.render(size: Size(width: 1, height: 1)) {
+    screen.render(size: Size(width: 1, height: 1)) {
       Text("a").backgroundColor(backgroundColor)
     }
 
-    #expect(canvas.output.controlSequences == [
+    #expect(screen.output.controlSequences == [
       "[2J",     // Clear screen
       "[?1049h", // Alternative buffer on
       "[?25l",   // Cursor visibility off

@@ -2,13 +2,13 @@
 import TerminalUITesting
 import Testing
 
-@Suite("Canvas")
-struct CanvasTests {
+@Suite("Screen")
+struct ScreenTests {
 
   @Test func `Drawing with default values`() {
-    let canvas = TextStreamCanvas(output: .memory)
-    canvas.draw(Cell("a"), at: Position(x: 2, y: 1))
-    #expect(canvas.output.controlSequences == [
+    let screen = TextStreamScreen(output: .memory)
+    screen.draw(Cell("a"), at: Position(x: 2, y: 1))
+    #expect(screen.output.controlSequences == [
       "[2J",     // Clear screen
       "[?1049h", // Alternative buffer on
       "[?25l",   // Cursor visibility off
@@ -18,11 +18,11 @@ struct CanvasTests {
   }
 
   @Test func `Center alignment`() {
-    let canvas = TestCanvas(width: 3, height: 3)
-    canvas.render {
+    let screen = TestScreen(width: 3, height: 3)
+    screen.render {
       Text("A")
     }
-    #expect(canvas.cells == [
+    #expect(screen.cells == [
       Position(x: 2, y: 2): Cell("A")
     ])
   }

@@ -1,5 +1,5 @@
 
-package struct TextStreamCanvas<Output: TextOutputStream>: Canvas {
+package struct TextStreamScreen<Output: TextOutputStream>: Screen {
   @Mutable package var output: Output
 
   package init(output: Output) {

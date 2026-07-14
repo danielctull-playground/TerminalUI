@@ -1,10 +1,10 @@
 @testable import TerminalUI
 
-extension Canvas {
+extension Screen {
 
   package func render(size: Size, content: () -> some View) {
     let renderer = Renderer(
-      canvas: self,
+      screen: self,
       content: content
     )
     renderer.render(event: WindowSize(size: size))

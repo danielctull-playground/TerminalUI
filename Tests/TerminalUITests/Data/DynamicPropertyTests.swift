@@ -26,10 +26,10 @@ struct DynamicPropertyTests {
       }
     }
 
-    let canvas = TestCanvas(width: 3, height: 1)
-    canvas.render { Content() }
+    let screen = TestScreen(width: 3, height: 1)
+    screen.render { Content() }
 
-    #expect(canvas.cells == [
+    #expect(screen.cells == [
       Position(x: 1, y: 1): Cell("n"),
       Position(x: 2, y: 1): Cell("e"),
       Position(x: 3, y: 1): Cell("w"),
@@ -54,17 +54,17 @@ struct DynamicPropertyTests {
       }
     }
 
-    let canvas = TestCanvas(width: 3, height: 1)
-    let renderer = Renderer(canvas: canvas, content: Content())
+    let screen = TestScreen(width: 3, height: 1)
+    let renderer = Renderer(screen: screen, content: Content())
 
     renderer.render(event: WindowSize(size: Size(width: 1, height: 1)))
-    #expect(canvas.cells == [
+    #expect(screen.cells == [
       Position(x: 1, y: 1): Cell("1")
     ])
 
-    canvas.cells = [:]
+    screen.cells = [:]
     renderer.render(event: WindowSize(size: Size(width: 3, height: 1)))
-    #expect(canvas.cells == [
+    #expect(screen.cells == [
       Position(x: 2, y: 1): Cell("3")
     ])
   }

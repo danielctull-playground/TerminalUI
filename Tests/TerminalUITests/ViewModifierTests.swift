@@ -13,13 +13,13 @@ struct ViewModifierTests {
 
   @Test func `Empty view modifier displays original contents`() {
 
-    let canvas = TextStreamCanvas(output: .memory)
+    let screen = TextStreamScreen(output: .memory)
 
-    canvas.render(size: Size(width: 1, height: 1)) {
+    screen.render(size: Size(width: 1, height: 1)) {
       Text("A").modifier(VM())
     }
 
-    #expect(canvas.output.controlSequences == [
+    #expect(screen.output.controlSequences == [
       "[2J",     // Clear screen
       "[?1049h", // Alternative buffer on
       "[?25l",   // Cursor visibility off
@@ -41,15 +41,15 @@ struct ViewModifierTests {
       }
     }
 
-    let canvas = TestCanvas(width: 1, height: 2)
-    canvas.render {
+    let screen = TestScreen(width: 1, height: 2)
+    screen.render {
       VStack(spacing: 0) {
         Color.black.modifier(Replace(value: "a"))
         Color.black.modifier(Replace(value: "b"))
       }
     }
 
-    #expect(canvas.cells == [
+    #expect(screen.cells == [
       Position(x: 1, y: 1): Cell("a"),
       Position(x: 1, y: 2): Cell("b"),
     ])
@@ -71,7 +71,7 @@ struct ViewModifierTests {
 //  ) throws {
 //    let proposed = ProposedViewSize(width: proposedWidth, height: proposedHeight)
 //    let view = Text(input).modifier(VM())
-//    let inputs = ViewInputs(canvas: TextStreamCanvas(output: .memory))
+//    let inputs = ViewInputs(screen: TextStreamScreen(output: .memory))
 //    let items = view.makeView(inputs: inputs).displayItems
 //    try #require(items.count == 1)
 //    let size = items[0].size(for: proposed)

@@ -13,12 +13,12 @@ struct EmptyViewTests {
 
   @Test func `Display Items`() {
 
-    let canvas = TestCanvas(width: 3, height: 3)
-    canvas.render {
+    let screen = TestScreen(width: 3, height: 3)
+    screen.render {
       EmptyView()
     }
 
-    #expect(canvas.cells.isEmpty)
+    #expect(screen.cells.isEmpty)
   }
 
   @Suite(.tags(.preferenceValues))
@@ -28,7 +28,7 @@ struct EmptyViewTests {
 
       var output = ""
 
-      TestCanvas(width: 3, height: 3).render {
+      TestScreen(width: 3, height: 3).render {
         EmptyView()
           .onPreferenceChange(PreferenceKey.A.self) { output = $0 }
       }
@@ -40,7 +40,7 @@ struct EmptyViewTests {
 
       var output = ""
 
-      TestCanvas(width: 3, height: 3).render {
+      TestScreen(width: 3, height: 3).render {
         EmptyView()
           .preference(key: PreferenceKey.A.self, value: "new")
           .onPreferenceChange(PreferenceKey.A.self) { output = $0 }
@@ -52,7 +52,7 @@ struct EmptyViewTests {
 
 //  @Test("makeView")
 //  func makeView() {
-//    let inputs = ViewInputs(canvas: TextStreamCanvas(output: .memory))
+//    let inputs = ViewInputs(screen: TextStreamScreen(output: .memory))
 //    let items = EmptyView().makeView(inputs: inputs).displayItems
 //    #expect(items.isEmpty)
 //  }

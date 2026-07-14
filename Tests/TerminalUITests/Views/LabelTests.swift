@@ -9,8 +9,8 @@ struct LabelTests {
 
     @Test func `default`() {
 
-      let canvas = TestCanvas(width: 10, height: 1)
-      canvas.render {
+      let screen = TestScreen(width: 10, height: 1)
+      screen.render {
         Label {
           Text("title")
         } icon: {
@@ -18,7 +18,7 @@ struct LabelTests {
         }
       }
 
-      #expect(canvas.cells == [
+      #expect(screen.cells == [
         Position(x:  1, y: 1): Cell("i"),
         Position(x:  2, y: 1): Cell("c"),
         Position(x:  3, y: 1): Cell("o"),
@@ -34,8 +34,8 @@ struct LabelTests {
 
     @Test func `titleAndIcon`() {
 
-      let canvas = TestCanvas(width: 10, height: 1)
-      canvas.render {
+      let screen = TestScreen(width: 10, height: 1)
+      screen.render {
         Label {
           Text("title")
         } icon: {
@@ -44,7 +44,7 @@ struct LabelTests {
         .labelStyle(.titleAndIcon)
       }
 
-      #expect(canvas.cells == [
+      #expect(screen.cells == [
         Position(x:  1, y: 1): Cell("i"),
         Position(x:  2, y: 1): Cell("c"),
         Position(x:  3, y: 1): Cell("o"),
@@ -60,8 +60,8 @@ struct LabelTests {
 
     @Test func `titleOnly`() {
 
-      let canvas = TestCanvas(width: 10, height: 1)
-      canvas.render {
+      let screen = TestScreen(width: 10, height: 1)
+      screen.render {
         Label {
           Text("title")
         } icon: {
@@ -70,7 +70,7 @@ struct LabelTests {
         .labelStyle(.titleOnly)
       }
 
-      #expect(canvas.cells == [
+      #expect(screen.cells == [
         Position(x: 4, y: 1): Cell("t"),
         Position(x: 5, y: 1): Cell("i"),
         Position(x: 6, y: 1): Cell("t"),
@@ -81,8 +81,8 @@ struct LabelTests {
 
     @Test func `iconOnly`() {
 
-      let canvas = TestCanvas(width: 10, height: 1)
-      canvas.render {
+      let screen = TestScreen(width: 10, height: 1)
+      screen.render {
         Label {
           Text("title")
         } icon: {
@@ -91,7 +91,7 @@ struct LabelTests {
         .labelStyle(.iconOnly)
       }
 
-      #expect(canvas.cells == [
+      #expect(screen.cells == [
         Position(x: 4, y: 1): Cell("i"),
         Position(x: 5, y: 1): Cell("c"),
         Position(x: 6, y: 1): Cell("o"),
@@ -110,8 +110,8 @@ struct LabelTests {
         }
       }
 
-      let canvas = TestCanvas(width: 5, height: 3)
-      canvas.render {
+      let screen = TestScreen(width: 5, height: 3)
+      screen.render {
         Group {
           Label {
             Text("title")
@@ -122,7 +122,7 @@ struct LabelTests {
         .labelStyle(Custom())
       }
 
-      #expect(canvas.cells == [
+      #expect(screen.cells == [
         Position(x: 1, y: 1): Cell("i"),
         Position(x: 2, y: 1): Cell("c"),
         Position(x: 3, y: 1): Cell("o"),
@@ -144,7 +144,7 @@ struct LabelTests {
 
       var output = ""
 
-      TestCanvas(width: 3, height: 3).render {
+      TestScreen(width: 3, height: 3).render {
         Label { Color.black } icon: { Color.blue }
           .onPreferenceChange(PreferenceKey.A.self) { output = $0 }
       }
@@ -156,7 +156,7 @@ struct LabelTests {
 
       var output = ""
 
-      TestCanvas(width: 3, height: 3).render {
+      TestScreen(width: 3, height: 3).render {
         Label { Color.black } icon: { Color.blue }
           .preference(key: PreferenceKey.A.self, value: "new")
           .onPreferenceChange(PreferenceKey.A.self) { output = $0 }
