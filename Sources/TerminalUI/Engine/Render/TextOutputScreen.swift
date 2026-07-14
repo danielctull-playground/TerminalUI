@@ -1,3 +1,4 @@
+import Foundation
 
 package struct TextOutputScreen<Output: TextOutputStream> {
 
@@ -26,5 +27,22 @@ extension TextOutputScreen: Screen {
 extension TextOutputStream {
   fileprivate mutating func write(_ character: Character) {
     write(String(character))
+  }
+}
+
+// MARK: - FileHandle Support
+
+extension TextOutputStream where Self == FileHandleTextOutputStream {
+  static func fileHandle(
+    _ fileHandle: FileHandle
+  ) -> FileHandleTextOutputStream {
+    FileHandleTextOutputStream(fileHandle: fileHandle)
+  }
+}
+
+struct FileHandleTextOutputStream: TextOutputStream {
+  fileprivate let fileHandle: FileHandle
+  mutating func write(_ string: String) {
+    fileHandle.write(Data(string.utf8))
   }
 }
