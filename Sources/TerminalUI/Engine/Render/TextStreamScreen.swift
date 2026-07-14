@@ -9,10 +9,12 @@ package struct TextStreamScreen<Output: TextOutputStream>: Screen {
     self.output.write(.cursorVisibility(.off))
   }
 
-  package func draw(_ cell: Cell, at position: Position) {
-    output.write(.selectGraphicRendition(cell.style.graphicRendition))
-    output.write(position.csi)
-    output.write(cell.content)
+  package func draw(_ buffer: Buffer) {
+    for (position, cell) in buffer.cells {
+      output.write(.selectGraphicRendition(cell.style.graphicRendition))
+      output.write(position.csi)
+      output.write(cell.content)
+    }
   }
 }
 

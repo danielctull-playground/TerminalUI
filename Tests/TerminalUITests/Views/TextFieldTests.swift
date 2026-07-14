@@ -70,8 +70,6 @@ struct TextFieldTests {
       Position(x: 3, y: 1): Cell("_"),
     ])
 
-    screen.cells = [:] // Re-rendering bug.
-
     renderer.render(event: KeyPress("\t")) // tab
     #expect(screen.cells == [
       Position(x: 1, y: 1): Cell("h"),

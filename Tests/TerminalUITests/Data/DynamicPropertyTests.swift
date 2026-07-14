@@ -62,7 +62,6 @@ struct DynamicPropertyTests {
       Position(x: 1, y: 1): Cell("1")
     ])
 
-    screen.cells = [:]
     renderer.render(event: WindowSize(size: Size(width: 3, height: 1)))
     #expect(screen.cells == [
       Position(x: 2, y: 1): Cell("3")

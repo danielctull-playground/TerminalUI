@@ -3,23 +3,22 @@ import Testing
 
 public struct TestScreen: Screen {
 
-  @Mutable private var _cells: [Position: Cell] = [:]
+  @Mutable private var buffer = Buffer()
   private let bounds: Rect
 
   public init(width: Int, height: Int) {
     bounds = Rect(origin: .origin, size: Size(width: width, height: height))
   }
 
-  public func draw(_ cell: Cell, at position: Position) {
-    _cells[position] = cell
+  public func draw(_ buffer: ScreenBuffer) {
+    self.buffer = buffer
   }
 }
 
 extension TestScreen {
 
   public var cells: [Position: Cell] {
-    get { _cells }
-    nonmutating set { _cells = newValue }
+    buffer.cells
   }
   
   public func render(@ViewBuilder content: () -> some View) {
