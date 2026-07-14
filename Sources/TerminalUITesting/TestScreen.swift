@@ -4,10 +4,15 @@ import Testing
 public struct TestScreen: Screen {
 
   @Mutable private var buffer = Buffer()
+  @Mutable private var _csi: [CSI] = []
   private let bounds: Rect
 
   public init(width: Int, height: Int) {
     bounds = Rect(origin: .origin, size: Size(width: width, height: height))
+  }
+
+  public func send(_ csi: CSI) {
+    _csi.append(csi)
   }
 
   public func draw(_ buffer: ScreenBuffer) {
@@ -20,7 +25,11 @@ extension TestScreen {
   public var cells: [Position: Cell] {
     buffer.cells
   }
-  
+
+  public var csi: [CSI] {
+    _csi
+  }
+
   public func render(@ViewBuilder content: () -> some View) {
     render(size: bounds.size, content: content)
   }

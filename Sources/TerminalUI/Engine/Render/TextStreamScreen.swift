@@ -1,12 +1,17 @@
 
-package struct TextStreamScreen<Output: TextOutputStream>: Screen {
+package struct TextStreamScreen<Output: TextOutputStream> {
+
   @Mutable package var output: Output
 
   package init(output: Output) {
     self.output = output
-    self.output.write(.clearScreen)
-    self.output.write(.alternativeBuffer(.on))
-    self.output.write(.cursorVisibility(.off))
+  }
+}
+
+extension TextStreamScreen: Screen {
+
+  package func send(_ csi: CSI) {
+    output.write(csi)
   }
 
   package func draw(_ buffer: Buffer) {

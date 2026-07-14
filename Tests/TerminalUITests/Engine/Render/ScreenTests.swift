@@ -9,9 +9,6 @@ struct ScreenTests {
     let screen = TextStreamScreen(output: .memory)
     screen.draw([Position(x: 2, y: 1): Cell("a")])
     #expect(screen.output.controlSequences == [
-      "[2J",     // Clear screen
-      "[?1049h", // Alternative buffer on
-      "[?25l",   // Cursor visibility off
       "[39;49;22;23;24;25;27;28;29m",
       "[1;2Ha", // Position + content
     ])

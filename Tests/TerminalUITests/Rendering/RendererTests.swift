@@ -5,6 +5,16 @@ import Testing
 @Suite("Renderer")
 struct RendererTests {
 
+  @Test func `sends fullscreen csi`() {
+    let screen = TestScreen(width: 3, height: 0)
+    _ = Renderer(screen: screen, content: Color.red)
+    #expect(screen.csi == [
+      .clearScreen,
+      .alternativeBuffer(.on),
+      .cursorVisibility(.off),
+    ])
+  }
+
   @Test func `height: zero`() {
     let screen = TestScreen(width: 3, height: 0)
     screen.render {

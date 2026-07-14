@@ -2,6 +2,8 @@ import AttributeGraph
 
 package protocol Screen {
   func draw(_ buffer: Buffer)
+
+  func send(_ csi: CSI)
 }
 
 extension Screen {
