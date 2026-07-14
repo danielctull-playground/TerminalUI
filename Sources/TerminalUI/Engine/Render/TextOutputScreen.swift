@@ -16,11 +16,20 @@ extension TextOutputScreen: Screen {
   }
 
   package func draw(_ buffer: Buffer) {
+
+    // Building a string here and flushing it to the screen at once removes
+    // stuttering over many cells. This way the changes should all appear at
+    // once.
+
+    var result = ""
+
     for (position, cell) in buffer.cells {
-      output.write(.selectGraphicRendition(cell.style.graphicRendition))
-      output.write(position.csi)
-      output.write(cell.content)
+      result.append(String(.selectGraphicRendition(cell.style.graphicRendition)))
+      result.append(String(position.csi))
+      result.append(cell.content)
     }
+
+    output.write(result)
   }
 }
 
@@ -30,10 +39,6 @@ extension TextOutputStream {
 
   fileprivate mutating func write(_ csi: CSI) {
     write(String(csi))
-  }
-
-  fileprivate mutating func write(_ character: Character) {
-    write(String(character))
   }
 }
 
