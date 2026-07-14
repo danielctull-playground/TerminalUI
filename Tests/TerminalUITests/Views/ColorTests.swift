@@ -5,7 +5,7 @@ import Testing
 @Suite("Color", .tags(.view))
 struct ColorTests {
 
-  private let canvas = TestCanvas(width: 3, height: 3)
+  private let screen = TestScreen(width: 3, height: 3)
 
   @Test func `body: fatal`() async {
     await #expect(processExitsWith: .failure) {
@@ -16,11 +16,11 @@ struct ColorTests {
   @Test(arguments: Color.testCases)
   func `render`(color: Color) {
 
-    canvas.render {
+    screen.render {
       color
     }
 
-    #expect(canvas.cells == [
+    #expect(screen.cells == [
       Position(x: 1, y: 1): Cell(" ", background: color),
       Position(x: 2, y: 1): Cell(" ", background: color),
       Position(x: 3, y: 1): Cell(" ", background: color),
@@ -34,19 +34,19 @@ struct ColorTests {
   }
 
   @Test func `height: zero`() {
-    let canvas = TestCanvas(width: 3, height: 0)
-    canvas.render {
+    let screen = TestScreen(width: 3, height: 0)
+    screen.render {
       Color.red
     }
-    #expect(canvas.cells.isEmpty)
+    #expect(screen.cells.isEmpty)
   }
 
   @Test func `width: zero`() {
-    let canvas = TestCanvas(width: 0, height: 3)
-    canvas.render {
+    let screen = TestScreen(width: 0, height: 3)
+    screen.render {
       Color.red
     }
-    #expect(canvas.cells.isEmpty)
+    #expect(screen.cells.isEmpty)
   }
 
 //  @Test("size", arguments: Color.testCases)
@@ -54,7 +54,7 @@ struct ColorTests {
 //    let width = Int.random(in: 0...1_000_000_000)
 //    let height = Int.random(in: 0...1_000_000_000)
 //    let proposed = ProposedViewSize(width: width, height: height)
-//    let inputs = ViewInputs(canvas: TextStreamCanvas(output: .memory))
+//    let inputs = ViewInputs(screen: TextStreamScreen(output: .memory))
 //    let items = color.makeView(inputs: inputs).displayItems
 //    try #require(items.count == 1)
 //    let size = items[0].size(for: proposed)
@@ -70,7 +70,7 @@ struct ColorTests {
 
       var output = ""
 
-      TestCanvas(width: 3, height: 3).render {
+      TestScreen(width: 3, height: 3).render {
         color
           .onPreferenceChange(PreferenceKey.A.self) { output = $0 }
       }
@@ -84,7 +84,7 @@ struct ColorTests {
 
       var output = ""
 
-      TestCanvas(width: 3, height: 3).render {
+      TestScreen(width: 3, height: 3).render {
         color
           .preference(key: PreferenceKey.A.self, value: "new")
           .onPreferenceChange(PreferenceKey.A.self) { output = $0 }

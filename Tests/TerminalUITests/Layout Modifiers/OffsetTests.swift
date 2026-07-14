@@ -16,48 +16,48 @@ struct OffsetTests {
 
   @Test func `x:`() {
 
-    let canvas = TestCanvas(width: 3, height: 5)
-    canvas.render {
+    let screen = TestScreen(width: 3, height: 5)
+    screen.render {
       view.offset(x: 2)
     }
 
-    #expect(canvas.cells == [
+    #expect(screen.cells == [
       Position(x: 4, y: 3): cell,
     ])
   }
 
   @Test func `y:`() {
 
-    let canvas = TestCanvas(width: 3, height: 5)
-    canvas.render {
+    let screen = TestScreen(width: 3, height: 5)
+    screen.render {
       view.offset(y: 2)
     }
 
-    #expect(canvas.cells == [
+    #expect(screen.cells == [
       Position(x: 2, y: 5): cell,
     ])
   }
 
   @Test func `x:y:`() {
 
-    let canvas = TestCanvas(width: 3, height: 5)
-    canvas.render {
+    let screen = TestScreen(width: 3, height: 5)
+    screen.render {
       view.offset(x: 1, y: 3)
     }
 
-    #expect(canvas.cells == [
+    #expect(screen.cells == [
       Position(x: 3, y: 6): cell,
     ])
   }
 
   @Test func `size:`() {
 
-    let canvas = TestCanvas(width: 3, height: 5)
-    canvas.render {
+    let screen = TestScreen(width: 3, height: 5)
+    screen.render {
       view.offset(size: Size(width: 1, height: 3))
     }
 
-    #expect(canvas.cells == [
+    #expect(screen.cells == [
       Position(x: 3, y: 6): cell,
     ])
   }
@@ -69,7 +69,7 @@ struct OffsetTests {
 
       var output = ""
 
-      TestCanvas(width: 3, height: 3).render {
+      TestScreen(width: 3, height: 3).render {
         Text("x")
           .offset(x: 1, y: 2)
           .onPreferenceChange(PreferenceKey.A.self) { output = $0 }
@@ -82,7 +82,7 @@ struct OffsetTests {
 
       var output = ""
 
-      TestCanvas(width: 3, height: 3).render {
+      TestScreen(width: 3, height: 3).render {
         Text("x")
           .preference(key: PreferenceKey.A.self, value: "new")
           .offset(x: 1, y: 2)

@@ -5,20 +5,20 @@ import Testing
 @Suite("ViewBuilder", .tags(.modifier))
 struct ViewBuilderTests {
 
-  private var canvas = TestCanvas(width: 10, height: 10)
+  private var screen = TestScreen(width: 10, height: 10)
 
   @Test func empty() {
-    canvas.render {}
-    #expect(canvas.cells == [:])
+    screen.render {}
+    #expect(screen.cells == [:])
   }
 
   @Test func first() {
 
-    canvas.render {
+    screen.render {
       Text("a")
     }
 
-    #expect(canvas.cells == [
+    #expect(screen.cells == [
       Position(x: 6, y: 6): Cell("a"),
     ])
   }
@@ -33,12 +33,12 @@ struct ViewBuilderTests {
 
   @Test func accumulated() {
 
-    canvas.render {
+    screen.render {
       Text("a")
       Text("b")
     }
 
-    #expect(canvas.cells == [
+    #expect(screen.cells == [
       Position(x: 6, y: 5): Cell("a"),
       Position(x: 6, y: 6): Cell("b"),
     ])
@@ -58,13 +58,13 @@ struct ViewBuilderTests {
   ])
   func optional(value: Bool, expectation: [Position: Cell]) {
 
-    canvas.render {
+    screen.render {
       if value {
         Text("a")
       }
     }
 
-    #expect(canvas.cells == expectation)
+    #expect(screen.cells == expectation)
   }
 
   @Test func `optional body: fatal`() async {
@@ -81,7 +81,7 @@ struct ViewBuilderTests {
   ])
   func either(value: Bool, character: Character) {
 
-    canvas.render {
+    screen.render {
       if value {
         Text("a")
       } else {
@@ -89,7 +89,7 @@ struct ViewBuilderTests {
       }
     }
 
-    #expect(canvas.cells == [
+    #expect(screen.cells == [
       Position(x: 6, y: 6): Cell(character),
     ])
   }
@@ -109,7 +109,7 @@ struct ViewBuilderTests {
   // I can't find an #available flag that exists for linux machines.
   @Test func limitedAvailability() {
 
-    canvas.render {
+    screen.render {
       if #available(iOS 999, macOS 999, tvOS 999, watchOS 999, *) {
         Text("a")
       } else if #available(*) {  // <-- This causes the builder to hit
@@ -117,7 +117,7 @@ struct ViewBuilderTests {
       }
     }
 
-    #expect(canvas.cells == [
+    #expect(screen.cells == [
       Position(x: 6, y: 6): Cell("b"),
     ])
   }

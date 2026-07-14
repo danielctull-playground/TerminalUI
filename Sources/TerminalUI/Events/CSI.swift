@@ -1,6 +1,6 @@
 
 /// Control Sequence Introducer
-struct CSI: Equatable, Hashable, Sendable {
+public struct CSI: Equatable, Hashable, Sendable {
 
   let introducer: Introducer
   let marker: Marker?
@@ -25,7 +25,7 @@ struct CSI: Equatable, Hashable, Sendable {
 
 extension CSI: CustomStringConvertible {
 
-  var description: String {
+  public var description: String {
     "CSI \(String(self))"
   }
 }
@@ -334,13 +334,6 @@ extension CSI.Command {
 }
 
 // MARK: - Output
-
-extension TextOutputStream {
-
-  mutating func write(_ csi: CSI) {
-    write(String(csi))
-  }
-}
 
 extension String {
 

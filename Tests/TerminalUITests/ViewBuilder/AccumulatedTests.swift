@@ -12,7 +12,7 @@ struct AccumulatedTests {
 
       var output = ""
 
-      TestCanvas(width: 3, height: 3).render {
+      TestScreen(width: 3, height: 3).render {
         Group {
           Text("x")
             .preference(key: PreferenceKey.A.self, value: "lhs")
@@ -28,7 +28,7 @@ struct AccumulatedTests {
 
       var output = ""
 
-      TestCanvas(width: 3, height: 3).render {
+      TestScreen(width: 3, height: 3).render {
         Group {
           Text("x")
           Text("y")
@@ -44,7 +44,7 @@ struct AccumulatedTests {
 
       var output = ""
 
-      TestCanvas(width: 3, height: 3).render {
+      TestScreen(width: 3, height: 3).render {
         Group {
           Text("x")
             .preference(key: PreferenceKey.A.self, value: "left")

@@ -19,11 +19,11 @@ private struct B: PreferenceKey {
 @Suite("Preference")
 struct PreferenceTests {
 
-  private let canvas = TestCanvas(width: 7, height: 1)
+  private let screen = TestScreen(width: 7, height: 1)
 
   @Suite struct `Reader` {
 
-    private let canvas = TestCanvas(width: 7, height: 1)
+    private let screen = TestScreen(width: 7, height: 1)
 
     @Test func `defaultValue`() {
 
@@ -37,7 +37,7 @@ struct PreferenceTests {
 
       var output = ""
 
-      canvas.render {
+      screen.render {
         TestView { output = $0 }
       }
 
@@ -47,7 +47,7 @@ struct PreferenceTests {
 
   @Suite struct `Writer` {
 
-    private let canvas = TestCanvas(width: 7, height: 1)
+    private let screen = TestScreen(width: 7, height: 1)
 
     @Test func `same preference`() {
 
@@ -62,7 +62,7 @@ struct PreferenceTests {
 
       var output = ""
 
-      canvas.render {
+      screen.render {
         TestView { output = $0 }
       }
 
@@ -82,7 +82,7 @@ struct PreferenceTests {
 
       var output = ""
 
-      canvas.render {
+      screen.render {
         TestView { output = $0 }
       }
 
@@ -102,7 +102,7 @@ struct PreferenceTests {
 
       var output = ""
 
-      canvas.render {
+      screen.render {
         TestView { output = $0 }
       }
 
@@ -112,7 +112,7 @@ struct PreferenceTests {
 
   @Suite struct `Accumulated` {
 
-    private let canvas = TestCanvas(width: 7, height: 1)
+    private let screen = TestScreen(width: 7, height: 1)
 
     @Test func `write neither`() {
 
@@ -129,7 +129,7 @@ struct PreferenceTests {
 
       var output = ""
 
-      canvas.render {
+      screen.render {
         TestView { output = $0 }
       }
 
@@ -152,7 +152,7 @@ struct PreferenceTests {
 
       var output = ""
 
-      canvas.render {
+      screen.render {
         TestView { output = $0 }
       }
 
@@ -175,7 +175,7 @@ struct PreferenceTests {
 
       var output = ""
 
-      canvas.render {
+      screen.render {
         TestView { output = $0 }
       }
 
@@ -199,7 +199,7 @@ struct PreferenceTests {
 
       var output = ""
 
-      canvas.render {
+      screen.render {
         TestView { output = $0 }
       }
 
@@ -211,7 +211,7 @@ struct PreferenceTests {
       var lhs = ""
       var rhs = ""
 
-      canvas.render {
+      screen.render {
         Group {
           Text("x")
             .preference(key: A.self, value: "lhs")

@@ -5,7 +5,7 @@ import Testing
 @Suite("Padding", .tags(.modifier))
 struct PaddingTests {
 
-  private let canvas = TestCanvas(width: 3, height: 3)
+  private let screen = TestScreen(width: 3, height: 3)
   private let view = Color.blue
   private let cell = Cell(" ", background: .blue)
 
@@ -17,12 +17,12 @@ struct PaddingTests {
 
   @Test func `edge insets`() {
 
-    let canvas = TestCanvas(width: 8, height: 6)
-    canvas.render {
+    let screen = TestScreen(width: 8, height: 6)
+    screen.render {
       view.padding(EdgeInsets(top: 1, leading: 2, bottom: 3, trailing: 4))
     }
 
-    #expect(canvas.cells == [
+    #expect(screen.cells == [
       Position(x: 3, y: 2): cell,
       Position(x: 4, y: 2): cell,
       Position(x: 3, y: 3): cell,
@@ -32,22 +32,22 @@ struct PaddingTests {
 
   @Test func `all`() async throws {
 
-    canvas.render {
+    screen.render {
       view.padding(.all, 1)
     }
 
-    #expect(canvas.cells == [
+    #expect(screen.cells == [
       Position(x: 2, y: 2): cell,
     ])
   }
 
   @Test func `top`() async throws {
 
-    canvas.render {
+    screen.render {
       view.padding(.top, 1)
     }
 
-    #expect(canvas.cells == [
+    #expect(screen.cells == [
       Position(x: 1, y: 2): cell,
       Position(x: 2, y: 2): cell,
       Position(x: 3, y: 2): cell,
@@ -59,11 +59,11 @@ struct PaddingTests {
 
   @Test func `leading`() async throws {
 
-    canvas.render {
+    screen.render {
       view.padding(.leading, 1)
     }
 
-    #expect(canvas.cells == [
+    #expect(screen.cells == [
       Position(x: 2, y: 1): cell,
       Position(x: 3, y: 1): cell,
       Position(x: 2, y: 2): cell,
@@ -75,11 +75,11 @@ struct PaddingTests {
 
   @Test func `bottom`() async throws {
 
-    canvas.render {
+    screen.render {
       view.padding(.bottom, 1)
     }
 
-    #expect(canvas.cells == [
+    #expect(screen.cells == [
       Position(x: 1, y: 1): cell,
       Position(x: 2, y: 1): cell,
       Position(x: 3, y: 1): cell,
@@ -91,11 +91,11 @@ struct PaddingTests {
 
   @Test func `trailing`() async throws {
 
-    canvas.render {
+    screen.render {
       view.padding(.trailing, 1)
     }
 
-    #expect(canvas.cells == [
+    #expect(screen.cells == [
       Position(x: 1, y: 1): cell,
       Position(x: 2, y: 1): cell,
       Position(x: 1, y: 2): cell,
@@ -107,11 +107,11 @@ struct PaddingTests {
 
   @Test func `horizontal`() async throws {
 
-    canvas.render {
+    screen.render {
       view.padding(.horizontal, 1)
     }
 
-    #expect(canvas.cells == [
+    #expect(screen.cells == [
       Position(x: 2, y: 1): cell,
       Position(x: 2, y: 2): cell,
       Position(x: 2, y: 3): cell,
@@ -120,11 +120,11 @@ struct PaddingTests {
 
   @Test func `vertical`() async throws {
 
-    canvas.render {
+    screen.render {
       view.padding(.vertical, 1)
     }
 
-    #expect(canvas.cells == [
+    #expect(screen.cells == [
       Position(x: 1, y: 2): cell,
       Position(x: 2, y: 2): cell,
       Position(x: 3, y: 2): cell,
@@ -133,11 +133,11 @@ struct PaddingTests {
 
   @Test func `length`() async throws {
 
-    canvas.render {
+    screen.render {
       view.padding(1)
     }
 
-    #expect(canvas.cells == [
+    #expect(screen.cells == [
       Position(x: 2, y: 2): cell,
     ])
   }
@@ -156,7 +156,7 @@ struct PaddingTests {
 //  ) throws {
 //    let proposed = ProposedViewSize(width: proposedWidth, height: proposedHeight)
 //    let view = Text(input).padding(1)
-//    let inputs = ViewInputs(canvas: TextStreamCanvas(output: .memory))
+//    let inputs = ViewInputs(screen: TextStreamScreen(output: .memory))
 //    let items = view.makeView(inputs: inputs).displayItems
 //    try #require(items.count == 1)
 //    let size = items[0].size(for: proposed)
@@ -171,7 +171,7 @@ struct PaddingTests {
 
       var output = ""
 
-      TestCanvas(width: 3, height: 3).render {
+      TestScreen(width: 3, height: 3).render {
         Text("x")
           .padding(.all, 1)
           .onPreferenceChange(PreferenceKey.A.self) { output = $0 }
@@ -184,7 +184,7 @@ struct PaddingTests {
 
       var output = ""
 
-      TestCanvas(width: 3, height: 3).render {
+      TestScreen(width: 3, height: 3).render {
         Text("x")
           .preference(key: PreferenceKey.A.self, value: "new")
           .padding(.all, 1)

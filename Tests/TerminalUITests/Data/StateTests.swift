@@ -20,12 +20,12 @@ struct StateTests {
 
   @Test func `reading`() {
 
-    let canvas = TestCanvas(width: 5, height: 3)
-    canvas.render {
+    let screen = TestScreen(width: 5, height: 3)
+    screen.render {
       TestView()
     }
 
-    #expect(canvas.cells == [
+    #expect(screen.cells == [
       Position(x: 1, y: 2): Cell("h"),
       Position(x: 2, y: 2): Cell("e"),
       Position(x: 3, y: 2): Cell("l"),
@@ -45,12 +45,12 @@ struct StateTests {
       }
     }
 
-    let canvas = TestCanvas(width: 5, height: 1)
-    canvas.render {
+    let screen = TestScreen(width: 5, height: 1)
+    screen.render {
       TestView()
     }
 
-    #expect(canvas.cells == [
+    #expect(screen.cells == [
       Position(x: 2, y: 1): Cell("n"),
       Position(x: 3, y: 1): Cell("e"),
       Position(x: 4, y: 1): Cell("w"),
@@ -77,12 +77,12 @@ struct StateTests {
       }
     }
 
-    let canvas = TestCanvas(width: 5, height: 1)
-    canvas.render {
+    let screen = TestScreen(width: 5, height: 1)
+    screen.render {
       Outer()
     }
 
-    #expect(canvas.cells == [
+    #expect(screen.cells == [
       Position(x: 2, y: 1): Cell("n"),
       Position(x: 3, y: 1): Cell("e"),
       Position(x: 4, y: 1): Cell("w"),
@@ -107,12 +107,12 @@ struct StateTests {
       }
     }
 
-    let canvas = TestCanvas(width: 5, height: 1)
-    canvas.render {
+    let screen = TestScreen(width: 5, height: 1)
+    screen.render {
       Outer()
     }
 
-    #expect(canvas.cells == [
+    #expect(screen.cells == [
       Position(x: 2, y: 1): Cell("n"),
       Position(x: 3, y: 1): Cell("e"),
       Position(x: 4, y: 1): Cell("w"),
@@ -131,15 +131,15 @@ struct StateTests {
       }
     }
 
-    let canvas = TestCanvas(width: 1, height: 2)
-    canvas.render {
+    let screen = TestScreen(width: 1, height: 2)
+    screen.render {
       VStack(spacing: 0) {
         Content(value: "a")
         Content(value: "b")
       }
     }
 
-    #expect(canvas.cells == [
+    #expect(screen.cells == [
       Position(x: 1, y: 1): Cell("a"),
       Position(x: 1, y: 2): Cell("b"),
     ])

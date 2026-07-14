@@ -16,13 +16,13 @@ struct FixedSizeTests {
 
   @Test func `horizontal`() {
 
-    let canvas = TestCanvas(width: 1, height: 1)
-    canvas.render {
+    let screen = TestScreen(width: 1, height: 1)
+    screen.render {
       view.fixedSize(horizontal: true, vertical: false)
     }
 
     // The default length for a nil length in a proposed size is 10.
-    #expect(canvas.cells == [
+    #expect(screen.cells == [
       Position(x: -4, y: 1): cell,
       Position(x: -3, y: 1): cell,
       Position(x: -2, y: 1): cell,
@@ -38,13 +38,13 @@ struct FixedSizeTests {
 
   @Test func `vertical`() {
 
-    let canvas = TestCanvas(width: 1, height: 1)
-    canvas.render {
+    let screen = TestScreen(width: 1, height: 1)
+    screen.render {
       view.fixedSize(horizontal: false, vertical: true)
     }
 
     // The default length for a nil length in a proposed size is 10.
-    #expect(canvas.cells == [
+    #expect(screen.cells == [
       Position(x: 1, y: -4): cell,
       Position(x: 1, y: -3): cell,
       Position(x: 1, y: -2): cell,
@@ -60,13 +60,13 @@ struct FixedSizeTests {
 
   @Test func `both`() {
 
-    let canvas = TestCanvas(width: 1, height: 1)
-    canvas.render {
+    let screen = TestScreen(width: 1, height: 1)
+    screen.render {
       view.fixedSize(horizontal: true, vertical: true)
     }
 
     // The default length for a nil length in a proposed size is 10.
-    #expect(canvas.cells.count == 100)
+    #expect(screen.cells.count == 100)
 
     let xs = -4...5
     let ys = -4...5
@@ -77,7 +77,7 @@ struct FixedSizeTests {
     }
 
     let expected = Dictionary(uniqueKeysWithValues: positions.map { ($0, cell) })
-    #expect(canvas.cells == expected)
+    #expect(screen.cells == expected)
   }
 
   @Suite(.tags(.preferenceValues))
@@ -87,7 +87,7 @@ struct FixedSizeTests {
 
       var output = ""
 
-      TestCanvas(width: 3, height: 3).render {
+      TestScreen(width: 3, height: 3).render {
         Text("x")
           .fixedSize(horizontal: true, vertical: false)
           .onPreferenceChange(PreferenceKey.A.self) { output = $0 }
@@ -100,7 +100,7 @@ struct FixedSizeTests {
 
       var output = ""
 
-      TestCanvas(width: 3, height: 3).render {
+      TestScreen(width: 3, height: 3).render {
         Text("x")
           .preference(key: PreferenceKey.A.self, value: "new")
           .fixedSize(horizontal: true, vertical: false)

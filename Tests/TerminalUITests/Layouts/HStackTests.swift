@@ -13,20 +13,20 @@ struct HStackTests {
 
   @Test func `empty`() {
 
-    let canvas = TestCanvas(width: 3, height: 3)
+    let screen = TestScreen(width: 3, height: 3)
 
-    canvas.render {
+    screen.render {
       HStack {}
     }
 
-    #expect(canvas.cells == [:])
+    #expect(screen.cells == [:])
   }
 
   @Test func `single line`() {
 
-    let canvas = TestCanvas(width: 3, height: 1)
+    let screen = TestScreen(width: 3, height: 1)
 
-    canvas.render {
+    screen.render {
       HStack {
         Text("1")
         Text("2")
@@ -34,7 +34,7 @@ struct HStackTests {
       }
     }
 
-    #expect(canvas.cells == [
+    #expect(screen.cells == [
       Position(x: 1, y: 1): Cell("1"),
       Position(x: 2, y: 1): Cell("2"),
       Position(x: 3, y: 1): Cell("3"),
@@ -43,9 +43,9 @@ struct HStackTests {
 
   @Test func `single line 2`() {
 
-    let canvas = TestCanvas(width: 5, height: 1)
+    let screen = TestScreen(width: 5, height: 1)
 
-    canvas.render {
+    screen.render {
       HStack {
         Color.blue
         Text("A")
@@ -53,7 +53,7 @@ struct HStackTests {
       }
     }
 
-    #expect(canvas.cells == [
+    #expect(screen.cells == [
       Position(x: 1,  y: 1): Cell(" ", background: .blue),
       Position(x: 2,  y: 1): Cell(" ", background: .blue),
       Position(x: 3,  y: 1): Cell("A"),
@@ -64,9 +64,9 @@ struct HStackTests {
 
   @Test func `single line 3`() {
 
-    let canvas = TestCanvas(width: 11, height: 1)
+    let screen = TestScreen(width: 11, height: 1)
 
-    canvas.render {
+    screen.render {
       HStack {
         Color.blue
         Text("A")
@@ -76,7 +76,7 @@ struct HStackTests {
       }
     }
 
-    #expect(canvas.cells == [
+    #expect(screen.cells == [
       Position(x:  1, y: 1): Cell(" ", background: .blue),
       Position(x:  2, y: 1): Cell(" ", background: .blue),
       Position(x:  3, y: 1): Cell(" ", background: .blue),
@@ -98,9 +98,9 @@ struct HStackTests {
   ]))
   func `alignment`(alignment: VerticalAlignment, y: Int) {
 
-    let canvas = TestCanvas(width: 5, height: 3)
+    let screen = TestScreen(width: 5, height: 3)
 
-    canvas.render {
+    screen.render {
       HStack(alignment: alignment) {
         Text("A")
         Color.black.frame(width: 1) // Ensures full height is used for HStack.
@@ -108,7 +108,7 @@ struct HStackTests {
       }
     }
 
-    #expect(canvas.cells == [
+    #expect(screen.cells == [
       Position(x:  2, y: y): Cell("A"),
       Position(x:  4, y: y): Cell("B"),
       Position(x:  3, y: 1): Cell(" ", background: .black),
@@ -125,9 +125,9 @@ struct HStackTests {
   ]))
   func `spacing`(spacing: Int, a: Int, b: Int, c: Int) {
 
-    let canvas = TestCanvas(width: 9, height: 1)
+    let screen = TestScreen(width: 9, height: 1)
 
-    canvas.render {
+    screen.render {
       HStack(spacing: spacing) {
         Text("A")
         Text("B")
@@ -135,7 +135,7 @@ struct HStackTests {
       }
     }
 
-    #expect(canvas.cells == [
+    #expect(screen.cells == [
       Position(x: a, y: 1): Cell("A"),
       Position(x: b, y: 1): Cell("B"),
       Position(x: c, y: 1): Cell("C"),

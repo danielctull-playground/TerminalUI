@@ -13,12 +13,12 @@ struct AnyViewTests {
 
   @Test func `Display Items`() {
 
-    let canvas = TestCanvas(width: 5, height: 3)
-    canvas.render {
+    let screen = TestScreen(width: 5, height: 3)
+    screen.render {
       AnyView(Text("Hello"))
     }
 
-    #expect(canvas.cells == [
+    #expect(screen.cells == [
       Position(x: 1, y: 2): Cell("H"),
       Position(x: 2, y: 2): Cell("e"),
       Position(x: 3, y: 2): Cell("l"),
@@ -34,7 +34,7 @@ struct AnyViewTests {
 
       var output = ""
 
-      TestCanvas(width: 3, height: 3).render {
+      TestScreen(width: 3, height: 3).render {
         AnyView(Text("Hello"))
           .onPreferenceChange(PreferenceKey.A.self) { output = $0 }
       }
@@ -46,7 +46,7 @@ struct AnyViewTests {
 
       var output = ""
 
-      TestCanvas(width: 3, height: 3).render {
+      TestScreen(width: 3, height: 3).render {
         AnyView(Text("Hello"))
           .preference(key: PreferenceKey.A.self, value: "new")
           .onPreferenceChange(PreferenceKey.A.self) { output = $0 }

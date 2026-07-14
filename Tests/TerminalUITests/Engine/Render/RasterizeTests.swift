@@ -2,7 +2,7 @@
 import TerminalUITesting
 import Testing
 
-extension CanvasTests {
+extension ScreenTests {
 
   @Suite("Rasterize")
   struct RasterizeTests {
@@ -16,10 +16,10 @@ extension CanvasTests {
           content: .fill(style))
       ])
 
-      let canvas = TestCanvas(width: 0, height: 0)
-      canvas.rasterize(list)
+      let screen = TestScreen(width: 0, height: 0)
+      screen.rasterize(list)
 
-      #expect(canvas.cells == [
+      #expect(screen.cells == [
         Position(x: 1, y: 1): Cell(" ", background: .red),
         Position(x: 2, y: 1): Cell(" ", background: .red),
         Position(x: 1, y: 2): Cell(" ", background: .red),
@@ -36,10 +36,10 @@ extension CanvasTests {
           content: .text("hi", style))
       ])
 
-      let canvas = TestCanvas(width: 0, height: 0)
-      canvas.rasterize(list)
+      let screen = TestScreen(width: 0, height: 0)
+      screen.rasterize(list)
 
-      #expect(canvas.cells == [
+      #expect(screen.cells == [
         Position(x: 2, y: 3): Cell("h"),
         Position(x: 3, y: 3): Cell("i"),
       ])
@@ -53,10 +53,10 @@ extension CanvasTests {
         DisplayList.Item(frame: Rect(x: 1, y: 1, width: 1, height: 1), content: .fill(blue)),
       ])
 
-      let canvas = TestCanvas(width: 0, height: 0)
-      canvas.rasterize(list)
+      let screen = TestScreen(width: 0, height: 0)
+      screen.rasterize(list)
 
-      #expect(canvas.cells == [
+      #expect(screen.cells == [
         Position(x: 1, y: 1): Cell(" ", background: .blue),
       ])
     }
@@ -69,10 +69,10 @@ extension CanvasTests {
         DisplayList.Item(frame: Rect(x: 1, y: 1, width: 5, height: 0), content: .text("hi", style)),
       ])
 
-      let canvas = TestCanvas(width: 0, height: 0)
-      canvas.rasterize(list)
+      let screen = TestScreen(width: 0, height: 0)
+      screen.rasterize(list)
 
-      #expect(canvas.cells.isEmpty)
+      #expect(screen.cells.isEmpty)
     }
   }
 }

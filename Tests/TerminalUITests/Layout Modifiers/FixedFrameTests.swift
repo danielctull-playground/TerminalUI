@@ -5,7 +5,7 @@ import Testing
 @Suite("FixedFrame", .tags(.modifier))
 struct FixedFrameTests {
 
-  private let canvas = TestCanvas(width: 3, height: 3)
+  private let screen = TestScreen(width: 3, height: 3)
   private let view = Color.blue
   private let cell = Cell(" ", background: .blue)
 
@@ -17,11 +17,11 @@ struct FixedFrameTests {
 
   @Test func `width: nil, height: nil`() {
 
-    canvas.render {
+    screen.render {
       view.frame()
     }
 
-    #expect(canvas.cells == [
+    #expect(screen.cells == [
       Position(x: 1, y: 1): cell,
       Position(x: 2, y: 1): cell,
       Position(x: 3, y: 1): cell,
@@ -36,11 +36,11 @@ struct FixedFrameTests {
 
   @Test func `width: 1, height: nil`() {
 
-    canvas.render {
+    screen.render {
       view.frame(width: 1)
     }
 
-    #expect(canvas.cells == [
+    #expect(screen.cells == [
       Position(x: 2, y: 1): cell,
       Position(x: 2, y: 2): cell,
       Position(x: 2, y: 3): cell,
@@ -49,11 +49,11 @@ struct FixedFrameTests {
 
   @Test func `width: 2, height: nil`() {
 
-    canvas.render {
+    screen.render {
       view.frame(width: 2)
     }
 
-    #expect(canvas.cells == [
+    #expect(screen.cells == [
       Position(x: 1, y: 1): cell,
       Position(x: 1, y: 2): cell,
       Position(x: 1, y: 3): cell,
@@ -65,11 +65,11 @@ struct FixedFrameTests {
 
   @Test func `width: nil, height: 1`() {
 
-    canvas.render {
+    screen.render {
       view.frame(height: 1)
     }
 
-    #expect(canvas.cells == [
+    #expect(screen.cells == [
       Position(x: 1, y: 2): cell,
       Position(x: 2, y: 2): cell,
       Position(x: 3, y: 2): cell,
@@ -78,11 +78,11 @@ struct FixedFrameTests {
 
   @Test func `width: nil, height: 2`() {
 
-    canvas.render {
+    screen.render {
       view.frame(height: 2)
     }
 
-    #expect(canvas.cells == [
+    #expect(screen.cells == [
       Position(x: 1, y: 1): cell,
       Position(x: 2, y: 1): cell,
       Position(x: 3, y: 1): cell,
@@ -94,22 +94,22 @@ struct FixedFrameTests {
 
   @Test func `width: 1, height: 1`() {
 
-    canvas.render {
+    screen.render {
       view.frame(width: 1, height: 1)
     }
 
-    #expect(canvas.cells == [
+    #expect(screen.cells == [
       Position(x: 2, y: 2): cell,
     ])
   }
 
   @Test func `width: 2, height: 2`() {
 
-    canvas.render {
+    screen.render {
       view.frame(width: 2, height: 2)
     }
 
-    #expect(canvas.cells == [
+    #expect(screen.cells == [
       Position(x: 1, y: 1): cell,
       Position(x: 2, y: 1): cell,
       Position(x: 1, y: 2): cell,
@@ -119,13 +119,13 @@ struct FixedFrameTests {
 
   @Test func `nested`() {
 
-    canvas.render {
+    screen.render {
       view
         .frame(width: 1, height: 1)
         .frame(width: 3, height: 3)
     }
 
-    #expect(canvas.cells == [
+    #expect(screen.cells == [
       Position(x: 2, y: 2): cell,
     ])
   }
@@ -143,13 +143,13 @@ struct FixedFrameTests {
   ]))
   func `alignment`(alignment: Alignment, position: Position) {
 
-    canvas.render {
+    screen.render {
       view
         .frame(width: 1, height: 1)
         .frame(width: 3, height: 3, alignment: alignment)
     }
 
-    #expect(canvas.cells == [position: cell])
+    #expect(screen.cells == [position: cell])
   }
 
   @Suite(.tags(.preferenceValues))
@@ -159,7 +159,7 @@ struct FixedFrameTests {
 
       var output = ""
 
-      TestCanvas(width: 3, height: 3).render {
+      TestScreen(width: 3, height: 3).render {
         Text("x")
           .frame(width: 1, height: 1)
           .onPreferenceChange(PreferenceKey.A.self) { output = $0 }
@@ -172,7 +172,7 @@ struct FixedFrameTests {
 
       var output = ""
 
-      TestCanvas(width: 3, height: 3).render {
+      TestScreen(width: 3, height: 3).render {
         Text("x")
           .preference(key: PreferenceKey.A.self, value: "new")
           .frame(width: 1, height: 1)

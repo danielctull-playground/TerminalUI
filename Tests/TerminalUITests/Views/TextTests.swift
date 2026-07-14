@@ -5,7 +5,7 @@ import Testing
 @Suite("Text", .tags(.view))
 struct TextTests {
 
-  private let canvas = TestCanvas(width: 5, height: 3)
+  private let screen = TestScreen(width: 5, height: 3)
 
   @Test func `body: fatal`() async {
     await #expect(processExitsWith: .failure) {
@@ -15,11 +15,11 @@ struct TextTests {
 
   @Test func `single line`() {
 
-    canvas.render {
+    screen.render {
       Text("Hello")
     }
 
-    #expect(canvas.cells == [
+    #expect(screen.cells == [
       Position(x: 1, y: 2): Cell("H"),
       Position(x: 2, y: 2): Cell("e"),
       Position(x: 3, y: 2): Cell("l"),
@@ -30,11 +30,11 @@ struct TextTests {
 
   @Test func `two lines`() {
 
-    canvas.render {
+    screen.render {
       Text("Hi there")
     }
 
-    #expect(canvas.cells == [
+    #expect(screen.cells == [
       Position(x: 1, y: 1): Cell("H"),
       Position(x: 2, y: 1): Cell("i"),
       Position(x: 1, y: 2): Cell("t"),
@@ -47,11 +47,11 @@ struct TextTests {
 
   @Test func `two lines (space is just after end)`() {
 
-    canvas.render {
+    screen.render {
       Text("Hello there")
     }
 
-    #expect(canvas.cells == [
+    #expect(screen.cells == [
       Position(x: 1, y: 1): Cell("H"),
       Position(x: 2, y: 1): Cell("e"),
       Position(x: 3, y: 1): Cell("l"),
@@ -80,7 +80,7 @@ struct TextTests {
 //    expectedHeight: Int
 //  ) throws {
 //    let proposed = ProposedViewSize(width: proposedWidth, height: proposedHeight)
-//    let inputs = ViewInputs(canvas: TextStreamCanvas(output: .memory))
+//    let inputs = ViewInputs(screen: TextStreamScreen(output: .memory))
 //    let items = Text(input).makeView(inputs: inputs).displayItems
 //    try #require(items.count == 1)
 //    let size = items[0].size(for: proposed)
@@ -95,7 +95,7 @@ struct TextTests {
 
       var output = ""
 
-      TestCanvas(width: 3, height: 3).render {
+      TestScreen(width: 3, height: 3).render {
         Text("Hello")
           .onPreferenceChange(PreferenceKey.A.self) { output = $0 }
       }
@@ -107,7 +107,7 @@ struct TextTests {
 
       var output = ""
 
-      TestCanvas(width: 3, height: 3).render {
+      TestScreen(width: 3, height: 3).render {
         Text("Hello")
           .preference(key: PreferenceKey.A.self, value: "new")
           .onPreferenceChange(PreferenceKey.A.self) { output = $0 }
@@ -118,18 +118,18 @@ struct TextTests {
   }
 
   @Test func `height: zero`() {
-    let canvas = TestCanvas(width: 3, height: 0)
-    canvas.render {
+    let screen = TestScreen(width: 3, height: 0)
+    screen.render {
       Text("A")
     }
-    #expect(canvas.cells.isEmpty)
+    #expect(screen.cells.isEmpty)
   }
 
   @Test func `width: zero`() {
-    let canvas = TestCanvas(width: 0, height: 3)
-    canvas.render {
+    let screen = TestScreen(width: 0, height: 3)
+    screen.render {
       Text("A")
     }
-    #expect(canvas.cells.isEmpty)
+    #expect(screen.cells.isEmpty)
   }
 }

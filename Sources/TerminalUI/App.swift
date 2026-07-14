@@ -76,7 +76,7 @@ extension App {
     let logger = Logger(label: "Event", factory: logHandler)
 
     let renderer = Renderer(
-      canvas: TextStreamCanvas(output: .fileHandle(.standardOutput)),
+      screen: TextOutputScreen(output: .fileHandle(.standardOutput)),
       content: body
     )
 

@@ -7,13 +7,13 @@ struct UnderlineTests {
 
   @Test func `Output: default`() {
 
-    let canvas = TextStreamCanvas(output: .memory)
+    let screen = TextOutputScreen(output: .memory)
 
-    canvas.render(size: Size(width: 1, height: 1)) {
+    screen.render(size: Size(width: 1, height: 1)) {
       Text("a").underline()
     }
 
-    #expect(canvas.output.controlSequences == [
+    #expect(screen.output.controlSequences == [
       "[2J",     // Clear screen
       "[?1049h", // Alternative buffer on
       "[?25l",   // Cursor visibility off
@@ -28,13 +28,13 @@ struct UnderlineTests {
   ])
   func `Text Output`(underline: Bool, expected: String) {
 
-    let canvas = TextStreamCanvas(output: .memory)
+    let screen = TextOutputScreen(output: .memory)
 
-    canvas.render(size: Size(width: 1, height: 1)) {
+    screen.render(size: Size(width: 1, height: 1)) {
       Text("a").underline(underline)
     }
 
-    #expect(canvas.output.controlSequences == [
+    #expect(screen.output.controlSequences == [
       "[2J",     // Clear screen
       "[?1049h", // Alternative buffer on
       "[?25l",   // Cursor visibility off
@@ -55,13 +55,13 @@ struct UnderlineTests {
     expected: String
   ) {
 
-    let canvas = TextStreamCanvas(output: .memory)
+    let screen = TextOutputScreen(output: .memory)
 
-    canvas.render(size: Size(width: 1, height: 1)) {
+    screen.render(size: Size(width: 1, height: 1)) {
       Text("a").underline(underline, style: style)
     }
 
-    #expect(canvas.output.controlSequences == [
+    #expect(screen.output.controlSequences == [
       "[2J",     // Clear screen
       "[?1049h", // Alternative buffer on
       "[?25l",   // Cursor visibility off

@@ -5,11 +5,11 @@ import Testing
 @Suite("Group", .tags(.view))
 struct GroupTests {
 
-  private var canvas = TestCanvas(width: 10, height: 10)
+  private var screen = TestScreen(width: 10, height: 10)
 
   @Test func test() {
 
-    canvas.render {
+    screen.render {
       Group {
         Text("a")
         Text("b")
@@ -17,7 +17,7 @@ struct GroupTests {
       .padding(1)
     }
 
-    #expect(canvas.cells == [
+    #expect(screen.cells == [
       Position(x: 6, y: 4): Cell("a"),
       Position(x: 6, y: 7): Cell("b"),
     ])
@@ -30,7 +30,7 @@ struct GroupTests {
 
       var output = ""
 
-      TestCanvas(width: 3, height: 3).render {
+      TestScreen(width: 3, height: 3).render {
         Group {}
           .onPreferenceChange(PreferenceKey.A.self) { output = $0 }
       }
@@ -42,7 +42,7 @@ struct GroupTests {
 
       var output = ""
 
-      TestCanvas(width: 3, height: 3).render {
+      TestScreen(width: 3, height: 3).render {
         Group {
           Text("x")
             .preference(key: PreferenceKey.A.self, value: "lhs")
@@ -58,7 +58,7 @@ struct GroupTests {
 
       var output = ""
 
-      TestCanvas(width: 3, height: 3).render {
+      TestScreen(width: 3, height: 3).render {
         Group {
           Text("x")
           Text("y")
@@ -74,7 +74,7 @@ struct GroupTests {
 
       var output = ""
 
-      TestCanvas(width: 3, height: 3).render {
+      TestScreen(width: 3, height: 3).render {
         Group {
           Text("x")
             .preference(key: PreferenceKey.A.self, value: "left")

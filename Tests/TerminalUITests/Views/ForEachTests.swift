@@ -7,8 +7,8 @@ struct ForEachTests {
 
   @Test func `renders each element in order`() {
 
-    let canvas = TestCanvas(width: 1, height: 3)
-    canvas.render {
+    let screen = TestScreen(width: 1, height: 3)
+    screen.render {
       VStack(spacing: 0) {
         ForEach(["a", "b", "c"], id: \.self) { letter in
           Text(letter)
@@ -16,7 +16,7 @@ struct ForEachTests {
       }
     }
 
-    #expect(canvas.cells == [
+    #expect(screen.cells == [
       Position(x: 1, y: 1): Cell("a"),
       Position(x: 1, y: 2): Cell("b"),
       Position(x: 1, y: 3): Cell("c"),
@@ -46,9 +46,9 @@ struct ForEachTests {
       }
     }
 
-    let canvas = TestCanvas(width: 1, height: 2)
-    canvas.render { Content() }
-    #expect(canvas.cells == [
+    let screen = TestScreen(width: 1, height: 2)
+    screen.render { Content() }
+    #expect(screen.cells == [
       Position(x: 1, y: 1): Cell("a"),
       Position(x: 1, y: 2): Cell("b"),
     ])
@@ -82,22 +82,22 @@ struct ForEachTests {
       }
     }
 
-    let canvas = TestCanvas(width: 3, height: 1)
-    let renderer = Renderer(canvas: canvas, content: Content())
+    let screen = TestScreen(width: 3, height: 1)
+    let renderer = Renderer(screen: screen, content: Content())
 
     renderer.render(event: WindowSize(size: Size(width: 1, height: 1)))
-    #expect(canvas.cells == [
+    #expect(screen.cells == [
       Position(x: 1, y: 1): Cell("1"),
     ])
 
     renderer.render(event: WindowSize(size: Size(width: 2, height: 1)))
-    #expect(canvas.cells == [
+    #expect(screen.cells == [
       Position(x: 1, y: 1): Cell("1"),
       Position(x: 2, y: 1): Cell("2"),
     ])
 
     renderer.render(event: WindowSize(size: Size(width: 3, height: 1)))
-    #expect(canvas.cells == [
+    #expect(screen.cells == [
       Position(x: 1, y: 1): Cell("1"),
       Position(x: 2, y: 1): Cell("2"),
       Position(x: 3, y: 1): Cell("3"),
@@ -119,10 +119,10 @@ struct ForEachTests {
       }
     }
 
-    let canvas = TestCanvas(width: 1, height: 2)
+    let screen = TestScreen(width: 1, height: 2)
 
-    canvas.render { Content() }
-    #expect(canvas.cells == [
+    screen.render { Content() }
+    #expect(screen.cells == [
       Position(x: 1, y: 1): Cell("b"),
       Position(x: 1, y: 2): Cell("a"),
     ])
@@ -160,19 +160,19 @@ struct ForEachTests {
       }
     }
 
-    let canvas = TestCanvas(width: 2, height: 2)
-    let renderer = Renderer(canvas: canvas, content: Content())
+    let screen = TestScreen(width: 2, height: 2)
+    let renderer = Renderer(screen: screen, content: Content())
 
     // [a,b], each logs once
     renderer.render(event: WindowSize(size: Size(width: 1, height: 2)))
-    #expect(canvas.cells == [
+    #expect(screen.cells == [
       Position(x: 1, y: 1): Cell("a"),
       Position(x: 1, y: 2): Cell("b"),
     ])
 
     // reorder → [b,a], each logs again
     renderer.render(event: WindowSize(size: Size(width: 2, height: 2)))
-    #expect(canvas.cells == [
+    #expect(screen.cells == [
       Position(x: 1, y: 1): Cell("b"), Position(x: 2, y: 1): Cell("b"),
       Position(x: 1, y: 2): Cell("a"), Position(x: 2, y: 2): Cell("a"),
     ])
@@ -202,7 +202,7 @@ struct ForEachTests {
       }
     }
 
-    let renderer = Renderer(canvas: TestCanvas(width: 1, height: 1), content: Content())
+    let renderer = Renderer(screen: TestScreen(width: 1, height: 1), content: Content())
     #expect(Tracked.live == 0)
 
     // Initial render yields 1 Tracked instance.
