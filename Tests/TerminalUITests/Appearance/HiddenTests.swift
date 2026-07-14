@@ -11,7 +11,7 @@ struct HiddenTests {
   ])
   func `Text Output`(hidden: Bool, expected: String) {
 
-    let screen = TextStreamScreen(output: .memory)
+    let screen = TextOutputScreen(output: .memory)
 
     screen.render(size: Size(width: 1, height: 1)) {
       Text("a").hidden(hidden)

@@ -11,7 +11,7 @@ struct BoldTests {
   ])
   func `Text Output`(bold: Bool, expected: String) {
 
-    let screen = TextStreamScreen(output: .memory)
+    let screen = TextOutputScreen(output: .memory)
 
     screen.render(size: Size(width: 1, height: 1)) {
       Text("a").bold(bold)

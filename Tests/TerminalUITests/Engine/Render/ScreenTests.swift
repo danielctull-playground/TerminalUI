@@ -6,7 +6,7 @@ import Testing
 struct ScreenTests {
 
   @Test func `Drawing with default values`() {
-    let screen = TextStreamScreen(output: .memory)
+    let screen = TextOutputScreen(output: .memory)
     screen.draw([Position(x: 2, y: 1): Cell("a")])
     #expect(screen.output.controlSequences == [
       "[39;49;22;23;24;25;27;28;29m",

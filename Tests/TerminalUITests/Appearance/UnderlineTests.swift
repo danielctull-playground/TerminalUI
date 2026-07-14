@@ -7,7 +7,7 @@ struct UnderlineTests {
 
   @Test func `Output: default`() {
 
-    let screen = TextStreamScreen(output: .memory)
+    let screen = TextOutputScreen(output: .memory)
 
     screen.render(size: Size(width: 1, height: 1)) {
       Text("a").underline()
@@ -28,7 +28,7 @@ struct UnderlineTests {
   ])
   func `Text Output`(underline: Bool, expected: String) {
 
-    let screen = TextStreamScreen(output: .memory)
+    let screen = TextOutputScreen(output: .memory)
 
     screen.render(size: Size(width: 1, height: 1)) {
       Text("a").underline(underline)
@@ -55,7 +55,7 @@ struct UnderlineTests {
     expected: String
   ) {
 
-    let screen = TextStreamScreen(output: .memory)
+    let screen = TextOutputScreen(output: .memory)
 
     screen.render(size: Size(width: 1, height: 1)) {
       Text("a").underline(underline, style: style)

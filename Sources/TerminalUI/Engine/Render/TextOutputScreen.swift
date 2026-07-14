@@ -1,5 +1,5 @@
 
-package struct TextStreamScreen<Output: TextOutputStream> {
+package struct TextOutputScreen<Output: TextOutputStream> {
 
   @Mutable package var output: Output
 
@@ -8,7 +8,7 @@ package struct TextStreamScreen<Output: TextOutputStream> {
   }
 }
 
-extension TextStreamScreen: Screen {
+extension TextOutputScreen: Screen {
 
   package func send(_ csi: CSI) {
     output.write(csi)
