@@ -60,7 +60,21 @@ package struct Renderer<Content: View, Screen: TerminalUI.Screen> {
         root.place(in: frame)
       }
 
-      let displayList = graph[outputs.displayList]
+      let outputDisplayList = graph[outputs.displayList]
+
+      // This is used to ensure any cells that were coloured and are now "clear"
+      // are cleared on screen. This can happen when a cell is no longer in the
+      // output display list.
+      //
+      // Fill the screen with clear cells then place items in front of it. These
+      // aren't all drawn, as the rasterizer converts this frame to cells and
+      // is "drawn over" in memory only.
+      let empty = DisplayList.Item(
+        frame: Rect(origin: .origin, size: environmentValues.windowSize.size),
+        content: .fill(Style(backgroundColor: .default))
+      )
+
+      let displayList = DisplayList(items: [empty] + outputDisplayList.items)
 
       screen.rasterize(displayList)
     }
