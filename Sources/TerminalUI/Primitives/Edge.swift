@@ -2,8 +2,8 @@
 public enum Edge {}
 
 extension Edge {
-  public struct Set {
-    fileprivate let insets: (Int) -> EdgeInsets
+  public struct Set: Sendable {
+    fileprivate let insets: @Sendable (Int) -> EdgeInsets
   }
 }
 

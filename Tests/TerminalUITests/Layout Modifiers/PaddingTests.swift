@@ -32,95 +32,57 @@ struct PaddingTests {
       """)
   }
 
-  @Test func `all`() async throws {
-
-    screen.render {
-      view.padding(.all, 1)
-    }
-
-    #expect(screen.buffer.description == """
+  @Test(arguments: Array<(Edge.Set, String)>([
+    (.all, """
       ...
       .▨.
       ...
-      """)
-  }
-
-  @Test func `top`() async throws {
-
-    screen.render {
-      view.padding(.top, 1)
-    }
-
-    #expect(screen.buffer.description == """
+      """
+    ),
+    (.top, """
       ...
       ▨▨▨
       ▨▨▨
-      """)
-  }
-
-  @Test func `leading`() async throws {
-
-    screen.render {
-      view.padding(.leading, 1)
-    }
-
-    #expect(screen.buffer.description == """
+      """
+    ),
+    (.leading, """
       .▨▨
       .▨▨
       .▨▨
-      """)
-  }
-
-  @Test func `bottom`() async throws {
-
-    screen.render {
-      view.padding(.bottom, 1)
-    }
-
-    #expect(screen.buffer.description == """
+      """
+    ),
+    (.bottom, """
       ▨▨▨
       ▨▨▨
       ...
-      """)
-  }
-
-  @Test func `trailing`() async throws {
-
-    screen.render {
-      view.padding(.trailing, 1)
-    }
-
-    #expect(screen.buffer.description == """
+      """
+    ),
+    (.trailing, """
       ▨▨.
       ▨▨.
       ▨▨.
-      """)
-  }
-
-  @Test func `horizontal`() async throws {
-
-    screen.render {
-      view.padding(.horizontal, 1)
-    }
-
-    #expect(screen.buffer.description == """
+      """
+    ),
+    (.horizontal, """
       .▨.
       .▨.
       .▨.
-      """)
-  }
-
-  @Test func `vertical`() async throws {
-
-    screen.render {
-      view.padding(.vertical, 1)
-    }
-
-    #expect(screen.buffer.description == """
+      """
+    ),
+    (.vertical, """
       ...
       ▨▨▨
       ...
-      """)
+      """
+    ),
+  ]))
+  func `edge set`(edges: Edge.Set, expected: String) {
+
+    screen.render {
+      view.padding(edges, 1)
+    }
+
+    #expect(screen.buffer.description == expected)
   }
 
   @Test func `length`() async throws {
