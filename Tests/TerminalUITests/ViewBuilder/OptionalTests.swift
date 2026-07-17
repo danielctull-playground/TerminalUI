@@ -57,11 +57,7 @@ struct OptionalTests {
       }
     }
 
-    #expect(screen.cells == [
-      Position(x: 1, y: 1): Cell("n"),
-      Position(x: 2, y: 1): Cell("e"),
-      Position(x: 3, y: 1): Cell("w"),
-    ])
+    #expect(screen.buffer.description == "new")
   }
 
   @MainActor
@@ -90,23 +86,23 @@ struct OptionalTests {
       }
     }
 
-    let screen = TestScreen(width: 1, height: 1)
+    let screen = TestScreen(width: 15, height: 1)
     let renderer = Renderer(screen: screen, content: Content())
 
     renderer.render(event: WindowSize(size: Size(width: 3, height: 1)))
-    #expect(screen.cells[Position(x: 2, y: 1)] == Cell("0"))
+    #expect(screen.buffer.description == ".0.............")
 
     renderer.render(event: WindowSize(size: Size(width: 5, height: 1)))
-    #expect(screen.cells[Position(x: 3, y: 1)] == nil)
+    #expect(screen.buffer.description == "...............")
 
     renderer.render(event: WindowSize(size: Size(width: 7, height: 1)))
-    #expect(screen.cells[Position(x: 4, y: 1)] == nil)
+    #expect(screen.buffer.description == "...............")
 
     renderer.render(event: WindowSize(size: Size(width: 9, height: 1)))
-    #expect(screen.cells[Position(x: 5, y: 1)] == Cell("1"))
+    #expect(screen.buffer.description == "....1..........")
 
     renderer.render(event: WindowSize(size: Size(width: 15, height: 1)))
-    #expect(screen.cells[Position(x: 8, y: 1)] == Cell("1"))
+    #expect(screen.buffer.description == ".......1.......")
   }
 
   @MainActor

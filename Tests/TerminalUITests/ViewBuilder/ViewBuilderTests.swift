@@ -5,11 +5,17 @@ import Testing
 @Suite("ViewBuilder", .tags(.modifier))
 struct ViewBuilderTests {
 
-  private var screen = TestScreen(width: 10, height: 10)
+  private var screen = TestScreen(width: 5, height: 5)
 
   @Test func empty() {
     screen.render {}
-    #expect(screen.cells == [:])
+    #expect(screen.buffer.description == """
+      .....
+      .....
+      .....
+      .....
+      .....
+      """)
   }
 
   @Test func first() {
@@ -18,9 +24,13 @@ struct ViewBuilderTests {
       Text("a")
     }
 
-    #expect(screen.cells == [
-      Position(x: 6, y: 6): Cell("a"),
-    ])
+    #expect(screen.buffer.description == """
+      .....
+      .....
+      ..a..
+      .....
+      .....
+      """)
   }
 
   @Test func `first body: fatal`() async {
@@ -38,10 +48,13 @@ struct ViewBuilderTests {
       Text("b")
     }
 
-    #expect(screen.cells == [
-      Position(x: 6, y: 5): Cell("a"),
-      Position(x: 6, y: 6): Cell("b"),
-    ])
+    #expect(screen.buffer.description == """
+      .....
+      ..a..
+      ..b..
+      .....
+      .....
+      """)
   }
 
   @Test func `accumulated body: fatal`() async {
@@ -53,10 +66,24 @@ struct ViewBuilderTests {
   }
 
   @Test(arguments: [
-    (true, [Position(x: 6, y: 6): Cell("a")]),
-    (false, [:])
+    (true, """
+      .....
+      .....
+      ..a..
+      .....
+      .....
+      """
+    ),
+    (false, """
+      .....
+      .....
+      .....
+      .....
+      .....
+      """
+    ),
   ])
-  func optional(value: Bool, expectation: [Position: Cell]) {
+  func optional(value: Bool, expected: String) {
 
     screen.render {
       if value {
@@ -64,7 +91,7 @@ struct ViewBuilderTests {
       }
     }
 
-    #expect(screen.cells == expectation)
+    #expect(screen.buffer.description == expected)
   }
 
   @Test func `optional body: fatal`() async {
@@ -76,10 +103,24 @@ struct ViewBuilderTests {
   }
 
   @Test(arguments: [
-    (true, "a"),
-    (false, "b")
+    (true, """
+      .....
+      .....
+      ..a..
+      .....
+      .....
+      """
+    ),
+    (false, """
+      .....
+      .....
+      ..b..
+      .....
+      .....
+      """
+    ),
   ])
-  func either(value: Bool, character: Character) {
+  func either(value: Bool, expected: String) {
 
     screen.render {
       if value {
@@ -89,9 +130,7 @@ struct ViewBuilderTests {
       }
     }
 
-    #expect(screen.cells == [
-      Position(x: 6, y: 6): Cell(character),
-    ])
+    #expect(screen.buffer.description == expected)
   }
 
   @Test func `either body: fatal`() async {
@@ -117,9 +156,13 @@ struct ViewBuilderTests {
       }
     }
 
-    #expect(screen.cells == [
-      Position(x: 6, y: 6): Cell("b"),
-    ])
+    #expect(screen.buffer.description == """
+      .....
+      .....
+      ..b..
+      .....
+      .....
+      """)
   }
 #endif
 

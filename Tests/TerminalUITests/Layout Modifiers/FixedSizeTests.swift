@@ -22,18 +22,9 @@ struct FixedSizeTests {
     }
 
     // The default length for a nil length in a proposed size is 10.
-    #expect(screen.cells == [
-      Position(x: -4, y: 1): cell,
-      Position(x: -3, y: 1): cell,
-      Position(x: -2, y: 1): cell,
-      Position(x: -1, y: 1): cell,
-      Position(x:  0, y: 1): cell,
-      Position(x:  1, y: 1): cell,
-      Position(x:  2, y: 1): cell,
-      Position(x:  3, y: 1): cell,
-      Position(x:  4, y: 1): cell,
-      Position(x:  5, y: 1): cell,
-    ])
+    #expect(screen.buffer.description == """
+      ▨▨▨▨▨▨▨▨▨▨
+      """)
   }
 
   @Test func `vertical`() {
@@ -44,18 +35,18 @@ struct FixedSizeTests {
     }
 
     // The default length for a nil length in a proposed size is 10.
-    #expect(screen.cells == [
-      Position(x: 1, y: -4): cell,
-      Position(x: 1, y: -3): cell,
-      Position(x: 1, y: -2): cell,
-      Position(x: 1, y: -1): cell,
-      Position(x: 1, y:  0): cell,
-      Position(x: 1, y:  1): cell,
-      Position(x: 1, y:  2): cell,
-      Position(x: 1, y:  3): cell,
-      Position(x: 1, y:  4): cell,
-      Position(x: 1, y:  5): cell,
-    ])
+    #expect(screen.buffer.description == """
+      ▨
+      ▨
+      ▨
+      ▨
+      ▨
+      ▨
+      ▨
+      ▨
+      ▨
+      ▨
+      """)
   }
 
   @Test func `both`() {
@@ -66,18 +57,18 @@ struct FixedSizeTests {
     }
 
     // The default length for a nil length in a proposed size is 10.
-    #expect(screen.cells.count == 100)
-
-    let xs = -4...5
-    let ys = -4...5
-    let positions = xs.flatMap { x in
-      ys.map { y in
-        Position(x: x, y: y)
-      }
-    }
-
-    let expected = Dictionary(uniqueKeysWithValues: positions.map { ($0, cell) })
-    #expect(screen.cells == expected)
+    #expect(screen.buffer.description == """
+      ▨▨▨▨▨▨▨▨▨▨
+      ▨▨▨▨▨▨▨▨▨▨
+      ▨▨▨▨▨▨▨▨▨▨
+      ▨▨▨▨▨▨▨▨▨▨
+      ▨▨▨▨▨▨▨▨▨▨
+      ▨▨▨▨▨▨▨▨▨▨
+      ▨▨▨▨▨▨▨▨▨▨
+      ▨▨▨▨▨▨▨▨▨▨
+      ▨▨▨▨▨▨▨▨▨▨
+      ▨▨▨▨▨▨▨▨▨▨
+      """)
   }
 
   @Suite(.tags(.preferenceValues))

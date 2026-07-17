@@ -16,11 +16,11 @@ struct ForEachTests {
       }
     }
 
-    #expect(screen.cells == [
-      Position(x: 1, y: 1): Cell("a"),
-      Position(x: 1, y: 2): Cell("b"),
-      Position(x: 1, y: 3): Cell("c"),
-    ])
+    #expect(screen.buffer.description == """
+      a
+      b
+      c
+      """)
   }
 
   @Test(.tags(.state))
@@ -86,22 +86,13 @@ struct ForEachTests {
     let renderer = Renderer(screen: screen, content: Content())
 
     renderer.render(event: WindowSize(size: Size(width: 1, height: 1)))
-    #expect(screen.cells == [
-      Position(x: 1, y: 1): Cell("1"),
-    ])
+    #expect(screen.buffer.description == "1..")
 
     renderer.render(event: WindowSize(size: Size(width: 2, height: 1)))
-    #expect(screen.cells == [
-      Position(x: 1, y: 1): Cell("1"),
-      Position(x: 2, y: 1): Cell("2"),
-    ])
+    #expect(screen.buffer.description == "12.")
 
     renderer.render(event: WindowSize(size: Size(width: 3, height: 1)))
-    #expect(screen.cells == [
-      Position(x: 1, y: 1): Cell("1"),
-      Position(x: 2, y: 1): Cell("2"),
-      Position(x: 3, y: 1): Cell("3"),
-    ])
+    #expect(screen.buffer.description == "123")
   }
 
   @Test func `reordering the data reorders the content`() {
@@ -122,10 +113,11 @@ struct ForEachTests {
     let screen = TestScreen(width: 1, height: 2)
 
     screen.render { Content() }
-    #expect(screen.cells == [
-      Position(x: 1, y: 1): Cell("b"),
-      Position(x: 1, y: 2): Cell("a"),
-    ])
+
+    #expect(screen.buffer.description == """
+      b
+      a
+      """)
   }
 
   @Test(.tags(.state))
@@ -165,17 +157,17 @@ struct ForEachTests {
 
     // [a,b], each logs once
     renderer.render(event: WindowSize(size: Size(width: 1, height: 2)))
-    #expect(screen.cells == [
-      Position(x: 1, y: 1): Cell("a"),
-      Position(x: 1, y: 2): Cell("b"),
-    ])
+    #expect(screen.buffer.description == """
+      a.
+      b.
+      """)
 
     // reorder → [b,a], each logs again
     renderer.render(event: WindowSize(size: Size(width: 2, height: 2)))
-    #expect(screen.cells == [
-      Position(x: 1, y: 1): Cell("b"), Position(x: 2, y: 1): Cell("b"),
-      Position(x: 1, y: 2): Cell("a"), Position(x: 2, y: 2): Cell("a"),
-    ])
+    #expect(screen.buffer.description == """
+      bb
+      aa
+      """)
   }
 
   @Test(.tags(.state))

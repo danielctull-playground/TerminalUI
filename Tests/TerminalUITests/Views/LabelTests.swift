@@ -18,18 +18,9 @@ struct LabelTests {
         }
       }
 
-      #expect(screen.cells == [
-        Position(x:  1, y: 1): Cell("i"),
-        Position(x:  2, y: 1): Cell("c"),
-        Position(x:  3, y: 1): Cell("o"),
-        Position(x:  4, y: 1): Cell("n"),
-
-        Position(x:  6, y: 1): Cell("t"),
-        Position(x:  7, y: 1): Cell("i"),
-        Position(x:  8, y: 1): Cell("t"),
-        Position(x:  9, y: 1): Cell("l"),
-        Position(x: 10, y: 1): Cell("e"),
-      ])
+      #expect(screen.buffer.description == """
+        icon.title
+        """)
     }
 
     @Test func `titleAndIcon`() {
@@ -44,18 +35,9 @@ struct LabelTests {
         .labelStyle(.titleAndIcon)
       }
 
-      #expect(screen.cells == [
-        Position(x:  1, y: 1): Cell("i"),
-        Position(x:  2, y: 1): Cell("c"),
-        Position(x:  3, y: 1): Cell("o"),
-        Position(x:  4, y: 1): Cell("n"),
-
-        Position(x:  6, y: 1): Cell("t"),
-        Position(x:  7, y: 1): Cell("i"),
-        Position(x:  8, y: 1): Cell("t"),
-        Position(x:  9, y: 1): Cell("l"),
-        Position(x: 10, y: 1): Cell("e"),
-      ])
+      #expect(screen.buffer.description == """
+        icon.title
+        """)
     }
 
     @Test func `titleOnly`() {
@@ -70,13 +52,9 @@ struct LabelTests {
         .labelStyle(.titleOnly)
       }
 
-      #expect(screen.cells == [
-        Position(x: 4, y: 1): Cell("t"),
-        Position(x: 5, y: 1): Cell("i"),
-        Position(x: 6, y: 1): Cell("t"),
-        Position(x: 7, y: 1): Cell("l"),
-        Position(x: 8, y: 1): Cell("e"),
-      ])
+      #expect(screen.buffer.description == """
+        ...title..
+        """)
     }
 
     @Test func `iconOnly`() {
@@ -91,12 +69,9 @@ struct LabelTests {
         .labelStyle(.iconOnly)
       }
 
-      #expect(screen.cells == [
-        Position(x: 4, y: 1): Cell("i"),
-        Position(x: 5, y: 1): Cell("c"),
-        Position(x: 6, y: 1): Cell("o"),
-        Position(x: 7, y: 1): Cell("n"),
-      ])
+      #expect(screen.buffer.description == """
+        ...icon...
+        """)
     }
 
     @Test func `custom`() {
@@ -122,18 +97,11 @@ struct LabelTests {
         .labelStyle(Custom())
       }
 
-      #expect(screen.cells == [
-        Position(x: 1, y: 1): Cell("i"),
-        Position(x: 2, y: 1): Cell("c"),
-        Position(x: 3, y: 1): Cell("o"),
-        Position(x: 4, y: 1): Cell("n"),
-
-        Position(x: 1, y: 3): Cell("t"),
-        Position(x: 2, y: 3): Cell("i"),
-        Position(x: 3, y: 3): Cell("t"),
-        Position(x: 4, y: 3): Cell("l"),
-        Position(x: 5, y: 3): Cell("e"),
-      ])
+      #expect(screen.buffer.description == """
+        icon.
+        .....
+        title
+        """)
     }
   }
 

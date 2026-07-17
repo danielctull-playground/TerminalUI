@@ -34,6 +34,10 @@ struct Style: Equatable {
 }
 
 extension Style {
+  static let `default` = Style()
+}
+
+extension Style {
   var graphicRendition: [GraphicRendition] {
     [
       foregroundColor.foreground,

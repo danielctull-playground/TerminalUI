@@ -20,9 +20,7 @@ struct NamespaceTests {
       Content()
     }
 
-    #expect(screen.cells == [
-      Position(x: 1, y: 1): Cell("D")
-    ])
+    #expect(screen.buffer.description == "D")
   }
 
   @Test func `namespaces in sibling views are independent`() {
@@ -63,9 +61,7 @@ struct NamespaceTests {
       Content()
     }
 
-    #expect(screen.cells == [
-      Position(x: 1, y: 1): Cell("D")
-    ])
+    #expect(screen.buffer.description == "D")
   }
 
   @Test func `should be consistent across re-evaluation`() {

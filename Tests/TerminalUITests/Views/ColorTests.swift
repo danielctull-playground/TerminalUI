@@ -38,7 +38,7 @@ struct ColorTests {
     screen.render {
       Color.red
     }
-    #expect(screen.cells.isEmpty)
+    #expect(screen.buffer.description == "")
   }
 
   @Test func `width: zero`() {
@@ -46,7 +46,7 @@ struct ColorTests {
     screen.render {
       Color.red
     }
-    #expect(screen.cells.isEmpty)
+    #expect(screen.buffer.description == "")
   }
 
 //  @Test("size", arguments: Color.testCases)

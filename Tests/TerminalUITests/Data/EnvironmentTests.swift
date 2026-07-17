@@ -20,15 +20,9 @@ struct EnvironmentTests {
       TestView()
     }
 
-    #expect(screen.cells == [
-      Position(x: 1, y: 1): Cell("d"),
-      Position(x: 2, y: 1): Cell("e"),
-      Position(x: 3, y: 1): Cell("f"),
-      Position(x: 4, y: 1): Cell("a"),
-      Position(x: 5, y: 1): Cell("u"),
-      Position(x: 6, y: 1): Cell("l"),
-      Position(x: 7, y: 1): Cell("t"),
-    ])
+    #expect(screen.buffer.description == """
+      default
+      """)
   }
 
   @Test func `write`() {
@@ -39,9 +33,9 @@ struct EnvironmentTests {
       TestView().environment(\.value, "b")
     }
 
-    #expect(screen.cells == [
-      Position(x: 4, y: 1): Cell("b"),
-    ])
+    #expect(screen.buffer.description == """
+      ...b...
+      """)
   }
 
   @Test func `write body: fatal`() async {
@@ -58,16 +52,9 @@ struct EnvironmentTests {
       TestView().transformEnvironment(\.value) { $0.append("a") }
     }
 
-    #expect(screen.cells == [
-      Position(x: 1, y: 1): Cell("d"),
-      Position(x: 2, y: 1): Cell("e"),
-      Position(x: 3, y: 1): Cell("f"),
-      Position(x: 4, y: 1): Cell("a"),
-      Position(x: 5, y: 1): Cell("u"),
-      Position(x: 6, y: 1): Cell("l"),
-      Position(x: 7, y: 1): Cell("t"),
-      Position(x: 8, y: 1): Cell("a"),
-    ])
+    #expect(screen.buffer.description == """
+      defaulta
+      """)
   }
 
   @Test func `transform body: fatal`() async {
