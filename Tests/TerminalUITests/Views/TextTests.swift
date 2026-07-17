@@ -20,9 +20,9 @@ struct TextTests {
     }
 
     #expect(screen.buffer.description == """
-      _____
+      .....
       Hello
-      _____
+      .....
       """)
   }
 
@@ -33,9 +33,9 @@ struct TextTests {
     }
 
     #expect(screen.buffer.description == """
-      Hi___
+      Hi...
       there
-      _____
+      .....
       """)
   }
 
@@ -48,7 +48,7 @@ struct TextTests {
     #expect(screen.buffer.description == """
       Hello
       there
-      _____
+      .....
       """)
   }
 

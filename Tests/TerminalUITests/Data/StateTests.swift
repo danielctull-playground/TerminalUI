@@ -26,9 +26,9 @@ struct StateTests {
     }
 
     #expect(screen.buffer.description == """
-      _____
+      .....
       hello
-      _____
+      .....
       """)
   }
 
@@ -49,7 +49,7 @@ struct StateTests {
     }
 
     #expect(screen.buffer.description == """
-      _new_
+      .new.
       """)
   }
 
@@ -79,7 +79,7 @@ struct StateTests {
     }
 
     #expect(screen.buffer.description == """
-      _new_
+      .new.
       """)
   }
 
@@ -107,7 +107,7 @@ struct StateTests {
     }
 
     #expect(screen.buffer.description == """
-      _new_
+      .new.
       """)
   }
 

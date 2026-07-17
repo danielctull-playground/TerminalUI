@@ -21,9 +21,9 @@ struct ScreenTests {
     }
 
     #expect(screen.buffer.description == """
-      ___
-      _A_
-      ___
+      ...
+      .A.
+      ...
       """)
   }
 
@@ -59,10 +59,10 @@ struct ScreenTests {
       ]
 
       #expect(buffer.description == """
-        _ABCD_
+        .ABCD.
         ▧▨▤▥▩▢
         ??????
-        _E__F_
+        .E..F.
         """)
     }
   }

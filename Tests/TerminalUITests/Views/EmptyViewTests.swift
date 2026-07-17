@@ -19,9 +19,9 @@ struct EmptyViewTests {
     }
 
     #expect(screen.buffer.description == """
-      ___
-      ___
-      ___
+      ...
+      ...
+      ...
       """)
   }
 

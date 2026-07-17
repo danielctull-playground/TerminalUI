@@ -90,19 +90,19 @@ struct OptionalTests {
     let renderer = Renderer(screen: screen, content: Content())
 
     renderer.render(event: WindowSize(size: Size(width: 3, height: 1)))
-    #expect(screen.buffer.description == "_0_____________")
+    #expect(screen.buffer.description == ".0.............")
 
     renderer.render(event: WindowSize(size: Size(width: 5, height: 1)))
-    #expect(screen.buffer.description == "_______________")
+    #expect(screen.buffer.description == "...............")
 
     renderer.render(event: WindowSize(size: Size(width: 7, height: 1)))
-    #expect(screen.buffer.description == "_______________")
+    #expect(screen.buffer.description == "...............")
 
     renderer.render(event: WindowSize(size: Size(width: 9, height: 1)))
-    #expect(screen.buffer.description == "____1__________")
+    #expect(screen.buffer.description == "....1..........")
 
     renderer.render(event: WindowSize(size: Size(width: 15, height: 1)))
-    #expect(screen.buffer.description == "_______1_______")
+    #expect(screen.buffer.description == ".......1.......")
   }
 
   @MainActor

@@ -34,7 +34,7 @@ struct EnvironmentTests {
     }
 
     #expect(screen.buffer.description == """
-      ___b___
+      ...b...
       """)
   }
 

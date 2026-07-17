@@ -19,7 +19,7 @@ struct LabelTests {
       }
 
       #expect(screen.buffer.description == """
-        icon_title
+        icon.title
         """)
     }
 
@@ -36,7 +36,7 @@ struct LabelTests {
       }
 
       #expect(screen.buffer.description == """
-        icon_title
+        icon.title
         """)
     }
 
@@ -53,7 +53,7 @@ struct LabelTests {
       }
 
       #expect(screen.buffer.description == """
-        ___title__
+        ...title..
         """)
     }
 
@@ -70,7 +70,7 @@ struct LabelTests {
       }
 
       #expect(screen.buffer.description == """
-        ___icon___
+        ...icon...
         """)
     }
 
@@ -98,8 +98,8 @@ struct LabelTests {
       }
 
       #expect(screen.buffer.description == """
-        icon_
-        _____
+        icon.
+        .....
         title
         """)
     }

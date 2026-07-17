@@ -52,7 +52,7 @@ extension Screen.Buffer: CustomStringConvertible {
         let cell = cells[Position(x: x, y: y)] ?? Cell(content: " ", style: .default)
 
         return switch (cell.content, cell.style) {
-        case (" ", .default): "_"
+        case (" ", .default): "."
         case (" ", .background(.red)): "▧"
         case (" ", .background(.blue)): "▨"
         case (" ", .background(.green)): "▤"

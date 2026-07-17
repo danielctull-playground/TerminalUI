@@ -66,16 +66,16 @@ struct EitherTests {
     let renderer = Renderer(screen: screen, content: Content())
 
     renderer.render(event: WindowSize(size: Size(width: 3, height: 1)))
-    #expect(screen.buffer.description == "_0_______")
+    #expect(screen.buffer.description == ".0.......")
 
     renderer.render(event: WindowSize(size: Size(width: 5, height: 1)))
-    #expect(screen.buffer.description == "__1______")
+    #expect(screen.buffer.description == "..1......")
 
     renderer.render(event: WindowSize(size: Size(width: 7, height: 1)))
-    #expect(screen.buffer.description == "___1_____")
+    #expect(screen.buffer.description == "...1.....")
 
     renderer.render(event: WindowSize(size: Size(width: 9, height: 1)))
-    #expect(screen.buffer.description == "____3____")
+    #expect(screen.buffer.description == "....3....")
   }
 
   @MainActor

@@ -22,11 +22,11 @@ struct OffsetTests {
     }
 
     #expect(screen.buffer.description == """
-      _____
-      _____
-      ____X
-      _____
-      _____
+      .....
+      .....
+      ....X
+      .....
+      .....
       """)
   }
 
@@ -38,11 +38,11 @@ struct OffsetTests {
     }
 
     #expect(screen.buffer.description == """
-      _____
-      _____
-      _____
-      _____
-      __X__
+      .....
+      .....
+      .....
+      .....
+      ..X..
       """)
   }
 
@@ -54,11 +54,11 @@ struct OffsetTests {
     }
 
     #expect(screen.buffer.description == """
-      ___X_
-      _____
-      _____
-      _____
-      _____
+      ...X.
+      .....
+      .....
+      .....
+      .....
       """)
   }
 
@@ -70,11 +70,11 @@ struct OffsetTests {
     }
 
     #expect(screen.buffer.description == """
-      _____
-      _____
-      _____
-      _____
-      ___X_
+      .....
+      .....
+      .....
+      .....
+      ...X.
       """)
   }
 

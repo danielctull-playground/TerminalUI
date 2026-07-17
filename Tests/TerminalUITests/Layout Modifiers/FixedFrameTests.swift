@@ -35,9 +35,9 @@ struct FixedFrameTests {
     }
 
     #expect(screen.buffer.description == """
-      _▨_
-      _▨_
-      _▨_
+      .▨.
+      .▨.
+      .▨.
       """)
   }
 
@@ -48,9 +48,9 @@ struct FixedFrameTests {
     }
 
     #expect(screen.buffer.description == """
-      ▨▨_
-      ▨▨_
-      ▨▨_
+      ▨▨.
+      ▨▨.
+      ▨▨.
       """)
   }
 
@@ -61,9 +61,9 @@ struct FixedFrameTests {
     }
 
     #expect(screen.buffer.description == """
-      ___
+      ...
       ▨▨▨
-      ___
+      ...
       """)
   }
 
@@ -76,7 +76,7 @@ struct FixedFrameTests {
     #expect(screen.buffer.description == """
       ▨▨▨
       ▨▨▨
-      ___
+      ...
       """)
   }
 
@@ -87,9 +87,9 @@ struct FixedFrameTests {
     }
 
     #expect(screen.buffer.description == """
-      ___
-      _▨_
-      ___
+      ...
+      .▨.
+      ...
       """)
   }
 
@@ -100,9 +100,9 @@ struct FixedFrameTests {
     }
 
     #expect(screen.buffer.description == """
-      ▨▨_
-      ▨▨_
-      ___
+      ▨▨.
+      ▨▨.
+      ...
       """)
   }
 
@@ -115,65 +115,65 @@ struct FixedFrameTests {
     }
 
     #expect(screen.buffer.description == """
-      ___
-      _▨_
-      ___
+      ...
+      .▨.
+      ...
       """)
   }
 
   @Test(arguments: Array<(Alignment, String)>([
     (.topLeading, """
-      ▨__
-      ___
-      ___
+      ▨..
+      ...
+      ...
       """
     ),
     (.top, """
-      _▨_
-      ___
-      ___
+      .▨.
+      ...
+      ...
       """
     ),
     (.topTrailing,"""
-      __▨
-      ___
-      ___
+      ..▨
+      ...
+      ...
       """
     ),
     (.leading, """
-      ___
-      ▨__
-      ___
+      ...
+      ▨..
+      ...
       """
     ),
     (.center, """
-      ___
-      _▨_
-      ___
+      ...
+      .▨.
+      ...
       """
     ),
     (.trailing, """
-      ___
-      __▨
-      ___
+      ...
+      ..▨
+      ...
       """
     ),
     (.bottomLeading, """
-      ___
-      ___
-      ▨__
+      ...
+      ...
+      ▨..
       """
     ),
     (.bottom, """
-      ___
-      ___
-      _▨_
+      ...
+      ...
+      .▨.
       """
     ),
     (.bottomTrailing, """
-      ___
-      ___
-      __▨
+      ...
+      ...
+      ..▨
       """
     ),
   ]))

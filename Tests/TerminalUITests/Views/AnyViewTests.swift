@@ -19,9 +19,9 @@ struct AnyViewTests {
     }
 
     #expect(screen.buffer.description == """
-      _____
+      .....
       Hello
-      _____
+      .....
       """)
   }
 

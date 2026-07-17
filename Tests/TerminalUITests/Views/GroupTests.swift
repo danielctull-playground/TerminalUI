@@ -18,12 +18,12 @@ struct GroupTests {
     }
 
     #expect(screen.buffer.description == """
-      _____
-      __a__
-      _____
-      _____
-      __b__
-      _____
+      .....
+      ..a..
+      .....
+      .....
+      ..b..
+      .....
       """)
   }
 

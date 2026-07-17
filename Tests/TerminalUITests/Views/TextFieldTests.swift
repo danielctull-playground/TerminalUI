@@ -18,14 +18,13 @@ struct TextFieldTests {
     let renderer = Renderer(screen: screen, content: Content())
     renderer.render(event: WindowSize(size: Size(width: 3, height: 1)))
 
-    // TODO: UNDERSCORE!!
     #expect(screen.buffer.description == """
-      ___
+      ._.
       """)
 
     renderer.render(event: KeyPress("h"))
     #expect(screen.buffer.description == """
-      h__
+      h_.
       """)
 
     renderer.render(event: KeyPress("i"))
@@ -52,32 +51,32 @@ struct TextFieldTests {
     renderer.render(event: WindowSize(size: Size(width: 3, height: 2)))
 
     #expect(screen.buffer.description == """
-      ___
-      ___
+      ._.
+      ...
       """)
 
     renderer.render(event: KeyPress("h"))
     #expect(screen.buffer.description == """
-      h__
-      ___
+      h_.
+      ...
       """)
 
     renderer.render(event: KeyPress("i"))
     #expect(screen.buffer.description == """
       hi_
-      ___
+      ...
       """)
 
     renderer.render(event: KeyPress("\t")) // tab
     #expect(screen.buffer.description == """
-      hi_
-      ___
+      hi.
+      ._.
       """)
 
     renderer.render(event: KeyPress("x"))
     #expect(screen.buffer.description == """
-      hi_
-      x__
+      hi.
+      x_.
       """)
   }
 }

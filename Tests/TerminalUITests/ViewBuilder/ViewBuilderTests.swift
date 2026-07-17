@@ -10,11 +10,11 @@ struct ViewBuilderTests {
   @Test func empty() {
     screen.render {}
     #expect(screen.buffer.description == """
-      _____
-      _____
-      _____
-      _____
-      _____
+      .....
+      .....
+      .....
+      .....
+      .....
       """)
   }
 
@@ -25,11 +25,11 @@ struct ViewBuilderTests {
     }
 
     #expect(screen.buffer.description == """
-      _____
-      _____
-      __a__
-      _____
-      _____
+      .....
+      .....
+      ..a..
+      .....
+      .....
       """)
   }
 
@@ -49,11 +49,11 @@ struct ViewBuilderTests {
     }
 
     #expect(screen.buffer.description == """
-      _____
-      __a__
-      __b__
-      _____
-      _____
+      .....
+      ..a..
+      ..b..
+      .....
+      .....
       """)
   }
 
@@ -67,19 +67,19 @@ struct ViewBuilderTests {
 
   @Test(arguments: [
     (true, """
-      _____
-      _____
-      __a__
-      _____
-      _____
+      .....
+      .....
+      ..a..
+      .....
+      .....
       """
     ),
     (false, """
-      _____
-      _____
-      _____
-      _____
-      _____
+      .....
+      .....
+      .....
+      .....
+      .....
       """
     ),
   ])
@@ -104,19 +104,19 @@ struct ViewBuilderTests {
 
   @Test(arguments: [
     (true, """
-      _____
-      _____
-      __a__
-      _____
-      _____
+      .....
+      .....
+      ..a..
+      .....
+      .....
       """
     ),
     (false, """
-      _____
-      _____
-      __b__
-      _____
-      _____
+      .....
+      .....
+      ..b..
+      .....
+      .....
       """
     ),
   ])
@@ -157,11 +157,11 @@ struct ViewBuilderTests {
     }
 
     #expect(screen.buffer.description == """
-      _____
-      _____
-      __b__
-      _____
-      _____
+      .....
+      .....
+      ..b..
+      .....
+      .....
       """)
   }
 #endif

@@ -23,12 +23,12 @@ struct PaddingTests {
     }
 
     #expect(screen.buffer.description == """
-      ________
-      __▨▨____
-      __▨▨____
-      ________
-      ________
-      ________
+      ........
+      ..▨▨....
+      ..▨▨....
+      ........
+      ........
+      ........
       """)
   }
 
@@ -39,9 +39,9 @@ struct PaddingTests {
     }
 
     #expect(screen.buffer.description == """
-      ___
-      _▨_
-      ___
+      ...
+      .▨.
+      ...
       """)
   }
 
@@ -52,7 +52,7 @@ struct PaddingTests {
     }
 
     #expect(screen.buffer.description == """
-      ___
+      ...
       ▨▨▨
       ▨▨▨
       """)
@@ -65,9 +65,9 @@ struct PaddingTests {
     }
 
     #expect(screen.buffer.description == """
-      _▨▨
-      _▨▨
-      _▨▨
+      .▨▨
+      .▨▨
+      .▨▨
       """)
   }
 
@@ -80,7 +80,7 @@ struct PaddingTests {
     #expect(screen.buffer.description == """
       ▨▨▨
       ▨▨▨
-      ___
+      ...
       """)
   }
 
@@ -91,9 +91,9 @@ struct PaddingTests {
     }
 
     #expect(screen.buffer.description == """
-      ▨▨_
-      ▨▨_
-      ▨▨_
+      ▨▨.
+      ▨▨.
+      ▨▨.
       """)
   }
 
@@ -104,9 +104,9 @@ struct PaddingTests {
     }
 
     #expect(screen.buffer.description == """
-      _▨_
-      _▨_
-      _▨_
+      .▨.
+      .▨.
+      .▨.
       """)
   }
 
@@ -117,9 +117,9 @@ struct PaddingTests {
     }
 
     #expect(screen.buffer.description == """
-      ___
+      ...
       ▨▨▨
-      ___
+      ...
       """)
   }
 
@@ -130,9 +130,9 @@ struct PaddingTests {
     }
 
     #expect(screen.buffer.description == """
-      ___
-      _▨_
-      ___
+      ...
+      .▨.
+      ...
       """)
   }
 

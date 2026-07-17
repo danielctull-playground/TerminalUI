@@ -86,10 +86,10 @@ struct ForEachTests {
     let renderer = Renderer(screen: screen, content: Content())
 
     renderer.render(event: WindowSize(size: Size(width: 1, height: 1)))
-    #expect(screen.buffer.description == "1__")
+    #expect(screen.buffer.description == "1..")
 
     renderer.render(event: WindowSize(size: Size(width: 2, height: 1)))
-    #expect(screen.buffer.description == "12_")
+    #expect(screen.buffer.description == "12.")
 
     renderer.render(event: WindowSize(size: Size(width: 3, height: 1)))
     #expect(screen.buffer.description == "123")
@@ -158,8 +158,8 @@ struct ForEachTests {
     // [a,b], each logs once
     renderer.render(event: WindowSize(size: Size(width: 1, height: 2)))
     #expect(screen.buffer.description == """
-      a_
-      b_
+      a.
+      b.
       """)
 
     // reorder → [b,a], each logs again

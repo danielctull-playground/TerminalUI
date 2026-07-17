@@ -20,9 +20,9 @@ struct VStackTests {
     }
 
     #expect(screen.buffer.description == """
-      ___
-      ___
-      ___
+      ...
+      ...
+      ...
       """)
   }
 
@@ -97,27 +97,27 @@ struct VStackTests {
 
   @Test(arguments: Array<(HorizontalAlignment, String)>([
     (.leading,  """
-      ___
-      A__
+      ...
+      A..
       ▩▩▩
-      B__
-      ___
+      B..
+      ...
       """
     ),
     (.center,  """
-      ___
-      _A_
+      ...
+      .A.
       ▩▩▩
-      _B_
-      ___
+      .B.
+      ...
       """
     ),
     (.trailing, """
-      ___
-      __A
+      ...
+      ..A
       ▩▩▩
-      __B
-      ___
+      ..B
+      ...
       """
     ),
   ]))
@@ -138,50 +138,50 @@ struct VStackTests {
 
   @Test(arguments: Array<(Int, String)>([
     (0, """
-      _
-      _
-      _
+      .
+      .
+      .
       A
       B
       C
-      _
-      _
-      _
+      .
+      .
+      .
       """
     ),
     (1, """
-      _
-      _
+      .
+      .
       A
-      _
+      .
       B
-      _
+      .
       C
-      _
-      _
+      .
+      .
       """
     ),
     (2, """
-      _
+      .
       A
-      _
-      _
+      .
+      .
       B
-      _
-      _
+      .
+      .
       C
-      _
+      .
       """
     ),
     (3, """
       A
-      _
-      _
-      _
+      .
+      .
+      .
       B
-      _
-      _
-      _
+      .
+      .
+      .
       C
       """
     ),

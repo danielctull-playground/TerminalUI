@@ -55,12 +55,12 @@ struct DynamicPropertyTests {
 
     renderer.render(event: WindowSize(size: Size(width: 1, height: 1)))
     #expect(screen.buffer.description == """
-      1__
+      1..
       """)
 
     renderer.render(event: WindowSize(size: Size(width: 3, height: 1)))
     #expect(screen.buffer.description == """
-      _3_
+      .3.
       """)
   }
 }

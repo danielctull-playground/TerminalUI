@@ -20,9 +20,9 @@ struct HStackTests {
     }
 
     #expect(screen.buffer.description == """
-      ___
-      ___
-      ___
+      ...
+      ...
+      ...
       """)
   }
 
@@ -82,21 +82,21 @@ struct HStackTests {
 
   @Test(arguments: Array<(VerticalAlignment, String)>([
     (.top, """
-      _A▩B_
-      __▩__
-      __▩__
+      .A▩B.
+      ..▩..
+      ..▩..
       """
     ),
     (.center, """
-      __▩__
-      _A▩B_
-      __▩__
+      ..▩..
+      .A▩B.
+      ..▩..
       """
     ),
     (.bottom, """
-      __▩__
-      __▩__
-      _A▩B_
+      ..▩..
+      ..▩..
+      .A▩B.
       """
     ),
   ]))
@@ -116,10 +116,10 @@ struct HStackTests {
   }
 
   @Test(arguments: Array<(Int, String)>([
-    (0, "___ABC___"),
-    (1, "__A_B_C__"),
-    (2, "_A__B__C_"),
-    (3, "A___B___C"),
+    (0, "...ABC..."),
+    (1, "..A.B.C.."),
+    (2, ".A..B..C."),
+    (3, "A...B...C"),
   ]))
   func `spacing`(spacing: Int, expected: String) {
 
