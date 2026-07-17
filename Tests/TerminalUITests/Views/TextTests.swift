@@ -19,13 +19,11 @@ struct TextTests {
       Text("Hello")
     }
 
-    #expect(screen.cells == [
-      Position(x: 1, y: 2): Cell("H"),
-      Position(x: 2, y: 2): Cell("e"),
-      Position(x: 3, y: 2): Cell("l"),
-      Position(x: 4, y: 2): Cell("l"),
-      Position(x: 5, y: 2): Cell("o"),
-    ])
+    #expect(screen.buffer.description == """
+      _____
+      Hello
+      _____
+      """)
   }
 
   @Test func `two lines`() {
@@ -34,15 +32,11 @@ struct TextTests {
       Text("Hi there")
     }
 
-    #expect(screen.cells == [
-      Position(x: 1, y: 1): Cell("H"),
-      Position(x: 2, y: 1): Cell("i"),
-      Position(x: 1, y: 2): Cell("t"),
-      Position(x: 2, y: 2): Cell("h"),
-      Position(x: 3, y: 2): Cell("e"),
-      Position(x: 4, y: 2): Cell("r"),
-      Position(x: 5, y: 2): Cell("e"),
-    ])
+    #expect(screen.buffer.description == """
+      Hi___
+      there
+      _____
+      """)
   }
 
   @Test func `two lines (space is just after end)`() {
@@ -51,18 +45,11 @@ struct TextTests {
       Text("Hello there")
     }
 
-    #expect(screen.cells == [
-      Position(x: 1, y: 1): Cell("H"),
-      Position(x: 2, y: 1): Cell("e"),
-      Position(x: 3, y: 1): Cell("l"),
-      Position(x: 4, y: 1): Cell("l"),
-      Position(x: 5, y: 1): Cell("o"),
-      Position(x: 1, y: 2): Cell("t"),
-      Position(x: 2, y: 2): Cell("h"),
-      Position(x: 3, y: 2): Cell("e"),
-      Position(x: 4, y: 2): Cell("r"),
-      Position(x: 5, y: 2): Cell("e"),
-    ])
+    #expect(screen.buffer.description == """
+      Hello
+      there
+      _____
+      """)
   }
 
 //  @Test(arguments: Array<(String, Int, Int, Int, Int)>([
@@ -122,7 +109,7 @@ struct TextTests {
     screen.render {
       Text("A")
     }
-    #expect(screen.cells.isEmpty)
+    #expect(screen.buffer.description == "")
   }
 
   @Test func `width: zero`() {
@@ -130,6 +117,6 @@ struct TextTests {
     screen.render {
       Text("A")
     }
-    #expect(screen.cells.isEmpty)
+    #expect(screen.buffer.description == "")
   }
 }

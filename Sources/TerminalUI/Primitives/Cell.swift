@@ -6,6 +6,8 @@ public struct Cell: Equatable, Sendable {
 
 extension Cell {
 
+  package static let empty = Cell(content: " ", style: .default)
+
   init(
     _ content: Character,
     foreground: Color = .default,

@@ -49,10 +49,10 @@ struct ViewModifierTests {
       }
     }
 
-    #expect(screen.cells == [
-      Position(x: 1, y: 1): Cell("a"),
-      Position(x: 1, y: 2): Cell("b"),
-    ])
+    #expect(screen.buffer.description == """
+      a
+      b
+      """)
   }
 
 //  @Test(arguments: Array<(String, Int, Int, Int, Int)>([

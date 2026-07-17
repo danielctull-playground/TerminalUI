@@ -22,12 +22,14 @@ struct PaddingTests {
       view.padding(EdgeInsets(top: 1, leading: 2, bottom: 3, trailing: 4))
     }
 
-    #expect(screen.cells == [
-      Position(x: 3, y: 2): cell,
-      Position(x: 4, y: 2): cell,
-      Position(x: 3, y: 3): cell,
-      Position(x: 4, y: 3): cell,
-    ])
+    #expect(screen.buffer.description == """
+      ________
+      __▨▨____
+      __▨▨____
+      ________
+      ________
+      ________
+      """)
   }
 
   @Test func `all`() async throws {
@@ -36,9 +38,11 @@ struct PaddingTests {
       view.padding(.all, 1)
     }
 
-    #expect(screen.cells == [
-      Position(x: 2, y: 2): cell,
-    ])
+    #expect(screen.buffer.description == """
+      ___
+      _▨_
+      ___
+      """)
   }
 
   @Test func `top`() async throws {
@@ -47,14 +51,11 @@ struct PaddingTests {
       view.padding(.top, 1)
     }
 
-    #expect(screen.cells == [
-      Position(x: 1, y: 2): cell,
-      Position(x: 2, y: 2): cell,
-      Position(x: 3, y: 2): cell,
-      Position(x: 1, y: 3): cell,
-      Position(x: 2, y: 3): cell,
-      Position(x: 3, y: 3): cell,
-    ])
+    #expect(screen.buffer.description == """
+      ___
+      ▨▨▨
+      ▨▨▨
+      """)
   }
 
   @Test func `leading`() async throws {
@@ -63,14 +64,11 @@ struct PaddingTests {
       view.padding(.leading, 1)
     }
 
-    #expect(screen.cells == [
-      Position(x: 2, y: 1): cell,
-      Position(x: 3, y: 1): cell,
-      Position(x: 2, y: 2): cell,
-      Position(x: 3, y: 2): cell,
-      Position(x: 2, y: 3): cell,
-      Position(x: 3, y: 3): cell,
-    ])
+    #expect(screen.buffer.description == """
+      _▨▨
+      _▨▨
+      _▨▨
+      """)
   }
 
   @Test func `bottom`() async throws {
@@ -79,14 +77,11 @@ struct PaddingTests {
       view.padding(.bottom, 1)
     }
 
-    #expect(screen.cells == [
-      Position(x: 1, y: 1): cell,
-      Position(x: 2, y: 1): cell,
-      Position(x: 3, y: 1): cell,
-      Position(x: 1, y: 2): cell,
-      Position(x: 2, y: 2): cell,
-      Position(x: 3, y: 2): cell,
-    ])
+    #expect(screen.buffer.description == """
+      ▨▨▨
+      ▨▨▨
+      ___
+      """)
   }
 
   @Test func `trailing`() async throws {
@@ -95,14 +90,11 @@ struct PaddingTests {
       view.padding(.trailing, 1)
     }
 
-    #expect(screen.cells == [
-      Position(x: 1, y: 1): cell,
-      Position(x: 2, y: 1): cell,
-      Position(x: 1, y: 2): cell,
-      Position(x: 2, y: 2): cell,
-      Position(x: 1, y: 3): cell,
-      Position(x: 2, y: 3): cell,
-    ])
+    #expect(screen.buffer.description == """
+      ▨▨_
+      ▨▨_
+      ▨▨_
+      """)
   }
 
   @Test func `horizontal`() async throws {
@@ -111,11 +103,11 @@ struct PaddingTests {
       view.padding(.horizontal, 1)
     }
 
-    #expect(screen.cells == [
-      Position(x: 2, y: 1): cell,
-      Position(x: 2, y: 2): cell,
-      Position(x: 2, y: 3): cell,
-    ])
+    #expect(screen.buffer.description == """
+      _▨_
+      _▨_
+      _▨_
+      """)
   }
 
   @Test func `vertical`() async throws {
@@ -124,11 +116,11 @@ struct PaddingTests {
       view.padding(.vertical, 1)
     }
 
-    #expect(screen.cells == [
-      Position(x: 1, y: 2): cell,
-      Position(x: 2, y: 2): cell,
-      Position(x: 3, y: 2): cell,
-    ])
+    #expect(screen.buffer.description == """
+      ___
+      ▨▨▨
+      ___
+      """)
   }
 
   @Test func `length`() async throws {
@@ -137,9 +129,11 @@ struct PaddingTests {
       view.padding(1)
     }
 
-    #expect(screen.cells == [
-      Position(x: 2, y: 2): cell,
-    ])
+    #expect(screen.buffer.description == """
+      ___
+      _▨_
+      ___
+      """)
   }
 
 //  @Test(arguments: Array<(String, Int, Int, Int, Int)>([

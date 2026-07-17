@@ -3,7 +3,7 @@ import Testing
 
 public struct TestScreen: Screen {
 
-  @Mutable private var buffer = Buffer()
+  @Mutable private var _buffer = Buffer()
   @Mutable private var _csi: [CSI] = []
   private let bounds: Rect
 
@@ -16,14 +16,33 @@ public struct TestScreen: Screen {
   }
 
   public func draw(_ buffer: ScreenBuffer) {
-    self.buffer = buffer
+
+    var cells: [Position: Cell] = [:]
+
+    if bounds.size.width > 0, bounds.size.height > 0 {
+      for x in bounds.minX...bounds.maxX {
+        for y in bounds.minY...bounds.maxY {
+          cells[Position(x: x, y: y)] = Cell.empty
+        }
+      }
+    }
+
+    for (position, cell) in buffer.cells {
+      cells[position] = cell
+    }
+
+    _buffer = Buffer(cells: cells)
   }
 }
 
 extension TestScreen {
 
+  package var buffer: Buffer {
+    _buffer
+  }
+
   public var cells: [Position: Cell] {
-    buffer.cells
+    _buffer.cells
   }
 
   public var csi: [CSI] {

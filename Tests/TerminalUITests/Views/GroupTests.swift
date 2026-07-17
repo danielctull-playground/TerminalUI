@@ -5,9 +5,9 @@ import Testing
 @Suite("Group", .tags(.view))
 struct GroupTests {
 
-  private var screen = TestScreen(width: 10, height: 10)
-
   @Test func test() {
+
+    let screen = TestScreen(width: 5, height: 6)
 
     screen.render {
       Group {
@@ -17,10 +17,14 @@ struct GroupTests {
       .padding(1)
     }
 
-    #expect(screen.cells == [
-      Position(x: 6, y: 4): Cell("a"),
-      Position(x: 6, y: 7): Cell("b"),
-    ])
+    #expect(screen.buffer.description == """
+      _____
+      __a__
+      _____
+      _____
+      __b__
+      _____
+      """)
   }
 
   @Suite(.tags(.preferenceValues))

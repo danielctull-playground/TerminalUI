@@ -20,7 +20,8 @@ struct RendererTests {
     screen.render {
       Color.red
     }
-    #expect(screen.cells.isEmpty)
+
+    #expect(screen.buffer.description == "")
   }
 
   @Test func `width: zero`() {
@@ -28,7 +29,8 @@ struct RendererTests {
     screen.render {
       Color.red
     }
-    #expect(screen.cells.isEmpty)
+
+    #expect(screen.buffer.description == "")
   }
 
   @Test func `one renderer draws across multiple frames`() {

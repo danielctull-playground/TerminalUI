@@ -18,7 +18,11 @@ struct EmptyViewTests {
       EmptyView()
     }
 
-    #expect(screen.cells.isEmpty)
+    #expect(screen.buffer.description == """
+      ___
+      ___
+      ___
+      """)
   }
 
   @Suite(.tags(.preferenceValues))

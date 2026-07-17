@@ -19,7 +19,11 @@ struct HStackTests {
       HStack {}
     }
 
-    #expect(screen.cells == [:])
+    #expect(screen.buffer.description == """
+      ___
+      ___
+      ___
+      """)
   }
 
   @Test func `single line`() {
@@ -34,11 +38,9 @@ struct HStackTests {
       }
     }
 
-    #expect(screen.cells == [
-      Position(x: 1, y: 1): Cell("1"),
-      Position(x: 2, y: 1): Cell("2"),
-      Position(x: 3, y: 1): Cell("3"),
-    ])
+    #expect(screen.buffer.description == """
+      123
+      """)
   }
 
   @Test func `single line 2`() {
@@ -53,13 +55,9 @@ struct HStackTests {
       }
     }
 
-    #expect(screen.cells == [
-      Position(x: 1,  y: 1): Cell(" ", background: .blue),
-      Position(x: 2,  y: 1): Cell(" ", background: .blue),
-      Position(x: 3,  y: 1): Cell("A"),
-      Position(x: 4,  y: 1): Cell(" ", background: .yellow),
-      Position(x: 5,  y: 1): Cell(" ", background: .yellow),
-    ])
+    #expect(screen.buffer.description == """
+      ▨▨A▥▥
+      """)
   }
 
   @Test func `single line 3`() {
@@ -76,27 +74,33 @@ struct HStackTests {
       }
     }
 
-    #expect(screen.cells == [
-      Position(x:  1, y: 1): Cell(" ", background: .blue),
-      Position(x:  2, y: 1): Cell(" ", background: .blue),
-      Position(x:  3, y: 1): Cell(" ", background: .blue),
-      Position(x:  4, y: 1): Cell("A"),
-      Position(x:  5, y: 1): Cell(" ", background: .yellow),
-      Position(x:  6, y: 1): Cell(" ", background: .yellow),
-      Position(x:  7, y: 1): Cell(" ", background: .yellow),
-      Position(x:  8, y: 1): Cell("B"),
-      Position(x:  9, y: 1): Cell(" ", background: .red),
-      Position(x: 10, y: 1): Cell(" ", background: .red),
-      Position(x: 11, y: 1): Cell(" ", background: .red),
-    ])
+
+    #expect(screen.buffer.description == """
+      ▨▨▨A▥▥▥B▧▧▧
+      """)
   }
 
-  @Test(arguments: Array<(VerticalAlignment, Int)>([
-    (.top,    1),
-    (.center, 2),
-    (.bottom, 3),
+  @Test(arguments: Array<(VerticalAlignment, String)>([
+    (.top, """
+      _A▩B_
+      __▩__
+      __▩__
+      """
+    ),
+    (.center, """
+      __▩__
+      _A▩B_
+      __▩__
+      """
+    ),
+    (.bottom, """
+      __▩__
+      __▩__
+      _A▩B_
+      """
+    ),
   ]))
-  func `alignment`(alignment: VerticalAlignment, y: Int) {
+  func `alignment`(alignment: VerticalAlignment, expected: String) {
 
     let screen = TestScreen(width: 5, height: 3)
 
@@ -108,22 +112,16 @@ struct HStackTests {
       }
     }
 
-    #expect(screen.cells == [
-      Position(x:  2, y: y): Cell("A"),
-      Position(x:  4, y: y): Cell("B"),
-      Position(x:  3, y: 1): Cell(" ", background: .black),
-      Position(x:  3, y: 2): Cell(" ", background: .black),
-      Position(x:  3, y: 3): Cell(" ", background: .black),
-    ])
+    #expect(screen.buffer.description == expected)
   }
 
-  @Test(arguments: Array<(Int, Int, Int, Int)>([
-    (0, 4, 5, 6),
-    (1, 3, 5, 7),
-    (2, 2, 5, 8),
-    (3, 1, 5, 9),
+  @Test(arguments: Array<(Int, String)>([
+    (0, "___ABC___"),
+    (1, "__A_B_C__"),
+    (2, "_A__B__C_"),
+    (3, "A___B___C"),
   ]))
-  func `spacing`(spacing: Int, a: Int, b: Int, c: Int) {
+  func `spacing`(spacing: Int, expected: String) {
 
     let screen = TestScreen(width: 9, height: 1)
 
@@ -135,10 +133,6 @@ struct HStackTests {
       }
     }
 
-    #expect(screen.cells == [
-      Position(x: a, y: 1): Cell("A"),
-      Position(x: b, y: 1): Cell("B"),
-      Position(x: c, y: 1): Cell("C"),
-    ])
+    #expect(screen.buffer.description == expected)
   }
 }

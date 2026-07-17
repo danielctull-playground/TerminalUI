@@ -19,7 +19,11 @@ struct VStackTests {
       VStack {}
     }
 
-    #expect(screen.cells == [:])
+    #expect(screen.buffer.description == """
+      ___
+      ___
+      ___
+      """)
   }
 
   @Test func `single column`() {
@@ -34,11 +38,11 @@ struct VStackTests {
       }
     }
 
-    #expect(screen.cells == [
-      Position(x: 1, y: 1): Cell("1"),
-      Position(x: 1, y: 2): Cell("2"),
-      Position(x: 1, y: 3): Cell("3"),
-    ])
+    #expect(screen.buffer.description == """
+      1
+      2
+      3
+      """)
   }
 
   @Test func `single column 2`() {
@@ -53,13 +57,13 @@ struct VStackTests {
       }
     }
 
-    #expect(screen.cells == [
-      Position(x: 1,  y: 1): Cell(" ", background: .blue),
-      Position(x: 1,  y: 2): Cell(" ", background: .blue),
-      Position(x: 1,  y: 3): Cell("A"),
-      Position(x: 1,  y: 4): Cell(" ", background: .yellow),
-      Position(x: 1,  y: 5): Cell(" ", background: .yellow),
-    ])
+    #expect(screen.buffer.description == """
+      ▨
+      ▨
+      A
+      ▥
+      ▥
+      """)
   }
 
   @Test func `single coloumn 3`() {
@@ -76,27 +80,48 @@ struct VStackTests {
       }
     }
 
-    #expect(screen.cells == [
-      Position(x: 1, y:  1): Cell(" ", background: .blue),
-      Position(x: 1, y:  2): Cell(" ", background: .blue),
-      Position(x: 1, y:  3): Cell(" ", background: .blue),
-      Position(x: 1, y:  4): Cell("A"),
-      Position(x: 1, y:  5): Cell(" ", background: .yellow),
-      Position(x: 1, y:  6): Cell(" ", background: .yellow),
-      Position(x: 1, y:  7): Cell(" ", background: .yellow),
-      Position(x: 1, y:  8): Cell("B"),
-      Position(x: 1, y:  9): Cell(" ", background: .red),
-      Position(x: 1, y: 10): Cell(" ", background: .red),
-      Position(x: 1, y: 11): Cell(" ", background: .red),
-    ])
+    #expect(screen.buffer.description == """
+      ▨
+      ▨
+      ▨
+      A
+      ▥
+      ▥
+      ▥
+      B
+      ▧
+      ▧
+      ▧
+      """)
   }
 
-  @Test(arguments: Array<(HorizontalAlignment, Int)>([
-    (.leading,  1),
-    (.center,   2),
-    (.trailing, 3),
+  @Test(arguments: Array<(HorizontalAlignment, String)>([
+    (.leading,  """
+      ___
+      A__
+      ▩▩▩
+      B__
+      ___
+      """
+    ),
+    (.center,  """
+      ___
+      _A_
+      ▩▩▩
+      _B_
+      ___
+      """
+    ),
+    (.trailing, """
+      ___
+      __A
+      ▩▩▩
+      __B
+      ___
+      """
+    ),
   ]))
-  func `alignment`(alignment: HorizontalAlignment, x: Int) {
+  func `alignment`(alignment: HorizontalAlignment, expected: String) {
 
     let screen = TestScreen(width: 3, height: 5)
 
@@ -108,22 +133,60 @@ struct VStackTests {
       }
     }
 
-    #expect(screen.cells == [
-      Position(x:  x, y: 2): Cell("A"),
-      Position(x:  x, y: 4): Cell("B"),
-      Position(x:  1, y: 3): Cell(" ", background: .black),
-      Position(x:  2, y: 3): Cell(" ", background: .black),
-      Position(x:  3, y: 3): Cell(" ", background: .black),
-    ])
+    #expect(screen.buffer.description == expected)
   }
 
-  @Test(arguments: Array<(Int, Int, Int, Int)>([
-    (0, 4, 5, 6),
-    (1, 3, 5, 7),
-    (2, 2, 5, 8),
-    (3, 1, 5, 9),
+  @Test(arguments: Array<(Int, String)>([
+    (0, """
+      _
+      _
+      _
+      A
+      B
+      C
+      _
+      _
+      _
+      """
+    ),
+    (1, """
+      _
+      _
+      A
+      _
+      B
+      _
+      C
+      _
+      _
+      """
+    ),
+    (2, """
+      _
+      A
+      _
+      _
+      B
+      _
+      _
+      C
+      _
+      """
+    ),
+    (3, """
+      A
+      _
+      _
+      _
+      B
+      _
+      _
+      _
+      C
+      """
+    ),
   ]))
-  func `spacing`(spacing: Int, a: Int, b: Int, c: Int) {
+  func `spacing`(spacing: Int, expected: String) {
 
     let screen = TestScreen(width: 1, height: 9)
 
@@ -135,10 +198,6 @@ struct VStackTests {
       }
     }
 
-    #expect(screen.cells == [
-      Position(x: 1, y: a): Cell("A"),
-      Position(x: 1, y: b): Cell("B"),
-      Position(x: 1, y: c): Cell("C"),
-    ])
+    #expect(screen.buffer.description == expected)
   }
 }

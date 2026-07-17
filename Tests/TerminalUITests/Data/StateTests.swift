@@ -25,13 +25,11 @@ struct StateTests {
       TestView()
     }
 
-    #expect(screen.cells == [
-      Position(x: 1, y: 2): Cell("h"),
-      Position(x: 2, y: 2): Cell("e"),
-      Position(x: 3, y: 2): Cell("l"),
-      Position(x: 4, y: 2): Cell("l"),
-      Position(x: 5, y: 2): Cell("o"),
-    ])
+    #expect(screen.buffer.description == """
+      _____
+      hello
+      _____
+      """)
   }
 
   @Test func `writing`() {
@@ -50,11 +48,9 @@ struct StateTests {
       TestView()
     }
 
-    #expect(screen.cells == [
-      Position(x: 2, y: 1): Cell("n"),
-      Position(x: 3, y: 1): Cell("e"),
-      Position(x: 4, y: 1): Cell("w"),
-    ])
+    #expect(screen.buffer.description == """
+      _new_
+      """)
   }
 
   @Test func `nesting`() {
@@ -82,11 +78,9 @@ struct StateTests {
       Outer()
     }
 
-    #expect(screen.cells == [
-      Position(x: 2, y: 1): Cell("n"),
-      Position(x: 3, y: 1): Cell("e"),
-      Position(x: 4, y: 1): Cell("w"),
-    ])
+    #expect(screen.buffer.description == """
+      _new_
+      """)
   }
 
   @Test func `binding`() {
@@ -112,11 +106,9 @@ struct StateTests {
       Outer()
     }
 
-    #expect(screen.cells == [
-      Position(x: 2, y: 1): Cell("n"),
-      Position(x: 3, y: 1): Cell("e"),
-      Position(x: 4, y: 1): Cell("w"),
-    ])
+    #expect(screen.buffer.description == """
+      _new_
+      """)
   }
 
   @Test func `sibling state is independent`() {
@@ -139,10 +131,10 @@ struct StateTests {
       }
     }
 
-    #expect(screen.cells == [
-      Position(x: 1, y: 1): Cell("a"),
-      Position(x: 1, y: 2): Cell("b"),
-    ])
+    #expect(screen.buffer.description == """
+      a
+      b
+      """)
   }
 }
 

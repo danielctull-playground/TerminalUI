@@ -18,13 +18,11 @@ struct AnyViewTests {
       AnyView(Text("Hello"))
     }
 
-    #expect(screen.cells == [
-      Position(x: 1, y: 2): Cell("H"),
-      Position(x: 2, y: 2): Cell("e"),
-      Position(x: 3, y: 2): Cell("l"),
-      Position(x: 4, y: 2): Cell("l"),
-      Position(x: 5, y: 2): Cell("o"),
-    ])
+    #expect(screen.buffer.description == """
+      _____
+      Hello
+      _____
+      """)
   }
 
   @Suite(.tags(.preferenceValues))

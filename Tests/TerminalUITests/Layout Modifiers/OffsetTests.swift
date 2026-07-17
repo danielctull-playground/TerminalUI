@@ -16,50 +16,66 @@ struct OffsetTests {
 
   @Test func `x:`() {
 
-    let screen = TestScreen(width: 3, height: 5)
+    let screen = TestScreen(width: 5, height: 5)
     screen.render {
       view.offset(x: 2)
     }
 
-    #expect(screen.cells == [
-      Position(x: 4, y: 3): cell,
-    ])
+    #expect(screen.buffer.description == """
+      _____
+      _____
+      ____X
+      _____
+      _____
+      """)
   }
 
   @Test func `y:`() {
 
-    let screen = TestScreen(width: 3, height: 5)
+    let screen = TestScreen(width: 5, height: 5)
     screen.render {
       view.offset(y: 2)
     }
 
-    #expect(screen.cells == [
-      Position(x: 2, y: 5): cell,
-    ])
+    #expect(screen.buffer.description == """
+      _____
+      _____
+      _____
+      _____
+      __X__
+      """)
   }
 
   @Test func `x:y:`() {
 
-    let screen = TestScreen(width: 3, height: 5)
+    let screen = TestScreen(width: 5, height: 5)
     screen.render {
-      view.offset(x: 1, y: 3)
+      view.offset(x: 1, y: -2)
     }
 
-    #expect(screen.cells == [
-      Position(x: 3, y: 6): cell,
-    ])
+    #expect(screen.buffer.description == """
+      ___X_
+      _____
+      _____
+      _____
+      _____
+      """)
   }
 
   @Test func `size:`() {
 
-    let screen = TestScreen(width: 3, height: 5)
+    let screen = TestScreen(width: 5, height: 5)
     screen.render {
-      view.offset(size: Size(width: 1, height: 3))
+      view.offset(size: Size(width: 1, height: 2))
     }
 
-    #expect(screen.cells == [
-      Position(x: 3, y: 6): cell,
-    ])
+    #expect(screen.buffer.description == """
+      _____
+      _____
+      _____
+      _____
+      ___X_
+      """)
   }
 
   @Suite(.tags(.preferenceValues))

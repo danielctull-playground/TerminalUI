@@ -18,22 +18,20 @@ struct TextFieldTests {
     let renderer = Renderer(screen: screen, content: Content())
     renderer.render(event: WindowSize(size: Size(width: 3, height: 1)))
 
-    #expect(screen.cells == [
-      Position(x: 2, y: 1): Cell("_"),
-    ])
+    // TODO: UNDERSCORE!!
+    #expect(screen.buffer.description == """
+      ___
+      """)
 
     renderer.render(event: KeyPress("h"))
-    #expect(screen.cells == [
-      Position(x: 1, y: 1): Cell("h"),
-      Position(x: 2, y: 1): Cell("_"),
-    ])
+    #expect(screen.buffer.description == """
+      h__
+      """)
 
     renderer.render(event: KeyPress("i"))
-    #expect(screen.cells == [
-      Position(x: 1, y: 1): Cell("h"),
-      Position(x: 2, y: 1): Cell("i"),
-      Position(x: 3, y: 1): Cell("_"),
-    ])
+    #expect(screen.buffer.description == """
+      hi_
+      """)
   }
 
   @Test func `multiple TextFields can be tabbed between`() {
@@ -53,37 +51,33 @@ struct TextFieldTests {
     let renderer = Renderer(screen: screen, content: Content())
     renderer.render(event: WindowSize(size: Size(width: 3, height: 2)))
 
-    #expect(screen.cells == [
-      Position(x: 2, y: 1): Cell("_"),
-    ])
+    #expect(screen.buffer.description == """
+      ___
+      ___
+      """)
 
     renderer.render(event: KeyPress("h"))
-    #expect(screen.cells == [
-      Position(x: 1, y: 1): Cell("h"),
-      Position(x: 2, y: 1): Cell("_"),
-    ])
+    #expect(screen.buffer.description == """
+      h__
+      ___
+      """)
 
     renderer.render(event: KeyPress("i"))
-    #expect(screen.cells == [
-      Position(x: 1, y: 1): Cell("h"),
-      Position(x: 2, y: 1): Cell("i"),
-      Position(x: 3, y: 1): Cell("_"),
-    ])
+    #expect(screen.buffer.description == """
+      hi_
+      ___
+      """)
 
     renderer.render(event: KeyPress("\t")) // tab
-    #expect(screen.cells == [
-      Position(x: 1, y: 1): Cell("h"),
-      Position(x: 2, y: 1): Cell("i"),
-      Position(x: 2, y: 2): Cell("_"),
-    ])
+    #expect(screen.buffer.description == """
+      hi_
+      ___
+      """)
 
-//    screen.cells = [:]
     renderer.render(event: KeyPress("x"))
-    #expect(screen.cells == [
-      Position(x: 1, y: 1): Cell("h"),
-      Position(x: 2, y: 1): Cell("i"),
-      Position(x: 1, y: 2): Cell("x"),
-      Position(x: 2, y: 2): Cell("_"),
-    ])
+    #expect(screen.buffer.description == """
+      hi_
+      x__
+      """)
   }
 }

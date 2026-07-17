@@ -19,9 +19,12 @@ struct ScreenTests {
     screen.render {
       Text("A")
     }
-    #expect(screen.cells == [
-      Position(x: 2, y: 2): Cell("A")
-    ])
+
+    #expect(screen.buffer.description == """
+      ___
+      _A_
+      ___
+      """)
   }
 
   @Suite("Buffer")
