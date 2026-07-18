@@ -16,21 +16,6 @@ public struct TestScreen: Screen {
   }
 
   public func draw(_ buffer: ScreenBuffer) {
-
-    var cells: [Position: Cell] = [:]
-
-    if bounds.size.width > 0, bounds.size.height > 0 {
-      for x in bounds.minX...bounds.maxX {
-        for y in bounds.minY...bounds.maxY {
-          cells[Position(x: x, y: y)] = Cell.empty
-        }
-      }
-    }
-
-    for (position, cell) in buffer.cells {
-      cells[position] = cell
-    }
-
     _buffer = Buffer(cells: cells)
   }
 }
