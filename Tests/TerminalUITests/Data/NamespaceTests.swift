@@ -3,11 +3,12 @@ import TerminalUITesting
 import Testing
 
 @Suite("Namespace")
+@MainActor
 struct NamespaceTests {
 
   @Test func `namespaces in one view should be distinct`() {
 
-    struct Content: View {
+    @MainActor struct Content: @MainActor View {
       @Namespace private var a
       @Namespace private var b
       var body: some View {
@@ -32,7 +33,7 @@ struct NamespaceTests {
       }
     }
 
-    struct Row: View {
+    @MainActor struct Row: @MainActor View {
       @Namespace private var a
       var body: some View {
         Color.white
@@ -41,7 +42,7 @@ struct NamespaceTests {
       }
     }
 
-    struct Content: View {
+    @MainActor struct Content: @MainActor View {
       @State private var value = ""
       var body: some View {
         Group {
@@ -71,7 +72,7 @@ struct NamespaceTests {
       static func reduce(value: inout Int, nextValue: () -> Int) { value = nextValue() }
     }
 
-    struct Content: View {
+    @MainActor struct Content: @MainActor View {
       @Environment(\.windowSize) private var windowSize
       @Namespace private var a
       var body: some View {
