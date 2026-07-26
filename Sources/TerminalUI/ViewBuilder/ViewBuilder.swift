@@ -1,4 +1,5 @@
 
+@MainActor
 @resultBuilder
 public enum ViewBuilder {
 

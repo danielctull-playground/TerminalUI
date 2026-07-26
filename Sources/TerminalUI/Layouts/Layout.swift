@@ -1,5 +1,6 @@
 import AttributeGraph
 
+@MainActor
 public protocol Layout {
 
   typealias Subviews = LayoutSubviews

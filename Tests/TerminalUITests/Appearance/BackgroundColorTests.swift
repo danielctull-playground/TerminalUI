@@ -17,7 +17,7 @@ struct BackgroundColorTests {
     (Color.cyan, "46"),
     (Color.white, "47"),
   ])
-  func `Text Output`(backgroundColor: Color, expected: String) {
+  func `Text Output`(backgroundColor: Color, expected: String) async {
 
     let screen = TextOutputScreen(output: .memory)
 
@@ -25,7 +25,7 @@ struct BackgroundColorTests {
       Text("a").backgroundColor(backgroundColor)
     }
 
-    #expect(screen.output.controlSequences == [
+    #expect(await screen.output.controlSequences == [
       "[2J",     // Clear screen
       "[?1049h", // Alternative buffer on
       "[?25l",   // Cursor visibility off

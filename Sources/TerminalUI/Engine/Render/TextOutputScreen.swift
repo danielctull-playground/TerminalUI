@@ -1,5 +1,6 @@
 import Foundation
 
+@MainActor
 package struct TextOutputScreen<Output: TextOutputStream> {
 
   @Mutable package var output: Output

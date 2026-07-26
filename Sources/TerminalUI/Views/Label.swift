@@ -18,6 +18,7 @@ public struct Label<Title: View, Icon: View>: View {
 
 // MARK: - LabelStyle
 
+@MainActor
 public protocol LabelStyle/*: DynamicProperty*/ {
 
   typealias Configuration = LabelStyleConfiguration
@@ -40,6 +41,7 @@ extension EnvironmentValues {
 
 // MARK: - LabelStyleConfiguration
 
+@MainActor
 public struct LabelStyleConfiguration {
 
   public struct Title: View {

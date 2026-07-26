@@ -14,6 +14,7 @@ import AttributeGraph
 ///
 /// > Note: This is different from ``Layout`` as it acts on each individual
 /// display item as opposed to the entire set of items.
+@MainActor
 protocol LayoutModifier {
 
   typealias Subview = LayoutSubview

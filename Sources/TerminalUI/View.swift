@@ -1,5 +1,6 @@
 import AttributeGraph
 
+@MainActor
 public protocol View {
 
   /// The type of view representing the body of this view.

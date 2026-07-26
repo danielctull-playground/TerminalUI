@@ -11,6 +11,7 @@ extension View {
 
 /// A modifier that you apply to a view or another view modifier, producing a
 /// different version of the original value.
+@MainActor
 public protocol ViewModifier {
 
   /// The content view type passed to `body()`.

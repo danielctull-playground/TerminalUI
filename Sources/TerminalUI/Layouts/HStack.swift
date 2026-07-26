@@ -1,4 +1,5 @@
 
+@MainActor
 public struct HStack {
 
   private let alignment: VerticalAlignment

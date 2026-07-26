@@ -2,6 +2,7 @@ import AttributeGraph
 
 // MARK: EnvironmentKey
 
+@MainActor
 public protocol EnvironmentKey {
   associatedtype Value
   static var defaultValue: Value { get }
@@ -115,10 +116,12 @@ private struct EnvironmentTransformer<Content: View, Value>: ViewModifier {
 
 // MARK: - EnvironmentValues
 
+@MainActor
 public struct EnvironmentValues {
 
   private var values: [AnyEnvironmentPropertyKey: Any] = [:]
 
+  @MainActor
   public subscript<Key: EnvironmentKey>(key: Key.Type) -> Key.Value {
     get { values[EnvironmentPropertyKey(key)] as? Key.Value ?? Key.defaultValue }
     set { values[EnvironmentPropertyKey(key)] = newValue }

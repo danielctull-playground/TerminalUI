@@ -10,6 +10,7 @@ struct Style: Equatable {
   let hidden: Hidden
   let strikethrough: Strikethrough
 
+  @MainActor
   init(
     foregroundColor: Color = .default,
     backgroundColor: Color = .default,
@@ -34,7 +35,7 @@ struct Style: Equatable {
 }
 
 extension Style {
-  static let `default` = Style()
+  @MainActor static let `default` = Style()
 }
 
 extension Style {
