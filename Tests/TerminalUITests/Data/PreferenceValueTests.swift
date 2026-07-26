@@ -16,12 +16,15 @@ private struct B: PreferenceKey {
   }
 }
 
+@MainActor
 @Suite("Preference")
 struct PreferenceTests {
 
   private let screen = TestScreen(width: 7, height: 1)
 
-  @Suite struct `Reader` {
+  @MainActor
+  @Suite("Reader")
+  struct ReaderTests {
 
     private let screen = TestScreen(width: 7, height: 1)
 
@@ -45,7 +48,9 @@ struct PreferenceTests {
     }
   }
 
-  @Suite struct `Writer` {
+  @MainActor
+  @Suite("Writer")
+  struct WriterTests {
 
     private let screen = TestScreen(width: 7, height: 1)
 
@@ -110,7 +115,9 @@ struct PreferenceTests {
     }
   }
 
-  @Suite struct `Accumulated` {
+  @MainActor
+  @Suite("Accumulated")
+  struct AccumulatedTests {
 
     private let screen = TestScreen(width: 7, height: 1)
 

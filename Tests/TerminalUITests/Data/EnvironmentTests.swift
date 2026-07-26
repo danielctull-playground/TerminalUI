@@ -3,6 +3,7 @@ import TerminalUIMacros
 import TerminalUITesting
 import Testing
 
+@MainActor
 @Suite("Environment")
 struct EnvironmentTests {
 

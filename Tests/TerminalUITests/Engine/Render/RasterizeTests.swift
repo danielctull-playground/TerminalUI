@@ -4,6 +4,7 @@ import Testing
 
 extension ScreenTests {
 
+  @MainActor
   @Suite("Rasterize")
   struct RasterizeTests {
 

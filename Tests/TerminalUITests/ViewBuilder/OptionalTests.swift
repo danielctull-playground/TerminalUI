@@ -2,6 +2,7 @@
 import TerminalUITesting
 import Testing
 
+@MainActor
 @Suite("Optional", .tags(.viewBuilder))
 struct OptionalTests {
 
@@ -60,7 +61,6 @@ struct OptionalTests {
     #expect(screen.buffer.description == "new")
   }
 
-  @MainActor
   @Test(.tags(.state))
   func `state inside a branch is lost when changing branch`() {
 
@@ -105,7 +105,6 @@ struct OptionalTests {
     #expect(screen.buffer.description == ".......1.......")
   }
 
-  @MainActor
   @Test(.tags(.state))
   func `leaving the content frees its state`() {
 

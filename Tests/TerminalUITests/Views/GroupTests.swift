@@ -2,6 +2,7 @@
 import TerminalUITesting
 import Testing
 
+@MainActor
 @Suite("Group", .tags(.view))
 struct GroupTests {
 
@@ -27,6 +28,7 @@ struct GroupTests {
       """)
   }
 
+  @MainActor
   @Suite(.tags(.preferenceValues))
   struct `Preference Values` {
 

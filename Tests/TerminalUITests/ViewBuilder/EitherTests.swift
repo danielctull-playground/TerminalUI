@@ -2,6 +2,7 @@
 import TerminalUITesting
 import Testing
 
+@MainActor
 @Suite("Either", .tags(.viewBuilder))
 struct EitherTests {
 
@@ -31,7 +32,6 @@ struct EitherTests {
       """)
   }
 
-  @MainActor
   @Test(.tags(.state))
   func `state inside a branch is lost when changing branch`() {
 

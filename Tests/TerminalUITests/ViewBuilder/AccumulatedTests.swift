@@ -2,9 +2,11 @@
 import TerminalUITesting
 import Testing
 
+@MainActor
 @Suite("Accumulated", .tags(.viewBuilder))
 struct AccumulatedTests {
 
+  @MainActor
   @Suite(.tags(.preferenceValues))
   struct `Preference Values` {
 

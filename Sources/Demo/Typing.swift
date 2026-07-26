@@ -1,9 +1,10 @@
 import ArgumentParser
 import TerminalUI
 
+@MainActor
 struct Typing: App, AsyncParsableCommand {
 
-  static let configuration = CommandConfiguration(
+  nonisolated static let configuration = CommandConfiguration(
     abstract: "Shows how App and AsyncParsableCommand can be used together."
   )
 
@@ -12,7 +13,7 @@ struct Typing: App, AsyncParsableCommand {
   }
 }
 
-struct Content: View {
+@MainActor struct Content: @MainActor View {
   @State private var a = ""
   @State private var b = ""
 

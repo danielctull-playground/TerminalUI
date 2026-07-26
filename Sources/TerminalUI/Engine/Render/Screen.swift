@@ -1,5 +1,6 @@
 import AttributeGraph
 
+@MainActor
 package protocol Screen {
   func draw(_ buffer: Buffer)
 

@@ -3,6 +3,7 @@ import AttributeGraph
 import TerminalUITesting
 import Testing
 
+@MainActor
 @Suite("FocusManager")
 struct FocusManagerTests {
 

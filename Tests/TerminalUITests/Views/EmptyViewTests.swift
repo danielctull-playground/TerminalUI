@@ -2,6 +2,7 @@
 import TerminalUITesting
 import Testing
 
+@MainActor
 @Suite("EmptyView", .tags(.view))
 struct EmptyViewTests {
 
@@ -25,6 +26,7 @@ struct EmptyViewTests {
       """)
   }
 
+  @MainActor
   @Suite(.tags(.preferenceValues))
   struct `Preference Values` {
 

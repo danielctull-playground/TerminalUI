@@ -1,9 +1,10 @@
 import ArgumentParser
 import TerminalUI
 
+@MainActor
 struct Styles: App, AsyncParsableCommand {
 
-  static let configuration = CommandConfiguration(
+  nonisolated static let configuration = CommandConfiguration(
     abstract: "Displays a variety of styles."
   )
 

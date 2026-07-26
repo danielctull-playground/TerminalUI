@@ -2,9 +2,11 @@
 import TerminalUITesting
 import Testing
 
+@MainActor
 @Suite("Label", .tags(.view))
 struct LabelTests {
 
+  @MainActor
   @Suite struct Style {
 
     @Test func `default`() {
@@ -105,6 +107,7 @@ struct LabelTests {
     }
   }
 
+  @MainActor
   @Suite(.tags(.preferenceValues))
   struct `Preference Values` {
 

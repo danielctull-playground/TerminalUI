@@ -1,5 +1,6 @@
 import AttributeGraph
 
+@MainActor
 public struct TextField {
 
   private let text: Binding<String>
@@ -9,7 +10,7 @@ public struct TextField {
   }
 }
 
-extension TextField: PrimitiveView {
+extension TextField: @MainActor PrimitiveView {
 
   public static func makeView(
     view: Attribute<TextField>,

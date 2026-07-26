@@ -2,6 +2,7 @@
 import TerminalUITesting
 import Testing
 
+@MainActor
 @Suite("ForegroundColor", .tags(.modifier))
 struct ForegroundColorTests {
 

@@ -2,6 +2,7 @@
 import TerminalUITesting
 import Testing
 
+@MainActor
 @Suite("ViewModifier", .tags(.modifier))
 struct ViewModifierTests {
 

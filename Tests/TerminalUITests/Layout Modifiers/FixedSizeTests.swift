@@ -2,6 +2,7 @@
 import TerminalUITesting
 import Testing
 
+@MainActor
 @Suite("FixedSize", .tags(.modifier))
 struct FixedSizeTests {
 
@@ -71,6 +72,7 @@ struct FixedSizeTests {
       """)
   }
 
+  @MainActor
   @Suite(.tags(.preferenceValues))
   struct `Preference Values` {
 

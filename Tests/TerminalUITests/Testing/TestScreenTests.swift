@@ -2,6 +2,7 @@ import TerminalUI
 import TerminalUITesting
 import Testing
 
+@MainActor
 @Suite("TestScreen")
 struct TestScreenTests {
 

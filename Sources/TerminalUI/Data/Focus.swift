@@ -2,6 +2,7 @@ import AttributeGraph
 
 // MARK: - FocusManager
 
+@MainActor
 final class FocusManager {
 
   unowned let graph: Graph
@@ -67,19 +68,20 @@ final class FocusManager {
 
 // MARK: - FocusID
 
+@MainActor
 struct FocusID: Equatable, Hashable {
   private let rawValue: Int
 }
 
 extension FocusID {
-  nonisolated(unsafe) private static var counter = 0
+  private static var counter = 0
   fileprivate static var next: Self {
     defer { counter += 1 }
     return FocusID(rawValue: counter)
   }
 }
 
-extension FocusID: CustomStringConvertible {
+extension FocusID: @MainActor CustomStringConvertible {
   public var description: String {
     String(describing: rawValue)
   }

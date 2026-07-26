@@ -41,6 +41,7 @@ struct KeyPressTests {
 
   // MARK: - updateEnvironment routes to the focus manager
 
+  @MainActor
   @Test func `updateEnvironment delivers the key to the focus manager`() {
     let graph = Graph()
     var received: [KeyPress] = []

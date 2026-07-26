@@ -2,6 +2,7 @@
 import TerminalUITesting
 import Testing
 
+@MainActor
 @Suite("Padding", .tags(.modifier))
 struct PaddingTests {
 
@@ -120,6 +121,7 @@ struct PaddingTests {
 //    #expect(size.height == expectedHeight)
 //  }
 
+  @MainActor
   @Suite(.tags(.preferenceValues))
   struct `Preference Values` {
 

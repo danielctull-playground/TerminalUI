@@ -54,7 +54,7 @@ extension TestScreen {
   }
 }
 
-extension TestScreen: CustomStringConvertible {
+extension TestScreen: @MainActor CustomStringConvertible {
 
   public var description: String {
 

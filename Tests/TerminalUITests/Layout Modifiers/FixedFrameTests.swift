@@ -2,6 +2,7 @@
 import TerminalUITesting
 import Testing
 
+@MainActor
 @Suite("FixedFrame", .tags(.modifier))
 struct FixedFrameTests {
 
@@ -188,6 +189,7 @@ struct FixedFrameTests {
     #expect(screen.buffer.description == expected)
   }
 
+  @MainActor
   @Suite(.tags(.preferenceValues))
   struct `Preference Values` {
 

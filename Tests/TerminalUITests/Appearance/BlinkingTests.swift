@@ -2,6 +2,7 @@
 import TerminalUITesting
 import Testing
 
+@MainActor
 @Suite("Blinking", .tags(.modifier))
 struct BlinkingTests {
 

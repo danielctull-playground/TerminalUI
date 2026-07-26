@@ -2,6 +2,7 @@
 import TerminalUITesting
 import Testing
 
+@MainActor
 @Suite("Hidden", .tags(.modifier))
 struct HiddenTests {
 

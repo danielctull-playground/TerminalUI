@@ -2,12 +2,13 @@
 import TerminalUITesting
 import Testing
 
+@MainActor
 @Suite("TextField")
 struct TextFieldTests {
 
   @Test func `key presses are rendered`() {
 
-    struct Content: View {
+    @MainActor struct Content: @MainActor View {
       @State private var text = ""
       var body: some View {
         TextField(text: $text)
@@ -35,7 +36,7 @@ struct TextFieldTests {
 
   @Test func `multiple TextFields can be tabbed between`() {
 
-    struct Content: View {
+    @MainActor struct Content: @MainActor View {
       @State private var a = ""
       @State private var b = ""
       var body: some View {

@@ -10,6 +10,7 @@ import Glibc
 import Musl
 #endif
 
+@MainActor
 @Suite("WindowSize")
 struct WindowSizeTests {
 
