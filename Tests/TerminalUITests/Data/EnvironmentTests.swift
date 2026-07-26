@@ -8,7 +8,7 @@ import Testing
 struct EnvironmentTests {
 
   @Test func `read outside of body: fatal`() async {
-    await #expect(processExitsWith: .failure) {
+    await #expect(processExitsWith: .failure) { @MainActor in
       _ = TestView().value
     }
   }
@@ -40,7 +40,7 @@ struct EnvironmentTests {
   }
 
   @Test func `write body: fatal`() async {
-    await #expect(processExitsWith: .failure) {
+    await #expect(processExitsWith: .failure) { @MainActor in
       _ = TestView().environment(\.value, "b").body
     }
   }
@@ -59,7 +59,7 @@ struct EnvironmentTests {
   }
 
   @Test func `transform body: fatal`() async {
-    await #expect(processExitsWith: .failure) {
+    await #expect(processExitsWith: .failure) { @MainActor in
       _ = TestView().transformEnvironment(\.value) { $0.append("a") }.body
     }
   }

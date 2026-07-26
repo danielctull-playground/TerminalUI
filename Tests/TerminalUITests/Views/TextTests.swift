@@ -9,7 +9,7 @@ struct TextTests {
   private let screen = TestScreen(width: 5, height: 3)
 
   @Test func `body: fatal`() async {
-    await #expect(processExitsWith: .failure) {
+    await #expect(processExitsWith: .failure) { @MainActor in
       _ = Text("").body
     }
   }

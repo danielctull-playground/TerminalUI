@@ -13,13 +13,13 @@ struct CSITests {
     }
 
     @Test func `invalid: ;`() async {
-      await #expect(processExitsWith: .failure) {
+      await #expect(processExitsWith: .failure) { @MainActor in
         _ = CSI.Marker(unicodeScalarLiteral: ";")
       }
     }
 
     @Test func `invalid: @`() async {
-      await #expect(processExitsWith: .failure) {
+      await #expect(processExitsWith: .failure) { @MainActor in
         _ = CSI.Marker(unicodeScalarLiteral: "@")
       }
     }
@@ -37,13 +37,13 @@ struct CSITests {
     }
 
     @Test func `invalid: <`() async {
-      await #expect(processExitsWith: .failure) {
+      await #expect(processExitsWith: .failure) { @MainActor in
         _ = CSI.Intermediate(unicodeScalarLiteral: "<")
       }
     }
 
     @Test func `invalid: 0`() async {
-      await #expect(processExitsWith: .failure) {
+      await #expect(processExitsWith: .failure) { @MainActor in
         _ = CSI.Intermediate(unicodeScalarLiteral: "0")
       }
     }
@@ -66,19 +66,19 @@ struct CSITests {
     }
 
     @Test func `invalid: :`() async {
-      await #expect(processExitsWith: .failure) {
+      await #expect(processExitsWith: .failure) { @MainActor in
         _ = CSI.Command(unicodeScalarLiteral: ":")
       }
     }
 
     @Test func `invalid: ?`() async {
-      await #expect(processExitsWith: .failure) {
+      await #expect(processExitsWith: .failure) { @MainActor in
         _ = CSI.Command(unicodeScalarLiteral: "?")
       }
     }
 
     @Test func `invalid: 1`() async {
-      await #expect(processExitsWith: .failure) {
+      await #expect(processExitsWith: .failure) { @MainActor in
         _ = CSI.Command(unicodeScalarLiteral: "1")
       }
     }

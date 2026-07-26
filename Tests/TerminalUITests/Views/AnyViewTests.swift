@@ -7,7 +7,7 @@ import Testing
 struct AnyViewTests {
 
   @Test func `body: fatal`() async {
-    await #expect(processExitsWith: .failure) {
+    await #expect(processExitsWith: .failure) { @MainActor in
       _ = AnyView(Color.black).body
     }
   }

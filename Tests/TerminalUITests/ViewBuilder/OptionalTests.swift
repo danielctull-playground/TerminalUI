@@ -7,13 +7,13 @@ import Testing
 struct OptionalTests {
 
   @Test func `none body: fatal`() async {
-    await #expect(processExitsWith: .failure) {
+    await #expect(processExitsWith: .failure) { @MainActor in
       _ = Optional<EmptyView>.none.body
     }
   }
 
   @Test func `some body: fatal`() async {
-    await #expect(processExitsWith: .failure) {
+    await #expect(processExitsWith: .failure) { @MainActor in
       _ = Optional<EmptyView>.some(EmptyView()).body
     }
   }

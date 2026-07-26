@@ -11,7 +11,7 @@ struct PaddingTests {
   private let cell = Cell(" ", background: .blue)
 
   @Test func `body: fatal`() async {
-    await #expect(processExitsWith: .failure) {
+    await #expect(processExitsWith: .failure) { @MainActor in
       _ = Color.black.padding(0).body
     }
   }

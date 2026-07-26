@@ -186,7 +186,7 @@ struct BindingTests {
   }
 
   @Test func `init (from optional value) - fatal error on read of nil`() async {
-    await #expect(processExitsWith: .failure) {
+    await #expect(processExitsWith: .failure) { @MainActor in
       var value: String? = "old"
       let optional = Binding { value } set: { value = $0 }
       let binding = try #require(Binding(optional))

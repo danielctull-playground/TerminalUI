@@ -9,7 +9,7 @@ struct ColorTests {
   private let screen = TestScreen(width: 3, height: 3)
 
   @Test func `body: fatal`() async {
-    await #expect(processExitsWith: .failure) {
+    await #expect(processExitsWith: .failure) { @MainActor in
       _ = Color.black.body
     }
   }

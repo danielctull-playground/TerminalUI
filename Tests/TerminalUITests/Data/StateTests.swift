@@ -7,13 +7,13 @@ import Testing
 struct StateTests {
 
   @Test func `read outside of body: fatal`() async {
-    await #expect(processExitsWith: .failure) {
+    await #expect(processExitsWith: .failure) { @MainActor in
       _ = TestView().value
     }
   }
 
   @Test func `write outside of body: fatal`() async {
-    await #expect(processExitsWith: .failure) {
+    await #expect(processExitsWith: .failure) { @MainActor in
       TestView().value = "nope"
     }
   }

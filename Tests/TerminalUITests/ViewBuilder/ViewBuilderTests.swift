@@ -35,7 +35,7 @@ struct ViewBuilderTests {
   }
 
   @Test func `first body: fatal`() async {
-    await #expect(processExitsWith: .failure) {
+    await #expect(processExitsWith: .failure) { @MainActor in
       _ = ViewBuilder
         .buildPartialBlock(first: Color.black)
         .body
@@ -59,7 +59,7 @@ struct ViewBuilderTests {
   }
 
   @Test func `accumulated body: fatal`() async {
-    await #expect(processExitsWith: .failure) {
+    await #expect(processExitsWith: .failure) { @MainActor in
       _ = ViewBuilder
         .buildPartialBlock(accumulated: Color.black, next: Color.blue)
         .body
@@ -96,7 +96,7 @@ struct ViewBuilderTests {
   }
 
   @Test func `optional body: fatal`() async {
-    await #expect(processExitsWith: .failure) {
+    await #expect(processExitsWith: .failure) { @MainActor in
       _ = ViewBuilder
         .buildOptional(Color.black)
         .body
@@ -135,11 +135,11 @@ struct ViewBuilderTests {
   }
 
   @Test func `either body: fatal`() async {
-    await #expect(processExitsWith: .failure) {
+    await #expect(processExitsWith: .failure) { @MainActor in
       let either: Either<Color, Color> = ViewBuilder.buildEither(first: Color.black)
       _ = either.body
     }
-    await #expect(processExitsWith: .failure) {
+    await #expect(processExitsWith: .failure) { @MainActor in
       let either: Either<Color, Color> = ViewBuilder.buildEither(second: Color.black)
       _ = either.body
     }
@@ -168,7 +168,7 @@ struct ViewBuilderTests {
 #endif
 
   @Test func `limited availability body: fatal`() async {
-    await #expect(processExitsWith: .failure) {
+    await #expect(processExitsWith: .failure) { @MainActor in
       _ = ViewBuilder.buildLimitedAvailability(Color.black).body
     }
   }

@@ -7,7 +7,7 @@ import Testing
 struct VStackTests {
 
   @Test func `body: fatal`() async {
-    await #expect(processExitsWith: .failure) {
+    await #expect(processExitsWith: .failure) { @MainActor in
       _ = VStack {}.body
     }
   }

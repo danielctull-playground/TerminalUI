@@ -10,7 +10,7 @@ struct OffsetTests {
   private let cell = Cell("X")
 
   @Test func `body: fatal`() async {
-    await #expect(processExitsWith: .failure) {
+    await #expect(processExitsWith: .failure) { @MainActor in
       _ = Color.black.offset().body
     }
   }

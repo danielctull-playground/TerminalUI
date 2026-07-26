@@ -103,7 +103,7 @@ struct WindowSizeTests {
     }
 
     @Test func `requires terminal`() async throws {
-      await #expect(processExitsWith: .failure) {
+      await #expect(processExitsWith: .failure) { @MainActor in
         let pipe = Pipe()
         var iterator = WindowSize.sequence(fileHandle: pipe.fileHandleForReading)
           .makeAsyncIterator()
