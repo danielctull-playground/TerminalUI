@@ -23,7 +23,7 @@ extension TextField: PrimitiveView {
 
     let focusManager = graph[inputs.environment].focusManager
     let id = focusManager.add { key in
-      graph[view].text.wrappedValue.append(key.character)
+      graph[view].text.wrappedValue.append(contentsOf: key.characters)
     }
 
     return ViewOutputs(

@@ -12,11 +12,11 @@ struct FocusManagerTests {
     var root: [KeyPress] = []
     let manager = FocusManager(graph: graph) { root.append($0) }
 
-    manager.handle("Y")
-    #expect(root == ["Y"])
+    manager.handle(KeyPress("Y"))
+    #expect(root == [KeyPress("Y")])
 
-    manager.handle("N")
-    #expect(root == ["Y", "N"])
+    manager.handle(KeyPress("N"))
+    #expect(root == [KeyPress("Y"), KeyPress("N")])
   }
 
   @Test func `first non-root handler is activated`() {
@@ -30,13 +30,13 @@ struct FocusManagerTests {
 
     #expect(manager.isFocused(aid))
 
-    manager.handle("1")
+    manager.handle(KeyPress("1"))
     #expect(root == [])
-    #expect(a == ["1"])
+    #expect(a == [KeyPress("1")])
 
-    manager.handle("2")
+    manager.handle(KeyPress("2"))
     #expect(root == [])
-    #expect(a == ["1", "2"])
+    #expect(a == [KeyPress("1"), KeyPress("2")])
   }
 
   @Test func `subsequent handlers are not activated`() {
@@ -54,17 +54,17 @@ struct FocusManagerTests {
     #expect(manager.isFocused(aid))
     #expect(!manager.isFocused(bid))
 
-    manager.handle("1")
+    manager.handle(KeyPress("1"))
     #expect(root == [])
-    #expect(a == ["1"])
+    #expect(a == [KeyPress("1")])
     #expect(b == [])
 
     #expect(manager.isFocused(aid))
     #expect(!manager.isFocused(bid))
 
-    manager.handle("2")
+    manager.handle(KeyPress("2"))
     #expect(root == [])
-    #expect(a == ["1", "2"])
+    #expect(a == [KeyPress("1"), KeyPress("2")])
     #expect(b == [])
   }
 
@@ -83,28 +83,28 @@ struct FocusManagerTests {
     #expect(manager.isFocused(aid))
     #expect(!manager.isFocused(bid))
 
-    manager.handle("1")
+    manager.handle(KeyPress("1"))
     #expect(root == [])
-    #expect(a == ["1"])
+    #expect(a == [KeyPress("1")])
     #expect(b == [])
 
     manager.handle(.tab)
     #expect(!manager.isFocused(aid))
     #expect(manager.isFocused(bid))
 
-    manager.handle("2")
+    manager.handle(KeyPress("2"))
     #expect(root == [])
-    #expect(a == ["1"])
-    #expect(b == ["2"])
+    #expect(a == [KeyPress("1")])
+    #expect(b == [KeyPress("2")])
 
     manager.handle(.tab)
     #expect(manager.isFocused(aid))
     #expect(!manager.isFocused(bid))
 
-    manager.handle("3")
+    manager.handle(KeyPress("3"))
     #expect(root == [])
-    #expect(a == ["1", "3"])
-    #expect(b == ["2"])
+    #expect(a == [KeyPress("1"), KeyPress("3")])
+    #expect(b == [KeyPress("2")])
   }
 
   @Test func `removing the current focus id moves to next focus`() {
@@ -122,19 +122,19 @@ struct FocusManagerTests {
     #expect(manager.isFocused(aid))
     #expect(!manager.isFocused(bid))
 
-    manager.handle("1")
+    manager.handle(KeyPress("1"))
     #expect(root == [])
-    #expect(a == ["1"])
+    #expect(a == [KeyPress("1")])
     #expect(b == [])
 
     manager.remove(id: aid)
     #expect(!manager.isFocused(aid))
     #expect(manager.isFocused(bid))
 
-    manager.handle("2")
+    manager.handle(KeyPress("2"))
     #expect(root == [])
-    #expect(a == ["1"])
-    #expect(b == ["2"])
+    #expect(a == [KeyPress("1")])
+    #expect(b == [KeyPress("2")])
   }
 
   @Test func `removing non-current focus id doesn't move to next focus`() {
@@ -156,9 +156,9 @@ struct FocusManagerTests {
     #expect(!manager.isFocused(bid))
     #expect(!manager.isFocused(cid))
 
-    manager.handle("1")
+    manager.handle(KeyPress("1"))
     #expect(root == [])
-    #expect(a == ["1"])
+    #expect(a == [KeyPress("1")])
     #expect(b == [])
     #expect(c == [])
 
@@ -167,9 +167,9 @@ struct FocusManagerTests {
     #expect(!manager.isFocused(bid))
     #expect(!manager.isFocused(cid))
 
-    manager.handle("2")
+    manager.handle(KeyPress("2"))
     #expect(root == [])
-    #expect(a == ["1", "2"])
+    #expect(a == [KeyPress("1"), KeyPress("2")])
     #expect(b == [])
     #expect(c == [])
   }
@@ -189,27 +189,27 @@ struct FocusManagerTests {
     #expect(manager.isFocused(aid))
     #expect(!manager.isFocused(bid))
 
-    manager.handle("1")
+    manager.handle(KeyPress("1"))
     #expect(root == [])
-    #expect(a == ["1"])
+    #expect(a == [KeyPress("1")])
     #expect(b == [])
 
     manager.remove(id: aid)
     #expect(!manager.isFocused(aid))
     #expect(manager.isFocused(bid))
 
-    manager.handle("2")
+    manager.handle(KeyPress("2"))
     #expect(root == [])
-    #expect(a == ["1"])
-    #expect(b == ["2"])
+    #expect(a == [KeyPress("1")])
+    #expect(b == [KeyPress("2")])
 
     manager.remove(id: bid)
     #expect(!manager.isFocused(aid))
     #expect(!manager.isFocused(bid))
 
-    manager.handle("3")
-    #expect(root == ["3"])
-    #expect(a == ["1"])
-    #expect(b == ["2"])
+    manager.handle(KeyPress("3"))
+    #expect(root == [KeyPress("3")])
+    #expect(a == [KeyPress("1")])
+    #expect(b == [KeyPress("2")])
   }
 }
