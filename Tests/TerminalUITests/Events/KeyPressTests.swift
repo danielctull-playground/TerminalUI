@@ -56,7 +56,10 @@ struct KeyPressTests {
   @Test func `updateEnvironment delivers the key to the focus manager`() {
     let graph = Graph()
     var received: [KeyPress] = []
-    let manager = FocusManager(graph: graph) { received.append($0) }
+    let manager = FocusManager(graph: graph) {
+      received.append($0)
+      return .handled
+    }
 
     var environment = EnvironmentValues()
     environment.focusManager = manager

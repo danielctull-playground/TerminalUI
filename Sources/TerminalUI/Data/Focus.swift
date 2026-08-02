@@ -7,10 +7,13 @@ final class FocusManager {
   unowned let graph: Graph
   private let root: FocusID
   private var current: Attribute<FocusID>
-  private var handlers: [FocusID: (KeyPress) -> Void]
+  private var handlers: [FocusID: (KeyPress) -> KeyPress.Result]
   private var order: [FocusID]
 
-  init(graph: Graph, unhandled handler: @escaping (KeyPress) -> Void = { _ in }) {
+  init(
+    graph: Graph,
+    unhandled handler: @escaping (KeyPress) -> KeyPress.Result = { _ in .ignored }
+  ) {
     self.graph = graph
     current = graph.external(of: FocusID.self)
     root = FocusID.next
@@ -29,11 +32,14 @@ final class FocusManager {
       return
     }
     let id = graph[current]
-    let handler = handlers[id]!
-    handler(keyPress)
+    let result = handlers[id]!(keyPress)
+
+    if result == .ignored, id != root {
+      _ = handlers[root]!(keyPress)
+    }
   }
 
-  func add(handler: @escaping (KeyPress) -> Void) -> FocusID {
+  func add(handler: @escaping (KeyPress) -> KeyPress.Result) -> FocusID {
     let id = FocusID.next
     handlers[id] = handler
     order.append(id)

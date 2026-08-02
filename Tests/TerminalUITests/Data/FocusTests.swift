@@ -10,7 +10,10 @@ struct FocusManagerTests {
 
     let graph = Graph()
     var root: [KeyPress] = []
-    let manager = FocusManager(graph: graph) { root.append($0) }
+    let manager = FocusManager(graph: graph) {
+      root.append($0)
+      return .handled
+    }
 
     manager.handle(KeyPress("Y"))
     #expect(root == [KeyPress("Y")])
@@ -19,14 +22,55 @@ struct FocusManagerTests {
     #expect(root == [KeyPress("Y"), KeyPress("N")])
   }
 
+  @Test func `handled focused key does not reach the root handler`() {
+
+    let graph = Graph()
+    var root: [KeyPress] = []
+    let manager = FocusManager(graph: graph) {
+      root.append($0)
+      return .handled
+    }
+
+    var a: [KeyPress] = []
+    _ = manager.add {
+      a.append($0)
+      return .handled
+    }
+
+    manager.handle(KeyPress("x"))
+    #expect(root == [])
+    #expect(a == [KeyPress("x")])
+  }
+
+  @Test func `ignored focused key reaches the root handler`() {
+
+    let graph = Graph()
+    var root: [KeyPress] = []
+    let manager = FocusManager(graph: graph) {
+      root.append($0)
+      return .handled
+    }
+
+    _ = manager.add { _ in .ignored }
+
+    manager.handle(KeyPress("x"))
+    #expect(root == [KeyPress("x")])
+  }
+
   @Test func `first non-root handler is activated`() {
 
     let graph = Graph()
     var root: [KeyPress] = []
-    let manager = FocusManager(graph: graph) { root.append($0) }
+    let manager = FocusManager(graph: graph) {
+      root.append($0)
+      return .handled
+    }
 
     var a: [KeyPress] = []
-    let aid = manager.add { a.append($0) }
+    let aid = manager.add {
+      a.append($0)
+      return .handled
+    }
 
     #expect(manager.isFocused(aid))
 
@@ -43,13 +87,22 @@ struct FocusManagerTests {
 
     let graph = Graph()
     var root: [KeyPress] = []
-    let manager = FocusManager(graph: graph) { root.append($0) }
+    let manager = FocusManager(graph: graph) {
+      root.append($0)
+      return .handled
+    }
 
     var a: [KeyPress] = []
-    let aid = manager.add { a.append($0) }
+    let aid = manager.add {
+      a.append($0)
+      return .handled
+    }
 
     var b: [KeyPress] = []
-    let bid = manager.add { b.append($0) }
+    let bid = manager.add {
+      b.append($0)
+      return .handled
+    }
 
     #expect(manager.isFocused(aid))
     #expect(!manager.isFocused(bid))
@@ -72,13 +125,22 @@ struct FocusManagerTests {
 
     let graph = Graph()
     var root: [KeyPress] = []
-    let manager = FocusManager(graph: graph) { root.append($0) }
+    let manager = FocusManager(graph: graph) {
+      root.append($0)
+      return .handled
+    }
 
     var a: [KeyPress] = []
-    let aid = manager.add { a.append($0) }
+    let aid = manager.add {
+      a.append($0)
+      return .handled
+    }
 
     var b: [KeyPress] = []
-    let bid = manager.add { b.append($0) }
+    let bid = manager.add {
+      b.append($0)
+      return .handled
+    }
 
     #expect(manager.isFocused(aid))
     #expect(!manager.isFocused(bid))
@@ -111,13 +173,22 @@ struct FocusManagerTests {
 
     let graph = Graph()
     var root: [KeyPress] = []
-    let manager = FocusManager(graph: graph) { root.append($0) }
+    let manager = FocusManager(graph: graph) {
+      root.append($0)
+      return .handled
+    }
 
     var a: [KeyPress] = []
-    let aid = manager.add { a.append($0) }
+    let aid = manager.add {
+      a.append($0)
+      return .handled
+    }
 
     var b: [KeyPress] = []
-    let bid = manager.add { b.append($0) }
+    let bid = manager.add {
+      b.append($0)
+      return .handled
+    }
 
     #expect(manager.isFocused(aid))
     #expect(!manager.isFocused(bid))
@@ -141,16 +212,28 @@ struct FocusManagerTests {
 
     let graph = Graph()
     var root: [KeyPress] = []
-    let manager = FocusManager(graph: graph) { root.append($0) }
+    let manager = FocusManager(graph: graph) {
+      root.append($0)
+      return .handled
+    }
 
     var a: [KeyPress] = []
-    let aid = manager.add { a.append($0) }
+    let aid = manager.add {
+      a.append($0)
+      return .handled
+    }
 
     var b: [KeyPress] = []
-    let bid = manager.add { b.append($0) }
+    let bid = manager.add {
+      b.append($0)
+      return .handled
+    }
 
     var c: [KeyPress] = []
-    let cid = manager.add { c.append($0) }
+    let cid = manager.add {
+      c.append($0)
+      return .handled
+    }
 
     #expect(manager.isFocused(aid))
     #expect(!manager.isFocused(bid))
@@ -178,13 +261,22 @@ struct FocusManagerTests {
 
     let graph = Graph()
     var root: [KeyPress] = []
-    let manager = FocusManager(graph: graph) { root.append($0) }
+    let manager = FocusManager(graph: graph) {
+      root.append($0)
+      return .handled
+    }
 
     var a: [KeyPress] = []
-    let aid = manager.add { a.append($0) }
+    let aid = manager.add {
+      a.append($0)
+      return .handled
+    }
 
     var b: [KeyPress] = []
-    let bid = manager.add { b.append($0) }
+    let bid = manager.add {
+      b.append($0)
+      return .handled
+    }
 
     #expect(manager.isFocused(aid))
     #expect(!manager.isFocused(bid))
