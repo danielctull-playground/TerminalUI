@@ -69,4 +69,14 @@ struct KeyPressTests {
       KeyPress("i"),
     ])
   }
+
+  @Suite("Result")
+  struct ResultTests {
+
+    @Test func `Equatable conformance`() {
+      #expect(KeyPress.Result.handled != .ignored)
+      #expect(KeyPress.Result.handled == .handled)
+      #expect(KeyPress.Result.ignored == .ignored)
+    }
+  }
 }

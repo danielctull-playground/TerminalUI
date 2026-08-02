@@ -23,6 +23,16 @@ extension KeyPress {
   static let tab = KeyPress(key: .tab, characters: "\t")
 }
 
+// MARK: - KeyPress.Result
+
+extension KeyPress {
+
+  enum Result: Equatable, Hashable, Sendable {
+    case handled
+    case ignored
+  }
+}
+
 // MARK: Sequence modifier
 
 extension AsyncSequence where Self: Sendable, Element == any Event {
