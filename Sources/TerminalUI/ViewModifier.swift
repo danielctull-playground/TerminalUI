@@ -20,6 +20,7 @@ public protocol ViewModifier {
   associatedtype Body: View
 
   /// Gets the current body of the caller.
+  @ViewBuilder
   func body(content: Content) -> Body
 }
 
