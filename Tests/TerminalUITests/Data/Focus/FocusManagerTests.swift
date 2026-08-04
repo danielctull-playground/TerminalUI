@@ -6,9 +6,10 @@ import Testing
 @Suite("FocusManager")
 struct FocusManagerTests {
 
+  private let graph = Graph()
+
   @Test func `root handles when there's no other focus ids`() {
 
-    let graph = Graph()
     var root: [KeyPress] = []
     let manager = FocusManager(graph: graph) {
       root.append($0)
@@ -24,7 +25,6 @@ struct FocusManagerTests {
 
   @Test func `handled focused key does not reach the root handler`() {
 
-    let graph = Graph()
     var root: [KeyPress] = []
     let manager = FocusManager(graph: graph) {
       root.append($0)
@@ -44,7 +44,6 @@ struct FocusManagerTests {
 
   @Test func `ignored focused key reaches the root handler`() {
 
-    let graph = Graph()
     var root: [KeyPress] = []
     let manager = FocusManager(graph: graph) {
       root.append($0)
@@ -59,7 +58,6 @@ struct FocusManagerTests {
 
   @Test func `first non-root handler is activated`() {
 
-    let graph = Graph()
     var root: [KeyPress] = []
     let manager = FocusManager(graph: graph) {
       root.append($0)
@@ -85,7 +83,6 @@ struct FocusManagerTests {
 
   @Test func `subsequent handlers are not activated`() {
 
-    let graph = Graph()
     var root: [KeyPress] = []
     let manager = FocusManager(graph: graph) {
       root.append($0)
@@ -123,7 +120,6 @@ struct FocusManagerTests {
 
   @Test func `tab toggles through non-root focus ids`() {
 
-    let graph = Graph()
     var root: [KeyPress] = []
     let manager = FocusManager(graph: graph) {
       root.append($0)
@@ -171,7 +167,6 @@ struct FocusManagerTests {
 
   @Test func `removing the current focus id moves to next focus`() {
 
-    let graph = Graph()
     var root: [KeyPress] = []
     let manager = FocusManager(graph: graph) {
       root.append($0)
@@ -210,7 +205,6 @@ struct FocusManagerTests {
 
   @Test func `removing non-current focus id doesn't move to next focus`() {
 
-    let graph = Graph()
     var root: [KeyPress] = []
     let manager = FocusManager(graph: graph) {
       root.append($0)
@@ -259,7 +253,6 @@ struct FocusManagerTests {
 
   @Test func `removing all active focus id moves focus to root`() {
 
-    let graph = Graph()
     var root: [KeyPress] = []
     let manager = FocusManager(graph: graph) {
       root.append($0)
@@ -303,5 +296,31 @@ struct FocusManagerTests {
     #expect(root == [KeyPress("3")])
     #expect(a == [KeyPress("1")])
     #expect(b == [KeyPress("2")])
+  }
+
+  @Test func `registering a focus ID activates the first ID`() {
+    let manager = FocusManager(graph: graph)
+    let id = FocusID.next
+    manager.register(id)
+    #expect(manager.isFocused(id))
+  }
+
+  @Test func `registering an ID twice appends only one ID to the tab order`() {
+
+    let manager = FocusManager(graph: graph)
+    let a = FocusID.next
+    let b = FocusID.next
+
+    manager.register(a)
+    #expect(manager.isFocused(a))
+
+    manager.register(a)
+    manager.register(b)
+
+    manager.handle(.tab)
+    #expect(manager.isFocused(b))
+
+    manager.handle(.tab)
+    #expect(manager.isFocused(a))
   }
 }

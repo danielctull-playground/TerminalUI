@@ -16,3 +16,12 @@ extension FocusID: CustomStringConvertible {
     String(describing: rawValue)
   }
 }
+
+// MARK: - PreferenceKey
+
+struct FocusIDKey: PreferenceKey {
+  static let defaultValue: FocusID? = nil
+  static func reduce(value: inout FocusID?, nextValue: () -> FocusID?) {
+    value = nextValue()
+  }
+}

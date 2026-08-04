@@ -32,10 +32,19 @@ final class FocusManager {
       return
     }
     let id = graph[current]
-    let result = handlers[id]!(keyPress)
+    let result = handlers[id]?(keyPress) ?? .ignored
 
     if result == .ignored, id != root {
-      _ = handlers[root]!(keyPress)
+      _ = handlers[root]?(keyPress)
+    }
+  }
+
+  func register(_ id: FocusID) {
+    guard !order.contains(id) else { return }
+    order.append(id)
+
+    if graph[current] == root {
+      graph.setValue(of: current, to: id)
     }
   }
 
