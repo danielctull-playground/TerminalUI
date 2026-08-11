@@ -7,10 +7,13 @@ final class FocusManager {
   unowned let graph: Graph
   private let root: FocusID
   private var current: Attribute<FocusID>
-  private var handlers: [FocusID: (KeyPress) -> Void]
+  private var handlers: [FocusID: (KeyPress) -> KeyPress.Result]
   private var order: [FocusID]
 
-  init(graph: Graph, unhandled handler: @escaping (KeyPress) -> Void = { _ in }) {
+  init(
+    graph: Graph,
+    unhandled handler: @escaping (KeyPress) -> KeyPress.Result = { _ in .ignored }
+  ) {
     self.graph = graph
     current = graph.external(of: FocusID.self)
     root = FocusID.next
@@ -29,20 +32,34 @@ final class FocusManager {
       return
     }
     let id = graph[current]
-    let handler = handlers[id]!
-    handler(keyPress)
+    let result = handlers[id]?(keyPress) ?? .ignored
+
+    if result == .ignored, id != root {
+      _ = handlers[root]?(keyPress)
+    }
   }
 
-  func add(handler: @escaping (KeyPress) -> Void) -> FocusID {
-    let id = FocusID.next
-    handlers[id] = handler
+  func register(_ id: FocusID) {
+    guard !order.contains(id) else { return }
     order.append(id)
 
     if graph[current] == root {
       graph.setValue(of: current, to: id)
     }
+  }
 
+  func add(handler: @escaping (KeyPress) -> KeyPress.Result) -> FocusID {
+    let id = FocusID.next
+    register(id)
+    setHandler(handler, for: id)
     return id
+  }
+
+  func setHandler(
+    _ handler: @escaping (KeyPress) -> KeyPress.Result,
+    for id: FocusID
+  ) {
+    handlers[id] = handler
   }
 
   func remove(id: FocusID) {
@@ -62,26 +79,6 @@ final class FocusManager {
     }
     graph.setValue(of: current, to: order[next])
     return true
-  }
-}
-
-// MARK: - FocusID
-
-struct FocusID: Equatable, Hashable {
-  private let rawValue: Int
-}
-
-extension FocusID {
-  nonisolated(unsafe) private static var counter = 0
-  fileprivate static var next: Self {
-    defer { counter += 1 }
-    return FocusID(rawValue: counter)
-  }
-}
-
-extension FocusID: CustomStringConvertible {
-  public var description: String {
-    String(describing: rawValue)
   }
 }
 

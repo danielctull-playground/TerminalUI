@@ -6,6 +6,18 @@ import Testing
 @Suite("KeyPress")
 struct KeyPressTests {
 
+  @Test func `init(key:characters:)`() {
+    let keyPress = KeyPress(key: "e", characters: "f")
+    #expect(keyPress.key == "e")
+    #expect(keyPress.characters == "f")
+  }
+
+  @Test func `init(_ character:)`() {
+    let keyPress = KeyPress("c")
+    #expect(keyPress.key == KeyEquivalent("c"))
+    #expect(keyPress.characters == "c")
+  }
+
   // MARK: - keyPressEvents (Byte -> KeyPress conversion)
 
   @Test func `a byte becomes a key press`() async throws {
@@ -35,7 +47,7 @@ struct KeyPressTests {
   func `a multi-byte UTF-8 character becomes one key press`() async throws {
     let events: [any Event] = [Byte(0xC3), Byte(0xA9)]
     var iterator = events.async.keyPressEvents.makeAsyncIterator()
-    #expect(try await iterator.next() as? KeyPress == KeyPress(character: "é"))
+    #expect(try await iterator.next() as? KeyPress == KeyPress("é"))
     #expect(try await iterator.next() == nil)
   }
 
@@ -44,7 +56,10 @@ struct KeyPressTests {
   @Test func `updateEnvironment delivers the key to the focus manager`() {
     let graph = Graph()
     var received: [KeyPress] = []
-    let manager = FocusManager(graph: graph) { received.append($0) }
+    let manager = FocusManager(graph: graph) {
+      received.append($0)
+      return .handled
+    }
 
     var environment = EnvironmentValues()
     environment.focusManager = manager
@@ -52,6 +67,19 @@ struct KeyPressTests {
     KeyPress("h").updateEnvironment(&environment)
     KeyPress("i").updateEnvironment(&environment)
 
-    #expect(received == ["h", "i"])
+    #expect(received == [
+      KeyPress("h"),
+      KeyPress("i"),
+    ])
+  }
+
+  @Suite("Result")
+  struct ResultTests {
+
+    @Test func `Equatable conformance`() {
+      #expect(KeyPress.Result.handled != .ignored)
+      #expect(KeyPress.Result.handled == .handled)
+      #expect(KeyPress.Result.ignored == .ignored)
+    }
   }
 }
