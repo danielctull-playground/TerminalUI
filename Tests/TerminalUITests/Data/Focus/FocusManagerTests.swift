@@ -8,6 +8,12 @@ struct FocusManagerTests {
 
   private let graph = Graph()
 
+  @Test func `focus manager needs to be set up at launch`() async {
+    await #expect(processExitsWith: .failure) {
+      _ = EnvironmentValues().focusManager
+    }
+  }
+
   @Test func `root handles when there's no other focus ids`() {
 
     var root: [KeyPress] = []
@@ -54,6 +60,7 @@ struct FocusManagerTests {
 
     _ = manager.add { _ in .ignored }
 
+    manager.handle(.tab)
     manager.handle(KeyPress("x"))
     #expect(root == [KeyPress("x")])
   }
