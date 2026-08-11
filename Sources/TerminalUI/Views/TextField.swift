@@ -1,7 +1,8 @@
-import AttributeGraph
 
 public struct TextField {
 
+  @FocusState private var isFocused: Bool
+  @Environment(\.focusManager) private var focusManager
   private let text: Binding<String>
 
   public init(text: Binding<String>) {
@@ -9,61 +10,21 @@ public struct TextField {
   }
 }
 
-extension TextField: PrimitiveView {
+extension TextField: View {
 
-  public static func makeView(
-    view: Attribute<TextField>,
-    inputs: ViewInputs
-  ) -> ViewOutputs {
+  public var body: some View {
+    HStack {
 
-    unowned let graph = inputs.graph
+      Text(text.wrappedValue)
 
-    let geometry = graph.external(of: ViewGeometry.self)
-    graph.setValue(of: geometry, to: .zero)
-
-    let focusManager = graph[inputs.environment].focusManager
-    let id = focusManager.add { key in
-      graph[view].text.wrappedValue.append(contentsOf: key.characters)
+      Text("_")
+        .hidden(!isFocused)
+    }
+    .focusable()
+    .focused($isFocused)
+    .onKeyPress { keyPress in
+      text.wrappedValue.append(keyPress.characters)
       return .handled
     }
-
-    return ViewOutputs(
-      preferenceValues: graph.constant(.empty),
-      layoutProxies: graph.rule { _ in
-
-        var text = graph[view].text.wrappedValue
-        if focusManager.isFocused(id) {
-          text.append("_") // Cursor
-        }
-
-        return [
-          LayoutProxy(
-            layoutComputer: LayoutComputer { _ in
-              Size(width: text.count, height: 1)
-            },
-            place: { frame in
-              graph.setValue(of: geometry, to: ViewGeometry(frame: frame))
-            }
-          )
-        ]
-      },
-      displayList: graph.rule { _ in
-
-        let frame = graph[geometry].frame
-        let environment = graph[inputs.environment]
-
-        var text = graph[view].text.wrappedValue
-        if focusManager.isFocused(id) {
-          text.append("_") // Cursor
-        }
-
-        return DisplayList(items: [
-          DisplayList.Item(
-            frame: frame,
-            content: .text(text, environment.style)
-          )
-        ])
-      }
-    )
   }
 }
