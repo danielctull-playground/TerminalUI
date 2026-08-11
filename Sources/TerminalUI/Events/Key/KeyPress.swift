@@ -27,7 +27,7 @@ extension KeyPress {
 
 extension KeyPress {
 
-  enum Result: Equatable, Hashable, Sendable {
+  public enum Result: Equatable, Hashable, Sendable {
     case handled
     case ignored
   }

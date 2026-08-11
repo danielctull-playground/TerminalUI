@@ -50,14 +50,16 @@ final class FocusManager {
 
   func add(handler: @escaping (KeyPress) -> KeyPress.Result) -> FocusID {
     let id = FocusID.next
-    handlers[id] = handler
-    order.append(id)
-
-    if graph[current] == root {
-      graph.setValue(of: current, to: id)
-    }
-
+    register(id)
+    setHandler(handler, for: id)
     return id
+  }
+
+  func setHandler(
+    _ handler: @escaping (KeyPress) -> KeyPress.Result,
+    for id: FocusID
+  ) {
+    handlers[id] = handler
   }
 
   func remove(id: FocusID) {

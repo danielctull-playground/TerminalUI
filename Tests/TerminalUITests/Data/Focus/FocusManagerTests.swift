@@ -323,4 +323,43 @@ struct FocusManagerTests {
     manager.handle(.tab)
     #expect(manager.isFocused(a))
   }
+
+  @Test func `setHandler installs a handler for a registered focus ID`() {
+
+    let manager = FocusManager(graph: graph)
+    let id = FocusID.next
+    var received: [KeyPress] = []
+
+    manager.register(id)
+    manager.setHandler(
+      { keyPress in
+        received.append(keyPress)
+        return .handled
+      },
+      for: id
+    )
+
+    manager.handle(KeyPress("x"))
+
+    #expect(received == [KeyPress("x")])
+  }
+
+  @Test func `setHandler does not activate an unregistered focus ID`() {
+
+    let manager = FocusManager(graph: graph)
+    let registeredID = FocusID.next
+    let unregisteredID = FocusID.next
+
+    manager.register(registeredID)
+    #expect(manager.isFocused(registeredID))
+    #expect(!manager.isFocused(unregisteredID))
+
+    manager.setHandler({ _ in .handled }, for: unregisteredID)
+    #expect(manager.isFocused(registeredID))
+    #expect(!manager.isFocused(unregisteredID))
+
+    manager.handle(.tab)
+    #expect(manager.isFocused(registeredID))
+    #expect(!manager.isFocused(unregisteredID))
+  }
 }
