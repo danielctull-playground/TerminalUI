@@ -17,7 +17,7 @@ struct AttributeID: ArenaID {
 struct AttributeNode {
 
   /// The cached value.
-  var value: Any?
+  var value: Value
 
   /// Allows the value to be updated or recomputed from other graph values.
   let update: (Graph) -> Any
@@ -45,5 +45,28 @@ extension AttributeNode {
 
     /// The input's value at the moment it was read.
     let value: Any
+  }
+}
+
+// MARK: - AttributeNode.Value
+
+extension AttributeNode {
+
+  // While we could use an optional here, unfortunately this results in issues
+  // when attempting to store optionals in the graph.
+  enum Value {
+    case uninitialized
+    case cached(Any)
+  }
+}
+
+extension AttributeNode.Value: Equatable {
+  static func == (lhs: AttributeNode.Value, rhs: AttributeNode.Value) -> Bool {
+    switch (lhs, rhs) {
+    case (.uninitialized, .uninitialized): true
+    case (.uninitialized, .cached): false
+    case (.cached, .uninitialized): false
+    case (.cached(let lhs), .cached(let rhs)): isEqual(lhs, rhs)
+    }
   }
 }

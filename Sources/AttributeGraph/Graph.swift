@@ -173,7 +173,7 @@ extension Graph {
   func attribute<Body: AttributeBody>(_ body: Body) -> Attribute<Body.Value> {
 
     let node = AttributeNode(
-      value: nil,
+      value: .uninitialized,
       update: body.update,
       subgraph: currentSubgraph
     )
@@ -222,14 +222,12 @@ extension Graph {
     to newValue: Value
   ) {
 
-    if
-      let oldValue = attributes[attribute.id].value as? Value,
-      isEqual(oldValue, newValue)
-    {
-      return
+    switch attributes[attribute.id].value {
+    case .cached(let oldValue) where isEqual(oldValue, newValue): return
+    default: break
     }
 
-    attributes[attribute.id].value = newValue
+    attributes[attribute.id].value = .cached(newValue)
     markAsDirty(dependentsOf: attribute.id)
     needsUpdate = true
   }
@@ -286,18 +284,21 @@ extension Graph {
 
   private func evaluate(_ id: AttributeID) -> Any {
 
-    if !attributes[id].isDirty, let cached = attributes[id].value {
+    if !attributes[id].isDirty, case let .cached(cached) = attributes[id].value {
       return cached
     }
 
-    var anyInputChanged = attributes[id].value == nil
+    var anyInputChanged = attributes[id].value == .uninitialized
     for edge in attributes[id].inputs where !isEqual(evaluate(edge.id), edge.value) {
       anyInputChanged = true
     }
     attributes[id].isDirty = false
 
     guard anyInputChanged else {
-      return attributes[id].value!
+      switch attributes[id].value {
+      case .cached(let value): return value
+      case .uninitialized: fatalError("Attempt to access uninitialized value.")
+      }
     }
 
     let update = attributes[id].update
@@ -315,7 +316,7 @@ extension Graph {
       }
     }
 
-    attributes[id].value = value
+    attributes[id].value = .cached(value)
     return value
   }
 

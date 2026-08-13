@@ -59,6 +59,17 @@ struct GraphTests {
     #expect(graph[value] == "b")
   }
 
+  @Test func `an external may be an optional value`() {
+    let graph = Graph()
+    let value = graph.external(of: Optional<String>.self)
+
+    graph.setValue(of: value, to: nil)
+    #expect(graph[value] == nil)
+
+    graph.setValue(of: value, to: "b")
+    #expect(graph[value] == "b")
+  }
+
   @Test func `an external must have its value set before access`() async {
     await #expect(processExitsWith: .failure) {
       let graph = Graph()

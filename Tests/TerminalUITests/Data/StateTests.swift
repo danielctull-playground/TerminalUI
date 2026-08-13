@@ -32,12 +32,54 @@ struct StateTests {
       """)
   }
 
+  @Test func `reading: optional`() {
+
+    struct Content: View {
+      @State var value: String?
+      var body: some View {
+        Text(value ?? "default")
+      }
+    }
+
+    let screen = TestScreen(width: 7, height: 3)
+    screen.render {
+      Content()
+    }
+
+    #expect(screen.buffer.description == """
+      .......
+      default
+      .......
+      """)
+  }
+
   @Test func `writing`() {
 
     struct TestView: View {
       @State var value = "hello"
       var body: some View {
         Text(value)
+          .preference(key: PreferenceKey.A.self, value: "new")
+          .onPreferenceChange(PreferenceKey.A.self) { value = $0 }
+      }
+    }
+
+    let screen = TestScreen(width: 5, height: 1)
+    screen.render {
+      TestView()
+    }
+
+    #expect(screen.buffer.description == """
+      .new.
+      """)
+  }
+
+  @Test func `writing: optional`() {
+
+    struct TestView: View {
+      @State var value: String?
+      var body: some View {
+        Text(value ?? "default")
           .preference(key: PreferenceKey.A.self, value: "new")
           .onPreferenceChange(PreferenceKey.A.self) { value = $0 }
       }
