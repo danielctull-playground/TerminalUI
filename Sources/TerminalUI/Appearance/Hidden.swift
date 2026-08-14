@@ -1,17 +1,30 @@
+import AttributeGraph
 
 extension View {
 
   public func hidden(_ isActive: Bool = true) -> some View {
-    environment(\.hidden, isActive ? .on : .off)
+    Hidden(hidden: isActive) { self }
   }
 }
 
-extension EnvironmentValues {
-  @Entry fileprivate(set) var hidden = Hidden.off
-}
+private struct Hidden: LayoutModifier {
 
-struct Hidden: Equatable {
-  let graphicRendition: GraphicRendition
-  static let on = Hidden(graphicRendition: 8)
-  static let off = Hidden(graphicRendition: 28)
+  let hidden: Bool
+
+  func sizeThatFits(
+    proposal: ProposedViewSize,
+    subview: Subview
+  ) -> Size {
+    subview.sizeThatFits(proposal)
+  }
+
+  func placeSubview(
+    in bounds: Rect,
+    proposal: ProposedViewSize,
+    subview: Subview
+  ) {
+    if !hidden {
+      subview.place(at: bounds.origin, proposal: proposal)
+    }
+  }
 }

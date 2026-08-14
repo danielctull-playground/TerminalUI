@@ -21,7 +21,7 @@ struct ItalicTests {
       "[2J",     // Clear screen
       "[?1049h", // Alternative buffer on
       "[?25l",   // Cursor visibility off
-      "[39;49;22;\(expected);24;25;27;28;29m",
+      "[39;49;22;\(expected);24;25;27;29m",
       "[1;1Ha",  // Position + content
     ])
   }

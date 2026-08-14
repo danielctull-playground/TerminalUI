@@ -21,7 +21,7 @@ struct BlinkingTests {
       "[2J",     // Clear screen
       "[?1049h", // Alternative buffer on
       "[?25l",   // Cursor visibility off
-      "[39;49;22;23;24;\(expected);27;28;29m",
+      "[39;49;22;23;24;\(expected);27;29m",
       "[1;1Ha",  // Position + content
     ])
   }

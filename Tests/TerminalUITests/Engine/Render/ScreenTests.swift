@@ -9,7 +9,7 @@ struct ScreenTests {
     let screen = TextOutputScreen(output: .memory)
     screen.draw([Position(x: 2, y: 1): Cell("a")])
     #expect(screen.output.controlSequences == [
-      "[39;49;22;23;24;25;27;28;29m",
+      "[39;49;22;23;24;25;27;29m",
       "[1;2Ha", // Position + content
     ])
   }

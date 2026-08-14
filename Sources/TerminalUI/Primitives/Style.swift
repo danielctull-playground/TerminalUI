@@ -7,7 +7,6 @@ struct Style: Equatable {
   let underline: UnderlineStyle
   let blinking: Blinking
   let inverse: Inverse
-  let hidden: Hidden
   let strikethrough: Strikethrough
 
   init(
@@ -18,7 +17,6 @@ struct Style: Equatable {
     underline: UnderlineStyle = .off,
     blinking: Blinking = .off,
     inverse: Inverse = .off,
-    hidden: Hidden = .off,
     strikethrough: Strikethrough = .off
   ) {
     self.foregroundColor = foregroundColor
@@ -28,7 +26,6 @@ struct Style: Equatable {
     self.underline = underline
     self.blinking = blinking
     self.inverse = inverse
-    self.hidden = hidden
     self.strikethrough = strikethrough
   }
 }
@@ -47,7 +44,6 @@ extension Style {
       underline.graphicRendition,
       blinking.graphicRendition,
       inverse.graphicRendition,
-      hidden.graphicRendition,
       strikethrough.graphicRendition,
     ]
   }
@@ -64,7 +60,6 @@ extension EnvironmentValues {
       underline: underline,
       blinking: blinking,
       inverse: inverse,
-      hidden: hidden,
       strikethrough: strikethrough,
     )
   }
