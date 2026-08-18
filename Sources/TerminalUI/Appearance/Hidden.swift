@@ -1,17 +1,37 @@
+import AttributeGraph
 
 extension View {
 
   public func hidden(_ isActive: Bool = true) -> some View {
-    environment(\.hidden, isActive ? .on : .off)
+    Hidden(content: self, isActive: isActive)
   }
 }
 
-extension EnvironmentValues {
-  @Entry fileprivate(set) var hidden = Hidden.off
+private struct Hidden<Content: View> {
+  let content: Content
+  let isActive: Bool
 }
 
-struct Hidden: Equatable {
-  let graphicRendition: GraphicRendition
-  static let on = Hidden(graphicRendition: 8)
-  static let off = Hidden(graphicRendition: 28)
+extension Hidden: PrimitiveView {
+
+  static func makeView(
+    view: Attribute<Hidden>,
+    inputs: ViewInputs
+  ) -> ViewOutputs {
+
+    let content = Content.makeView(
+      view: inputs.graph.map(view) { $0.content },
+      inputs: inputs
+    )
+
+    return ViewOutputs(
+      preferenceValues: content.preferenceValues,
+      layoutProxies: content.layoutProxies,
+      displayList: inputs.graph.rule { graph in
+        graph[view].isActive
+          ? .empty
+          : graph[content.displayList]
+      }
+    )
+  }
 }

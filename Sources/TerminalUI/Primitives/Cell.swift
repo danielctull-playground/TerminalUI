@@ -17,7 +17,6 @@ extension Cell {
     underline: UnderlineStyle = .off,
     blinking: Blinking = .off,
     inverse: Inverse = .off,
-    hidden: Hidden = .off,
     strikethrough: Strikethrough = .off
   ) {
     self.content = content
@@ -29,7 +28,6 @@ extension Cell {
       underline: underline,
       blinking: blinking,
       inverse: inverse,
-      hidden: hidden,
       strikethrough: strikethrough,
     )
   }
