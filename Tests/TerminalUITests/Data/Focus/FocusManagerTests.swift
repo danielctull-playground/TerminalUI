@@ -37,6 +37,8 @@ struct FocusManagerTests {
       return .handled
     }
 
+    manager.handle(.tab)
+
     manager.handle(KeyPress("x"))
     #expect(root == [])
     #expect(a == [KeyPress("x")])
@@ -70,6 +72,9 @@ struct FocusManagerTests {
       return .handled
     }
 
+    #expect(!manager.isFocused(aid))
+
+    manager.handle(.tab)
     #expect(manager.isFocused(aid))
 
     manager.handle(KeyPress("1"))
@@ -101,6 +106,10 @@ struct FocusManagerTests {
       return .handled
     }
 
+    #expect(!manager.isFocused(aid))
+    #expect(!manager.isFocused(bid))
+
+    manager.handle(.tab)
     #expect(manager.isFocused(aid))
     #expect(!manager.isFocused(bid))
 
@@ -138,6 +147,10 @@ struct FocusManagerTests {
       return .handled
     }
 
+    #expect(!manager.isFocused(aid))
+    #expect(!manager.isFocused(bid))
+
+    manager.handle(.tab)
     #expect(manager.isFocused(aid))
     #expect(!manager.isFocused(bid))
 
@@ -185,6 +198,10 @@ struct FocusManagerTests {
       return .handled
     }
 
+    #expect(!manager.isFocused(aid))
+    #expect(!manager.isFocused(bid))
+
+    manager.handle(.tab)
     #expect(manager.isFocused(aid))
     #expect(!manager.isFocused(bid))
 
@@ -229,7 +246,13 @@ struct FocusManagerTests {
       return .handled
     }
 
+    #expect(!manager.isFocused(aid))
+    #expect(!manager.isFocused(bid))
+    #expect(!manager.isFocused(cid))
+
+    manager.handle(.tab)
     #expect(manager.isFocused(aid))
+    #expect(!manager.isFocused(bid))
     #expect(!manager.isFocused(bid))
     #expect(!manager.isFocused(cid))
 
@@ -271,6 +294,10 @@ struct FocusManagerTests {
       return .handled
     }
 
+    #expect(!manager.isFocused(aid))
+    #expect(!manager.isFocused(bid))
+
+    manager.handle(.tab)
     #expect(manager.isFocused(aid))
     #expect(!manager.isFocused(bid))
 
@@ -298,11 +325,11 @@ struct FocusManagerTests {
     #expect(b == [KeyPress("2")])
   }
 
-  @Test func `registering a focus ID activates the first ID`() {
+  @Test func `registering a focus ID does not activate the first ID`() {
     let manager = FocusManager(graph: graph)
     let id = FocusID.next
     manager.register(id)
-    #expect(manager.isFocused(id))
+    #expect(!manager.isFocused(id))
   }
 
   @Test func `registering an ID twice appends only one ID to the tab order`() {
@@ -312,6 +339,8 @@ struct FocusManagerTests {
     let b = FocusID.next
 
     manager.register(a)
+
+    manager.handle(.tab)
     #expect(manager.isFocused(a))
 
     manager.register(a)
@@ -339,6 +368,7 @@ struct FocusManagerTests {
       for: id
     )
 
+    manager.handle(.tab)
     manager.handle(KeyPress("x"))
 
     #expect(received == [KeyPress("x")])
@@ -351,6 +381,10 @@ struct FocusManagerTests {
     let unregisteredID = FocusID.next
 
     manager.register(registeredID)
+    #expect(!manager.isFocused(registeredID))
+    #expect(!manager.isFocused(unregisteredID))
+
+    manager.handle(.tab)
     #expect(manager.isFocused(registeredID))
     #expect(!manager.isFocused(unregisteredID))
 

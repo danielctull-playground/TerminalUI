@@ -23,6 +23,9 @@ struct OnKeyPressTests {
     // Trigger render
     renderer.render(event: WindowSize(size: Size(width: 1, height: 1)))
 
+    // Tab to focus on the focusable view.
+    renderer.render(event: KeyPress.tab)
+
     renderer.render(event: KeyPress("x"))
     #expect(received == [KeyPress("x")])
   }

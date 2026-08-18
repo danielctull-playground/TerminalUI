@@ -19,6 +19,11 @@ struct TextFieldTests {
     renderer.render(event: WindowSize(size: Size(width: 3, height: 1)))
 
     #expect(screen.buffer.description == """
+      ...
+      """)
+
+    renderer.render(event: KeyPress.tab)
+    #expect(screen.buffer.description == """
       ._.
       """)
 
@@ -51,6 +56,12 @@ struct TextFieldTests {
     renderer.render(event: WindowSize(size: Size(width: 3, height: 2)))
 
     #expect(screen.buffer.description == """
+      ...
+      ...
+      """)
+
+    renderer.render(event: KeyPress.tab)
+    #expect(screen.buffer.description == """
       ._.
       ...
       """)
@@ -67,7 +78,7 @@ struct TextFieldTests {
       ...
       """)
 
-    renderer.render(event: KeyPress("\t")) // tab
+    renderer.render(event: KeyPress.tab)
     #expect(screen.buffer.description == """
       hi.
       ._.

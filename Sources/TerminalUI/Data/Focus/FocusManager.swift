@@ -42,10 +42,6 @@ final class FocusManager {
   func register(_ id: FocusID) {
     guard !order.contains(id) else { return }
     order.append(id)
-
-    if graph[current] == root {
-      graph.setValue(of: current, to: id)
-    }
   }
 
   func add(handler: @escaping (KeyPress) -> KeyPress.Result) -> FocusID {
@@ -71,6 +67,12 @@ final class FocusManager {
   }
 
   private func next() -> Bool {
+
+    if graph[current] == root, let first = order.first {
+      graph.setValue(of: current, to: first)
+      return true
+    }
+
     guard order.count > 1 else { return false }
     let previous = order.firstIndex(of: graph[current])!
     var next = order.index(after: previous)
