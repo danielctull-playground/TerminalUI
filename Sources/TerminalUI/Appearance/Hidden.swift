@@ -3,28 +3,35 @@ import AttributeGraph
 extension View {
 
   public func hidden(_ isActive: Bool = true) -> some View {
-    Hidden(hidden: isActive) { self }
+    Hidden(content: self, isActive: isActive)
   }
 }
 
-private struct Hidden: LayoutModifier {
+private struct Hidden<Content: View> {
+  let content: Content
+  let isActive: Bool
+}
 
-  let hidden: Bool
+extension Hidden: PrimitiveView {
 
-  func sizeThatFits(
-    proposal: ProposedViewSize,
-    subview: Subview
-  ) -> Size {
-    subview.sizeThatFits(proposal)
-  }
+  static func makeView(
+    view: Attribute<Hidden>,
+    inputs: ViewInputs
+  ) -> ViewOutputs {
 
-  func placeSubview(
-    in bounds: Rect,
-    proposal: ProposedViewSize,
-    subview: Subview
-  ) {
-    if !hidden {
-      subview.place(at: bounds.origin, proposal: proposal)
-    }
+    let content = Content.makeView(
+      view: inputs.graph.map(view) { $0.content },
+      inputs: inputs
+    )
+
+    return ViewOutputs(
+      preferenceValues: content.preferenceValues,
+      layoutProxies: content.layoutProxies,
+      displayList: inputs.graph.rule { graph in
+        graph[view].isActive
+          ? .empty
+          : graph[content.displayList]
+      }
+    )
   }
 }
