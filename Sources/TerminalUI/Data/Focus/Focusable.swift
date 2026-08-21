@@ -9,8 +9,13 @@ extension View {
 private struct Focusable<Content: View>: ViewModifier {
 
   @Environment(\.focusManager) private var focusManager
-  @State private var focusID = FocusID.next
+  @State private var focusID: FocusID
   let isFocusable: Bool
+
+  init(isFocusable: Bool) {
+    self.isFocusable = isFocusable
+    focusID = .next
+  }
 
   func body(content: Content) -> some View {
     register(content: content)

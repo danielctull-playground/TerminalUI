@@ -8,7 +8,7 @@ extension View {
   }
 }
 
-struct OnKeyPress<Content: View>: ViewModifier {
+private struct OnKeyPress<Content: View>: ViewModifier {
 
   @Environment(\.focusManager) private var focusManager
   let action: (KeyPress) -> KeyPress.Result

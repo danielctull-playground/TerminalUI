@@ -22,6 +22,10 @@ final class FocusManager {
     graph.setValue(of: current, to: root)
   }
 
+  var focusedID: FocusID {
+    graph[current]
+  }
+
   func isFocused(_ id: FocusID) -> Bool {
     graph[current] == id
   }
@@ -64,6 +68,11 @@ final class FocusManager {
     }
     handlers.removeValue(forKey: id)
     order.removeAll { $0 == id }
+  }
+
+  func focus(_ id: FocusID) {
+    guard order.contains(id) else { return }
+    graph.setValue(of: current, to: id)
   }
 
   private func next() -> Bool {

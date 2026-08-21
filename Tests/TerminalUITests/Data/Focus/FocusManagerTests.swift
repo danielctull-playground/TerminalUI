@@ -8,6 +8,12 @@ struct FocusManagerTests {
 
   private let graph = Graph()
 
+  @Test func `focus manager needs to be set up at launch`() async {
+    await #expect(processExitsWith: .failure) {
+      _ = EnvironmentValues().focusManager
+    }
+  }
+
   @Test func `root handles when there's no other focus ids`() {
 
     var root: [KeyPress] = []
@@ -54,6 +60,7 @@ struct FocusManagerTests {
 
     _ = manager.add { _ in .ignored }
 
+    manager.handle(.tab)
     manager.handle(KeyPress("x"))
     #expect(root == [KeyPress("x")])
   }
@@ -395,5 +402,42 @@ struct FocusManagerTests {
     manager.handle(.tab)
     #expect(manager.isFocused(registeredID))
     #expect(!manager.isFocused(unregisteredID))
+  }
+
+  @Test func `focus activates a registered focus ID`() {
+    let manager = FocusManager(graph: graph)
+    let id = FocusID.next
+
+    manager.register(id)
+    #expect(!manager.isFocused(id))
+    #expect(manager.focusedID != id)
+
+    manager.focus(id)
+    #expect(manager.isFocused(id))
+    #expect(manager.focusedID == id)
+  }
+
+  @Test func `focus does not activate an unregistered focus ID`() {
+    let manager = FocusManager(graph: graph)
+    let id = FocusID.next
+    manager.focus(id)
+    #expect(!manager.isFocused(id))
+    #expect(manager.focusedID != id)
+  }
+
+  @Test func `focus of unregistered id does not alter focus`() {
+    let manager = FocusManager(graph: graph)
+    let a = FocusID.next
+    let b = FocusID.next
+
+    manager.register(a)
+    manager.focus(a)
+    #expect(manager.isFocused(a))
+    #expect(manager.focusedID == a)
+
+    manager.focus(b)
+    #expect(manager.isFocused(a))
+    #expect(!manager.isFocused(b))
+    #expect(manager.focusedID == a)
   }
 }
