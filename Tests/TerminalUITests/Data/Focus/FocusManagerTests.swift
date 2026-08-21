@@ -403,4 +403,36 @@ struct FocusManagerTests {
     #expect(manager.isFocused(registeredID))
     #expect(!manager.isFocused(unregisteredID))
   }
+
+  @Test func `focus activates a registered focus ID`() {
+    let manager = FocusManager(graph: graph)
+    let id = FocusID.next
+
+    manager.register(id)
+    #expect(!manager.isFocused(id))
+
+    manager.focus(id)
+    #expect(manager.isFocused(id))
+  }
+
+  @Test func `focus does not activate an unregistered focus ID`() {
+    let manager = FocusManager(graph: graph)
+    let id = FocusID.next
+    manager.focus(id)
+    #expect(!manager.isFocused(id))
+  }
+
+  @Test func `focus of unregistered id does not alter focus`() {
+    let manager = FocusManager(graph: graph)
+    let a = FocusID.next
+    let b = FocusID.next
+
+    manager.register(a)
+    manager.focus(a)
+    #expect(manager.isFocused(a))
+
+    manager.focus(b)
+    #expect(manager.isFocused(a))
+    #expect(!manager.isFocused(b))
+  }
 }

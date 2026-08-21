@@ -66,6 +66,11 @@ final class FocusManager {
     order.removeAll { $0 == id }
   }
 
+  func focus(_ id: FocusID) {
+    guard order.contains(id) else { return }
+    graph.setValue(of: current, to: id)
+  }
+
   private func next() -> Bool {
 
     if graph[current] == root, let first = order.first {
