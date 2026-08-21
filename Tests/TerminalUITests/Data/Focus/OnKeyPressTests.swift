@@ -5,6 +5,34 @@ import Testing
 @Suite("OnKeyPress")
 struct OnKeyPressTests {
 
+  @Test func `focused alone does not make a view tabbable`() {
+
+    var received: [KeyPress] = []
+
+    struct Content: View {
+      @FocusState private var isFocused: Bool
+      let received: (KeyPress) -> Void
+
+      var body: some View {
+        Text("X")
+          .focused($isFocused)
+          .onKeyPress { keyPress in
+            received(keyPress)
+            return .handled
+          }
+      }
+    }
+
+    let screen = TestScreen(width: 1, height: 1)
+    let renderer = Renderer(screen: screen, content: Content { received.append($0) })
+
+    renderer.render(event: WindowSize(size: Size(width: 1, height: 1)))
+    renderer.render(event: KeyPress.tab)
+    renderer.render(event: KeyPress("x"))
+
+    #expect(received == [])
+  }
+
   @Test func `non-focusable view is skipped by tab`() {
 
     var received: [String] = []
