@@ -16,4 +16,6 @@ extension KeyEquivalent: ExpressibleByUnicodeScalarLiteral {
 
 extension KeyEquivalent {
   public static let tab: Self = "\t"
+  public static let `return`: Self = "\r"
+  public static let space: Self = " "
 }

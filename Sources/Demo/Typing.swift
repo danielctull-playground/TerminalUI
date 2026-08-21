@@ -13,37 +13,46 @@ struct Typing: App, AsyncParsableCommand {
 }
 
 struct Content: View {
-  @State private var a = ""
-  @State private var b = ""
 
   var body: some View {
     HStack {
 
       Color.black
 
-      VStack(spacing: 1) {
-        Text(a)
-          .backgroundColor(.blue)
-          .foregroundColor(.yellow)
-
-        TextField(text: $a)
-          .backgroundColor(.yellow)
-          .foregroundColor(.blue)
-      }
+      TypingView(primary: .blue, secondary: .yellow)
 
       Color.black
 
-      VStack(spacing: 1) {
-        Text(b)
-          .backgroundColor(.red)
-          .foregroundColor(.white)
-
-        TextField(text: $b)
-          .backgroundColor(.white)
-          .foregroundColor(.red)
-      }
+      TypingView(primary: .red, secondary: .white)
 
       Color.black
+    }
+  }
+}
+
+struct TypingView: View {
+
+  @State private var typing = ""
+  @State private var submitted = ""
+
+  let primary: Color
+  let secondary: Color
+
+  var body: some View {
+    VStack(spacing: 1) {
+      TextField(text: $typing)
+        .backgroundColor(secondary)
+        .foregroundColor(primary)
+
+      Button {
+        submitted = typing
+      } label: {
+        Text("Submit")
+      }
+
+      Text(submitted)
+        .backgroundColor(primary)
+        .foregroundColor(secondary)
     }
   }
 }

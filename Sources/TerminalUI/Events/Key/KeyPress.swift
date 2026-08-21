@@ -21,6 +21,8 @@ extension KeyPress: Event {
 
 extension KeyPress {
   static let tab = KeyPress(key: .tab, characters: "\t")
+  static let `return` = KeyPress(key: .return, characters: "\r")
+  static let space = KeyPress(key: .space, characters: " ")
 }
 
 // MARK: - KeyPress.Result
