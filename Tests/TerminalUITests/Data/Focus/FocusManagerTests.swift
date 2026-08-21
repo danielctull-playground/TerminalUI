@@ -410,9 +410,11 @@ struct FocusManagerTests {
 
     manager.register(id)
     #expect(!manager.isFocused(id))
+    #expect(manager.focusedID != id)
 
     manager.focus(id)
     #expect(manager.isFocused(id))
+    #expect(manager.focusedID == id)
   }
 
   @Test func `focus does not activate an unregistered focus ID`() {
@@ -420,6 +422,7 @@ struct FocusManagerTests {
     let id = FocusID.next
     manager.focus(id)
     #expect(!manager.isFocused(id))
+    #expect(manager.focusedID != id)
   }
 
   @Test func `focus of unregistered id does not alter focus`() {
@@ -430,9 +433,11 @@ struct FocusManagerTests {
     manager.register(a)
     manager.focus(a)
     #expect(manager.isFocused(a))
+    #expect(manager.focusedID == a)
 
     manager.focus(b)
     #expect(manager.isFocused(a))
     #expect(!manager.isFocused(b))
+    #expect(manager.focusedID == a)
   }
 }

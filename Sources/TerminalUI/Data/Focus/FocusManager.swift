@@ -22,6 +22,10 @@ final class FocusManager {
     graph.setValue(of: current, to: root)
   }
 
+  var focusedID: FocusID {
+    graph[current]
+  }
+
   func isFocused(_ id: FocusID) -> Bool {
     graph[current] == id
   }
