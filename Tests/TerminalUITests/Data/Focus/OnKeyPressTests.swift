@@ -5,6 +5,36 @@ import Testing
 @Suite("OnKeyPress")
 struct OnKeyPressTests {
 
+  @Test func `non-focusable view is skipped by tab`() {
+
+    var received: [String] = []
+
+    let screen = TestScreen(width: 2, height: 1)
+    let renderer = Renderer(
+      screen: screen,
+      content: HStack(spacing: 0) {
+        Text("A")
+          .focusable(false)
+          .onKeyPress { _ in
+            received.append("A")
+            return .handled
+          }
+        Text("B")
+          .focusable()
+          .onKeyPress { _ in
+            received.append("B")
+            return .handled
+          }
+      }
+    )
+
+    renderer.render(event: WindowSize(size: Size(width: 2, height: 1)))
+    renderer.render(event: KeyPress.tab)
+    renderer.render(event: KeyPress("x"))
+
+    #expect(received == ["B"])
+  }
+
   @Test func `focused view receives a key press`() {
 
     var received: [KeyPress] = []
