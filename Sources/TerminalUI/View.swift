@@ -1,5 +1,7 @@
 import AttributeGraph
 
+public typealias ViewBuilder = ContentBuilder
+
 public protocol View {
 
   /// The type of view representing the body of this view.
