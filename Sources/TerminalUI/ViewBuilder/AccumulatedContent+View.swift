@@ -1,14 +1,8 @@
 import AttributeGraph
 
-struct AccumulatedContent<A: View, B: View>: PrimitiveView {
+extension AccumulatedContent: View where A: View, B: View {}
 
-  private let a: A
-  private let b: B
-
-  init(_ a: A, _ b: B) {
-    self.a = a
-    self.b = b
-  }
+extension AccumulatedContent: PrimitiveView where A: View, B: View {
 
   static func makeView(
     view: Attribute<Self>,

@@ -16,7 +16,7 @@ public enum ViewBuilder {
     accumulated: some View,
     next: some View
   ) -> some View {
-    AccumulatedContent(accumulated, next)
+    AccumulatedContent(a: accumulated, b: next)
   }
 }
 
