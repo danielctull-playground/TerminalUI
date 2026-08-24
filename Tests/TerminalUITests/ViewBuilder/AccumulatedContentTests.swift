@@ -2,8 +2,8 @@
 import TerminalUITesting
 import Testing
 
-@Suite("Accumulated", .tags(.viewBuilder))
-struct AccumulatedTests {
+@Suite("AccumulatedContent", .tags(.viewBuilder))
+struct AccumulatedContentTests {
 
   @Suite(.tags(.preferenceValues))
   struct `Preference Values` {

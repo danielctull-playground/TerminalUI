@@ -1,6 +1,6 @@
 import AttributeGraph
 
-struct Accumulated<A: View, B: View>: PrimitiveView {
+struct AccumulatedContent<A: View, B: View>: PrimitiveView {
 
   private let a: A
   private let b: B
