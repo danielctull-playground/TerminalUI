@@ -18,6 +18,13 @@ public enum ContentBuilder {
   ) -> AccumulatedContent<First, Second> {
     AccumulatedContent(a: accumulated, b: next)
   }
+
+  public static func buildBlock<each Content>(
+    _ content: repeat each Content
+  ) -> TupleContent<repeat each Content> {
+    TupleContent(content: repeat each content)
+  }
+
 }
 
 extension ContentBuilder {
