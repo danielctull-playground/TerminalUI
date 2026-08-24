@@ -1,8 +1,8 @@
 import AttributeGraph
 
-public struct EmptyView: PrimitiveView {
+public typealias EmptyView = EmptyContent
 
-  public init() {}
+extension EmptyContent: PrimitiveView {
 
   public static func makeView(
     view: Attribute<Self>,
