@@ -4,7 +4,7 @@ extension AccumulatedContent: View where A: View, B: View {}
 
 extension AccumulatedContent: PrimitiveView where A: View, B: View {
 
-  static func makeView(
+  public static func makeView(
     view: Attribute<Self>,
     inputs: ViewInputs
   ) -> ViewOutputs {
