@@ -1,24 +1,10 @@
 import AttributeGraph
 
-public struct ConditionalContent<TrueContent: View, FalseContent: View> {
+extension ConditionalContent: View where TrueContent: View, FalseContent: View {}
 
-  fileprivate enum Value {
-    case `true`(TrueContent)
-    case `false`(FalseContent)
-  }
+extension ConditionalContent: PrimitiveView where TrueContent: View, FalseContent: View {}
 
-  private let value: Value
-
-  init(_ content: TrueContent) {
-    value = .true(content)
-  }
-
-  init(_ content: FalseContent) {
-    value = .false(content)
-  }
-}
-
-extension ConditionalContent: DynamicView {
+extension ConditionalContent: DynamicView where TrueContent: View, FalseContent: View {
 
   enum ID {
     case `true`
