@@ -62,6 +62,52 @@ struct ButtonTests {
     #expect(actions == 2)
   }
 
+  @Suite("Style")
+  struct StyleTests {
+
+    @Test func `default`() {
+
+      let screen = TestScreen(width: 8, height: 1)
+      screen.render {
+        Button {} label: { Text("button") }
+      }
+
+      #expect(screen.buffer.description == """
+        [button]
+        """)
+    }
+
+    @Test func `custom`() {
+
+      struct Custom: ButtonStyle {
+        func makeBody(configuration: Configuration) -> some View {
+          VStack(spacing: 0) {
+            Text("┏━━━━━━┓")
+            HStack(spacing: 0) {
+              Text("┃")
+              configuration.label
+              Text("┃")
+            }
+            Text("┗━━━━━━┛")
+          }
+        }
+      }
+
+      let screen = TestScreen(width: 8, height: 3)
+      screen.render {
+        Button {} label: { Text("button") }
+          .buttonStyle(Custom())
+      }
+
+      #expect(screen.buffer.description == """
+        ┏━━━━━━┓
+        ┃button┃
+        ┗━━━━━━┛
+        """)
+    }
+  }
+
+
   @Suite(.tags(.preferenceValues))
   struct `Preference Values` {
 
