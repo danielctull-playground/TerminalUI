@@ -1,4 +1,8 @@
 
+extension EnvironmentValues {
+  @Entry public fileprivate(set) var isFocused: Bool = false
+}
+
 extension View {
 
   public func focusable(_ isFocusable: Bool = true) -> some View {
@@ -19,6 +23,7 @@ private struct Focusable<Content: View>: ViewModifier {
 
   func body(content: Content) -> some View {
     register(content: content)
+      .environment(\.isFocused, focusManager.focusedID == focusID)
   }
 
   private func register(content: Content) -> some View {
