@@ -124,4 +124,62 @@ struct FocusableTests {
       .false
       """)
   }
+
+  @Test func `Element should lose focus when no longer focusable`() {
+
+    struct Content: View {
+      @Environment(\.windowSize) private var windowSize
+      var body: some View {
+        VStack(spacing: 0) {
+          FocusCheck(name: "first")
+            .focusable()
+          FocusCheck(name: "second")
+            .focusable(windowSize.size.width.isMultiple(of: 2))
+        }
+      }
+    }
+
+    let screen = TestScreen(width: 6, height: 4)
+    let renderer = Renderer(screen: screen, content: Content())
+
+    renderer.render(event: WindowSize(size: Size(width: 6, height: 4)))
+    #expect(screen.buffer.description == """
+      .first
+      .false
+      second
+      .false
+      """)
+
+    renderer.render(event: KeyPress.tab)
+    #expect(screen.buffer.description == """
+      .first
+      .true.
+      second
+      .false
+      """)
+
+    renderer.render(event: KeyPress.tab)
+    #expect(screen.buffer.description == """
+      .first
+      .false
+      second
+      .true.
+      """)
+
+    renderer.render(event: WindowSize(size: Size(width: 7, height: 4)))
+    #expect(screen.buffer.description == """
+      .first.
+      .true..
+      second.
+      .false.
+      """)
+
+    renderer.render(event: KeyPress.tab)
+    #expect(screen.buffer.description == """
+      .first.
+      .true..
+      second.
+      .false.
+      """)
+  }
 }
