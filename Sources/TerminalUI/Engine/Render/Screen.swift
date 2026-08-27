@@ -12,7 +12,7 @@ extension Screen {
   package typealias Buffer = ScreenBuffer
 }
 
-public struct ScreenBuffer {
+public struct ScreenBuffer: Equatable {
 
   package private(set) var cells: [Position: Cell]
 
