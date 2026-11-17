@@ -11,7 +11,6 @@ struct RendererTests {
     #expect(screen.csi == [
       .clearScreen,
       .alternativeBuffer(.on),
-      .cursorVisibility(.off),
     ])
   }
 

@@ -41,7 +41,6 @@ package struct Renderer<Content: View, Screen: TerminalUI.Screen> {
 
     screen.send(.clearScreen)
     screen.send(.alternativeBuffer(.on))
-    screen.send(.cursorVisibility(.off))
   }
 
   package func render(event: some Event) {

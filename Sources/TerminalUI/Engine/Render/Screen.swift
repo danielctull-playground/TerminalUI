@@ -15,6 +15,7 @@ extension Screen {
 public struct ScreenBuffer: Equatable {
 
   package private(set) var cells: [Position: Cell]
+  package var cursor: Position?
 
   package init(cells: [Position: Cell] = [:]) {
     self.cells = cells
@@ -49,7 +50,15 @@ extension Screen.Buffer: CustomStringConvertible {
     return (minY...maxY).map { y in
       (minX...maxX).map { x in
 
-        let cell = cells[Position(x: x, y: y)] ?? Cell(content: " ", style: .default)
+        let position = Position(x: x, y: y)
+
+        let cell = if position == cursor {
+          Cell(content: "_", style: .default)
+        } else if let cell = cells[position] {
+          cell
+        } else {
+          Cell(content: " ", style: .default)
+        }
 
         return switch (cell.content, cell.style) {
         case (" ", .default): "."

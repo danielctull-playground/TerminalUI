@@ -35,5 +35,7 @@ extension DisplayList.Item {
 
     /// Fill every cell of `frame` with a resolved `Style`.
     case fill(Style)
+
+    case cursor
   }
 }

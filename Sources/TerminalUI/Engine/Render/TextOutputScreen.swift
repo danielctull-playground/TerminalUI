@@ -23,10 +23,20 @@ extension TextOutputScreen: Screen {
 
     var result = ""
 
+    // Changing the position of the cursor while visible can cause flickering.
+    // Instead turn visibility off, and afterwards if this frame has a cursor,
+    // position and make it visible.
+    result.append(String(.cursorVisibility(.off)))
+
     for (position, cell) in buffer.cells {
       result.append(String(.selectGraphicRendition(cell.style.graphicRendition)))
       result.append(String(position.csi))
       result.append(cell.content)
+    }
+
+    if let cursor = buffer.cursor {
+      result.append(String(cursor.csi))
+      result.append(String(.cursorVisibility(.on)))
     }
 
     output.write(result)

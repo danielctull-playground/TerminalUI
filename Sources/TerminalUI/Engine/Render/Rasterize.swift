@@ -10,8 +10,9 @@ extension Screen {
 
     for item in displayList.items {
       switch item.content {
-      case let .fill(style): fill(in: &buffer, frame: item.frame, style: style)
-      case let .text(text, style): draw(in: &buffer, text: text, frame: item.frame, style: style)
+      case .fill(let style): fill(in: &buffer, frame: item.frame, style: style)
+      case .text(let text, let style): draw(in: &buffer, text: text, frame: item.frame, style: style)
+      case .cursor: buffer.cursor = item.frame.origin
       }
     }
 
