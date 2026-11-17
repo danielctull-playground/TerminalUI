@@ -32,6 +32,7 @@ public struct TestScreen: Screen {
     }
 
     _buffer = Buffer(cells: cells)
+    _buffer.cursor = buffer.cursor
   }
 }
 

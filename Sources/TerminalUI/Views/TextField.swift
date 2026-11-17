@@ -17,7 +17,7 @@ extension TextField: View {
 
       Text(text.wrappedValue)
 
-      Text("_")
+      Cursor()
         .hidden(!isFocused)
     }
     .focusable()

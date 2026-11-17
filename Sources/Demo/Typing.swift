@@ -41,7 +41,6 @@ struct TypingView: View {
   var body: some View {
     VStack(spacing: 1) {
       TextField(text: $typing)
-        .backgroundColor(secondary)
         .foregroundColor(primary)
 
       Button {
